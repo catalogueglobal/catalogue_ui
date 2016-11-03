@@ -25,7 +25,7 @@
     "@ngrx/store": "^2.2.1",
     "@types/leaflet-markercluster": "^0.4.32",
     "@types/protractor": "^1.5.20",
-    "angular2-jwt": "^0.1.23",
+    "angular2-jwt": "0.1.23",
     "angular2-toaster": "^1.0.1",
     "core-js": "^2.4.1",
     "font-awesome": "^4.6.3",
