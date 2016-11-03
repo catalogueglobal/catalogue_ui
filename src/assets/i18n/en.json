@@ -45,7 +45,7 @@
       },
       "projectName": "Project name",
       "feedName": "Feed name",
-      "isPublic": "Private dataset",
+      "isPublic": "Public dataset",
       "submit": "Proceed to upload"
     }
   },
