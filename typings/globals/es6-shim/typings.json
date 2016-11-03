@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/bd269cad4cb2b495f940c7b6afc5825d568029be/es6-shim/es6-shim.d.ts",
+    "raw": "github:DefinitelyTyped/DefinitelyTyped/es6-shim/es6-shim.d.ts#bd269cad4cb2b495f940c7b6afc5825d568029be",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/bd269cad4cb2b495f940c7b6afc5825d568029be/es6-shim/es6-shim.d.ts"
+  }
+}

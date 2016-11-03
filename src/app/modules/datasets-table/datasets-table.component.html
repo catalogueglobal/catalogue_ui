@@ -1,0 +1,74 @@
+<div class="dataset-table" *ngIf="feeds && feeds.length>0">
+  <table id="datatable" class="display responsive nowrap" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+	<th class="chkMulti"><i class="fa fa-check-square-o checkAll" aria-hidden="true"
+				(click)="checkAll()"
+				title="{{'datasets-table.checkall'|translate}}"></i></th>
+	<th>
+          <app-sort-link sortValue="name" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="asc">
+            {{'datasets-table.column.feedName'|translate}}
+          </app-sort-link>
+	</th>
+	<th>
+          <app-sort-link sortValue="regionStateCountry" [(value)]="currentSort" (valueChange)="setSort($event)"
+			 defaultOrder="asc">
+            {{'datasets-table.column.area'|translate}}
+          </app-sort-link>
+	</th>
+	<!--<th>
+            License
+	    </th>
+      <th>License Details<a href="#" class="question-circle"></a></th>-->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let feed of feeds | paginate: { itemsPerPage: config.PAGINATION_ITEMS_PER_PAGE, maxSize: config.PAGINATION_LINKS_MAX, currentPage: page }">
+	<td class="chkMulti">
+          <div><input type="checkbox" [(ngModel)]="checkById[feed.id]"></div>
+	</td>
+	<td>{{feed.name}}</td>
+	<td class="area">
+          <div>{{regionStateCountry(feed)}}</div>
+	</td>
+	<!--<td></td>
+	    <td>
+              <div class="license-attr">
+		<span class="unknown-attr requires disabled">
+		  <span class="tool-tip-info">Unknown whether<br> agency requires<br>attribution.</span>
+		</span>
+		<span class="unknown-attr allow-derivation disabled">
+		  <span class="tool-tip-info">You may create a<br>derived data product<br>from this feed.</span>
+		</span>
+		<span class="unknown-attr allow-redistribution disabled">
+		  <span class="tool-tip-info">You may redistribute<br>this feed.</span>
+		</span>
+              </div>
+	    </td>-->
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    <pagination-controls #p (pageChange)="page = $event">
+      <ul class="ng2-pagination custom">
+        <li class="pagination-previous" [class.disabled]="p.isFirstPage()">
+          <a *ngIf="1 < p.getCurrent()" (click)="p.previous()"><i class="fa fa-arrow-left"></i></a>
+          <span *ngIf="p.isFirstPage()"><i class="fa fa-arrow-left"></i></span>
+        </li>
+        <li [class.current]="p.getCurrent() === page.value" *ngFor="let page of p.pages">
+          <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
+            <span>{{ page.label }}</span>
+          </a>
+          <div *ngIf="p.getCurrent() === page.value">
+            <span>{{ page.label }}</span>
+          </div>
+        </li>
+        <li class="pagination-next" [class.disabled]="p.isLastPage()">
+          <a *ngIf="!p.isLastPage()" (click)="p.next()"><i class="fa fa-arrow-right"></i></a>
+          <span *ngIf="p.isLastPage()"><i class="fa fa-arrow-right"></i></span>
+        </li>
+      </ul>
+    </pagination-controls>
+  </div>
+</div><!--/.dataset-table-->

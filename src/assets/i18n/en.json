@@ -1,0 +1,148 @@
+{
+  "layout": {
+    "menu": {
+      "use": "use",
+      "upload": "upload",
+      "download": "download",
+      "manage": "manage",
+      "subscribe": "subscribe",
+      "login": "login",
+      "logout": "logout"
+    },
+    "footer": {
+      "home": "Home",
+      "about": "About",
+      "faq": "FAQ",
+      "community": "Community",
+      "tools": "Tools",
+      "blog": "Blog",
+      "contact": "Contact",
+      "subscribe": "Subscribe",
+      "copyright": "&copy; {{year}} Catalogue. All Rights Reserved."
+    }
+  },
+  "popup": {
+    "subscribe": {
+      "title": "Subscribe Now",
+      "name": "Name",
+      "company": "Company",
+      "email": "Email",
+      "type": {
+        "label": "Types",
+        "placeholder": "Select your Type",
+        "producer": "Producer",
+        "developer": "Developers",
+        "community": "Community"
+      },
+      "submit": "Subscribe"
+    },
+    "upload": {
+      "title": "Upload new dataset",
+      "file": "File (.zip)",
+      "toggleOptions": {
+        "show": "Show advanced options",
+        "hide": "Hide advanced options"
+      },
+      "projectName": "Project name",
+      "feedName": "Feed name",
+      "isPublic": "Private dataset",
+      "submit": "Proceed to upload"
+    }
+  },
+  "datasets": {
+    "title": "Download datasets",
+    "map": {
+      "title": "Select datasets on the map or search by location"
+    },
+    "table": {
+      "title": "catalogue datasets",
+      "intro": "From the list of displayed datasets, click to select those you want to download.",
+      "search": "Search here",
+      "btn": {
+        "download": "download"
+      },
+      "noresult": {
+        "info": "No feed found for your search. Try zooming out or",
+        "reset": "reset your search"
+      }
+    }
+  },
+  "mydatasets": {
+    "title": "Manage your datasets",
+    "map": {
+      "title": "Select datasets on the map or search by location"
+    },
+    "table": {
+      "title": "catalogue datasets",
+      "intro": "From the list of displayed datasets, click to select those you want to download.",
+      "search": "Search here",
+      "btn": {
+        "download": "download",
+        "delete": "delete"
+      },
+      "noresult": {
+        "info": "No feed found for your search. Try zooming out or",
+        "reset": "reset your search"
+      }
+    }
+  },
+  "datasets-table": {
+    "checkall": "Check all",
+    "column": {
+      "feedName": "Feed name",
+      "area": "Area"
+    }
+  },
+  "mydatasets-table": {
+    "checkall": "Check all",
+    "column": {
+      "isPublic": {
+        "label": "Public",
+        "public": "public",
+        "private": "private"
+      },
+      "type": {
+        "label": "Type",
+        "fetch": "Fetch auto.",
+        "upload": "Manual upload",
+        "inhouse": "In house prod."
+      },
+      "feedName": "Feed name",
+      "area": "Area",
+      "updated": "Updated"
+    }
+  },
+  "state": {
+    "USER_SUBSCRIBE": "Subscribing...",
+    "USER_SUBSCRIBE_SUCCESS": "Subscription success, thanks.",
+    "USER_SUBSCRIBE_FAIL": "Sorry, subscription failed. Please try again",
+    "FEEDS_GET": {
+      "private": "Loading private feeds...",
+      "public": "Loading public feeds..."
+    },
+    "FEEDS_GET_FAIL": {
+      "public": "Failed to load public feeds.",
+      "private": "Failed to load private feeds."
+    },
+    "FEED_CREATE": "Creating feed: <i>{{feedName}</i>",
+    "FEED_CREATE_PROGRESS": "Creating feed: <i>{{feedName}}</i> ({{progress}})",
+    "FEED_CREATE_SUCCESS": "Feed created: <i>{{feedName}}</i>",
+    "FEED_CREATE_FAIL": "Feed creation failed: <i>{{feedName}}</i>",
+    "FEED_SET_PUBLIC": "Updating feed: <i>{{feedName}}</i>",
+    "FEED_SET_PUBLIC_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
+    "FEED_SET_PUBLIC_FAIL": "Feed update failed: <i>{{feedName}}</i>",
+    "FEED_SET_NAME": "Updating feed: <i>{{feedName}}</i>",
+    "FEED_SET_NAME_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
+    "FEED_SET_NAME_FAIL": "Feed update failed: <i>{{feedName}}</i>",
+    "FEED_SET_FILE": "Updating feed <i>{{feedName}}</i>...",
+    "FEED_SET_FILE_PROGRESS": "Updating feed <i>{{feedName}}</i> ({{progress}})",
+    "FEED_SET_FILE_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
+    "FEED_SET_FILE_FAIL": "Feeds update failed: <i>{{feedName}}</i>",
+    "FEED_DELETE": "Deleting {{countFeeds}} feed(s)...",
+    "FEED_DELETE_SUCCESS": "{{countFeeds}} feed(s) deleted.",
+    "FEED_DELETE_FAIL": "Failed to delete {{countFeeds}} feed(s) : {{feedLabels}}.",
+    "FEED_FETCH": "Refreshing feed <i>{{feedName}}</i>...",
+    "FEED_FETCH_SUCCESS": "Feed refreshed: <i>{{feedName}}</i>",
+    "FEED_FETCH_FAIL":"Feed refresh failed: <i>{{feedName}}</i>"
+  }
+}

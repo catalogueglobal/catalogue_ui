@@ -1,0 +1,74 @@
+<div class="banner" style="background-image:url(images/bgi/banner.jpg);">
+  <div class="main-title"><h1 class="banner-title">Catalogue</h1></div>
+</div><!--/.banner-->
+<div id="main">
+  <div id="primary" class="content-area one-column">
+    <div id="content" class="site-content">
+      <div class="module-box-section">
+        <div class="cols cols3">
+          <div class="col">
+            <div class="module-box faq">
+              <div class="box-content">
+                <h5>Upload</h5>
+                <p>Share your data</p>
+                <a class="see-more poptrigger" data-rel="createfeed">Contribute</a>
+              </div><!--/.box-content-->
+            </div>
+            <!--/.module-box-section-->
+          </div>
+          <!--/.col-->
+          <div class="col">
+            <div class="module-box datasets">
+              <div class="box-content">
+                <h5>Download</h5>
+                <p>For your own use</p>
+                <a routerLink="/datasets" class="see-more">Browse datasets</a>
+              </div>
+              <!--/.box-content-->
+            </div>
+            <!--/.module-box-section-->
+          </div>
+          <!--/.col-->
+          <div class="col">
+            <div class="module-box contact">
+              <div class="box-contact" *ngIf="!sessionService.loggedIn">
+                <h5>Subscribe</h5>
+                <p>Access to more features</p>
+                <a href="#" class="poptrigger see-more" data-rel="subscribepopup" title="Subscribe">Subscribe now</a>
+              </div>
+              <div class="box-contact" *ngIf="sessionService.loggedIn">
+                <h5>Manage</h5>
+                <p>Update your data</p>
+                <a routerLink="/my-datasets" class="poptrigger see-more" title="Subscribe">My datasets</a>
+              </div>
+              <!--/.box-content-->
+            </div>
+            <!--/.module-box-section-->
+          </div>
+          <!--/.col-->
+        </div>
+        <!--/.cols3-->
+      </div>
+      <!--/.module-box-section-->
+      <div class="our-partners">
+        <div class="wrap">
+          <h3>Our Partners</h3>
+          <ul class="cf">
+            <li>
+              <figure><img src="../../../images/oui-share.jpg" alt="oui-share"></figure>
+            </li>
+            <li>
+              <figure><img src="../../../images/transdev.jpg" alt="transdev"></figure>
+            </li>
+            <li>
+              <figure><img src="../../../images/la-fabrique.jpg" alt="la-fabrique"></figure>
+            </li>
+            <li>
+              <figure><img src="../../../images/caisse.jpg" alt="caisse"></figure>
+            </li>
+          </ul>
+        </div><!--/.wrap-->
+      </div><!--/.our-partners-->
+    </div><!--/#content-->
+  </div><!--/#primary-->
+</div><!--/#main-->

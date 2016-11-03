@@ -1,0 +1,35 @@
+<div class="banner" style="background-image:url(images/bgi/banner.jpg);">
+  <div class="main-title"><h1 class="banner-title">{{'datasets.title'|translate}}</h1></div>
+</div><!--/.banner-->
+<div id="main">
+  <div id="primary" class="content-area one-column">
+    <div class="datasets-section">
+      <div class="map-section">
+        <h4>{{'datasets.map.title'|translate}}</h4>
+        <app-datasets-map [feeds]="feeds$|async" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom"
+                          (boundsChange)="onBoundsChange($event)"></app-datasets-map>
+      </div><!--/.map-section-->
+      <div class="feed-registry">
+        <h4>{{'datasets.table.title'|translate}}</h4>
+        <p>{{'datasets.table.intro'|translate}}</p>
+        <div class="tools">
+          <div class="autocompletebox">
+            <app-datasets-autocomplete (selected)="onAutocompleteSelected($event)"
+                                       placeholder="{{'datasets.table.search'|translate}}"></app-datasets-autocomplete>
+          </div>
+          <a *ngIf="feeds.length>0" href="#" class="generic-btn" [class.disabled]="!getCheckedFeeds().length"
+             (click)="downloadFeeds($event)">
+            <i class="fa fa-download" aria-hidden="true"></i> {{'datasets.table.btn.download'|translate}}
+          </a>
+        </div><!--/.tools-->
+
+        <app-datasets-table [feeds]="feeds$|async"
+                            (sortChange)="onSortChange($event)"></app-datasets-table>
+
+        <div class="noresult" *ngIf="feeds.length==0">
+          {{'datasets.table.noresult.info'|translate}} <a (click)="resetSearch()">{{'datasets.table.noresult.reset'|translate}}</a>.
+        </div>
+      </div><!--/.feed-registry-->
+    </div><!--/.datasets-section-->
+  </div><!--/#primary-->
+</div><!--/#main-->
