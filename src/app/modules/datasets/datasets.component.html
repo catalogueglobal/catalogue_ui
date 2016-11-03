@@ -6,23 +6,28 @@
     <div class="datasets-section">
       <div class="map-section">
         <h4>{{'datasets.map.title'|translate}}</h4>
-        <app-datasets-map [feeds]="feeds$|async" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom"
+        <div id="map-wrapper">
+          <app-datasets-map [feeds]="feeds$|async" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom"
                           (boundsChange)="onBoundsChange($event)"></app-datasets-map>
+          <div id="search-input-wrapper" style="">
+            <div class="tools">
+              <div class="autocompletebox">
+                <app-datasets-autocomplete (selected)="onAutocompleteSelected($event)"
+                                       placeholder="{{'datasets.table.search'|translate}}"></app-datasets-autocomplete>
+              </div>
+            </div><!--/#tools-->
+          </div><!--/#search-input-wrapper-->
+        </div><!--/#map-wrapper-->
       </div><!--/.map-section-->
       <div class="feed-registry">
         <h4>{{'datasets.table.title'|translate}}</h4>
         <p>{{'datasets.table.intro'|translate}}</p>
         <div class="tools">
-          <div class="autocompletebox">
-            <app-datasets-autocomplete (selected)="onAutocompleteSelected($event)"
-                                       placeholder="{{'datasets.table.search'|translate}}"></app-datasets-autocomplete>
-          </div>
           <a *ngIf="feeds.length>0" href="#" class="generic-btn" [class.disabled]="!getCheckedFeeds().length"
              (click)="downloadFeeds($event)">
             <i class="fa fa-download" aria-hidden="true"></i> {{'datasets.table.btn.download'|translate}}
           </a>
-        </div><!--/.tools-->
-
+        </div>
         <app-datasets-table [feeds]="feeds$|async"
                             (sortChange)="onSortChange($event)"></app-datasets-table>
 

@@ -2466,6 +2466,22 @@ input[type="submit"].submit-btn {
   margin-bottom: 40px;
 }
 
+
+#map-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+#search-input-wrapper {
+  position:absolute;
+  top: 14px;
+  left:40px;
+  width: 70%;
+  margin-left:40px;
+  margin-right: 40px;
+  z-index: 1;
+}
+
 #datasetmap {
   height: 564px;
   margin-bottom: 55px;
@@ -4151,6 +4167,7 @@ table caption + thead tr:first-child th, table caption + thead tr:first-child td
 #datasetmap {
   margin-left: 40px;
   margin-right: 40px;
+  z-index:0;
 }
 
 .tools .autocompletebox input {
