@@ -9,7 +9,7 @@ import * as leaflet from "leaflet";
 
 export type AutocompleteItem = {
   position: leaflet.LatLngExpression,
-  type: string
+  type: string,
 }
 
 @Component({
@@ -20,6 +20,7 @@ export type AutocompleteItem = {
 export class DatasetsAutocompleteComponent {
 
   private dataService: RemoteData;
+  private searchInput: string;
   @Output() private selected = new EventEmitter<AutocompleteItem>();
   @Input() private placeholder: string;
 
@@ -40,5 +41,6 @@ export class DatasetsAutocompleteComponent {
       type: selected.originalObject.type
     };
     this.selected.emit(position);
+    this.searchInput = null; // clear the input once the search is done
   }
 }

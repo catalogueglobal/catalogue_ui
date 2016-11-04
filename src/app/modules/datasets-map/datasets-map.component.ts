@@ -4,7 +4,6 @@ import {IFeed, IBounds} from "../../commons/services/api/feedsApi.service";
 import {UtilsService} from "../../commons/services/utils.service";
 import {Configuration} from "../../commons/configuration";
 import {MapUtilsService} from "../../commons/services/mapUtils.service";
-import {DatasetsComponent} from "../datasets/datasets.component";
 import * as leaflet from "leaflet";
 require('./../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster');
 
