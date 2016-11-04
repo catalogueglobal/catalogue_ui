@@ -2536,6 +2536,10 @@ input[type="submit"].submit-btn {
   padding-right: 50px;
 }
 
+.completer-dropdown[_ngcontent-mpf-16] {
+  width: 100% !important;
+}
+
 .tools .download-btn {
   float: right;
   background: #3c57b2;

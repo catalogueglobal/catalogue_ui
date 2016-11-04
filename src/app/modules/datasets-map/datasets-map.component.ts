@@ -98,7 +98,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     //leaflet.IconOptions.imagePath = 'vendor/leaflet/dist/images/';
 
     let tiles = leaflet.tileLayer(this.config.MAP_TILE_LAYER_URL, this.config.MAP_TILE_LAYER_OPTIONS);
-    let map = leaflet.map(cssId, {center: <any>this.initialPosition, zoom: this.initialZoom, layers: [tiles]});
+    let map = leaflet.map(cssId, {center: <any>this.initialPosition, zoom: this.initialZoom, zoomControl: false,layers: [tiles]});
 
     map.addLayer(this.markerClusterGroup);
     this.mapUtils.clusterAreaOver(this.markerClusterGroup, map);
