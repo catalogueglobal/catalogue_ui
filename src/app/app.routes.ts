@@ -5,8 +5,8 @@ import {Routes, RouterModule} from '@angular/router';
 import {AuthGuard} from "./commons/guards/AuthGuard";
 
 const routes: Routes = [
-  {path: '', component: DatasetsComponent},
-  /*{path: 'datasets', component: DatasetsComponent},*/
+  {path: '', redirectTo: '/datasets', pathMatch: 'full'},
+  {path: 'datasets', component: DatasetsComponent},
   {path: 'my-datasets', component: MyDatasetsComponent, canActivate: [AuthGuard]},
   {path: '**', component: DatasetsComponent} // When page not found redirect to home
 ];
