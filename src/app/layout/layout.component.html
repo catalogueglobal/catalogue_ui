@@ -4,23 +4,24 @@
       <a href="{{'/'|institutionalUrl}}" title="Catalogue" id="logo"><img src="../../images/logo.png" alt="Catalogue"></a>
       <nav id="mainmenu">
         <ul class="cf">
-          <li class="subscribe-btn use-btn">
+
+          <!--<li class="subscribe-btn use-btn">
             <a routerLink="/" class="button subscribe use">{{'layout.menu.use'|translate}}</a>
-          </li>
+          </li>-->
           <li>
             <a href="#" class="session-item poptrigger" data-rel="createfeed">{{'layout.menu.upload'|translate}}</a>
           </li>
           <li>
-            <a routerLinkActive="active" routerLink="/datasets" class="session-item">{{'layout.menu.download'|translate}}</a>
+            <a routerLinkActive="active" routerLink="/" class="session-item">{{'layout.menu.download'|translate}}</a>
           </li>
           <li *ngIf="sessionService.loggedIn">
             <a routerLinkActive="active" routerLink="/my-datasets" class="session-item">{{'layout.menu.manage'|translate}}</a>
           </li>
 
-          <li *ngIf="!sessionService.loggedIn">
+          <!--<li *ngIf="!sessionService.loggedIn">
             <a href="#" class="session-item poptrigger"
                data-rel="subscribepopup">{{'layout.menu.subscribe'|translate}}</a>
-          </li>
+          </li> -->
           <li *ngIf="sessionService.loggedIn">
             <a href="#" class="session-item" (click)="sessionService.logout()">{{'layout.menu.logout'|translate}}</a>
           </li>
