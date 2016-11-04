@@ -2475,8 +2475,8 @@ input[type="submit"].submit-btn {
 #search-input-wrapper {
   position:absolute;
   top: 14px;
-  left:40px;
-  width: 70%;
+  left:14px;
+  width: 73%;
   margin-left:40px;
   margin-right: 40px;
   z-index: 1;
