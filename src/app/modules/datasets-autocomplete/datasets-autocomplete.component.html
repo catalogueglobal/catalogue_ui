@@ -1,2 +1,2 @@
-<ng2-completer [dataService]="dataService" [minSearchLength]="0" (selected)="onItemSelected($event)"
+<ng2-completer name="searchInput" [(ngModel)]="searchInput" #searchInput1="ngModel" [dataService]="dataService" [minSearchLength]="0" (selected)="onItemSelected($event, $this)"
                [placeholder]="placeholder"></ng2-completer>
