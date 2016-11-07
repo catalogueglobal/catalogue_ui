@@ -4,6 +4,7 @@ import {IFeed, IBounds} from "../../commons/services/api/feedsApi.service";
 import {UtilsService} from "../../commons/services/utils.service";
 import {Configuration} from "../../commons/configuration";
 import {MapUtilsService} from "../../commons/services/mapUtils.service";
+import { Router }   from '@angular/router';
 import * as leaflet from "leaflet";
 require('./../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster');
 
@@ -27,7 +28,7 @@ export class DatasetsMapComponent implements AfterViewInit {
   initialZoom: number = this.config.MAP_ZOOM_UNKNOWN;
   _zoom: number;
 
-  constructor(private utils: UtilsService, private config: Configuration, private mapUtils: MapUtilsService) {
+  constructor(private utils: UtilsService, private config: Configuration, private mapUtils: MapUtilsService, private router: Router) {
     this.geolocalize();
   }
 
@@ -101,6 +102,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     let map = leaflet.map(cssId, {center: <any>this.initialPosition, zoom: this.initialZoom, zoomControl: false,layers: [tiles]});
 
     map.addLayer(this.markerClusterGroup);
+
     this.mapUtils.clusterAreaOver(this.markerClusterGroup, map);
 
     let that = this;
@@ -129,9 +131,13 @@ export class DatasetsMapComponent implements AfterViewInit {
           let latLng = this.utils.computeLatLng(feed.latestValidation.bounds);
           let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
           let marker = this.computeMarker(feed.name, [latLng.lat, latLng.lng], bounds, feed.url, feed.isPublic);
-          this.markerClusterGroup.addLayer(marker);
+          
+
+          this.router.url === "/my-datasets" ? this.map.addLayer(marker) : this.markerClusterGroup.addLayer(marker);  
+          
 
           let that = this;
+          // area over marker
           this.mapUtils.markerAreaOver(marker, this.map);
         }
         /*else {
@@ -150,10 +156,11 @@ export class DatasetsMapComponent implements AfterViewInit {
 
   private computeMarker(name: string, latLng: [number, number], bounds: leaflet.LatLngExpression[], url: string, isPublic: boolean): leaflet.Marker {
 
-    let marker: any = leaflet.marker(latLng, {title: name});
+    let marker: any = leaflet.marker(latLng, {title: name, draggable: true});
     marker.data = {
-      bounds: bounds
+     bounds: bounds
     }
+
     marker.bindPopup(this.computeMarkerPopup(name, url));
     return marker;
   }
