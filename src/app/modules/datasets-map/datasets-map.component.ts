@@ -21,15 +21,16 @@ export class DatasetsMapComponent implements AfterViewInit {
   private _feeds: IFeed[];
   map: leaflet.Map;
   markerClusterGroup;
+  markers: Array<leaflet.Marker>;
 
   initialPosition = this.config.MAP_DEFAULT_POSITION;
   _position;
-
   initialZoom: number = this.config.MAP_ZOOM_UNKNOWN;
   _zoom: number;
 
   constructor(private utils: UtilsService, private config: Configuration, private mapUtils: MapUtilsService, private router: Router) {
     this.geolocalize();
+    this.markers = new Array();
   }
 
   reset() {
@@ -120,22 +121,28 @@ export class DatasetsMapComponent implements AfterViewInit {
     return map;
   }
 
+  private clearMap() {
+    this.markerClusterGroup.clearLayers();
+      for (var i = 0; i < this.markers.length; i++){
+        console.log("REMOOVE");
+        this.map.removeLayer(this.markers[i]);
+        this.markers.splice(i, 1);
+      }
+  }
+
   private populateMap() {
 
     if (this._feeds && this.map) {
-      this.markerClusterGroup.clearLayers();
-
+      this.clearMap();
+      console.log("MARKERRRRRRRRRRS", this.markers);
       console.log("setFeeds", this._feeds.length);
       this._feeds.map(feed=> {
         if (feed.latestValidation && feed.latestValidation.bounds) {
           let latLng = this.utils.computeLatLng(feed.latestValidation.bounds);
           let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
-          let marker = this.computeMarker(feed.name, [latLng.lat, latLng.lng], bounds, feed.url, feed.isPublic);
-          
-
+          let marker = this.computeMarker(feed.name, [latLng.lat, latLng.lng], bounds, feed.url, feed.isPublic)
           this.router.url === "/my-datasets" ? this.map.addLayer(marker) : this.markerClusterGroup.addLayer(marker);  
-          
-
+          this.markers.push(marker);
           let that = this;
           // area over marker
           this.mapUtils.markerAreaOver(marker, this.map);
@@ -155,12 +162,12 @@ export class DatasetsMapComponent implements AfterViewInit {
   }
 
   private computeMarker(name: string, latLng: [number, number], bounds: leaflet.LatLngExpression[], url: string, isPublic: boolean): leaflet.Marker {
-    var isDraggable = this.router.url === '/my-datasets' ? true : false;
+    var isDraggable: boolean = this.router.url === '/my-datasets' ? true : false;
     let marker: any = leaflet.marker(latLng, {title: name, draggable: isDraggable});
+    console.log("MARRKKKKKKER COMMMMMMMMMPUUUUUUUUUTE");
     marker.data = {
      bounds: bounds
     }
-
     marker.bindPopup(this.computeMarkerPopup(name, url));
     return marker;
   }
