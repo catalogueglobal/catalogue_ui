@@ -155,8 +155,8 @@ export class DatasetsMapComponent implements AfterViewInit {
   }
 
   private computeMarker(name: string, latLng: [number, number], bounds: leaflet.LatLngExpression[], url: string, isPublic: boolean): leaflet.Marker {
-
-    let marker: any = leaflet.marker(latLng, {title: name, draggable: true});
+    var isDraggable = this.router.url === '/my-datasets' ? true : false;
+    let marker: any = leaflet.marker(latLng, {title: name, draggable: isDraggable});
     marker.data = {
      bounds: bounds
     }
