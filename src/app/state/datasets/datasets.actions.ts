@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Action} from "@ngrx/store";
 import {FeedsGetResponse, IFeedApi, FeedsGetParams, IFeed} from "../../commons/services/api/feedsApi.service";
+import {IProject} from "../../commons/services/api/projectsApi.service";
 import {ICreateFeed} from "./datasets.effects";
 import {UserSubscribeParams} from "../../commons/services/api/usersApi.service";
 
@@ -43,6 +44,11 @@ export const DatasetsActionType = {
   FEED_FETCH: `FEED_FETCH`,
   FEED_FETCH_SUCCESS: `FEED_FETCH_SUCCESS`,
   FEED_FETCH_FAIL: `FEED_FETCH_FAIL`,
+
+  GET_PUBLIC_PROJECT: `GET_PUBLIC_PROJECT`,
+  GET_PRIVATE_PROJECT: `GET_PUBLIC_PROJECT`,
+  GET_PUBLIC_PROJECT_SUCCESS: `GET_PUBLIC_PROJECT_SUCCESS`,
+  GET_PUBLIC_PROJECT_FAIL: `GET_PUBLIC_PROJECT_FAIL`,
 };
 
 export type IFeedReference ={
@@ -123,6 +129,34 @@ export class DatasetsActions {
         feeds: feeds
       }
     }
+  }
+
+
+  publicProjectGet(projectGetParams: string) : Action {
+    return {
+      type: DatasetsActionType.GET_PUBLIC_PROJECT,
+      payload: {
+        projectGetParams: projectGetParams,
+      }
+    }
+  }
+
+  publicProjectGetSuccess(projectGetResponse: IProject) : Action {
+    return {
+      type: DatasetsActionType.GET_PUBLIC_PROJECT_SUCCESS,
+      payload: {
+        projectGetResponse: projectGetResponse
+      }
+    }
+  }
+
+  publicProjectGetFail(projectGetParams: string, error: any) : Action {
+    return {
+      type: DatasetsActionType.GET_PUBLIC_PROJECT_FAIL,
+      payload: {
+        projectGetParams: projectGetParams
+      }
+    };
   }
 
   feedsGetSuccess(feedsGetResponse: FeedsGetResponse): Action {

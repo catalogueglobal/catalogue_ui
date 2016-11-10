@@ -44,9 +44,19 @@ export class ProjectsApiService extends AbstractApiService {
   }
 
   public getSecureList(bounds: IBounds, sortOrder: SortOrder): Observable<IProject[]> {
+    console.log("GETTT SECUUUUUUUUUUUUUUUUUUUUUUURE LIST");
     return this.authHttp.get(this.PROJECT_SECURE_URL + "?" + this.sortQuery(sortOrder) + "&" + this.boundsQuery(bounds))
       .map<IProject[]>(response => response.json());
   }
+
+  public getPublicProject(projectId: string): Observable<IProject> {
+    return this.authHttp.get(this.PROJECT_PUBLIC_URL + "/" + projectId).map<IProject>(response => response.json());
+  }
+
+  public getPrivateProject(projectId: string): Observable<IProject> {
+    return this.authHttp.get(this.PROJECT_SECURE_URL + "/" + projectId).map<IProject>(response => response.json());
+  }
+
 
   private sortQuery(sortOrder: SortOrder) {
     if (!sortOrder) {

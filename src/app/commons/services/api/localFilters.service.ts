@@ -10,6 +10,7 @@ export class LocalFiltersService {
   }
 
   public filterFeedsInArea(feeds: IFeed[], area: IBounds) {
+    console.log("FILTER FEEDS IN AREA", feeds);
     return feeds.filter(feed => this.isFeedWithinArea(feed, area));
   }
 

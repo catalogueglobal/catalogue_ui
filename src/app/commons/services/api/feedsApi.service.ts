@@ -128,6 +128,7 @@ export class FeedsApiService extends AbstractApiService {
     let projects;
     if (params.secure) {
       projects = this.projectsApiService.getSecureList(params.bounds, params.sortOrder);
+      console.log("GET LIST", projects);
     }
     else {
       projects = this.projectsApiService.getPublicList(params.bounds, params.sortOrder);
@@ -143,11 +144,13 @@ export class FeedsApiService extends AbstractApiService {
       .toArray()
       .map(feedArray => {
         if (bounds) {
+          console.log("ADAPT FEEDS RESPONSE", feedArray);
           feedArray = this.localFilters.filterFeedsInArea(feedArray, bounds)
         }
         if (sortOrder) {
           feedArray = this.localFilters.sortFeeds(feedArray, sortOrder)
         }
+        console.log("FEEDS RETURNED", feedArray);
         return {
           feeds: feedArray
         };

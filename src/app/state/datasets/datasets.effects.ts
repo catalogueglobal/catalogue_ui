@@ -9,7 +9,7 @@ import {
   FeedsGetResponse
 } from "../../commons/services/api/feedsApi.service";
 import {DatasetsState} from "./datasets.reducer";
-import {ProjectsApiService} from "../../commons/services/api/projectsApi.service";
+import {IProject, ProjectsApiService} from "../../commons/services/api/projectsApi.service";
 import {UsersApiService, UserSubscribeParams} from "../../commons/services/api/usersApi.service";
 
 export type ICreateFeed = {
@@ -40,6 +40,18 @@ export class DatasetsEffects {
           .map(() => this.action.userSubscribeSuccess(userSubscribeParams))
           .catch(e => Observable.of(this.action.userSubscribeFail(userSubscribeParams, e)))
       }
+    ).share();
+
+  @Effect() PROJECT_PUBLIC_GET$: Observable<Action> = this.actions$
+    .ofType(DatasetsActionType.GET_PUBLIC_PROJECT)
+    .map(action => action.payload)
+    .switchMap(payload => {
+        const projectGetParams: string = payload.projectGetParams;
+
+        return this.projectsApi.getPublicProject(projectGetParams)
+        .map( project => this.action.publicProjectGetSuccess(project))
+        .catch(e => Observable.of(this.action.publicProjectGetFail(projectGetParams, e)))
+      } 
     ).share();
 
   @Effect() FEEDS_GET$: Observable<Action> = this.actions$

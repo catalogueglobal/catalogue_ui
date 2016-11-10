@@ -1,7 +1,10 @@
 import {Component, AfterViewInit, Input, Output, EventEmitter} from "@angular/core";
 import {ProjectsApiService} from "../../commons/services/api/projectsApi.service";
+import {Store, Action} from "@ngrx/store";
 import {IFeed, IBounds} from "../../commons/services/api/feedsApi.service";
 import {UtilsService} from "../../commons/services/utils.service";
+import {DatasetsState} from "../../state/datasets/datasets.reducer";
+import {DatasetsActions} from "../../state/datasets/datasets.actions";
 import {Configuration} from "../../commons/configuration";
 import {MapUtilsService} from "../../commons/services/mapUtils.service";
 import { Router }   from '@angular/router';
@@ -28,7 +31,7 @@ export class DatasetsMapComponent implements AfterViewInit {
   initialZoom: number = this.config.MAP_ZOOM_UNKNOWN;
   _zoom: number;
 
-  constructor(private utils: UtilsService, private config: Configuration, private mapUtils: MapUtilsService, private router: Router) {
+  constructor(private utils: UtilsService, private config: Configuration, private mapUtils: MapUtilsService, private router: Router, protected store: Store<DatasetsState>, protected datasetsAction: DatasetsActions) {
     this.geolocalize();
     this.markers = new Array();
   }
@@ -123,21 +126,23 @@ export class DatasetsMapComponent implements AfterViewInit {
 
   private clearMap() {
     this.markerClusterGroup.clearLayers();
+    if (this.router.url === "/my-datasets"){
       for (var i = 0; i < this.markers.length; i++){
-        console.log("REMOOVE");
         this.map.removeLayer(this.markers[i]);
         this.markers.splice(i, 1);
       }
+    }
   }
 
   private populateMap() {
 
     if (this._feeds && this.map) {
       this.clearMap();
-      console.log("MARKERRRRRRRRRRS", this.markers);
       console.log("setFeeds", this._feeds.length);
       this._feeds.map(feed=> {
         if (feed.latestValidation && feed.latestValidation.bounds) {
+
+          this.getLatLngProject(feed.projectId);
           let latLng = this.utils.computeLatLng(feed.latestValidation.bounds);
           let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
           let marker = this.computeMarker(feed.name, [latLng.lat, latLng.lng], bounds, feed.url, feed.isPublic)
@@ -164,7 +169,7 @@ export class DatasetsMapComponent implements AfterViewInit {
   private computeMarker(name: string, latLng: [number, number], bounds: leaflet.LatLngExpression[], url: string, isPublic: boolean): leaflet.Marker {
     var isDraggable: boolean = this.router.url === '/my-datasets' ? true : false;
     let marker: any = leaflet.marker(latLng, {title: name, draggable: isDraggable});
-    console.log("MARRKKKKKKER COMMMMMMMMMPUUUUUUUUUTE");
+
     marker.data = {
      bounds: bounds
     }
@@ -180,4 +185,8 @@ export class DatasetsMapComponent implements AfterViewInit {
     return popupHtml;
   }
 
-}
+  private getLatLngProject(projectId: string){
+    this.store.dispatch(this.datasetsAction.publicProjectGet(projectId));
+  }
+
+} 

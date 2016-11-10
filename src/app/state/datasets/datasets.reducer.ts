@@ -88,6 +88,14 @@ export function datasetsReducer(state = initialState, action: Action): DatasetsS
 
     //
 
+    case DatasetsActionType.GET_PUBLIC_PROJECT: {
+      const projectGetParams: string = payload.projectGetParams
+
+      return Object.assign({}, state, {
+        projectGetParams: projectGetParams
+      });
+    }
+
     case DatasetsActionType.FEEDS_GET:
     case DatasetsActionType.FEEDS_GET_LOCALLY: {
       const feedsGetParams: FeedsGetParams = payload.feedsGetParams;
@@ -102,7 +110,7 @@ export function datasetsReducer(state = initialState, action: Action): DatasetsS
     }
     case DatasetsActionType.FEEDS_GET_SUCCESS: {
       const response: FeedsGetResponse = payload.feedsGetResponse;
-
+      console.log("RESPONSE", response.feeds);
       return Object.assign({}, state, {
         status: {},
         feeds: response.feeds
