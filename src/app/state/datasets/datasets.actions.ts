@@ -142,10 +142,11 @@ export class DatasetsActions {
   }
 
   publicProjectGetSuccess(projectGetResponse: IProject) : Action {
+    console.log("PROJECT GET SUCCESS", projectGetResponse);
     return {
       type: DatasetsActionType.GET_PUBLIC_PROJECT_SUCCESS,
       payload: {
-        projectGetResponse: projectGetResponse
+        project: projectGetResponse
       }
     }
   }

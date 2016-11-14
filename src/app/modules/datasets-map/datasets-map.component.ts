@@ -1,12 +1,14 @@
 import {Component, AfterViewInit, Input, Output, EventEmitter} from "@angular/core";
 import {ProjectsApiService} from "../../commons/services/api/projectsApi.service";
 import {Store, Action} from "@ngrx/store";
+import {Observable} from "rxjs/Rx";
 import {IFeed, IBounds} from "../../commons/services/api/feedsApi.service";
 import {UtilsService} from "../../commons/services/utils.service";
 import {DatasetsState} from "../../state/datasets/datasets.reducer";
 import {DatasetsActions} from "../../state/datasets/datasets.actions";
 import {Configuration} from "../../commons/configuration";
 import {MapUtilsService} from "../../commons/services/mapUtils.service";
+import {IProject} from "../../commons/services/api/projectsApi.service";
 import { Router }   from '@angular/router';
 import * as leaflet from "leaflet";
 require('./../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster');
@@ -18,6 +20,9 @@ require('./../../../../node_modules/leaflet.markercluster/dist/leaflet.markerclu
 })
 
 export class DatasetsMapComponent implements AfterViewInit {
+  protected project$: Observable<IProject>; 
+  protected project: IProject;
+
   @Input() mapId: string;
   @Output() protected boundsChange = new EventEmitter();
 
@@ -34,6 +39,10 @@ export class DatasetsMapComponent implements AfterViewInit {
   constructor(private utils: UtilsService, private config: Configuration, private mapUtils: MapUtilsService, private router: Router, protected store: Store<DatasetsState>, protected datasetsAction: DatasetsActions) {
     this.geolocalize();
     this.markers = new Array();
+
+    this.project$ = store.select('datasets').map(<DatasetsState>(datasets) => datasets.project);
+    this.project$.subscribe(datasets => this.project = datasets);
+    
   }
 
   reset() {
@@ -173,6 +182,11 @@ export class DatasetsMapComponent implements AfterViewInit {
     marker.data = {
      bounds: bounds
     }
+
+    marker.on("dragend", function(e){
+      console.log("saaaaaaaaaaaaaave");
+    })
+
     marker.bindPopup(this.computeMarkerPopup(name, url));
     return marker;
   }
@@ -187,6 +201,7 @@ export class DatasetsMapComponent implements AfterViewInit {
 
   private getLatLngProject(projectId: string){
     this.store.dispatch(this.datasetsAction.publicProjectGet(projectId));
+    console.log("GET LAT LNT project",this.project); 
   }
 
 } 
