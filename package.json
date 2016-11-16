@@ -23,6 +23,7 @@
     "@ngrx/core": "^1.2.0",
     "@ngrx/effects": "^2.0.0",
     "@ngrx/store": "^2.2.1",
+    "@ngrx/store-devtools": "^3.2.2",
     "@types/leaflet-markercluster": "^0.4.32",
     "@types/protractor": "^1.5.20",
     "angular2-jwt": "0.1.23",

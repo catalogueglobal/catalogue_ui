@@ -4,6 +4,7 @@ import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {AppComponent} from "./app.component";
 import {EffectsModule} from "@ngrx/effects";
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import {DatasetsEffects} from "./state/datasets/datasets.effects";
 import {TranslateService, TranslateLoader, TranslateStaticLoader} from "ng2-translate/src/translate.service";
 import {SessionService} from "./commons/services/session.service";
@@ -98,6 +99,7 @@ import {MyDatasetsComponent} from "./modules/my-datasets/my-datasets.component";
       )(appReducer)
     ),
     EffectsModule.run(DatasetsEffects),
+    StoreDevtoolsModule.instrumentOnlyWithExtension(),
 
     TranslateModule.forRoot({
       provide: TranslateLoader,
