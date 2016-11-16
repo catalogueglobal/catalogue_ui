@@ -78,6 +78,7 @@ export class DatasetsMapComponent implements AfterViewInit {
   @Input() set feeds(value: IFeed[]) {
     this._feeds = value;
     if (this.map) {
+      this.clearMap();
       this.populateMap();
     }
   }
@@ -134,6 +135,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     return map;
   }
 
+  // remove all marker from the map when refresh
   private clearMap() {
     this.markerClusterGroup.clearLayers();
     if (this.router.url === "/my-datasets"){
@@ -151,15 +153,7 @@ export class DatasetsMapComponent implements AfterViewInit {
       console.log("setFeeds", this._feeds.length);
       this._feeds.map(feed=> {
         if (feed.latestValidation && feed.latestValidation.bounds) {
-          this.getLatLngProject(feed);
-          let latLng = this.utils.computeLatLng(feed.latestValidation.bounds);
-          //let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
-          //let marker = this.computeMarker(feed.name, [latLng.lat, latLng.lng], bounds, feed.url, feed.isPublic)
-          //this.router.url === "/my-datasets" ? this.map.addLayer(marker) : this.markerClusterGroup.addLayer(marker);  
-          //this.markers.push(marker);
-          //let that = this;
-          // area over marker
-          //this.mapUtils.markerAreaOver(marker, this.map);
+          this.createMarker(feed);  
         }
         /*else {
          console.log('new marker (no bounds)', feed);
@@ -202,18 +196,15 @@ export class DatasetsMapComponent implements AfterViewInit {
     var projectsApi: ProjectsApiService;
     var updateProject;
       var changedPos = ev.target.getLatLng();
-      
-      console.log(ev.target.data.id);
+    
       updateProject = {
         defaultLocationLat: changedPos.lat,
         defaultLocationLon: changedPos.lng
       };
-    console.log(updateProject);
     this.store.dispatch(this.datasetsAction.updateProject(ev.target.data.id, updateProject));
   }
 
-  private getLatLngProject(feed: IFeed){
-    
+  private createMarker(feed: IFeed){
     this.projectsApi.getPrivateProject(feed.projectId).subscribe(
       data => {
         if (data){

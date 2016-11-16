@@ -97,10 +97,29 @@ export function datasetsReducer(state = initialState, action: Action): DatasetsS
     }
 
     case DatasetsActionType.GET_PUBLIC_PROJECT_SUCCESS: {
-      console.log("REDUCER GET PUBLIC PROJECT SUCCESS", payload.project);
-      
       return Object.assign({}, state, {
         project: payload.project
+      });
+    }
+
+    case DatasetsActionType.UPDATE_PROJECT: {
+      return Object.assign({}, state,{
+        projectId: payload.projectId,
+        updateProject: payload.updateProject
+      });
+    }
+
+    case DatasetsActionType.UPDATE_PROJECT_SUCCESS: {
+      return Object.assign({}, state,{
+        project: payload.project
+      });
+    }
+
+    case DatasetsActionType.UPDATE_PROJECT_FAIL: {
+      return Object.assign({}, state, {
+        projectId: payload.projectId,
+        updateProject: payload.updateProject,
+        error: payload.error
       });
     }
 
