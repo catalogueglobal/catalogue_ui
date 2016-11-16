@@ -155,7 +155,8 @@ export class DatasetsActions {
     return {
       type: DatasetsActionType.GET_PUBLIC_PROJECT_FAIL,
       payload: {
-        projectGetParams: projectGetParams
+        projectGetParams: projectGetParams,
+        error: error
       }
     };
   }

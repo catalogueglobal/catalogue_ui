@@ -22,6 +22,7 @@ require('./../../../../node_modules/leaflet.markercluster/dist/leaflet.markerclu
 export class DatasetsMapComponent implements AfterViewInit {
   protected project$: Observable<IProject>; 
   protected project: IProject;
+  public updateProject: Function;
 
   @Input() mapId: string;
   @Output() protected boundsChange = new EventEmitter();
@@ -36,13 +37,12 @@ export class DatasetsMapComponent implements AfterViewInit {
   initialZoom: number = this.config.MAP_ZOOM_UNKNOWN;
   _zoom: number;
 
-  constructor(private utils: UtilsService, private config: Configuration, private mapUtils: MapUtilsService, private router: Router, protected store: Store<DatasetsState>, protected datasetsAction: DatasetsActions) {
+
+  constructor(private utils: UtilsService, private config: Configuration, private projectsApi: ProjectsApiService, private mapUtils: MapUtilsService, private router: Router, protected store: Store<DatasetsState>, protected datasetsAction: DatasetsActions) {
     this.geolocalize();
     this.markers = new Array();
+    this.updateProject = this.updateProjectProperty.bind(this);
 
-    this.project$ = store.select('datasets').map(<DatasetsState>(datasets) => datasets.project);
-    this.project$.subscribe(datasets => this.project = datasets);
-    
   }
 
   reset() {
@@ -85,6 +85,7 @@ export class DatasetsMapComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.map = this.computeMap(this.mapId);
     this.populateMap();
+
   }
 
   private geolocalize(): void {
@@ -150,16 +151,15 @@ export class DatasetsMapComponent implements AfterViewInit {
       console.log("setFeeds", this._feeds.length);
       this._feeds.map(feed=> {
         if (feed.latestValidation && feed.latestValidation.bounds) {
-
-          this.getLatLngProject(feed.projectId);
+          this.getLatLngProject(feed);
           let latLng = this.utils.computeLatLng(feed.latestValidation.bounds);
-          let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
-          let marker = this.computeMarker(feed.name, [latLng.lat, latLng.lng], bounds, feed.url, feed.isPublic)
-          this.router.url === "/my-datasets" ? this.map.addLayer(marker) : this.markerClusterGroup.addLayer(marker);  
-          this.markers.push(marker);
-          let that = this;
+          //let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
+          //let marker = this.computeMarker(feed.name, [latLng.lat, latLng.lng], bounds, feed.url, feed.isPublic)
+          //this.router.url === "/my-datasets" ? this.map.addLayer(marker) : this.markerClusterGroup.addLayer(marker);  
+          //this.markers.push(marker);
+          //let that = this;
           // area over marker
-          this.mapUtils.markerAreaOver(marker, this.map);
+          //this.mapUtils.markerAreaOver(marker, this.map);
         }
         /*else {
          console.log('new marker (no bounds)', feed);
@@ -175,17 +175,16 @@ export class DatasetsMapComponent implements AfterViewInit {
     theMap.setView(thePosition, theZoom);
   }
 
-  private computeMarker(name: string, latLng: [number, number], bounds: leaflet.LatLngExpression[], url: string, isPublic: boolean): leaflet.Marker {
+  private computeMarker(name: string, latLng: [number, number], bounds: leaflet.LatLngExpression[], url: string, isPublic: boolean, id: string): leaflet.Marker {
     var isDraggable: boolean = this.router.url === '/my-datasets' ? true : false;
     let marker: any = leaflet.marker(latLng, {title: name, draggable: isDraggable});
 
     marker.data = {
-     bounds: bounds
+     bounds: bounds,
+     id: id
     }
-
-    marker.on("dragend", function(e){
-      console.log("saaaaaaaaaaaaaave");
-    })
+    let that;
+    marker.on("dragend", this.updateProject);
 
     marker.bindPopup(this.computeMarkerPopup(name, url));
     return marker;
@@ -199,9 +198,38 @@ export class DatasetsMapComponent implements AfterViewInit {
     return popupHtml;
   }
 
-  private getLatLngProject(projectId: string){
-    this.store.dispatch(this.datasetsAction.publicProjectGet(projectId));
-    console.log("GET LAT LNT project",this.project); 
+  private updateProjectProperty(ev) {
+    var projectsApi: ProjectsApiService;
+    var updateProject;
+      var changedPos = ev.target.getLatLng();
+      
+      console.log(ev.target.data.id);
+      updateProject = {
+        defaultLocationLat: changedPos.lat,
+        defaultLocationLon: changedPos.lng
+      };
+    console.log(updateProject);
+    this.projectsApi.updateProject(updateProject, ev.target.data.id).subscribe(
+      data => {
+        console.log("UPDATE PROJECT", data);
+      }
+    );
+  }
+
+  private getLatLngProject(feed: IFeed){
+    
+    this.projectsApi.getPrivateProject(feed.projectId).subscribe(
+      data => {
+        if (data){
+          let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
+          let marker = this.computeMarker(feed.name, [data.defaultLocationLat, data.defaultLocationLon], bounds, feed.url, feed.isPublic, feed.projectId)
+          this.router.url === "/my-datasets" ? this.map.addLayer(marker) : this.markerClusterGroup.addLayer(marker);  
+          this.markers.push(marker);
+          let that = this;
+          // area over marker
+          this.mapUtils.markerAreaOver(marker, this.map);
+        }
+      });
   }
 
 } 

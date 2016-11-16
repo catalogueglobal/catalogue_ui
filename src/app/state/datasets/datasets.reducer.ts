@@ -96,6 +96,14 @@ export function datasetsReducer(state = initialState, action: Action): DatasetsS
       });
     }
 
+    case DatasetsActionType.GET_PUBLIC_PROJECT_SUCCESS: {
+      console.log("REDUCER GET PUBLIC PROJECT SUCCESS", payload.project);
+      
+      return Object.assign({}, state, {
+        project: payload.project
+      });
+    }
+
     case DatasetsActionType.FEEDS_GET:
     case DatasetsActionType.FEEDS_GET_LOCALLY: {
       const feedsGetParams: FeedsGetParams = payload.feedsGetParams;
