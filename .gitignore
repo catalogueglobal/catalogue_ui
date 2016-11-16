@@ -1,0 +1,14 @@
+.idea
+node_modules/
+.settings
+out
+target/
+.DS_Store
+bin/
+.project
+*.iml
+*.launch
+maven-eclipse.xml
+*~
+*.versionsBackup
+.classpath
