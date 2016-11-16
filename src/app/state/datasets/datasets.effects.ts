@@ -54,6 +54,20 @@ export class DatasetsEffects {
       } 
     ).share();
 
+
+  @Effect() UPDATE_PROJECT$: Observable<Action> = this.actions$
+    .ofType(DatasetsActionType.UPDATE_PROJECT)
+    .map(action => action.payload)
+    .switchMap(payload => {
+      const projectId: string = payload.projectId;
+      const updateProject: any = payload.updateProject;
+
+      return this.projectsApi.updateProject(updateProject, projectId)
+      .map(project => this.action.updateProjectSuccess(project))
+      .catch(e => Observable.of(this.action.updateProjectFail(projectId, updateProject, e)))
+      }
+    ).share();
+
   @Effect() FEEDS_GET$: Observable<Action> = this.actions$
     .ofType(DatasetsActionType.FEEDS_GET)
     .map(action => action.payload)

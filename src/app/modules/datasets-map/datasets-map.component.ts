@@ -209,11 +209,7 @@ export class DatasetsMapComponent implements AfterViewInit {
         defaultLocationLon: changedPos.lng
       };
     console.log(updateProject);
-    this.projectsApi.updateProject(updateProject, ev.target.data.id).subscribe(
-      data => {
-        console.log("UPDATE PROJECT", data);
-      }
-    );
+    this.store.dispatch(this.datasetsAction.updateProject(ev.target.data.id, updateProject));
   }
 
   private getLatLngProject(feed: IFeed){

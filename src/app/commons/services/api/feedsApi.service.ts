@@ -144,13 +144,11 @@ export class FeedsApiService extends AbstractApiService {
       .toArray()
       .map(feedArray => {
         if (bounds) {
-          console.log("ADAPT FEEDS RESPONSE", feedArray);
           feedArray = this.localFilters.filterFeedsInArea(feedArray, bounds)
         }
         if (sortOrder) {
           feedArray = this.localFilters.sortFeeds(feedArray, sortOrder)
         }
-        console.log("FEEDS RETURNED", feedArray);
         return {
           feeds: feedArray
         };

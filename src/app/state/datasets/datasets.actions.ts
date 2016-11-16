@@ -49,6 +49,10 @@ export const DatasetsActionType = {
   GET_PRIVATE_PROJECT: `GET_PUBLIC_PROJECT`,
   GET_PUBLIC_PROJECT_SUCCESS: `GET_PUBLIC_PROJECT_SUCCESS`,
   GET_PUBLIC_PROJECT_FAIL: `GET_PUBLIC_PROJECT_FAIL`,
+
+  UPDATE_PROJECT: 'UPDATE_PROJECT',
+  UPDATE_PROJECT_SUCCESS: 'UPDATE_PROJECT_SUCCESS',
+  UPDATE_PROJECT_FAIL: 'UPDATE_PROJECT_FAIL',
 };
 
 export type IFeedReference ={
@@ -142,7 +146,6 @@ export class DatasetsActions {
   }
 
   publicProjectGetSuccess(projectGetResponse: IProject) : Action {
-    console.log("PROJECT GET SUCCESS", projectGetResponse);
     return {
       type: DatasetsActionType.GET_PUBLIC_PROJECT_SUCCESS,
       payload: {
@@ -150,6 +153,7 @@ export class DatasetsActions {
       }
     }
   }
+
 
   publicProjectGetFail(projectGetParams: string, error: any) : Action {
     return {
@@ -159,6 +163,36 @@ export class DatasetsActions {
         error: error
       }
     };
+  }
+
+  updateProject(projectId: string, projectPutParams: any) : Action {
+    return {
+      type: DatasetsActionType.UPDATE_PROJECT,
+      payload: {
+        projectId: projectId,
+        updateProject: projectPutParams
+      }
+    }
+  }
+
+  updateProjectSuccess(projectPutResponse: IProject) : Action {
+    return {
+      type: DatasetsActionType.UPDATE_PROJECT_SUCCESS,
+      payload: {
+        project: projectPutResponse
+      }
+    }
+  }
+
+  updateProjectFail(projectId: string, projectPutParams: any, error: any){
+    return {
+      type: DatasetsActionType.UPDATE_PROJECT_FAIL,
+      payload: {
+        projectId: projectId,
+        updateProject: projectPutParams,
+        error: error
+      }
+    }
   }
 
   feedsGetSuccess(feedsGetResponse: FeedsGetResponse): Action {
