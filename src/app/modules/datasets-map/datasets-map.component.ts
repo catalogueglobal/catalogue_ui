@@ -23,7 +23,6 @@ export class DatasetsMapComponent implements AfterViewInit {
   protected project$: Observable<IProject>; 
   protected project: IProject;
   public updateProject: Function;
-  public extractDataCallBack: Function;
 
   @Input() mapId: string;
   @Output() protected boundsChange = new EventEmitter();
@@ -43,7 +42,6 @@ export class DatasetsMapComponent implements AfterViewInit {
     this.geolocalize();
     this.markers = new Array();
     this.updateProject = this.updateProjectProperty.bind(this);
-    this.extractDataCallBack = this.extractData.bind(this);
   }
 
   reset() {
@@ -179,7 +177,11 @@ export class DatasetsMapComponent implements AfterViewInit {
      id: id
     }
     let that;
-    marker.on("dragend", this.updateProject);
+
+    if (isDraggable === true){
+      marker.on("dragend", this.updateProject);
+    }
+    
 
     marker.bindPopup(this.computeMarkerPopup(name, url));
     return marker;
@@ -218,9 +220,16 @@ export class DatasetsMapComponent implements AfterViewInit {
   }
 
   private createMarker(feed: IFeed){
-    this.projectsApi.getPrivateProject(feed.projectId).then(function success(data){
-      return this.extractData(data, feed);
-    }.bind(this)); 
+    if (this.router.url == "/my-datasets"){
+      this.projectsApi.getPrivateProject(feed.projectId).then(function success(data){
+        return this.extractData(data, feed);
+      }.bind(this));
+    } else {
+      this.projectsApi.getPublicProject(feed.projectId).then(function success(data){
+        return this.extractData(data, feed);
+      }.bind(this));
+    }
+     
   }
 
 } 

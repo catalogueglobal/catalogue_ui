@@ -48,8 +48,8 @@ export class ProjectsApiService extends AbstractApiService {
       .map<IProject[]>(response => response.json());
   }
 
-  public getPublicProject(projectId: string): Observable<IProject> {
-    return this.authHttp.get(this.PROJECT_PUBLIC_URL + "/" + projectId).map(response => response.json());
+  public getPublicProject(projectId: string): Promise<IProject> {
+    return this.http.get(this.PROJECT_PUBLIC_URL + "/" + projectId).map(response => response.json()).toPromise();
   }
 
   public getPrivateProject(projectId: string): Promise<IProject> {

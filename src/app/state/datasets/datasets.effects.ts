@@ -42,7 +42,7 @@ export class DatasetsEffects {
       }
     ).share();
 
-  @Effect() PROJECT_PUBLIC_GET$: Observable<Action> = this.actions$
+  /*@Effect() PROJECT_PUBLIC_GET$: Observable<Action> = this.actions$
     .ofType(DatasetsActionType.GET_PUBLIC_PROJECT)
     .map(action => action.payload)
     .switchMap(payload => {
@@ -52,7 +52,7 @@ export class DatasetsEffects {
         .map( project => this.action.publicProjectGetSuccess(project))
         .catch(e => Observable.of(this.action.publicProjectGetFail(projectGetParams, e)))
       } 
-    ).share();
+    ).share();*/
 
 
   @Effect() UPDATE_PROJECT$: Observable<Action> = this.actions$
