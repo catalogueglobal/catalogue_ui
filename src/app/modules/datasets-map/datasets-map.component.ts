@@ -23,6 +23,7 @@ export class DatasetsMapComponent implements AfterViewInit {
   protected project$: Observable<IProject>; 
   protected project: IProject;
   public updateProject: Function;
+  public extractDataCallBack: Function;
 
   @Input() mapId: string;
   @Output() protected boundsChange = new EventEmitter();
@@ -42,7 +43,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     this.geolocalize();
     this.markers = new Array();
     this.updateProject = this.updateProjectProperty.bind(this);
-
+    this.extractDataCallBack = this.extractData.bind(this);
   }
 
   reset() {
@@ -192,6 +193,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     return popupHtml;
   }
 
+  // Update the Lat and Lng of the project
   private updateProjectProperty(ev) {
     var projectsApi: ProjectsApiService;
     var updateProject;
@@ -204,19 +206,21 @@ export class DatasetsMapComponent implements AfterViewInit {
     this.store.dispatch(this.datasetsAction.updateProject(ev.target.data.id, updateProject));
   }
 
-  private createMarker(feed: IFeed){
-    this.projectsApi.getPrivateProject(feed.projectId).subscribe(
-      data => {
-        if (data){
+  private extractData(data, feed){
+    if (data){
           let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
           let marker = this.computeMarker(feed.name, [data.defaultLocationLat, data.defaultLocationLon], bounds, feed.url, feed.isPublic, feed.projectId)
           this.router.url === "/my-datasets" ? this.map.addLayer(marker) : this.markerClusterGroup.addLayer(marker);  
           this.markers.push(marker);
-          let that = this;
           // area over marker
           this.mapUtils.markerAreaOver(marker, this.map);
         }
-      });
+  }
+
+  private createMarker(feed: IFeed){
+    this.projectsApi.getPrivateProject(feed.projectId).then(function success(data){
+      return this.extractData(data, feed);
+    }.bind(this)); 
   }
 
 } 
