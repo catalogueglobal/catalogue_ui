@@ -32,16 +32,20 @@ export class FeedCreateFormComponent {
       return;
     }
 
-    if (this.addToProject === false){
-      let createFeed: ICreateFeed = {
+    let createFeed: ICreateFeed = {
         projectName: this.simpleUpload.projectName,
+        projectId: this.simpleUpload.projectId,
         feedName: this.simpleUpload.feedName,
         isPublic: this.simpleUpload.isPrivate,
         file: this.simpleUpload.file
       }
+
+    if (this.addToProject === false){
+      // create to new project and add feed
       this.store.dispatch(this.datasetsAction.feedCreate(createFeed));
     } else {
-      // add file to project
+      // add new feed to project
+      this.store.dispatch(this.datasetsAction.addFeedToProject(createFeed));
     }
     
   }
@@ -75,7 +79,7 @@ export class FeedCreateFormComponent {
 
   private resetForm() {
     this.showOptionsUpload = false;
-    this.isNewProject = true;
+    this.addToProject = false;
     this.simpleUpload = {
       projectName: "",
       feedName: "",

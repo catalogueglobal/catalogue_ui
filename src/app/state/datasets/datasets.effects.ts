@@ -14,6 +14,7 @@ import {UsersApiService, UserSubscribeParams} from "../../commons/services/api/u
 
 export type ICreateFeed = {
   projectName: string,
+  projectId: string,
   feedName: string,
   isPublic: boolean,
   file: any
@@ -42,19 +43,7 @@ export class DatasetsEffects {
       }
     ).share();
 
-  /*@Effect() PROJECT_PUBLIC_GET$: Observable<Action> = this.actions$
-    .ofType(DatasetsActionType.GET_PUBLIC_PROJECT)
-    .map(action => action.payload)
-    .switchMap(payload => {
-        const projectGetParams: string = payload.projectGetParams;
-
-        return this.projectsApi.getPublicProject(projectGetParams)
-        .map( project => this.action.publicProjectGetSuccess(project))
-        .catch(e => Observable.of(this.action.publicProjectGetFail(projectGetParams, e)))
-      } 
-    ).share();*/
-
-
+  
   @Effect() UPDATE_PROJECT$: Observable<Action> = this.actions$
     .ofType(DatasetsActionType.UPDATE_PROJECT)
     .map(action => action.payload)
@@ -107,6 +96,20 @@ export class DatasetsEffects {
           .catch(e => Observable.of(this.action.feedCreateFail(createFeed, e)))
       }
     ).share();
+
+  @Effect() ADD_FEED_TO_PROJECT$: Observable<Action> = this.actions$
+    .ofType(DatasetsActionType.ADD_FEED_TO_PROJECT)
+    .map(action => action.payload)
+    .switchMap(payload => {
+      const createFeed = payload.createFeed;
+
+      return this.addFeedToProject(createFeed, progressInfo => {
+        this.store.dispatch(this.action.feedCreateProgress(createFeed, progressInfo))
+      })
+      .map(feed => this.action.addFeedToProjectSuccess(feed))
+      .catch(e => Observable.of(this.action.addFeedToProjectFail(createFeed, e)))
+    }
+  ).share();
 
   @Effect() SET_PUBLIC$: Observable<Action> = this.actions$
     .ofType(DatasetsActionType.FEED_SET_PUBLIC)
@@ -204,6 +207,32 @@ export class DatasetsEffects {
           })
       }
     ).share();
+
+  private addFeedToProject(createFeed: ICreateFeed, onProgress): Observable<IFeedApi> {
+    return Observable.create(obs$ => {
+      onProgress("creating feed");
+      this.feedsApi.create(createFeed.feedName, createFeed.projectId, createFeed.isPublic).subscribe(feed => {
+        console.log("created feed:", feed);
+
+        onProgress("uploading...")
+              let setFile$ = this.feedsApi.setFile(feed.id, createFeed.file);
+              setFile$.subscribe(progress => {
+                  console.log('setFile progress', progress)
+                  onProgress("uploading... " + progress + "%")
+                },
+                err => {
+                  console.log('setFile error', err);
+                  obs$.error(err);
+                },
+                () => {
+                  console.log('setFile complete')
+                  obs$.next(feed);
+                  obs$.complete();
+                });
+              return setFile$;
+      })
+    });
+  } 
 
   private createProjectAndFeedAndSetFile(createFeed: ICreateFeed, onProgress): Observable<IFeedApi> {
     return Observable.create(obs$ => {

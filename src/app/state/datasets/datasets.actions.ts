@@ -53,6 +53,10 @@ export const DatasetsActionType = {
   UPDATE_PROJECT: 'UPDATE_PROJECT',
   UPDATE_PROJECT_SUCCESS: 'UPDATE_PROJECT_SUCCESS',
   UPDATE_PROJECT_FAIL: 'UPDATE_PROJECT_FAIL',
+
+  ADD_FEED_TO_PROJECT: 'ADD_FEED_TO_PROJECT',
+  ADD_FEED_TO_PROJECT_SUCCESS: 'ADD_FEED_TO_PROJECT_SUCCESS',
+  ADD_FEED_TO_PROJECT_FAIL: 'ADD_FEED_TO_PROJECT_FAIL',
 };
 
 export type IFeedReference ={
@@ -420,6 +424,44 @@ export class DatasetsActions {
       type: DatasetsActionType.FEED_FETCH_FAIL,
       payload: {
         feedRef: feedRef
+      }
+    }
+  }
+
+  addFeedToProject(createFeed: ICreateFeed): Action {
+
+    // use filename as default project/feed name
+    let defaultName = createFeed.file.name;
+    if (!createFeed.projectName || !createFeed.projectName.trim().length) {
+      createFeed.projectName = defaultName;
+    }
+    if (!createFeed.feedName || !createFeed.feedName.trim().length) {
+      createFeed.feedName = defaultName;
+    }
+
+    return {
+      type: DatasetsActionType.ADD_FEED_TO_PROJECT,
+      payload: {
+        createFeed: createFeed
+      }
+    }
+  }
+
+  addFeedToProjectSuccess(feed: IFeedApi): Action {
+    return {
+      type: DatasetsActionType.ADD_FEED_TO_PROJECT_SUCCESS,
+      payload: {
+        feed: feed
+      }
+    }
+  }
+
+  addFeedToProjectFail(createFeed: ICreateFeed, error: any): Action {
+    return {
+      type: DatasetsActionType.ADD_FEED_TO_PROJECT_FAIL,
+      payload: {
+        createFeed: createFeed,
+        error: error
       }
     }
   }
