@@ -143,6 +143,8 @@
     "FEED_DELETE_FAIL": "Failed to delete {{countFeeds}} feed(s) : {{feedLabels}}.",
     "FEED_FETCH": "Refreshing feed <i>{{feedName}}</i>...",
     "FEED_FETCH_SUCCESS": "Feed refreshed: <i>{{feedName}}</i>",
-    "FEED_FETCH_FAIL": "Feed refresh failed: <i>{{feedName}}</i>"
+    "FEED_FETCH_FAIL": "Feed refresh failed: <i>{{feedName}}</i>",
+    "ADD_FEED_TO_PROJECT_SUCCESS": "Feed have been added to the project",
+    "ADD_FEED_TO_PROJECT_FAIL": "Feed couldn't be added to the project"
   }
 }

@@ -199,6 +199,40 @@ export function datasetsReducer(state = initialState, action: Action): DatasetsS
 
     //
 
+    case DatasetsActionType.ADD_FEED_TO_PROJECT: {
+      const createFeed = payload.createFeed;
+
+      return Object.assign({}, state, {
+        status: {
+          busyMessage: "state.ADD_FEED_TO_PROJECT",
+          busyMessageArgs: {feedName: createFeed.feedName}
+        }
+      });
+    }
+
+
+    case DatasetsActionType.ADD_FEED_TO_PROJECT_SUCCESS: {
+      const createFeed = payload.feed;
+
+      return Object.assign({}, state, {
+        status: {
+          notifyMessage: "state.ADD_FEED_TO_PROJECT_SUCCESS",
+          notifyMessageArgs: {feedName: createFeed.feedName}
+        }
+      });
+    }
+
+    case DatasetsActionType.ADD_FEED_TO_PROJECT_FAIL: {
+      const createFeed = payload.createFeed;
+
+      return Object.assign({}, state, {
+        status: {
+          notifyMessage: "state.ADD_FEED_TO_PROJECT_FAIL",
+          notifyMessageArgs: {feedName: createFeed.feedName}
+        }
+      });
+    }
+
     case DatasetsActionType.FEED_SET_PUBLIC: {
       const feedRef = payload.feedRef;
 

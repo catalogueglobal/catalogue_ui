@@ -21,10 +21,10 @@ export class FeedCreateFormComponent {
 
   constructor(private sessionService:SessionService, private utils: UtilsService, protected store: Store<DatasetsState>, protected datasetsAction: DatasetsActions, private projectsService: ProjectsApiService, actions$: Actions) {
     this.resetForm();
-    this.getAllProjectNames();
   
     // reset form on upload success
-    actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.resetForm())
+    actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.resetForm());
+    actions$.ofType(DatasetsActionType.ADD_FEED_TO_PROJECT_SUCCESS).subscribe(() => this.resetForm());
   }
 
   private submit(): void {
@@ -78,10 +78,12 @@ export class FeedCreateFormComponent {
   }
 
   private resetForm() {
+    this.getAllProjectNames();
     this.showOptionsUpload = false;
     this.addToProject = false;
     this.simpleUpload = {
       projectName: "",
+      projectId: "",
       feedName: "",
       file: null,
       isPrivate: false

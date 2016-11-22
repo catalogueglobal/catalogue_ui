@@ -210,7 +210,7 @@ export class DatasetsEffects {
 
   private addFeedToProject(createFeed: ICreateFeed, onProgress): Observable<IFeedApi> {
     return Observable.create(obs$ => {
-      onProgress("creating feed");
+      onProgress("creating feed")
       this.feedsApi.create(createFeed.feedName, createFeed.projectId, createFeed.isPublic).subscribe(feed => {
         console.log("created feed:", feed);
 
@@ -230,7 +230,11 @@ export class DatasetsEffects {
                   obs$.complete();
                 });
               return setFile$;
-      })
+      },
+      err => {
+              console.log('feed creation error', err);
+              obs$.error(err);
+            });
     });
   } 
 
