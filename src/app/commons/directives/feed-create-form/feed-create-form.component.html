@@ -10,6 +10,16 @@
   <a (click)="toggleShowOptionsUpload($event)" *ngIf="showOptionsUpload" href="#">{{'popup.upload.toggleOptions.hide'|translate}}</a>
   <div *ngIf="showOptionsUpload">
     <div class="form-group">
+      <input (click)="toggleAddToProject($event)" type="checkbox" id="add-to-project" [(ngModel)]="simpleUpload.addToProject" name="addToProject">
+      <label for="add-to-project">Add to an existant project</label>
+    </div><!--/.form-group-->
+    <div class="form-group" *ngIf="addToProject">
+      <label>{{'popup.upload.projectName'|translate}}</label>
+      <select [(ngModel)]="simpleUpload.projectId" name="projectId">
+        <option *ngFor="let project of projectsName" [value]="project.id">{{project.name}}</option>
+      </select>
+    </div><!--/.form-group-->
+    <div class="form-group" *ngIf="!addToProject">
       <label>{{'popup.upload.projectName'|translate}}</label>
       <input type="text" [(ngModel)]="simpleUpload.projectName" name="projectName">
     </div><!--/.form-group-->

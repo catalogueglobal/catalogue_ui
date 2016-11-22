@@ -220,6 +220,7 @@ export class DatasetsMapComponent implements AfterViewInit {
   }
 
   private createMarker(feed: IFeed){
+    // TODO : to change, the code is not clean
     if (this.router.url == "/my-datasets"){
       this.projectsApi.getPrivateProject(feed.projectId).then(function success(data){
         return this.extractData(data, feed);
@@ -230,6 +231,7 @@ export class DatasetsMapComponent implements AfterViewInit {
       }.bind(this));
     }
      
+      
   }
 
 } 
