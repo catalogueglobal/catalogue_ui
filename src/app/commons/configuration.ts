@@ -36,7 +36,8 @@ export class Configuration {
   public MAP_TILE_LAYER_URL: string = 'https://api.tiles.mapbox.com/v4/conveyal.ie3o67m0/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY29udmV5YWwiLCJhIjoiMDliQURXOCJ9.9JWPsqJY7dGIdX777An7Pw';
   public MAP_TILE_LAYER_OPTIONS: {} = {
     attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, &copy; <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 18
+    maxZoom: 18,
+    noWrap: true
   };
 
   public AUTOCOMPLETE_LIMIT: number = 10;
