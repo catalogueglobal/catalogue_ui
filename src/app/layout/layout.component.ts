@@ -18,6 +18,9 @@ export class LayoutComponent {
     actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS)
       .subscribe(action => closePopup('#createfeed'))
 
+    // close popup on feed added to project 
+    actions$.ofType(DatasetsActionType.ADD_FEED_TO_PROJECT_SUCCESS)
+      .subscribe(action => closePopup('#createfeed'))
 
     // close popup on user subscribe success
     actions$.ofType(DatasetsActionType.USER_SUBSCRIBE_SUCCESS)
