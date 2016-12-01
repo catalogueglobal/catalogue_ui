@@ -34,6 +34,7 @@ import {ToasterModule} from "angular2-toaster/angular2-toaster";
 //import {ToasterContainerComponent} from "angular2-toaster/angular2-toaster";
 import {StatusComponent} from "./commons/directives/status/status.component";
 import {FeedCreateFormComponent} from "./commons/directives/feed-create-form/feed-create-form.component";
+import {DeleteFeedConfirmationComponent} from "./commons/directives/delete-feed-confirmation/delete-feed-confirmation.component";
 import {InlineEditTextComponent} from "./commons/directives/inline-edit-text/inline-edit-text.component";
 import {InlineEditFileComponent} from "./commons/directives/inline-edit-file/inline-edit-file.component";
 import {SubscribeFormComponent} from './commons/directives/subscribe-form/subscribe-form.component';
@@ -51,6 +52,8 @@ import {Ng2CompleterModule } from "ng2-completer";
 import {HomeComponent} from "./modules/home/home.component";
 import {DatasetsComponent} from "./modules/datasets/datasets.component";
 import {MyDatasetsComponent} from "./modules/my-datasets/my-datasets.component";
+import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
+
 
 @NgModule({
   declarations: [
@@ -80,7 +83,8 @@ import {MyDatasetsComponent} from "./modules/my-datasets/my-datasets.component";
     InlineEditTextComponent,
     InlineEditFileComponent,
     SubscribeFormComponent,
-    PaginatePipe
+    PaginatePipe,
+    DeleteFeedConfirmationComponent
   ],
 
   imports: [
@@ -91,6 +95,10 @@ import {MyDatasetsComponent} from "./modules/my-datasets/my-datasets.component";
     HttpModule,
     ToasterModule,
     routing,
+
+    ConfirmationPopoverModule.forRoot({
+      confirmButtonType: 'danger' // set defaults here
+    }),
 
     StoreModule.provideStore(
       compose(
@@ -107,6 +115,8 @@ import {MyDatasetsComponent} from "./modules/my-datasets/my-datasets.component";
       deps: [Http]
     })
   ],
+
+  
 
   entryComponents: [AppComponent],
 

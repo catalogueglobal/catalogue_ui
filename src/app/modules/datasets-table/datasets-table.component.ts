@@ -5,6 +5,7 @@ import {Configuration} from "../../commons/configuration";
 import {SortOrder} from "../../commons/directives/sort-link/sort-link.component";
 import {UtilsService} from "../../commons/services/utils.service";
 import {FEED_RETRIEVAL_METHOD} from "../../commons/services/api/feedsApi.service";
+import {DeleteFeedConfirmationComponent} from "../../commons/directives/delete-feed-confirmation/delete-feed-confirmation.component";
 //import {Map} from "@angular/core/src/facade/collection";
 
 @Component({
@@ -63,7 +64,7 @@ export class DatasetsTableComponent {
   public getCheckedFeeds(): IFeedRow[] {
     if (!this.feeds) {
       // component not initialized yet
-      return [];
+     return [];
     }
     return this.feeds.filter(feed => this.checkById[feed.id]);
   }

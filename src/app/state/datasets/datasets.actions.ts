@@ -57,6 +57,9 @@ export const DatasetsActionType = {
   ADD_FEED_TO_PROJECT: 'ADD_FEED_TO_PROJECT',
   ADD_FEED_TO_PROJECT_SUCCESS: 'ADD_FEED_TO_PROJECT_SUCCESS',
   ADD_FEED_TO_PROJECT_FAIL: 'ADD_FEED_TO_PROJECT_FAIL',
+
+  CONFIRM_DELETE_FEED: 'CONFIRM_DELETE_FEED',
+  CONFIRM_DELETE_FEED_SUCCESS: 'CONFIRM_DELETE_FEED_SUCCESS',
 };
 
 export type IFeedReference ={
@@ -466,6 +469,20 @@ export class DatasetsActions {
     }
   }
 
+  confirmationDeleteProject(deleteProject: boolean): Action{
+    return {
+      type: DatasetsActionType.CONFIRM_DELETE_FEED,
+      payload: {
+        deleteProject: deleteProject
+      }
+    }
+  }
+
+  confirmationDeleteProjectSuccess(): Action {
+    return {
+      type: DatasetsActionType.CONFIRM_DELETE_FEED_SUCCESS
+    }
+  }
   //
 
 }

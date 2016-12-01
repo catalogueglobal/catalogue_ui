@@ -9,6 +9,7 @@ import {DatasetsMapComponent} from "../datasets-map/datasets-map.component";
 import {MyDatasetsTableComponent} from "../my-datasets-table/my-datasets-table.component";
 import {IFeed, FeedsApiService} from "../../commons/services/api/feedsApi.service";
 import {UtilsService} from "../../commons/services/utils.service";
+import {DatasetsActionType} from "../../state/datasets/datasets.actions";
 import {Actions} from "@ngrx/effects";
 import {LocalFiltersService} from "../../commons/services/api/localFilters.service";
 
@@ -26,6 +27,7 @@ export class MyDatasetsComponent extends DatasetsComponent {
     super(utils, projectsApiService, store, datasetsAction, config, feedsApi, localFilters, actions$);
 
     this.initDatasets(true); // show private feeds
+    actions$.ofType(DatasetsActionType.CONFIRM_DELETE_FEED_SUCCESS).subscribe(action => this.deleteFeeds());
   }
 
   deleteFeeds() {

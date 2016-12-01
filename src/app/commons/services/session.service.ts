@@ -3,6 +3,7 @@ import {LocalStorage, SessionStorageService} from "ng2-webstorage";
 import {tokenNotExpired} from "angular2-jwt/angular2-jwt";
 import {Configuration} from "../configuration";
 import {Observable} from "rxjs/Rx";
+//import {FeedCreateFormComponent} from "../directives/feed-create-form/feed-create-form.component";
 
 export type Session = {
   user:any,
@@ -19,7 +20,7 @@ export class SessionService {
   @LocalStorage() session:Session;
   private lock:any;
 
-  constructor(private config:Configuration) {
+  constructor(private config:Configuration, ) {
     console.log("session", this.session);
     this.lock = new Auth0Lock(this.config.AUTH_ID, this.config.AUTH_DOMAIN);
   }
@@ -43,6 +44,7 @@ export class SessionService {
     this.showLogin().subscribe(
       session => {
         that.session = session;
+        //that.feedCreate.getAllProjectNames();
         console.log("login success", that.session);
       },
       (err) => {

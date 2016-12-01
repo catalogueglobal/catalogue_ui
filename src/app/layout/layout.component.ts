@@ -25,6 +25,9 @@ export class LayoutComponent {
     // close popup on user subscribe success
     actions$.ofType(DatasetsActionType.USER_SUBSCRIBE_SUCCESS)
       .subscribe(action => closePopup('#subscribepopup'))
+
+    actions$.ofType(DatasetsActionType.FEED_DELETE_SUCCESS)
+      .subscribe(action => closePopup('#deletefeedpopup'))
   }
 
 }

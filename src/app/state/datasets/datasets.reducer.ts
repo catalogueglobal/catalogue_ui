@@ -419,6 +419,14 @@ export function datasetsReducer(state = initialState, action: Action): DatasetsS
       });
     }
 
+    case DatasetsActionType.CONFIRM_DELETE_FEED: {
+      return Object.assign({}, state, {});
+    }
+
+    case DatasetsActionType.CONFIRM_DELETE_FEED_SUCCESS: {
+      return Object.assign({}, state, {});
+    }
+
     default:
       return state;
   }

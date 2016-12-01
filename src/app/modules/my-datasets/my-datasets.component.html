@@ -23,8 +23,8 @@
         <h4>{{'mydatasets.table.title'|translate}}</h4>
         <p>{{'mydatasets.table.intro'|translate}}</p>
         <div class="tools">
-          <a *ngIf="feeds.length>0" href="#" class="generic-btn" (click)="deleteFeeds()"
-             [class.disabled]="!getCheckedFeeds().length">
+          <a [class.disabled]="!getCheckedFeeds().length" href="#" class="generic-btn poptrigger" data-rel="deletefeedpopup"
+             >
             <i class="fa fa-trash" aria-hidden="true"></i> {{'mydatasets.table.btn.delete'|translate}}
           </a>
           <a *ngIf="feeds.length>0" href="#" class="generic-btn" (click)="downloadFeeds($event)"

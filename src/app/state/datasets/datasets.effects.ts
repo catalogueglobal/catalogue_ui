@@ -208,6 +208,14 @@ export class DatasetsEffects {
       }
     ).share();
 
+  @Effect() CONFIRM_DELETE_FEED$: any = this.actions$
+    .ofType(DatasetsActionType.CONFIRM_DELETE_FEED)
+    .map(action => action.payload)
+    .map(payload => {
+      return this.action.confirmationDeleteProjectSuccess();
+    }).share();
+     
+
   private addFeedToProject(createFeed: ICreateFeed, onProgress): Observable<IFeedApi> {
     return Observable.create(obs$ => {
       onProgress("creating feed")
