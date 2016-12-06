@@ -211,7 +211,13 @@ export class DatasetsMapComponent implements AfterViewInit {
   private extractData(data, feed){
     if (data){
           let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
-          let marker = this.computeMarker(feed.name, [data.defaultLocationLat, data.defaultLocationLon], bounds, feed.url, feed.isPublic, feed.projectId)
+	  let lat = data.defaultLocationLat;
+	  let lng = data.defaultLocationLon;
+          if (!lat)
+	     lat = (bounds[0].lat + bounds[1].lat) / 2;
+          if (!lng)
+	     lng = (bounds[0].lng + bounds[2].lng) / 2;
+          let marker = this.computeMarker(feed.name, [lat, lng], bounds, feed.url, feed.isPublic, feed.projectId)
           this.router.url === "/my-datasets" ? this.map.addLayer(marker) : this.markerClusterGroup.addLayer(marker);  
           this.markers.push(marker);
           // area over marker
