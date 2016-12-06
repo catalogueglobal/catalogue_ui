@@ -15,7 +15,7 @@ export class UploadService {
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
           if (xhr.status === 200 || xhr.status == 302 || xhr.status == 304) {
-            //observer.next(JSON.parse(xhr.response));
+            //observer.next(JSON.parse(xhr.response));&
             observer.complete();
           } else {
             observer.error(xhr.response);

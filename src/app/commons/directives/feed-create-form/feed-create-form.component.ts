@@ -59,7 +59,7 @@ export class FeedCreateFormComponent {
     this.addToProject = !this.addToProject;
   }
 
-  private getAllProjectNames(){
+  public getAllProjectNames(){
     if (this.sessionService.loggedIn == true){
       this.projectsService.getAllSecureProject().subscribe(response => {
         let name;

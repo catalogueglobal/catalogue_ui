@@ -2,7 +2,6 @@ import {Component, OnInit, Output, EventEmitter} from "@angular/core";
 import {Actions} from "@ngrx/effects";
 import {Store, Action} from "@ngrx/store";
 import {DatasetsState} from "../../../state/datasets/datasets.reducer";
-//import {DatasetsComponent} from "../../../modules/datasets/datasets.component";
 import {DatasetsActions, toFeedReference, IFeedReference, DatasetsActionType} from "../../../state/datasets/datasets.actions";
 import {IFeed, FeedsApiService} from "../../services/api/feedsApi.service";
 import {ProjectsApiService} from "../../services/api/projectsApi.service";

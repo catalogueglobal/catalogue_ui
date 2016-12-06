@@ -551,17 +551,17 @@ p.drop-caps.secundary:first-child:first-letter {
 /* =Common-Page (common classes for all pages)
 ========================================================================================*/
 #header {
-  position: absolute;
+  position: fixed;
   width: 100%;
   left: 0;
   top: 0;
-  z-index: 10;
+  z-index: 11;
   padding-top: 20px;
 }
 
 #logo {
   float: left;
-  width: 133px;
+  width: 200px;
 }
 
 #logo img {
@@ -670,8 +670,10 @@ p.drop-caps.secundary:first-child:first-letter {
 .banner {
   background: url(../images/bgi/banner.jpg) no-repeat center center;
   background-size: cover;
-  height: 400px;
-  position: relative;
+  height: 80px;
+  position: fixed;
+  width: 100%;
+  z-index: 10;
 }
 
 .banner:after {
