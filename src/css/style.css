@@ -2471,7 +2471,7 @@ input[type="submit"].submit-btn {
 
 #map-wrapper {
   position: relative;
-  width: 100%;
+  min-width:500px;
 }
 
 #search-input-wrapper {

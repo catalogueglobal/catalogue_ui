@@ -4,7 +4,9 @@
 <div id="main">
   <div id="primary" class="content-area one-column">
     <div class="datasets-section">
-      <div class="map-section">
+      <div class="row" style="margin-top:40px;max-width:100%;">
+        <div class="column six">
+        <div class="map-section">
         <h4>{{'datasets.map.title'|translate}}</h4>
         <div id="map-wrapper">
           <app-datasets-map [feeds]="feeds$|async" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom"
@@ -19,7 +21,11 @@
           </div><!--/#search-input-wrapper-->
         </div><!--/#map-wrapper-->
       </div><!--/.map-section-->
-      <div class="feed-registry">
+      </div>
+
+
+      <div class="six column">
+        <div class="feed-registry">
         <h4>{{'datasets.table.title'|translate}}</h4>
         <p>{{'datasets.table.intro'|translate}}</p>
         <div class="tools">
@@ -34,7 +40,14 @@
         <div class="noresult" *ngIf="feeds.length==0">
           {{'datasets.table.noresult.info'|translate}} <a (click)="resetSearch()">{{'datasets.table.noresult.reset'|translate}}</a>.
         </div>
-      </div><!--/.feed-registry-->
+        </div><!--/.feed-registry-->
+      </div>
+      </div>
+      
     </div><!--/.datasets-section-->
   </div><!--/#primary-->
 </div><!--/#main-->
+<div class="row wide">
+        <div class="six column">twelve</div>
+        <div class="six column">twelve</div>
+</div>
