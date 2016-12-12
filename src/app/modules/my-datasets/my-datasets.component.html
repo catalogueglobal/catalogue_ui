@@ -1,43 +1,57 @@
 <div class="banner" style="background-image:url(images/bgi/banner.jpg);">
   <!--<div class="main-title"><h1 class="banner-title">{{'mydatasets.title'|translate}}</h1></div>-->
-</div><!--/.banner-->
+</div>
+<!--/.banner-->
 <div id="main">
   <div id="primary" class="content-area one-column">
     <div class="datasets-section">
-      <div class="map-section">
-        <h4>{{'mydatasets.map.title'|translate}}</h4>
-        <div id="map-wrapper">
-          <app-datasets-map [feeds]="feeds$|async" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom"
-                          (boundsChange)="onBoundsChange($event)"></app-datasets-map>
-          <div id="search-input-wrapper" style="">
-            <div <class="tools">
-              <div class="autocompletebox">
-                <app-datasets-autocomplete (selected)="onAutocompleteSelected($event)"
-                                       placeholder="{{'datasets.table.search'|translate}}"></app-datasets-autocomplete>
+      <div class="row" style="margin-top:40px;max-width:100%;">
+        <div class="column six" style="min-width:500px;">
+          <div class="map-section">
+            <h4>{{'mydatasets.map.title'|translate}}</h4>
+            <div id="map-wrapper">
+              <app-datasets-map [feeds]="feeds$|async" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom" (boundsChange)="onBoundsChange($event)"></app-datasets-map>
+              <div id="search-input-wrapper" style="">
+                <div class="tools">
+                  <div class="autocompletebox">
+                    <app-datasets-autocomplete (selected)="onAutocompleteSelected($event)" placeholder="{{'datasets.table.search'|translate}}"></app-datasets-autocomplete>
+                  </div>
+                </div>
+                <!--/#tools-->
               </div>
-            </div><!--/#tools-->
-          </div><!--/#search-input-wrapper-->
-        </div><!--/#map-wrapper-->
-      </div><!--/.map-section-->
-      <div class="feed-registry">
-        <h4>{{'mydatasets.table.title'|translate}}</h4>
-        <p>{{'mydatasets.table.intro'|translate}}</p>
-        <div class="tools">
-          <a [class.disabled]="!getCheckedFeeds().length" href="#" class="generic-btn poptrigger" data-rel="deletefeedpopup"
-             >
-            <i class="fa fa-trash" aria-hidden="true"></i> {{'mydatasets.table.btn.delete'|translate}}
-          </a>
-          <a *ngIf="feeds.length>0" href="#" class="generic-btn" (click)="downloadFeeds($event)"
-             [class.disabled]="!getCheckedFeeds().length">
-            <i class="fa fa-download" aria-hidden="true"></i> {{'mydatasets.table.btn.download'|translate}}</a>
-        </div><!--/.tools-->
-        <app-my-datasets-table [feeds]="feeds$|async"
-                               (sortChange)="onSortChange($event)"></app-my-datasets-table>
-
-        <div class="noresult" *ngIf="feeds.length==0">
-          {{'mydatasets.table.noresult.info'|translate}} <a (click)="resetSearch()">{{'mydatasets.table.noresult.reset'|translate}}</a>.
+              <!--/#search-input-wrapper-->
+            </div>
+            <!--/#map-wrapper-->
+          </div>
+          <!--/.map-section-->
         </div>
-      </div><!--/.feed-registry-->
-    </div><!--/.datasets-section-->
-  </div><!--/#primary-->
-</div><!--/#main-->
+
+        <div class="column six">
+          <div class="feed-registry">
+            <h4>{{'mydatasets.table.title'|translate}}</h4>
+            <p>{{'mydatasets.table.intro'|translate}}</p>
+            <div class="tools">
+              <a [class.disabled]="!getCheckedFeeds().length" href="#" class="generic-btn poptrigger" data-rel="deletefeedpopup">
+                <i class="fa fa-trash" aria-hidden="true"></i> {{'mydatasets.table.btn.delete'|translate}}
+              </a>
+              <a *ngIf="feeds.length>0" href="#" class="generic-btn" (click)="downloadFeeds($event)" [class.disabled]="!getCheckedFeeds().length">
+                <i class="fa fa-download" aria-hidden="true"></i> {{'mydatasets.table.btn.download'|translate}}</a>
+            </div>
+            <!--/.tools-->
+            <app-my-datasets-table [feeds]="feeds$|async" (sortChange)="onSortChange($event)"></app-my-datasets-table>
+
+            <div class="noresult" *ngIf="feeds.length==0">
+              {{'mydatasets.table.noresult.info'|translate}} <a (click)="resetSearch()">{{'mydatasets.table.noresult.reset'|translate}}</a>.
+            </div>
+          </div>
+          <!--/.feed-registry-->
+        </div>
+      </div>
+
+
+    </div>
+    <!--/.datasets-section-->
+  </div>
+  <!--/#primary-->
+</div>
+<!--/#main-->
