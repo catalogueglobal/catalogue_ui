@@ -21,7 +21,12 @@ export class SessionService {
 
   constructor(private config:Configuration) {
     console.log("session", this.session);
-    this.lock = new Auth0Lock(this.config.AUTH_ID, this.config.AUTH_DOMAIN);
+    var options = {
+      logo: "https://www.thoiry.net/sites/default/files/styles/cbox/public/fa-galerie/grand%20sourir%20panda.jpg",
+      closable: false,
+      primaryColor: "green",
+    }
+    this.lock = new Auth0Lock(this.config.AUTH_ID, this.config.AUTH_DOMAIN, options);
   }
 
   // configured as HttpAuth tokenGetter

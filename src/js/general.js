@@ -346,3 +346,16 @@ function closePopup(popupSelector) {
     });
   }
 }
+
+function openPopup(popupSelector) {
+  var popup = $(popupSelector);
+  if (popup) {
+    popup.fadeIn(300, function (){
+      $('.modal-backdrop').fadeIn(250, function () {
+        $('body').addClass('overflowhidden');
+        $('.popouterbox .popup-block').addAttr('style');
+        popup.show();
+      });
+    });
+  }
+}

@@ -22,12 +22,16 @@ export class LayoutComponent {
     actions$.ofType(DatasetsActionType.ADD_FEED_TO_PROJECT_SUCCESS)
       .subscribe(action => closePopup('#createfeed'))
 
+    actions$.ofType(DatasetsActionType.ADD_FEED_TO_PROJECT_SUCCESS)
+      .subscribe(action => openPopup('#uploadingfeed'))
+
     // close popup on user subscribe success
     actions$.ofType(DatasetsActionType.USER_SUBSCRIBE_SUCCESS)
       .subscribe(action => closePopup('#subscribepopup'))
 
     actions$.ofType(DatasetsActionType.FEED_DELETE_SUCCESS)
       .subscribe(action => closePopup('#deletefeedpopup'))
+
   }
 
 }
