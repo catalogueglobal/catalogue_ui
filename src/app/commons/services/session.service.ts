@@ -12,7 +12,7 @@ export type Session = {
 const SESSION = "SESSION";
 
 // Avoid name not found warnings
-declare var Auth0Lock:any;
+declare var  Auth0Lock:any;
 
 @Injectable()
 export class SessionService {
@@ -20,11 +20,15 @@ export class SessionService {
   private lock:any;
 
   constructor(private config:Configuration) {
-    console.log("session", this.session);
     var options = {
-      logo: "https://www.thoiry.net/sites/default/files/styles/cbox/public/fa-galerie/grand%20sourir%20panda.jpg",
-      closable: false,
-      primaryColor: "green",
+        theme: {
+          primaryColor: 'red',
+          authButtons: {
+            connectionName: {
+              primaryColor: 'green'
+            }
+          }
+        } 
     }
     this.lock = new Auth0Lock(this.config.AUTH_ID, this.config.AUTH_DOMAIN, options);
   }

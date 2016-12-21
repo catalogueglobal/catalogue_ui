@@ -302,7 +302,7 @@ function generalJs() {
     });
 
     //Close popup
-    $(document).on('click', '.close-dialogbox, .modal-backdrop', function () {
+    $(document).on('click', '.close-dialogbox, .modal-backdrop, .close-modal', function () {
       $(this).parents('.popouterbox').fadeOut(300, function () {
         $(this).find('.modal-backdrop').fadeOut(250, function () {
           $('body').removeClass('overflowhidden');
@@ -352,8 +352,6 @@ function openPopup(popupSelector) {
   if (popup) {
     popup.fadeIn(300, function (){
       $('.modal-backdrop').fadeIn(250, function () {
-        $('body').addClass('overflowhidden');
-        $('.popouterbox .popup-block').addAttr('style');
         popup.show();
       });
     });

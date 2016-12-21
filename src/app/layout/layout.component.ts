@@ -31,7 +31,6 @@ export class LayoutComponent {
 
     actions$.ofType(DatasetsActionType.FEED_DELETE_SUCCESS)
       .subscribe(action => closePopup('#deletefeedpopup'))
-
   }
 
 }

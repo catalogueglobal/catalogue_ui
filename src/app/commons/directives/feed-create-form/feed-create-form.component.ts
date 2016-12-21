@@ -34,7 +34,6 @@ export class FeedCreateFormComponent {
 
     let createFeed: ICreateFeed = {
         projectName: this.simpleUpload.projectName,
-        projectId: this.simpleUpload.projectId,
         feedName: this.simpleUpload.feedName,
         isPublic: this.simpleUpload.isPrivate,
         file: this.simpleUpload.file
@@ -78,12 +77,8 @@ export class FeedCreateFormComponent {
   }
 
   private resetForm() {
-    this.getAllProjectNames();
     this.showOptionsUpload = false;
-    this.addToProject = false;
     this.simpleUpload = {
-      projectName: "",
-      projectId: "",
       feedName: "",
       file: null,
       isPrivate: false
