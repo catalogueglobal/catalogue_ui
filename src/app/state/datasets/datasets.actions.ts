@@ -435,9 +435,9 @@ export class DatasetsActions {
 
     // use filename as default project/feed name
     let defaultName = createFeed.file.name;
-    /*if (!createFeed.projectName || !createFeed.projectName.trim().length) {
+    if (!createFeed.projectName || !createFeed.projectName.trim().length) {
       createFeed.projectName = defaultName;
-    }*/
+    }
     if (!createFeed.feedName || !createFeed.feedName.trim().length) {
       createFeed.feedName = defaultName;
     }

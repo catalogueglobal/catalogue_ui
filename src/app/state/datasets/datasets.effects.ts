@@ -96,7 +96,7 @@ export class DatasetsEffects {
       }
     ).share();
 
-/*  @Effect() ADD_FEED_TO_PROJECT$: Observable<Action> = this.actions$
+  @Effect() ADD_FEED_TO_PROJECT$: Observable<Action> = this.actions$
     .ofType(DatasetsActionType.ADD_FEED_TO_PROJECT)
     .map(action => action.payload)
     .switchMap(payload => {
@@ -108,7 +108,7 @@ export class DatasetsEffects {
       .map(feed => this.action.addFeedToProjectSuccess(feed))
       .catch(e => Observable.of(this.action.addFeedToProjectFail(createFeed, e)))
     }
-  ).share();*/
+  ).share();
 
   @Effect() SET_PUBLIC$: Observable<Action> = this.actions$
     .ofType(DatasetsActionType.FEED_SET_PUBLIC)
@@ -215,11 +215,11 @@ export class DatasetsEffects {
     }).share();
      
 
-  /*private addFeedToProject(createFeed: ICreateFeed, onProgress): Observable<IFeedApi> {
+  private addFeedToProject(createFeed: ICreateFeed, onProgress): Observable<IFeedApi> {
     return Observable.create(obs$ => {
       onProgress("creating feed")
       this.feedsApi.create(createFeed.feedName, createFeed.isPublic).subscribe(feed => {
-        console.log("created feed:", feed);
+        console.log("created feed:", feed); 
 
         onProgress("uploading...")
               let setFile$ = this.feedsApi.setFile(feed.id, createFeed.file);
@@ -243,7 +243,7 @@ export class DatasetsEffects {
               obs$.error(err);
             });
     });
-  } */
+  } 
 
   private createProjectAndFeedAndSetFile(createFeed: ICreateFeed, onProgress): Observable<IFeedApi> {
     return Observable.create(obs$ => {
