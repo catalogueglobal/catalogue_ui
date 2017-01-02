@@ -39,14 +39,7 @@ export class FeedCreateFormComponent {
         file: this.simpleUpload.file
       }
 
-    //if (this.addToProject === false){
-      // create to new project and add feed
-      this.store.dispatch(this.datasetsAction.feedCreate(createFeed));
-   // } else {
-      // add new feed to project
-     // this.store.dispatch(this.datasetsAction.addFeedToProject(createFeed));
-   // }
-    
+      this.store.dispatch(this.datasetsAction.feedCreate(createFeed));    
   }
 
   private toggleShowOptionsUpload($event) {

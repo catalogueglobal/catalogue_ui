@@ -11,7 +11,7 @@
             <h4>{{'mydatasets.map.title'|translate}}</h4>
             <div id="map-wrapper">
               <app-datasets-map [feeds]="feeds$|async" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom" (boundsChange)="onBoundsChange($event)"></app-datasets-map>
-              <div id="search-input-wrapper" style="">
+              <div id="search-input-wrapper">
                 <div class="tools">
                   <div class="autocompletebox">
                     <app-datasets-autocomplete (selected)="onAutocompleteSelected($event)" placeholder="{{'datasets.table.search'|translate}}"></app-datasets-autocomplete>

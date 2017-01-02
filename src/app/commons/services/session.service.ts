@@ -1,34 +1,37 @@
-import {Injectable} from "@angular/core";
-import {LocalStorage, SessionStorageService} from "ng2-webstorage";
-import {tokenNotExpired} from "angular2-jwt/angular2-jwt";
-import {Configuration} from "../configuration";
-import {Observable} from "rxjs/Rx";
+import { Injectable } from "@angular/core";
+import { LocalStorage, SessionStorageService } from "ng2-webstorage";
+import { tokenNotExpired } from "angular2-jwt/angular2-jwt";
+import { Configuration } from "../configuration";
+import { Observable } from "rxjs/Rx";
 
 export type Session = {
-  user:any,
-  token:string
+  user: any,
+  token: string
 }
 
 const SESSION = "SESSION";
 
 // Avoid name not found warnings
-declare var  Auth0Lock:any;
+declare var Auth0Lock: any;
 
 @Injectable()
 export class SessionService {
-  @LocalStorage() session:Session;
-  private lock:any;
+  @LocalStorage() session: Session;
+  private lock: any;
 
-  constructor(private config:Configuration) {
+  constructor(private config: Configuration) {
     var options = {
-        theme: {
-          primaryColor: 'red',
-          authButtons: {
-            connectionName: {
-              primaryColor: 'green'
-            }
+      theme: {
+        primaryColor: 'red',
+        authButtons: {
+          connectionName: {
+            primaryColor: 'green'
           }
-        } 
+        }
+      },
+      languageDictionary: {
+        title: "My Company"
+      }
     }
     this.lock = new Auth0Lock(this.config.AUTH_ID, this.config.AUTH_DOMAIN, options);
   }
@@ -42,7 +45,7 @@ export class SessionService {
     return this.session.token;
   }
 
-  public get loggedIn():boolean {
+  public get loggedIn(): boolean {
     this.checkTokenNotExpired();
     return this.session ? true : false;
   }
@@ -68,7 +71,7 @@ export class SessionService {
     }
   }
 
-  private showLogin():Observable<Session> {
+  private showLogin(): Observable<Session> {
     return Observable.create(observer => {
       // Show the Auth0 Lock widget
       this.lock.show({}, (err, profile, token) => {
@@ -86,7 +89,7 @@ export class SessionService {
     })
   }
 
-  public logout():void {
+  public logout(): void {
     this.session = null;
   }
 
