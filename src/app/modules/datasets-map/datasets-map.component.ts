@@ -8,6 +8,7 @@ import {DatasetsState} from "../../state/datasets/datasets.reducer";
 import {DatasetsActions} from "../../state/datasets/datasets.actions";
 import {Configuration} from "../../commons/configuration";
 import {MapUtilsService} from "../../commons/services/mapUtils.service";
+import {SharedService} from "../../commons/services/shared.service"
 import {IProject} from "../../commons/services/api/projectsApi.service";
 import { Router }   from '@angular/router';
 import * as leaflet from "leaflet";
@@ -38,8 +39,10 @@ export class DatasetsMapComponent implements AfterViewInit {
   _zoom: number;
 
 
-  constructor(private utils: UtilsService, private config: Configuration, private projectsApi: ProjectsApiService, private mapUtils: MapUtilsService, private router: Router, protected store: Store<DatasetsState>, protected datasetsAction: DatasetsActions) {
-    this.geolocalize();
+  constructor(private utils: UtilsService, private config: Configuration, private projectsApi: ProjectsApiService, private mapUtils: MapUtilsService, private router: Router, protected store: Store<DatasetsState>, protected datasetsAction: DatasetsActions, private shared: SharedService) {
+    
+    //this.geolocalize();
+    this.setCenterMap();
     this.markers = new Array();
     this.updateProject = this.updateProjectProperty.bind(this);
   }
@@ -123,6 +126,8 @@ export class DatasetsMapComponent implements AfterViewInit {
     map.on('moveend', function (e) {
       console.log('map move', map.getBounds());
       let mapBounds = map.getBounds();
+      let newCenter = map.getCenter();
+      that.shared.setNewCenter(newCenter);
       let areaBounds = that.utils.computeLatLngToBounds([mapBounds.getNorthEast(), mapBounds.getSouthWest()]);
       that.boundsChange.emit(areaBounds);
     })
@@ -158,6 +163,15 @@ export class DatasetsMapComponent implements AfterViewInit {
          console.log('new marker (no bounds)', feed);
          }*/
       });
+    }
+  }
+
+  private setCenterMap() {
+    let lastCenter = this.shared.getCenterMap();
+    if (lastCenter.lat != 0 && lastCenter.lng != 0){
+      this.position = [lastCenter.lat, lastCenter.lng];
+    } else {
+      this.geolocalize();
     }
   }
 

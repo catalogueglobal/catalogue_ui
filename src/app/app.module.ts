@@ -39,6 +39,7 @@ import {InlineEditTextComponent} from "./commons/directives/inline-edit-text/inl
 import {InlineEditFileComponent} from "./commons/directives/inline-edit-file/inline-edit-file.component";
 import {SubscribeFormComponent} from './commons/directives/subscribe-form/subscribe-form.component';
 import {UsersApiService} from "./commons/services/api/usersApi.service";
+import {SharedService} from "./commons/services/shared.service";
 import {TranslatePipe} from "ng2-translate/src/translate.pipe";
 import {LayoutComponent} from "./layout/layout.component";
 import {DatasetsAutocompleteComponent} from "./modules/datasets-autocomplete/datasets-autocomplete.component";
@@ -125,7 +126,7 @@ import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
   providers: [
     TranslateService, SessionService, Configuration, UploadService,
     UtilsService, MapUtilsService, ProjectsApiService, FeedsApiService, UsersApiService, LocalFiltersService,
-    DatasetsActions,
+    DatasetsActions, SharedService,
     AuthGuard,
     //NG2_WEBSTORAGE,
 
