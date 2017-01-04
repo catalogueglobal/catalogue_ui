@@ -22,7 +22,7 @@ export class SessionService {
   constructor(private config: Configuration) {
     var options = {
       theme: {
-        primaryColor: 'red',
+        primaryColor: 'blue',
         authButtons: {
           connectionName: {
             primaryColor: 'green'
@@ -30,7 +30,7 @@ export class SessionService {
         }
       },
       languageDictionary: {
-        title: "My Company"
+        title: "Catalogue"
       }
     }
     this.lock = new Auth0Lock(this.config.AUTH_ID, this.config.AUTH_DOMAIN, options);
