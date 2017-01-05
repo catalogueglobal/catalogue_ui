@@ -51,6 +51,8 @@ export class DatasetsMapComponent implements AfterViewInit {
     console.log('map reset', this.initialPosition, this.initialZoom)
     this._zoom = this.initialZoom;
     this._position = this.initialPosition;
+
+    this.goTo(this.map, this._position, true);
   }
 
   @Input() set position(value: leaflet.LatLngExpression) {
@@ -61,7 +63,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     this._position = value;
 
     if (this.map) {
-      this.goTo(this.map, value);
+      this.goTo(this.map, value, false);
     }
   }
 
@@ -133,7 +135,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     })
 
     if (this._position) {
-      this.goTo(map, this._position);
+      this.goTo(map, this._position, false);
     }
 
     return map;
@@ -170,17 +172,17 @@ export class DatasetsMapComponent implements AfterViewInit {
     let lastCenter = this.shared.getCenterMap();
     if (lastCenter.lat != 0 && lastCenter.lng != 0){
       this.position = [lastCenter.lat, lastCenter.lng];
-      this.initialZoom = lastCenter.zoom;
+      //this.initialZoom = lastCenter.zoom;
     } else {
       this.geolocalize();
     }
   }
 
-  private goTo(theMap, thePosition) {
+  private goTo(theMap, thePosition, isReset) {
     let theZoom = this._zoom || this.config.MAP_ZOOM_POSITION;
 
     let lastCenter = this.shared.getCenterMap();
-    if (lastCenter.lat != 0 && lastCenter.lng != 0){
+    if (lastCenter.lat != 0 && lastCenter.lng != 0 && isReset == false){
       thePosition[0] = lastCenter.lat;
       thePosition[1] = lastCenter.lng;
       theZoom = lastCenter.zoom;
