@@ -4,7 +4,8 @@ import { Injectable } from '@angular/core';
 export class SharedService {
     centerMap = {
         lat: 0,
-        lng: 0
+        lng: 0,
+        zoom: 0
     };
     
     constructor() {
@@ -15,8 +16,9 @@ export class SharedService {
         return this.centerMap;
     }
 
-    setNewCenter (newCenter) {
+    setNewCenter (newCenter, zoom) {
         this.centerMap.lat = newCenter.lat;
         this.centerMap.lng = newCenter.lng;
+        this.centerMap.zoom = zoom;
     }
 }

@@ -127,7 +127,7 @@ export class DatasetsMapComponent implements AfterViewInit {
       console.log('map move', map.getBounds());
       let mapBounds = map.getBounds();
       let newCenter = map.getCenter();
-      that.shared.setNewCenter(newCenter);
+      that.shared.setNewCenter(newCenter, e.target._zoom);
       let areaBounds = that.utils.computeLatLngToBounds([mapBounds.getNorthEast(), mapBounds.getSouthWest()]);
       that.boundsChange.emit(areaBounds);
     })
@@ -170,6 +170,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     let lastCenter = this.shared.getCenterMap();
     if (lastCenter.lat != 0 && lastCenter.lng != 0){
       this.position = [lastCenter.lat, lastCenter.lng];
+      this.initialZoom = lastCenter.zoom;
     } else {
       this.geolocalize();
     }
@@ -178,7 +179,14 @@ export class DatasetsMapComponent implements AfterViewInit {
   private goTo(theMap, thePosition) {
     let theZoom = this._zoom || this.config.MAP_ZOOM_POSITION;
 
-    console.log('goTo', thePosition, theZoom)
+    let lastCenter = this.shared.getCenterMap();
+    if (lastCenter.lat != 0 && lastCenter.lng != 0){
+      thePosition[0] = lastCenter.lat;
+      thePosition[1] = lastCenter.lng;
+      theZoom = lastCenter.zoom;
+    }
+    console.log('goTo', thePosition, theZoom);
+
     theMap.setView(thePosition, theZoom);
   }
 
