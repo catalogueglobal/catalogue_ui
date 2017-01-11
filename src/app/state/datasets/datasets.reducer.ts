@@ -386,6 +386,69 @@ export function datasetsReducer(state = initialState, action: Action): DatasetsS
 
     //
 
+    case DatasetsActionType.SUBSCRIBE_FEED: {
+      const userInfos = payload.userInfos
+
+      return Object.assign({}, state, {
+        status: {
+          busyMessage: "state.SUBSCRIBE_FEED",
+          busyMessageArgs: {userInfos: userInfos}
+        },
+      });
+    }
+
+    case DatasetsActionType.SUBSCRIBE_FEED_SUCCESS: {
+      const userInfos = payload.userInfos
+
+      return Object.assign({}, state, {
+        status: {
+          busyMessage: "state.SUBSCRIBE_FEED_SUCCESS",
+          busyMessageArgs: {userInfos: userInfos}
+        },
+      })
+    }
+
+    case DatasetsActionType.SUBSCRIBE_FEED_FAIL: {
+      return Object.assign({}, state, {
+        status: {
+          busyMessage: "state.SUBSCRIBE_FEED_FAIL",
+          busyMessageArgs: "Can't subscribe to feed"
+        }
+      });
+    }
+
+    case DatasetsActionType.UNSUBSCRIBE_FEED: {
+      const userInfos = payload.userInfos
+
+      return Object.assign({}, state, {
+        status: {
+          busyMessage: "state.UNSUBSCRIBE_FEED",
+          busyMessageArgs: {userInfos: userInfos}
+        },
+      });
+    }
+
+    case DatasetsActionType.UNSUBSCRIBE_FEED_SUCCESS: {
+      const userInfos = payload.userInfos
+
+      return Object.assign({}, state, {
+        status: {
+          busyMessage: "state.UNSUBSCRIBE_FEED_SUCCESS",
+          busyMessageArgs: {userInfos: userInfos}
+        },
+      })
+    }
+
+    case DatasetsActionType.UNSUBSCRIBE_FEED_FAIL: {
+      return Object.assign({}, state, {
+        status: {
+          busyMessage: "state.UNSUBSCRIBE_FEED_FAIL",
+          busyMessageArgs: "Can't subscribe to feed"
+        }
+      });
+    }
+
+
     case DatasetsActionType.FEED_FETCH: {
       const feedRef = payload.feedRef;
 

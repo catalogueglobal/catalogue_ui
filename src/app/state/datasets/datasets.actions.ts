@@ -60,6 +60,14 @@ export const DatasetsActionType = {
 
   CONFIRM_DELETE_FEED: 'CONFIRM_DELETE_FEED',
   CONFIRM_DELETE_FEED_SUCCESS: 'CONFIRM_DELETE_FEED_SUCCESS',
+
+  SUBSCRIBE_FEED: 'SUBSCRIBE_FEED',
+  SUBSCRIBE_FEED_SUCCESS: 'SUBSCRIBE_FEED_SUCCESS',
+  SUBSCRIBE_FEED_FAIL: 'SUBSCRIBE_FEED_FAIL',
+
+  UNSUBSCRIBE_FEED: 'UNSUBSCRIBE_FEED',
+  UNSUBSCRIBE_FEED_SUCCESS: 'UNSUBSCRIBE_FEED_SUCCESS',
+  UNSUBSCRIBE_FEED_FAIL: 'UNSUBSCRIBE_FEED_FAIL'
 };
 
 export type IFeedReference ={
@@ -483,6 +491,65 @@ export class DatasetsActions {
       type: DatasetsActionType.CONFIRM_DELETE_FEED_SUCCESS
     }
   }
+
+  subscribeToFeed(user_id, userInfos: Object): Action {
+    return {
+      type: DatasetsActionType.SUBSCRIBE_FEED,
+      payload: {
+        user_id: user_id,
+        userInfos: userInfos
+      }
+    }
+  }
+
+  subscribeToFeedSuccess(userInfos: Object): Action {
+    return {
+      type: DatasetsActionType.SUBSCRIBE_FEED_SUCCESS,
+      payload: {
+        userInfos: userInfos
+      }
+    }
+  }
+
+  subscribeToFeedFail(userInfos: Object, error: any){
+    return {
+      type: DatasetsActionType.SUBSCRIBE_FEED_FAIL,
+      payload: {
+        userInfos: userInfos,
+        error: error
+      }
+    }
+  }
+
+  unsubscribeToFeed(user_id, userInfos: Object): Action {
+    return {
+      type: DatasetsActionType.UNSUBSCRIBE_FEED,
+      payload: {
+        user_id: user_id,
+        userInfos: userInfos
+      }
+    }
+  }
+
+  unsubscribeToFeedSuccess(userInfos: Object): Action {
+    return {
+      type: DatasetsActionType.UNSUBSCRIBE_FEED_SUCCESS,
+      payload: {
+        userInfos: userInfos
+      }
+    }
+  }
+
+  unsubscribeToFeedFail(userInfos: Object, error: any){
+    return {
+      type: DatasetsActionType.UNSUBSCRIBE_FEED_FAIL,
+      payload: {
+        userInfos: userInfos,
+        error: error
+      }
+    }
+  }
+
   //
 
 }

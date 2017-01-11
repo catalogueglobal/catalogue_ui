@@ -16,6 +16,9 @@
             {{'datasets-table.column.area'|translate}}
           </app-sort-link>
 	</th>
+  <th *ngIf="sessionService.loggedIn">
+    Subscibe / Unsubscribe
+  </th>
 	<!--<th>
             License
 	    </th>
@@ -45,6 +48,9 @@
 		</span>
               </div>
 	    </td>-->
+      <td class="" *ngIf="sessionService.loggedIn">
+        <input type="checkbox" (click)="actionOnFeed(feed.id)" >
+      </td>
       </tr>
     </tbody>
   </table>

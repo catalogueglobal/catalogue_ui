@@ -123,6 +123,24 @@ export class DatasetsEffects {
       }
     ).share();
 
+  @Effect() SUBSCRIBE_FEED$: Observable<Action> = this.actions$
+    .ofType(DatasetsActionType.SUBSCRIBE_FEED)
+    .map(action => action.payload)
+    .switchMap(payload => {
+      return this.usersApi.updateUser(payload.user_id, payload.userInfos)
+        .map(updatedUser => this.action.subscribeToFeedSuccess(updatedUser))
+        .catch(e => Observable.of(this.action.subscribeToFeedFail(payload.userInfos, e)));
+    }).share();
+
+  @Effect() UNSUBSCRIBE_FEED$: Observable<Action> = this.actions$
+    .ofType(DatasetsActionType.UNSUBSCRIBE_FEED)
+    .map(action => action.payload)
+    .switchMap(payload => {
+      return this.usersApi.updateUser(payload.user_id, payload.userInfos)
+        .map(updatedUser => this.action.unsubscribeToFeedSuccess(updatedUser))
+        .catch(e => Observable.of(this.action.unsubscribeToFeedFail(payload.userInfos, e)));
+    }).share();
+
   @Effect() FEED_SET_NAME$: Observable<Action> = this.actions$
     .ofType(DatasetsActionType.FEED_SET_NAME)
     .map(action => action.payload)
@@ -214,6 +232,8 @@ export class DatasetsEffects {
       return this.action.confirmationDeleteProjectSuccess();
     }).share();
      
+
+
 
   /*private addFeedToProject(createFeed: ICreateFeed, onProgress): Observable<IFeedApi> {
     return Observable.create(obs$ => {

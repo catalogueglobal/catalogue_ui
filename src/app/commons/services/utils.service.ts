@@ -77,4 +77,18 @@ export class UtilsService {
     return parts.join(', ');
   }
 
+  public addFeedIdToJson(userInfos, feed_id){
+    console.log("add feed_id to json");
+    if (userInfos.app_metadata.datatools[0].subscriptions == null){
+      let b = {"type": "feed-updated", target: []};
+      userInfos.app_metadata.datatools[0].subscriptions = [];
+      userInfos.app_metadata.datatools[0].subscriptions.push(b);
+      userInfos.app_metadata.datatools[0].subscriptions[0].target.push(feed_id);
+    } else {
+      userInfos.app_metadata.datatools[0].subscriptions[0].target.push(feed_id);
+    }
+
+    return userInfos;
+  }
+
 }

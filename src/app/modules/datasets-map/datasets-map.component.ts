@@ -9,6 +9,7 @@ import {DatasetsActions} from "../../state/datasets/datasets.actions";
 import {Configuration} from "../../commons/configuration";
 import {MapUtilsService} from "../../commons/services/mapUtils.service";
 import {SharedService} from "../../commons/services/shared.service"
+import {SessionService} from "../../commons/services/session.service"
 import {IProject} from "../../commons/services/api/projectsApi.service";
 import { Router }   from '@angular/router';
 import * as leaflet from "leaflet";
@@ -39,7 +40,7 @@ export class DatasetsMapComponent implements AfterViewInit {
   _zoom: number;
 
 
-  constructor(private utils: UtilsService, private config: Configuration, private projectsApi: ProjectsApiService, private mapUtils: MapUtilsService, private router: Router, protected store: Store<DatasetsState>, protected datasetsAction: DatasetsActions, private shared: SharedService) {
+  constructor(private utils: UtilsService, private config: Configuration, private projectsApi: ProjectsApiService, private mapUtils: MapUtilsService, private router: Router, protected store: Store<DatasetsState>, protected datasetsAction: DatasetsActions, private shared: SharedService, private session: SessionService) {
     
     //this.geolocalize();
     this.setCenterMap();

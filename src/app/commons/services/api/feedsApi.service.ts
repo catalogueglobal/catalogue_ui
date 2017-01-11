@@ -136,6 +136,7 @@ export class FeedsApiService extends AbstractApiService {
     return this.adaptFeedsResponse(projects, params.secure, params.bounds, params.sortOrder);
   }
 
+
   protected adaptFeedsResponse(projectsObservable: Observable<IProject[]>, retrieveSecureFeeds: boolean, bounds: IBounds, sortOrder: SortOrder): Observable<FeedsGetResponse> {
     return projectsObservable.flatMap(project => project)
       .map(p => this.feedsFromProject(p, retrieveSecureFeeds))
