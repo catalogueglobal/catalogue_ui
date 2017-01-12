@@ -145,6 +145,12 @@
     "FEED_FETCH_SUCCESS": "Feed refreshed: <i>{{feedName}}</i>",
     "FEED_FETCH_FAIL":"Feed refresh failed: <i>{{feedName}}</i>",
     "ADD_FEED_TO_PROJECT_SUCCESS": "Feed have been added to the project",
-    "ADD_FEED_TO_PROJECT_FAIL": "Feed couldn't be added to the project"
+    "ADD_FEED_TO_PROJECT_FAIL": "Feed couldn't be added to the project",
+    "SUBSCRIBE_FEED": "Subscribing to feed",
+    "SUBSCRIBE_FEED_SUCCESS": "You have been subscribed to the feed",
+    "SUBSCRIBE_FEED_FAIL": "Fail to subscribe to the feed",
+    "UNSUBSCRIBE_FEED": "Unsubscribing to feed",
+    "UNSUBSCRIBE_FEED_SUCCESS": "You have been unsubscribed to the feed",
+    "UNSUBSCRIBE_FEED_FAIL": "Fail to unsubscribe to the feed"
   }
 }

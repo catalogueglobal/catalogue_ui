@@ -49,7 +49,7 @@
               </div>
 	    </td>-->
       <td class="" *ngIf="sessionService.loggedIn">
-        <input type="checkbox" (click)="actionOnFeed(feed.id)" >
+        <input type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)" >
       </td>
       </tr>
     </tbody>

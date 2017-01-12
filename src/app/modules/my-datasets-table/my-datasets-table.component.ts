@@ -5,6 +5,8 @@ import {DatasetsState} from "../../state/datasets/datasets.reducer";
 import {Store} from "@ngrx/store";
 import {DatasetsActions, toFeedReference, DatasetsActionType} from "../../state/datasets/datasets.actions";
 import {UtilsService} from "../../commons/services/utils.service";
+import {UsersApiService} from "../../commons/services/api/usersApi.service";
+import {SessionService} from "../../commons/services/session.service";
 import {PaginationService} from "ng2-pagination";
 import {Configuration} from "../../commons/configuration";
 import {Actions} from "@ngrx/effects";
@@ -24,8 +26,8 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
 
   private confirmEditById: Map<string,EventEmitter<any>> = new Map()
 
-  constructor(config: Configuration, utils: UtilsService, private feedsApi: FeedsApiService, protected store: Store<DatasetsState>, protected datasetsAction: DatasetsActions, protected actions$: Actions) {
-    super(config, utils);
+  constructor(config: Configuration, utils: UtilsService, private feedsApi: FeedsApiService, protected store: Store<DatasetsState>, protected datasetsAction: DatasetsActions, protected actions$: Actions, usersApiService: UsersApiService, sessionService: SessionService) {
+    super(config, utils, sessionService, usersApiService, store, actions$, datasetsAction);
 
     // close inline edit form on setName() success
     actions$.ofType(DatasetsActionType.FEED_SET_NAME_SUCCESS)

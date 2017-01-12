@@ -29,6 +29,7 @@ export class DatasetsTableComponent {
   private checkById: Map<string,boolean> = new Map<string,boolean>();
   private page:number;
   private indexToUnsubscribe: number;
+  private feedSubscribed: Array<String>;
 
   protected currentSort: SortOrder = {
     sort: 'name',
@@ -37,6 +38,7 @@ export class DatasetsTableComponent {
 
   constructor(protected config: Configuration, private utils: UtilsService, private sessionService: SessionService, private usersApiService: UsersApiService, protected store: Store<DatasetsState>, actions$: Actions,
   protected datasetsAction: DatasetsActions) {
+    
   }
 
   // overriden by childs
@@ -115,6 +117,14 @@ export class DatasetsTableComponent {
       return false
       }
     }
+
+  public checkSubscribed(feed_id){
+    var index = this.sessionService.session.user.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id);
+    if (index == -1){
+      return false
+    }
+    return true
+  }
 
   public resetPage() {
     this.page = 1;
