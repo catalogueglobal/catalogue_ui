@@ -402,8 +402,6 @@ export function datasetsReducer(state = initialState, action: Action): DatasetsS
 
       return Object.assign({}, state, {
         status: {
-          busyMessage: "state.SUBSCRIBE_FEED_SUCCESS",
-          busyMessageArgs: {userInfos: userInfos}
         },
       })
     }
@@ -433,8 +431,6 @@ export function datasetsReducer(state = initialState, action: Action): DatasetsS
 
       return Object.assign({}, state, {
         status: {
-          busyMessage: "state.UNSUBSCRIBE_FEED_SUCCESS",
-          busyMessageArgs: {userInfos: userInfos}
         },
       })
     }
