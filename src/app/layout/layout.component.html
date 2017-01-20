@@ -5,9 +5,6 @@
       <nav id="mainmenu">
         <ul class="cf">
           
-          <!--<li class="subscribe-btn use-btn">
-            <a routerLink="/" class="button subscribe use">{{'layout.menu.use'|translate}}</a>
-          </li>-->
           <li>
             <a href="#" class="session-item poptrigger" data-rel="createfeed">{{'layout.menu.upload'|translate}}</a>
           </li>
@@ -18,10 +15,6 @@
             <a routerLinkActive="active" routerLink="/my-datasets" class="session-item">{{'layout.menu.manage'|translate}}</a>
           </li>
 
-          <!--<li *ngIf="!sessionService.loggedIn">
-            <a href="#" class="session-item poptrigger"
-               data-rel="subscribepopup">{{'layout.menu.subscribe'|translate}}</a>
-          </li> -->
           <li *ngIf="sessionService.loggedIn">
             <a href="#" class="session-item" (click)="sessionService.logout()">{{'layout.menu.logout'|translate}}</a>
           </li>
@@ -33,7 +26,7 @@
     </div><!--/.wrap-->
   </header><!--/#header-->
 
-  <router-outlet></router-outlet>
+  <router-outlet></router-outlet> <!-- Routed views go here -->
 
   <footer id="footer">
     <div class="wrap">
