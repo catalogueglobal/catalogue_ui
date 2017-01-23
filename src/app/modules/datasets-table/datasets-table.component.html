@@ -30,7 +30,7 @@
 	<td class="chkMulti">
           <div><input type="checkbox" [(ngModel)]="checkById[feed.id]"></div>
 	</td>
-	<td>{{feed.name}}</td>
+  <td><a [routerLink]="['/feeds/', feed.id]"> {{feed.name}}</a></td>
 	<td class="area">
           <div>{{regionStateCountry(feed)}}</div>
 	</td>

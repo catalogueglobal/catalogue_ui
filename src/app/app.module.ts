@@ -52,6 +52,7 @@ import {PaginatePipe} from "ng2-pagination";
 import {Ng2CompleterModule } from "ng2-completer";
 import {HomeComponent} from "./modules/home/home.component";
 import {DatasetsComponent} from "./modules/datasets/datasets.component";
+import {FeedsComponent} from "./modules/feeds/feeds.component";
 import {MyDatasetsComponent} from "./modules/my-datasets/my-datasets.component";
 import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
 
@@ -62,6 +63,7 @@ import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
     HomeComponent,
     DatasetsComponent,
     MyDatasetsComponent,
+    FeedsComponent,
 
     // directives
     CustomFileinputDirective,

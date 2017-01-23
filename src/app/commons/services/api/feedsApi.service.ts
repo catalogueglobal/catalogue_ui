@@ -61,6 +61,7 @@ export class FeedsApiService extends AbstractApiService {
   private FEED_PUBLIC_VERSION_URL: string;
   private FEED_SECURE_VERSION_URL: string;
   private FEED_DOWNLOAD_URL: string;
+  private FEED_NOTES: string;
 
   constructor(protected http: Http, protected authHttp: AuthHttp, protected authConfig: AuthConfig, protected config: Configuration, protected projectsApiService: ProjectsApiService, protected uploadService: UploadService, protected localFilters: LocalFiltersService) {
     super(http, authHttp, authConfig, config);
@@ -69,6 +70,7 @@ export class FeedsApiService extends AbstractApiService {
     this.FEED_PUBLIC_VERSION_URL = this.config.ROOT_API + "/api/manager/public/feedversion";
     this.FEED_SECURE_VERSION_URL = this.config.ROOT_API + "/api/manager/secure/feedversion";
     this.FEED_DOWNLOAD_URL = this.config.ROOT_API + "/api/manager/downloadfeed";
+    this.FEED_NOTES = this.config.ROOT_API + "/api/manager/secure/note?type=FEED_SOURCE&objectId="
   }
 
   public create(name: string, projectId: string, isPublic: boolean): Observable<IFeedApi> {
@@ -122,6 +124,14 @@ export class FeedsApiService extends AbstractApiService {
   public get(feedSourceId: string): Observable<IFeedApi> {
     return this.authHttp.get(this.FEED_SECURE_URL + '/' + feedSourceId)
       .map(response => response.json())
+  }
+
+  public getNotes(feedSourceId: string): Observable<any>{
+    return this.authHttp.get(this.FEED_NOTES + feedSourceId).map(response => response.json())
+  }
+
+  public addNotes(feedSourceId: string, note: string): Observable<any>{
+    return this.authHttp.post(this.FEED_NOTES + feedSourceId, note).map(response => response.json())
   }
 
   public getList(params: FeedsGetParams): Observable<FeedsGetResponse> {
