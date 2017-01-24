@@ -12,3 +12,4 @@ maven-eclipse.xml
 *~
 *.versionsBackup
 .classpath
+public/

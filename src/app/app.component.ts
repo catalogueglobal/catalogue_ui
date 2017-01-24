@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {TranslateService} from "ng2-translate/ng2-translate";
+import {TranslateService} from "ng2-translate";
 import {Router, NavigationEnd, Event} from "@angular/router";
 import {Store} from "@ngrx/store";
 

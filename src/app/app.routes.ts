@@ -1,4 +1,3 @@
-import {HomeComponent} from "./modules/home/home.component";
 import {DatasetsComponent} from "./modules/datasets/datasets.component";
 import {FeedsComponent} from "./modules/feeds/feeds.component";
 import {MyDatasetsComponent} from "./modules/my-datasets/my-datasets.component";
@@ -10,7 +9,7 @@ const routes: Routes = [
   {path: 'datasets', component: DatasetsComponent},
   {path: 'feeds/:id', component: FeedsComponent},
   {path: 'my-datasets', component: MyDatasetsComponent, canActivate: [AuthGuard]},
-  {path: '**', component: DatasetsComponent} // When page not found redirect to home
+  {path: '**', component: DatasetsComponent} // When page not found redirect to home // TODO. Create a PageNotFoundComponent and map this wildcard route to it.
 ];
 
 // - Updated Export

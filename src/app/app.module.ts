@@ -4,7 +4,7 @@ import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {AppComponent} from "./app.component";
 import {EffectsModule} from "@ngrx/effects";
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {DatasetsEffects} from "./state/datasets/datasets.effects";
 import {TranslateService, TranslateLoader, TranslateStaticLoader} from "ng2-translate/src/translate.service";
 import {SessionService} from "./commons/services/session.service";
@@ -25,7 +25,7 @@ import {combineReducers, StoreModule} from "@ngrx/store";
 import {appReducer} from "./state/index.reducer";
 import {compose} from "@ngrx/core/compose";
 import {routing} from "./app.routes";
-import {TranslateModule} from "ng2-translate/ng2-translate";
+import {TranslateModule} from "ng2-translate";
 import {AuthGuard} from "./commons/guards/AuthGuard";
 import {OrderByPipe} from "./commons/pipes/orderby";
 import {LocalFiltersService} from "./commons/services/api/localFilters.service";
@@ -50,7 +50,6 @@ import {SortLinkComponent} from "./commons/directives/sort-link/sort-link.compon
 import {MyDatasetsTableComponent} from "./modules/my-datasets-table/my-datasets-table.component";
 import {PaginatePipe} from "ng2-pagination";
 import {Ng2CompleterModule } from "ng2-completer";
-import {HomeComponent} from "./modules/home/home.component";
 import {DatasetsComponent} from "./modules/datasets/datasets.component";
 import {FeedsComponent} from "./modules/feeds/feeds.component";
 import {MyDatasetsComponent} from "./modules/my-datasets/my-datasets.component";
@@ -60,7 +59,6 @@ import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     DatasetsComponent,
     MyDatasetsComponent,
     FeedsComponent,
