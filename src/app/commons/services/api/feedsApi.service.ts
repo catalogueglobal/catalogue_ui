@@ -126,8 +126,8 @@ export class FeedsApiService extends AbstractApiService {
       .map(response => response.json())
   }
 
-  public getNotes(feedSourceId: string): Observable<any>{
-    return this.authHttp.get(this.FEED_NOTES + feedSourceId).map(response => response.json())
+  public getNotes(feedSourceId: string): Promise<any>{
+    return this.authHttp.get(this.FEED_NOTES + feedSourceId).map(response => response.json()).toPromise();
   }
 
   public addNotes(feedSourceId: string, note: string): Observable<any>{

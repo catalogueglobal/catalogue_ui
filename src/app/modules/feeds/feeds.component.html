@@ -16,8 +16,11 @@
   <br />
   Notes :<br />
   <div class="column twelve">
-    <textarea></textarea>
-    <button>Submit</button>
+    <ul>
+      <li *ngFor="let comment of notesFeed">{{comment.body}}</li>
+    </ul>
+    <textarea [(ngModel)]="note"></textarea>
+    <button (click)="addNotesToFeed()">Submit</button>
   </div>
 
 </div>

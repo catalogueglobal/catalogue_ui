@@ -67,7 +67,11 @@ export const DatasetsActionType = {
 
   UNSUBSCRIBE_FEED: 'UNSUBSCRIBE_FEED',
   UNSUBSCRIBE_FEED_SUCCESS: 'UNSUBSCRIBE_FEED_SUCCESS',
-  UNSUBSCRIBE_FEED_FAIL: 'UNSUBSCRIBE_FEED_FAIL'
+  UNSUBSCRIBE_FEED_FAIL: 'UNSUBSCRIBE_FEED_FAIL',
+
+  FEEDS_ADD_NOTES: "FEEDS_ADD_NOTES",
+  FEEDS_ADD_NOTES_SUCCESS: 'FEEDS_ADD_NOTES_SUCCESS',
+  FEEDS_ADD_NOTES_FAIL: 'FEEDS_ADD_NOTES_FAIL'
 };
 
 export type IFeedReference ={
@@ -370,6 +374,37 @@ export class DatasetsActions {
   }
 
   //
+
+  feedAddNotes(feedId: string, data: any): Action {
+    return {
+      type: DatasetsActionType.FEEDS_ADD_NOTES,
+      payload: {
+        feedId: feedId,
+        data: data
+      }
+    }
+  }
+
+  feedAddNotesSuccess(feedId: string, data: any): Action {
+    return {
+      type: DatasetsActionType.FEEDS_ADD_NOTES_SUCCESS,
+      payload: {
+        feedId: feedId,
+        data: data
+      }
+    }
+  }
+
+  feedAddNotesFail(feedId: string, data: any, error: any): Action {
+    return {
+      type: DatasetsActionType.FEEDS_ADD_NOTES_FAIL,
+      payload: {
+        feedId: feedId,
+        data: data,
+        error: error
+      }
+    }
+  }
 
   feedSetFile(feedRef: IFeedReference, file: File): Action {
     return {

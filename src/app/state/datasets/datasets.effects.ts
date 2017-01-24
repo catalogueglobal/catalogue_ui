@@ -123,6 +123,16 @@ export class DatasetsEffects {
       }
     ).share();
 
+
+  @Effect() FEED_ADD_NOTES$: Observable<Action> = this.actions$
+    .ofType(DatasetsActionType.FEEDS_ADD_NOTES)
+    .map(action => action.payload)
+    .switchMap(payload => {
+      return this.feedsApi.addNotes(payload.feedId, payload.data)
+        .map(data => this.action.feedAddNotesSuccess(payload.feedId, payload.data))
+        .catch(e => Observable.of(this.action.feedAddNotesFail(payload.feedId, payload.data, e)))
+    }).share();
+
   @Effect() SUBSCRIBE_FEED$: Observable<Action> = this.actions$
     .ofType(DatasetsActionType.SUBSCRIBE_FEED)
     .map(action => action.payload)
