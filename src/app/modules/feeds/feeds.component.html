@@ -14,8 +14,8 @@
   <br />
   <br />
   <br />
-  Notes :<br />
-  <div class="column twelve">
+  <div class="column twelve" *ngIf="sessionService.loggedIn">
+    Notes :<br />
     <ul>
       <li *ngFor="let comment of notesFeed">{{comment.body}}</li>
     </ul>
