@@ -18,6 +18,7 @@ export class FeedsComponent {
   public note: string;
   public feedId: string;
   public notesFeed: Array<Object>;
+  public infoFeed: Object;
 
 
     constructor(private route: ActivatedRoute, private router: Router, feedsApi: FeedsApiService, protected store: Store<DatasetsState>, protected actions$: Actions,
@@ -30,6 +31,13 @@ export class FeedsComponent {
       // Get the info from the feed id
       this.notesFeed = [];
       let that = this;
+
+      feedsApi.getPublic(this.feedId).then(function(data){
+        that.infoFeed = data;
+      });
+
+      
+
       if (sessionService.loggedIn == true){
         feedsApi.getNotes(this.feedId).then(function(data){
         for (var i = 0; i < data.length; i++){
@@ -37,7 +45,9 @@ export class FeedsComponent {
         }
         });
       }
-      
+      console.log("hi");
+      console.log(this.infoFeed);
+      console.log("hi");
 
       actions$.ofType(DatasetsActionType.FEEDS_ADD_NOTES_SUCCESS)
       .subscribe(action => this.resetForm());

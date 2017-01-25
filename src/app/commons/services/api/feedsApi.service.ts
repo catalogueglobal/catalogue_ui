@@ -121,6 +121,10 @@ export class FeedsApiService extends AbstractApiService {
       .map(response => response.json())
   }
 
+  public getPublic(feedSourceId: string): Promise<any> {
+    return this.http.get(this.FEED_PUBLIC_URL + '/' + feedSourceId).map(response => response.json()).toPromise();
+  }
+
   public get(feedSourceId: string): Observable<IFeedApi> {
     return this.authHttp.get(this.FEED_SECURE_URL + '/' + feedSourceId)
       .map(response => response.json())
