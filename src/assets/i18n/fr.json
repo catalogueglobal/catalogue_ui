@@ -51,6 +51,7 @@
     "delete": {
       "confirm": {
         "title": "Confirmer la suppression",
+        "label": "Etes-vous sûr que vous voulez supprimer?"
       }
     }
   },

@@ -50,7 +50,8 @@
     },
     "delete": {
       "confirm": {
-        "title": "Confirm deletion",
+          "title": "Confirm deletion",
+          "label": "Are you sure you want to delete ?"
       }
     }
   },
