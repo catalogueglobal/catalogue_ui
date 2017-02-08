@@ -47,6 +47,11 @@
       "feedName": "Feed name",
       "isPublic": "Public dataset",
       "submit": "Proceed to upload"
+    },
+    "delete": {
+      "confirm": {
+        "title": "Confirm deletion",
+      }
     }
   },
   "datasets": {
