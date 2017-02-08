@@ -16,13 +16,15 @@
             {{'datasets-table.column.area'|translate}}
           </app-sort-link>
 	</th>
-  <th *ngIf="sessionService.loggedIn">
-    Subscibe / Unsubscribe
-  </th>
-	<!--<th>
-            License
-	    </th>
-      <th>License Details<a href="#" class="question-circle"></a></th>-->
+	<th>
+          License
+	</th>
+	<th>
+	  License Details<a href="#" class="question-circle"></a>
+	</th>
+	<th *ngIf="sessionService.loggedIn">
+	  Subscibe / Unsubscribe
+	</th>
       </tr>
     </thead>
     <tbody>
@@ -30,27 +32,28 @@
 	<td class="chkMulti">
           <div><input type="checkbox" [(ngModel)]="checkById[feed.id]"></div>
 	</td>
-  <td><a [routerLink]="['/feeds/', feed.id]"> {{feed.name}}</a></td>
+	<td><a [routerLink]="['/feeds/', feed.id]"> {{feed.name}}</a></td>
 	<td class="area">
           <div>{{regionStateCountry(feed)}}</div>
 	</td>
-	<!--<td></td>
-	    <td>
-              <div class="license-attr">
-		<span class="unknown-attr requires disabled">
-		  <span class="tool-tip-info">Unknown whether<br> agency requires<br>attribution.</span>
-		</span>
-		<span class="unknown-attr allow-derivation disabled">
-		  <span class="tool-tip-info">You may create a<br>derived data product<br>from this feed.</span>
-		</span>
-		<span class="unknown-attr allow-redistribution disabled">
-		  <span class="tool-tip-info">You may redistribute<br>this feed.</span>
-		</span>
-              </div>
-	    </td>-->
-      <td class="" *ngIf="sessionService.loggedIn">
-        <input type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)" >
-      </td>
+	<td>
+	</td>
+	<td>
+          <div class="license-attr">
+	    <span class="unknown-attr requires disabled">
+	      <span class="tool-tip-info">Unknown whether agency requires attribution.</span>
+	    </span>
+	    <span class="unknown-attr allow-derivation disabled">
+	      <span class="tool-tip-info">You may create a derived data product from this feed.</span>
+	    </span>
+	    <span class="unknown-attr allow-redistribution disabled">
+	      <span class="tool-tip-info">You may redistribute this feed.</span>
+	    </span>
+          </div>
+	</td>
+	<td class="" *ngIf="sessionService.loggedIn">
+          <input type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)" >
+	</td>
       </tr>
     </tbody>
   </table>

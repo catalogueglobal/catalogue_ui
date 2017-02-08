@@ -21,20 +21,24 @@
             {{'mydatasets-table.column.feedName'|translate}}
           </app-sort-link>
 	</th>
-	<th class="area">
+	<!-- <th class="area">
           <app-sort-link sortValue="regionStateCountry" [(value)]="currentSort" (valueChange)="setSort($event)"
 			 defaultOrder="asc">
             {{'mydatasets-table.column.area'|translate}}
           </app-sort-link>
-	</th>
+	</th> -->
 	<th class="lastUpdated">
           <app-sort-link sortValue="lastUpdated" [(value)]="currentSort" (valueChange)="setSort($event)"
 			 defaultOrder="desc">
             {{'mydatasets-table.column.updated'|translate}}
           </app-sort-link>
 	</th>
-	<!--<th>License</th>
-	    <th class="licenseDetails">License Details<a href="#" class="question-circle"></a></th>-->
+	<th>
+	  License
+	</th>
+	<th class="licenseDetails">
+	  License Details<a href="#" class="question-circle"></a>
+	</th>
       </tr>
     </thead>
     <tbody>
@@ -75,26 +79,27 @@
             {{feed.name}}
           </app-inline-edit-text>
 	</td>
-	<td class="area">
+	<!-- <td class="area">
           <div>{{regionStateCountry(feed)}}</div>
-	</td>
+	</td> -->
 	<td class="lastUpdated">
           {{feed.lastUpdated|date:'y-MM-dd'}}
 	</td>
-	<!--<td></td>
-	    <td>
-              <div class="license-attr">
-		<span class="unknown-attr requires disabled">
-		  <span class="tool-tip-info">Unknown whether<br> agency requires<br>attribution.</span>
-		</span>
-		<span class="unknown-attr allow-derivation disabled">
-		  <span class="tool-tip-info">You may create a<br>derived data product<br>from this feed.</span>
-		</span>
-		<span class="unknown-attr allow-redistribution disabled">
-		  <span class="tool-tip-info">You may redistribute<br>this feed.</span>
-		</span>
-              </div>
-	    </td>-->
+	<td>
+	</td>
+	<td>
+          <div class="license-attr">
+	    <span class="unknown-attr requires disabled">
+	      <span class="tool-tip-info">Unknown whether<br> agency requires<br>attribution.</span>
+	    </span>
+	    <span class="unknown-attr allow-derivation disabled">
+	      <span class="tool-tip-info">You may create a<br>derived data product<br>from this feed.</span>
+	    </span>
+	    <span class="unknown-attr allow-redistribution disabled">
+	      <span class="tool-tip-info">You may redistribute<br>this feed.</span>
+	    </span>
+          </div>
+	</td>
       </tr>
     </tbody>
   </table>

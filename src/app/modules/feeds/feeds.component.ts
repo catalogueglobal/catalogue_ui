@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import {Router, ActivatedRoute, Params } from '@angular/router';
 import {FeedsApiService, IFeedApi} from '../../commons/services/api/feedsApi.service';
 import {SessionService} from "../../commons/services/session.service";
 import {Store, Action} from "@ngrx/store";
@@ -40,26 +40,24 @@ export class FeedsComponent {
 
       if (sessionService.loggedIn == true){
         feedsApi.getNotes(this.feedId).then(function(data){
-        for (var i = 0; i < data.length; i++){
+        for (var i = data.length - 1; i >= 0 ; i--){
           that.notesFeed.push(data[i]);
         }
         });
       }
-      console.log("hi");
-      console.log(this.infoFeed);
-      console.log("hi");
 
       actions$.ofType(DatasetsActionType.FEEDS_ADD_NOTES_SUCCESS)
       .subscribe(action => this.resetForm());
+
     }
 
 
   addNotesToFeed(){
     // add note to feed if not empty
     if (this.note != null){
-      let data = {body: this.note}
+      let data = {body: this.note, date: Date.now(), userEmail: this.sessionService.session.user.email}
       this.store.dispatch(this.datasetsAction.feedAddNotes(this.feedId, data));
-      this.notesFeed.push(data);
+      this.notesFeed.unshift(data);
     }
   }
 

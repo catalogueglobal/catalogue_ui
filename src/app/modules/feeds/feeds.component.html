@@ -11,13 +11,19 @@
   <br />
   <h1 *ngIf="infoFeed != null">{{infoFeed.name}}</h1>
   <br />
-  <br />
+  <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Period of application: From {{infoFeed.latestValidation.startDate|date:'y-MM-dd'}} to {{infoFeed.latestValidation.endDate|date:'y-MM-dd'}}</h4>
+  <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Number of routes: {{infoFeed.latestValidation.routeCount}}</h4>
+  <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Number of trips: {{infoFeed.latestValidation.tripCount}}</h4>
   <br />
   <br />
   <div class="column twelve" *ngIf="sessionService.loggedIn">
     Notes :<br />
     <ul>
-      <li *ngFor="let comment of notesFeed">{{comment.body}}</li>
+      <li *ngFor="let comment of notesFeed">
+	<strong>Author: {{comment.userEmail}}</strong><br />
+	<small><strong>Date:</strong> <i>{{comment.date|date:'y-MM-dd HH:mm:ss'}}</i></small><br />
+	{{comment.body}}
+      </li>
     </ul>
     <textarea [(ngModel)]="note"></textarea>
     <button (click)="addNotesToFeed()">Submit</button>
