@@ -1,13 +1,13 @@
-import {Directive, ElementRef} from "@angular/core";
+import { Directive, ElementRef } from "@angular/core";
 
 /**
  * customFileinput integration.
  */
 @Directive({
-  selector: 'input[type=file]'
+    selector: 'input[type=file]'
 })
 export class CustomFileinputDirective {
-  constructor(el: ElementRef) {
-    customFileinput(el.nativeElement);
-  }
+    constructor(el: ElementRef) {
+        customFileinput(el.nativeElement);
+    }
 }
