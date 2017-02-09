@@ -11,7 +11,6 @@ export class SharedService {
     constructor() {
     }
 
-
     getCenterMap () {
         return this.centerMap;
     }

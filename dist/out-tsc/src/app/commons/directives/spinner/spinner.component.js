@@ -1,0 +1,60 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+import { Component, Input } from '@angular/core';
+export var SpinnerComponent = (function () {
+    function SpinnerComponent() {
+        this.visible = true;
+        this.delay = 0;
+    }
+    Object.defineProperty(SpinnerComponent.prototype, "isRunning", {
+        set: function (value) {
+            var _this = this;
+            if (!value) {
+                this.cancel();
+                this.visible = false;
+            }
+            if (this.timeout) {
+                return;
+            }
+            this.timeout = setTimeout(function () {
+                _this.visible = true;
+                _this.cancel();
+            }, this.delay);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SpinnerComponent.prototype.cancel = function () {
+        clearTimeout(this.timeout);
+        this.timeout = undefined;
+    };
+    SpinnerComponent.prototype.ngOnDestroy = function () {
+        this.cancel();
+    };
+    __decorate([
+        Input(), 
+        __metadata('design:type', Number)
+    ], SpinnerComponent.prototype, "delay", void 0);
+    __decorate([
+        Input(), 
+        __metadata('design:type', Boolean), 
+        __metadata('design:paramtypes', [Boolean])
+    ], SpinnerComponent.prototype, "isRunning", null);
+    SpinnerComponent = __decorate([
+        Component({
+            selector: 'app-spinner',
+            templateUrl: 'spinner.component.html',
+            styleUrls: ['spinner.component.css']
+        }), 
+        __metadata('design:paramtypes', [])
+    ], SpinnerComponent);
+    return SpinnerComponent;
+}());
+//# sourceMappingURL=/Users/zbouziane/tmp/catalogue_ui/src/src/app/commons/directives/spinner/spinner.component.js.map
