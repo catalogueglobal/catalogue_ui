@@ -22,10 +22,10 @@
           </app-sort-link>
 	</th>
 	<!-- <th class="area">
-          <app-sort-link sortValue="regionStateCountry" [(value)]="currentSort" (valueChange)="setSort($event)"
-			 defaultOrder="asc">
-            {{'mydatasets-table.column.area'|translate}}
-          </app-sort-link>
+             <app-sort-link sortValue="regionStateCountry" [(value)]="currentSort" (valueChange)="setSort($event)"
+			    defaultOrder="asc">
+               {{'mydatasets-table.column.area'|translate}}
+             </app-sort-link>
 	</th> -->
 	<th class="lastUpdated">
           <app-sort-link sortValue="lastUpdated" [(value)]="currentSort" (valueChange)="setSort($event)"
@@ -80,7 +80,7 @@
           </app-inline-edit-text>
 	</td>
 	<!-- <td class="area">
-          <div>{{regionStateCountry(feed)}}</div>
+             <div>{{regionStateCountry(feed)}}</div>
 	</td> -->
 	<td class="lastUpdated">
           {{feed.lastUpdated|date:'y-MM-dd'}}

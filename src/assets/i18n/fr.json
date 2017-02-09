@@ -2,51 +2,51 @@
   "layout": {
     "menu": {
       "use": "use",
-      "upload": "upload",
-      "download": "download",
-      "manage": "manage",
-      "subscribe": "subscribe",
-      "login": "login",
-      "logout": "logout"
+      "upload": "importer",
+      "download": "télécharger",
+      "manage": "gérer",
+      "subscribe": "souscrire",
+      "login": "connexion",
+      "logout": "déconnexion"
     },
     "footer": {
-      "home": "Home",
-      "about": "About",
+      "home": "Accueil",
+      "about": "À Propos",
       "faq": "FAQ",
-      "community": "Community",
-      "tools": "Tools",
+      "community": "Communauté",
+      "tools": "Outils",
       "blog": "Blog",
       "contact": "Contact",
-      "subscribe": "Subscribe",
+      "subscribe": "Souscrire",
       "copyright": "&copy; {{year}} Catalogue. All Rights Reserved."
     }
   },
   "popup": {
     "subscribe": {
-      "title": "Subscribe Now",
-      "name": "Name",
-      "company": "Company",
+      "title": "Souscrire",
+      "name": "Nom",
+      "company": "Entreprise",
       "email": "Email",
       "type": {
         "label": "Types",
-        "placeholder": "Select your Type",
-        "producer": "Producer",
-        "developer": "Developers",
-        "community": "Community"
+        "placeholder": "Choisir le Type",
+        "producer": "Producteur",
+        "developer": "Développeurs",
+        "community": "Communauté"
       },
-      "submit": "Subscribe"
+      "submit": "Souscrire"
     },
     "upload": {
-      "title": "Upload new dataset",
-      "file": "File (.zip)",
+      "title": "Importer un nouveau jeu de données",
+      "file": "Fichier (.zip)",
       "toggleOptions": {
-        "show": "Show advanced options",
-        "hide": "Hide advanced options"
+        "show": "Montrer les options avancées",
+        "hide": "Cacher les options avancées"
       },
-      "projectName": "Project name",
-      "feedName": "Feed name",
-      "isPublic": "Public dataset",
-      "submit": "Proceed to upload"
+      "projectName": "Nom du Projet",
+      "feedName": "Nom du jeu de données",
+      "isPublic": "Jeu de données public",
+      "submit": "Importer"
     },
     "delete": {
       "confirm": {
@@ -56,66 +56,66 @@
     }
   },
   "datasets": {
-    "title": "Download datasets",
+    "title": "Téléchargement des données",
     "map": {
-      "title": "Select datasets on the map or search by location"
+      "title": "Choisir les jeux de données sur la carte ou chercher par zone géographique"
     },
     "table": {
-      "title": "catalogue datasets",
-      "intro": "From the list of displayed datasets, click to select those you want to download.",
-      "search": "Search here",
+      "title": "catalogue des jeux de données",
+      "intro": "Depuis la liste des données affichées, cliquez pour sélectionner celles que vous souhaitez télécharger.",
+      "search": "Chercher ici",
       "btn": {
-        "download": "download"
+        "download": "télécharger"
       },
       "noresult": {
-        "info": "No feed found for your search. Try zooming out or",
-        "reset": "reset your search"
+        "info": "Aucue données disponible. Dézoomer ou",
+        "reset": "réinitialiser votre recherche"
       }
     }
   },
   "mydatasets": {
-    "title": "Manage your datasets",
+    "title": "Gérer vos données",
     "map": {
-      "title": "Select datasets on the map or search by location"
+      "title": "Choisir les jeux de données sur la carte ou chercher par zone géographique"
     },
     "table": {
-      "title": "catalogue datasets",
-      "intro": "From the list of displayed datasets, click to select those you want to download.",
-      "search": "Search here",
+      "title": "catalogue des jeux de données",
+      "intro": "Depuis la liste des données affichées, cliquez pour sélectionner celles que vous souhaitez télécharger.",
+      "search": "Chercher ici",
       "btn": {
-        "download": "download",
-        "delete": "delete"
+        "download": "télécharger",
+        "delete": "supprimer"
       },
       "noresult": {
-        "info": "No feed found for your search. Try zooming out or",
-        "reset": "reset your search"
+        "info": "Aucue données disponible. Dézoomer ou",
+        "reset": "réinitialiser votre recherche"
       }
     }
   },
   "datasets-table": {
-    "checkall": "Check all",
+    "checkall": "Vérifier tout",
     "column": {
-      "feedName": "Feed name",
-      "area": "Area"
+      "feedName": "Nom du lot",
+      "area": "Zone"
     }
   },
   "mydatasets-table": {
-    "checkall": "Check all",
+    "checkall": "Vérifier tout",
     "column": {
       "isPublic": {
         "label": "Public",
         "public": "public",
-        "private": "private"
+        "private": "privé"
       },
       "type": {
         "label": "Type",
-        "fetch": "Fetch auto.",
-        "upload": "Manual upload",
-        "inhouse": "In house prod."
+        "fetch": "Import auto.",
+        "upload": "Import Manuel",
+        "inhouse": "Production locale"
       },
-      "feedName": "Feed name",
-      "area": "Area",
-      "updated": "Updated"
+      "feedName": "Nom du lot",
+      "area": "Zone",
+      "updated": "Actualisé"
     }
   },
   "state": {
@@ -123,12 +123,12 @@
     "USER_SUBSCRIBE_SUCCESS": "Subscription success, thanks.",
     "USER_SUBSCRIBE_FAIL": "Sorry, subscription failed. Please try again",
     "FEEDS_GET": {
-      "private": "Loading private feeds...",
-      "public": "Loading public feeds..."
+      "private": "Chargement des données privées...",
+      "public": "Chargement des données public..."
     },
     "FEEDS_GET_FAIL": {
-      "public": "Failed to load public feeds.",
-      "private": "Failed to load private feeds."
+      "public": "Echec de chargement des données privées.",
+      "private": "Echec de chargement des données public."
     },
     "FEED_CREATE": "Creating feed: <i>{{feedName}</i>",
     "FEED_CREATE_PROGRESS": "Creating feed: <i>{{feedName}}</i> ({{progress}})",
