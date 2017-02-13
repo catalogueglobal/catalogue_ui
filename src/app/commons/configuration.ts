@@ -24,7 +24,7 @@ export class Configuration {
         return this.MAP_ZOOM_POSITION;
     }
     public MAP_DEFAULT_POSITION: number[] = [48.827208299999995, 2.2820185]; // initial position when geoloc not possible: Paris, FR
-    public MAP_TILE_LAYER_URL: string = 'https://api.tiles.mapbox.com/v4/conveyal.ie3o67m0/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY29udmV5YWwiLCJhIjoiMDliQURXOCJ9.9JWPsqJY7dGIdX777An7Pw';
+    public MAP_TILE_LAYER_URL: string = 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiemJvdXppYW5lIiwiYSI6ImNpa28yZnNoaTAwOWl3MG00M2Q0MG1qcHIifQ.r3Ye8UdsaoAc3DuF6elmXQ';
     public MAP_TILE_LAYER_OPTIONS: {} = {
         attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, &copy; <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18,
