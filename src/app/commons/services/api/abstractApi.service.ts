@@ -16,7 +16,7 @@ export abstract class AbstractApiService {
     
     protected computeAuthHeaders(): Map<string,string> {
 	    let headers: Map<string,string> = new Map<string,string>();
-	    headers.set(this.authConfig.headerName, this.authConfig.headerPrefix + this.authConfig.tokenGetter());
+	    headers.set(this.authConfig.getConfig().headerName, this.authConfig.getConfig().headerPrefix + this.authConfig.getConfig().tokenGetter());
 	    //console.log("computeAuthHeaders", headers, this.authConfig);
 	    return headers;
     }

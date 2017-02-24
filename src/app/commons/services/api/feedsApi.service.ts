@@ -96,17 +96,17 @@ export class FeedsApiService extends AbstractApiService {
             projectId: projectId,
             isPublic: isPublic
         });
-        return this.authHttp.post(this.FEED_SECURE_URL, data).map <IFeedApi>(response => response.json());
+        return this.authHttp.post(this.FEED_SECURE_URL, data).map(response => response.json());
     }
     
     public setPublic(feedSourceId: string, value: boolean): Observable<IFeedApi> {
         return this.authHttp.put(this.FEED_SECURE_URL + "/" + feedSourceId, JSON.stringify({isPublic: value}))
-            .map<IFeedApi>(response=>response.json());
+            .map(response=>response.json());
     }
     
     public setName(feedSourceId: string, value: string): Observable<IFeedApi> {
         return this.authHttp.put(this.FEED_SECURE_URL + "/" + feedSourceId, JSON.stringify({name: value}))
-            .map<IFeedApi>(response=>response.json());
+            .map(response=>response.json());
     }
     
     public setFile(feedSourceId: string, file: File): Observable<any> {
@@ -162,14 +162,14 @@ export class FeedsApiService extends AbstractApiService {
             text: text,
             feedIds: feedIds
         });
-        return this.authHttp.post(this.FEED_LICENSE, data).map<ILicense>(response => response.json());
+        return this.authHttp.post(this.FEED_LICENSE, data).map(response => response.json());
     }
     
     public setLicense(feedIds: string[], licenseId: string): Observable<ILicense>{
         let data = JSON.stringify({
             feedIds: feedIds
         });
-        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId , data).map<ILicense>(response => response.json());
+        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId , data).map(response => response.json());
     }
 
     public unsetLicense(feedIds: string[], licenseId: string): Observable<ILicense>{
@@ -177,7 +177,7 @@ export class FeedsApiService extends AbstractApiService {
             action: "remove",
             feedIds: feedIds
         });
-        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId , data).map<ILicense>(response => response.json());
+        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId , data).map(response => response.json());
     }
 
     public getList(params: FeedsGetParams): Observable<FeedsGetResponse> {
@@ -253,6 +253,6 @@ export class FeedsApiService extends AbstractApiService {
     
     getSecureFeeds(projectId: string): Observable<IFeedApi[]> {
         return this.authHttp.get(this.FEED_SECURE_URL + "?projectId=" + projectId)
-            .map <IFeedApi[]>(response => response.json());
+            .map(response => response.json());
     }
 }

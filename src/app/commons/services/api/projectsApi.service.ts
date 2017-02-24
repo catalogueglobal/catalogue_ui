@@ -35,7 +35,7 @@ export class ProjectsApiService extends AbstractApiService {
         let params = JSON.stringify({
             name: name
         });
-        return this.authHttp.post(this.PROJECT_SECURE_URL, params).map <IProject>(response => response.json());
+        return this.authHttp.post(this.PROJECT_SECURE_URL, params).map(response => response.json());
     }
 
     public delete(projectId: string): Observable<any> {
@@ -44,12 +44,12 @@ export class ProjectsApiService extends AbstractApiService {
 
     public getPublicList(bounds: IBounds, sortOrder: SortOrder): Observable<IProject[]> {
         return this.http.get(this.PROJECT_PUBLIC_URL + "?" + this.sortQuery(sortOrder) + "&" + this.boundsQuery(bounds))
-            .map<IProject[]>(response => response.json());
+            .map(response => response.json());
     }
 
     public getSecureList(bounds: IBounds, sortOrder: SortOrder): Observable<IProject[]> {
         return this.authHttp.get(this.PROJECT_SECURE_URL + "?" + this.sortQuery(sortOrder) + "&" + this.boundsQuery(bounds))
-            .map<IProject[]>(response => response.json());
+            .map(response => response.json());
     }
     
     public getPublicProject(projectId: string): Promise<IProject> {
@@ -57,7 +57,7 @@ export class ProjectsApiService extends AbstractApiService {
     }
     
     public getAllSecureProject() : Observable<IProject[]> {
-        return this.authHttp.get(this.PROJECT_SECURE_URL).map<IProject[]>(response => response.json());
+        return this.authHttp.get(this.PROJECT_SECURE_URL).map(response => response.json());
     }
     
     public getPrivateProject(projectId: string): Promise<IProject> {
