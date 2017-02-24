@@ -51,6 +51,23 @@ import { DatasetsActions }                                          from "./stat
 import { DatasetsEffects }                                          from "./state/datasets/datasets.effects";
 import { appReducer }                                               from "./state/index.reducer";
 
+export function httpFactory(http: Http) {
+    return new TranslateStaticLoader(http, '/assets/i18n', '.json');
+}
+
+export function sessionServiceFactory(sessionService) {
+    return new AuthConfig({
+        tokenGetter: () => {
+            return sessionService._tokenGetter();
+        },
+        noJwtError: false,
+    });
+}
+
+export function httpAuthConfigFactory(http, authConfig) {
+    return new AuthHttp(authConfig, http);
+}
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -107,7 +124,7 @@ import { appReducer }                                               from "./stat
 
         TranslateModule.forRoot({
             provide: TranslateLoader,
-            useFactory: (http: Http) => new TranslateStaticLoader(http, '/assets/i18n', '.json'),
+            useFactory: httpFactory,
             deps: [Http]
         })
     ],
@@ -125,22 +142,13 @@ import { appReducer }                                               from "./stat
 
         {
             provide: AuthConfig,
-            useFactory: (sessionService) => {
-                return new AuthConfig({
-                    tokenGetter: () => {
-                        return sessionService._tokenGetter();
-                    },
-                    noJwtError: false,
-                });
-            },
+            useFactory: sessionServiceFactory,
             deps: [SessionService]
         },
 
         {
             provide: AuthHttp,
-            useFactory: (http, authConfig) => {
-                return new AuthHttp(authConfig, http);
-            },
+            useFactory: httpAuthConfigFactory,
             deps: [Http, AuthConfig]
         },
     ]

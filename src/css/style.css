@@ -3929,9 +3929,11 @@ table caption + thead tr:first-child th, table caption + thead tr:first-child td
   font-size: 14px;
 }
 
+/*
 .newsletter input[type="text"] {
   background: url(../img/newsleeter-bg.png) no-repeat 6% 50%;
 }
+*/
 
 .sponsors-logo {
   margin: -28px 0 0 -28px;

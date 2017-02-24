@@ -39,8 +39,8 @@ export class MapUtilsService {
 
     computeRedIcon() {
         let redIcon = leaflet.icon({
-            iconUrl: 'images/markers/marker-icon-red.png',
-            shadowUrl: 'vendor/leaflet/dist/images/marker-shadow.png',
+            iconUrl: 'src/images/markers/marker-icon-red.png',
+            shadowUrl: 'src/vendor/leaflet/dist/images/marker-shadow.png',
             iconSize: [25, 41],
             iconAnchor: [12, 41],
             popupAnchor: [1, -34],

@@ -73,7 +73,7 @@ export const DatasetsActionType = {
     FEEDS_ADD_NOTES_FAIL: 'FEEDS_ADD_NOTES_FAIL'
 };
 
-export type IFeedReference ={
+export type IFeedReference = {
     feedsourceId: string,
     feedLabel: string
 }
@@ -196,7 +196,7 @@ export class DatasetsActions {
         }
     }
     
-    updateProjectFail(projectId: string, projectPutParams: any, error: any){
+    updateProjectFail(projectId: string, projectPutParams: any, error: any) : Action {
         return {
             type: DatasetsActionType.UPDATE_PROJECT_FAIL,
             payload: {
@@ -524,7 +524,7 @@ export class DatasetsActions {
         }
     }
     
-    subscribeToFeedFail(userInfos: Object, error: any){
+    subscribeToFeedFail(userInfos: Object, error: any) : Action {
         return {
             type: DatasetsActionType.SUBSCRIBE_FEED_FAIL,
             payload: {
@@ -553,7 +553,7 @@ export class DatasetsActions {
         }
     }
     
-    unsubscribeToFeedFail(userInfos: Object, error: any){
+    unsubscribeToFeedFail(userInfos: Object, error: any) : Action {
         return {
             type: DatasetsActionType.UNSUBSCRIBE_FEED_FAIL,
             payload: {

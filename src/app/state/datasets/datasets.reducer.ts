@@ -25,8 +25,7 @@ const initialState: DatasetsState = {
 function updateFeeds(feeds, updatedFeed) {
     return feeds.map(feed => {
         if (feed.id == updatedFeed.id) {
-            // update feed datas
-            Object.assign(feed, updatedFeed);
+            Object.assign(feed, updatedFeed); // update feed datas
             console.log('feed updated', feed);
         }
         return feed;

@@ -20,4 +20,9 @@ export abstract class AbstractApiService {
 	    //console.log("computeAuthHeaders", headers, this.authConfig);
 	    return headers;
     }
+
+    protected computeDefaultHeaders(): Map<string,string> {
+		let headers: Map<string,string> = new Map<string,string>();
+		return headers;
+	}
 }

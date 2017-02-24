@@ -36,7 +36,7 @@ function generalJs() {
 
     /* Get Screen size
      ---------------------------------------------------------------------*/
-    $win.load(function () {
+    $win.on('load', function () {
       $win.on('resize', function () {
         if (!screencheck(567)) {
           $screensize('#mainbanner');
@@ -49,7 +49,7 @@ function generalJs() {
 
     /* Get Screen size
      ---------------------------------------------------------------------*/
-    $win.load(function () {
+    $win.on('load', function () {
       $win.on('resize', function () {
         if (screencheck(1920)) {
           $screensize('.analysis-process');
