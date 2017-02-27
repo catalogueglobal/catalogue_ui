@@ -37,8 +37,14 @@
       "submit": "Subscribe"
     },
     "upload": {
+      "login": "Login to proceed",
+      "file": "Data file (*.zip)",
+      "browse": "Browse",
+      "check": "Check to download your own license",
+      "select": "Select a license",
+      "licenseName": "License Name",
+      "licenseFile": "License File (*.txt)",
       "title": "Upload new dataset",
-      "file": "File (.zip)",
       "toggleOptions": {
         "show": "Show advanced options",
         "hide": "Hide advanced options"

@@ -14,7 +14,9 @@ export type ICreateFeed = {
     feedName: string,
     isPublic: boolean,
     file: any,
-    licenceFile:any
+    licenseName: string,
+    licenseId: string;
+    licenseFile:any
 }
 
 @Injectable()
@@ -226,44 +228,58 @@ export class DatasetsEffects {
       }
     */
 
-    // TODO. ADD LICENCE SETTING
-    private createProjectAndFeedAndSetFile(createFeed: ICreateFeed, onProgress): Observable<IFeedApi> {
-        return Observable.create(obs$ => {
-            onProgress("creating project")
-            this.projectsApi.create(createFeed.projectName).subscribe(
-                project => {
-                    console.log("created project:", project);
-                    onProgress("creating feed")
-                    this.feedsApi.create(createFeed.feedName, project.id, createFeed.isPublic).subscribe(
-                        feed => {
-                            console.log("created feed:", feed);
-                            onProgress("uploading...")
-                            let setFile$ = this.feedsApi.setFile(feed.id, createFeed.file);
-                            setFile$.subscribe(
-                                progress => {
-                                    console.log('setFile progress', progress)
-                                    onProgress("uploading... " + progress + "%")
-                                },
-                                err => {
-                                    console.log('setFile error', err);
-                                    obs$.error(err);
-                                },
-                                () => {
-                                    console.log('setFile complete')
-                                    obs$.next(feed);
-                                    obs$.complete();
-                                });
-                            return setFile$;
-                        },
-                        err => {
-                            console.log('feed creation error', err);
-                            obs$.error(err);
-                        });
-                },
-                err => {
-                    console.log('project creation error', err);
-                    obs$.error(err);
-                });
-        })
-    }
+    // TODO. ADD LICENSE SETTING
+    private createProjectAndFeedAndSetFile(createFeed: ICreateFeed, onProgress) {
+    return Observable.create(obs$ => {
+        onProgress("creating project")
+        this.projectsApi.create(createFeed.projectName).subscribe(
+            project => {
+                console.log("created project:", project);
+                onProgress("creating feed")
+                this.feedsApi.create(createFeed.feedName, project.id, createFeed.isPublic).subscribe(
+                    feed => {
+                        console.log("created feed:", feed);
+                        onProgress("uploading...")
+                        let setFile$ = this.feedsApi.setFile(feed.id, createFeed.file);
+                        setFile$.subscribe(
+                            progress => {
+                                console.log('setFile progress', progress)
+                                onProgress("uploading... " + progress + "%")
+                            },
+                            err => {
+                                console.log('setFile error', err);
+                                obs$.error(err);
+                            },
+                            () => {
+                                console.log('setFile complete')
+                                obs$.next(feed);
+                                obs$.complete();
+                            });
+                        // READ THE TEXT FROM createFeed.licenseFile AND SEND IT TO createLicense
+                        let reader = new FileReader();
+                        let that = this;
+                        reader.onload = function(e) {
+                            let licenseText = reader.result;
+                            that.feedsApi.createLicense(createFeed.licenseName, licenseText, [feed.id]).subscribe(license => {
+                                console.log("License.idlicence", license.id);
+                            }, err => {
+                            });
+                        }
+                        if (createFeed.licenseFile)
+                            reader.readAsText(createFeed.licenseFile);
+                        else if (createFeed.licenseId)
+                            console.log("ZZZZZZZZZZ licenseId", createFeed.licenseId); // update license
+                        return setFile$;
+                    },
+                    err => {
+                        console.log('feed creation error', err);
+                        obs$.error(err);
+                    });
+            },
+            err => {
+                console.log('project creation error', err);
+                obs$.error(err);
+            });
+    })
+}
 }

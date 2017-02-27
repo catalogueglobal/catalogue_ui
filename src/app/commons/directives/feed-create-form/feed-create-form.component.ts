@@ -5,6 +5,7 @@ import { DatasetsActions, DatasetsActionType } from "../../../state/datasets/dat
 import { ICreateFeed }                         from "../../../state/datasets/datasets.effects";
 import { DatasetsState }                       from "../../../state/datasets/datasets.reducer";
 import { ProjectsApiService }                  from "../../services/api/projectsApi.service";
+import { FeedsApiService }                     from "../../services/api/feedsApi.service";
 import { SessionService }                      from "../../services/session.service";
 import { UtilsService }                        from "../../services/utils.service";
 
@@ -17,21 +18,34 @@ export class FeedCreateFormComponent {
     public showOptionsUpload: boolean;
     public addToProject: boolean;
     public projectsName = [];
-    
+    public licenses = [];
+
     constructor(
         private sessionService:   SessionService,
         private utils:            UtilsService,
         protected store:          Store<DatasetsState>,
         protected datasetsAction: DatasetsActions,
         private projectsService:  ProjectsApiService,
+        private feedsService:     FeedsApiService,
         actions$:                 Actions)
     {
         this.resetForm();
         // reset form on upload success
         actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.resetForm());
         actions$.ofType(DatasetsActionType.ADD_FEED_TO_PROJECT_SUCCESS).subscribe(() => this.resetForm());
+        let that = this;
+        this.feedsService.getLicenses().then(function(data) {
+            for (var i = data.length - 1; i >= 0 ; i--) {
+                that.licenses.push(data[i]);
+            }
+        });
     }
-    
+
+
+    onChange(selectedLicense) {
+        this.simpleUpload.licenseId = selectedLicense.id;
+    }
+
     private submit(): void {
         if (!this.simpleUpload.file) {
             return;
@@ -41,7 +55,9 @@ export class FeedCreateFormComponent {
             feedName: this.simpleUpload.feedName,
             isPublic: this.simpleUpload.isPrivate,
             file: this.simpleUpload.file,
-            licenceFile: this.simpleUpload.licence
+            licenseName: this.simpleUpload.licenseName,
+            licenseId: this.simpleUpload.licenseId,
+            licenseFile: this.simpleUpload.license
         }
         this.store.dispatch(this.datasetsAction.feedCreate(createFeed));    
     }
@@ -77,8 +93,9 @@ export class FeedCreateFormComponent {
         this.simpleUpload = {
             feedName: "",
             file: null,
-            licence: null,
-            newLicence: false,
+            license: null,
+            newLicense: false,
+            licenseId: null,
             isPrivate: false
         };
     }

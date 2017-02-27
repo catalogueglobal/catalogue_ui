@@ -37,15 +37,21 @@
       "submit": "Souscrire"
     },
     "upload": {
+      "login": "Connectez-vous pour continuer",
+      "file": "Fichier de données (*.zip)",
+      "browse": "Parcourir",
+      "check": "Cocher pour télécharger votre propre licence",
+      "select": "Choisir une licence",
+      "licenseName": "Nom de la licence",
+      "licenseFile": "Fichier de licence (*.txt)",
       "title": "Importer un nouveau jeu de données",
-      "file": "Fichier (.zip)",
       "toggleOptions": {
         "show": "Montrer les options avancées",
         "hide": "Cacher les options avancées"
       },
       "projectName": "Nom du Projet",
       "feedName": "Nom du jeu de données",
-      "isPublic": "Jeu de données public",
+      "isPublic": "Jeu de données public (Cocher pour rendre ces données disponibles aux téléchargement)",
       "submit": "Importer"
     },
     "delete": {

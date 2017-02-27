@@ -329,9 +329,9 @@ function generalJs() {
 
   });
 };
-function customFileinput(elt) {
+function customFileinput(elt, val) {
   $(elt).customFileinput({
-    buttontext: 'BROWSE'
+    buttontext: val
   });
 }
 function closePopup(popupSelector) {

@@ -1,4 +1,5 @@
 import { Directive, ElementRef } from "@angular/core";
+import { TranslateService } from "ng2-translate/src/translate.service";
 
 /**
  * customFileinput integration.
@@ -7,7 +8,11 @@ import { Directive, ElementRef } from "@angular/core";
     selector: 'input[type=file]'
 })
 export class CustomFileinputDirective {
-    constructor(el: ElementRef) {
-        customFileinput(el.nativeElement);
+    constructor(el: ElementRef, translate: TranslateService) {
+        translate.get('popup.upload.browse').subscribe(
+            value => {
+                customFileinput(el.nativeElement, value);
+            }
+        )
     }
 }

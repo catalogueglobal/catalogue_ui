@@ -9,7 +9,7 @@ import { combineReducers, StoreModule }                             from "@ngrx/
 import { StoreDevtoolsModule }                                      from '@ngrx/store-devtools';
 import { ConfirmationPopoverModule }                                from 'angular-confirmation-popover';
 import { AuthConfig, AuthHttp }                                     from "angular2-jwt";
-import { ToasterModule }                                            from "angular2-toaster/angular2-toaster";
+import { ToasterModule }                                            from "angular2-toaster";
 import { Ng2CompleterModule  }                                      from "ng2-completer";
 import { PaginationControlsCmp, PaginatePipe }                      from "ng2-pagination";
 import { TranslateModule }                                          from "ng2-translate";
@@ -68,6 +68,13 @@ export function httpAuthConfigFactory(http, authConfig) {
     return new AuthHttp(authConfig, http);
 }
 
+export function composeProvider() {
+    return compose(
+        storeLogger(),
+        combineReducers
+    )(appReducer);
+}
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -103,7 +110,7 @@ export function httpAuthConfigFactory(http, authConfig) {
     imports: [
         BrowserModule,
         CommonModule,
-        Ng2CompleterModule,
+        //Ng2CompleterModule,
         FormsModule,
         HttpModule,
         ToasterModule,
@@ -113,12 +120,7 @@ export function httpAuthConfigFactory(http, authConfig) {
             confirmButtonType: 'danger' // set defaults here
         }),
 
-        StoreModule.provideStore(
-            compose(
-                storeLogger(),
-                combineReducers
-            )(appReducer)
-        ),
+        StoreModule.provideStore(composeProvider),
         EffectsModule.run(DatasetsEffects),
         StoreDevtoolsModule.instrumentOnlyWithExtension(),
 
