@@ -68,11 +68,10 @@ export function httpAuthConfigFactory(http, authConfig) {
     return new AuthHttp(authConfig, http);
 }
 
-export function composeProvider() {
-    return compose(
-        storeLogger(),
-        combineReducers
-    )(appReducer);
+const allReducers = compose(storeLogger(), combineReducers)(appReducer);
+
+export function composeProvider(state: any, action: any) {
+    return allReducers(state, action);
 }
 
 @NgModule({
@@ -110,7 +109,7 @@ export function composeProvider() {
     imports: [
         BrowserModule,
         CommonModule,
-        //Ng2CompleterModule,
+        Ng2CompleterModule,
         FormsModule,
         HttpModule,
         ToasterModule,
