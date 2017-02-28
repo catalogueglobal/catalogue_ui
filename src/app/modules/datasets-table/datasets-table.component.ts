@@ -137,7 +137,7 @@ export class DatasetsTableComponent {
     }
     
     public checkSubscribed(feed_id){
-        var index = this.sessionService.session.user.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id);
+        var index = this.sessionService.session.user.app_metadata ? this.sessionService.session.user.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id) : -1;
         if (index == -1){
             return false
         }
