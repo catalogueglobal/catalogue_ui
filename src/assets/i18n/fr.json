@@ -44,6 +44,7 @@
       "select": "Choisir une licence",
       "licenseName": "Nom de la licence",
       "licenseFile": "Fichier de licence (*.txt)",
+      "metadataFile": "Fichier de Meta-données (*.zip)",
       "title": "Importer un nouveau jeu de données",
       "toggleOptions": {
         "show": "Montrer les options avancées",
@@ -51,7 +52,7 @@
       },
       "projectName": "Nom du Projet",
       "feedName": "Nom du jeu de données",
-      "isPublic": "Jeu de données public (Cocher pour rendre ces données disponibles aux téléchargement)",
+      "isPublic": "Jeu de données public (Cocher pour rendre ces données disponibles au téléchargement)",
       "submit": "Importer"
     },
     "delete": {
@@ -102,7 +103,9 @@
     "checkall": "Vérifier tout",
     "column": {
       "feedName": "Nom du lot",
-      "area": "Zone"
+      "area": "Zone",
+      "license": "Licence",
+      "subscribe": "S'abonner / Se désabonner"
     }
   },
   "mydatasets-table": {

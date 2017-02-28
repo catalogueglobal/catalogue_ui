@@ -16,7 +16,8 @@ export type ICreateFeed = {
     file: any,
     licenseName: string,
     licenseId: string;
-    licenseFile:any
+    metadataFile: any,
+    licenseFile: any
 }
 
 @Injectable()
@@ -268,7 +269,9 @@ export class DatasetsEffects {
                         if (createFeed.licenseFile)
                             reader.readAsText(createFeed.licenseFile);
                         else if (createFeed.licenseId)
-                            console.log("ZZZZZZZZZZ licenseId", createFeed.licenseId); // update license
+                            this.feedsApi.setLicense([feed.id],createFeed.licenseId);
+                        if (createFeed.metadataFile)
+                            console.log("ZZZZZZZZZZ licenseId", createFeed.metadataFile);
                         return setFile$;
                     },
                     err => {

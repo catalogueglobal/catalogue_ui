@@ -57,6 +57,7 @@ export class FeedCreateFormComponent {
             file: this.simpleUpload.file,
             licenseName: this.simpleUpload.licenseName,
             licenseId: this.simpleUpload.licenseId,
+            metadataFile: this.simpleUpload.metadataFile,
             licenseFile: this.simpleUpload.license
         }
         this.store.dispatch(this.datasetsAction.feedCreate(createFeed));    
@@ -96,6 +97,7 @@ export class FeedCreateFormComponent {
             license: null,
             newLicense: false,
             licenseId: null,
+            metadataFile: null,
             isPrivate: false
         };
     }

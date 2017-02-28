@@ -34,7 +34,7 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         usersApiService: UsersApiService,
         sessionService: SessionService)
     {
-        super(config, utils, sessionService, usersApiService, store, actions$, datasetsAction);
+        super(config, utils, sessionService, feedsApi, usersApiService, store, actions$, datasetsAction);
         // close inline edit form on setName() success
         actions$.ofType(DatasetsActionType.FEED_SET_NAME_SUCCESS).subscribe(
             action => {

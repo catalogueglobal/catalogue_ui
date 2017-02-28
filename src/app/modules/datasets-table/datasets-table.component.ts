@@ -1,16 +1,16 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Actions }                                from "@ngrx/effects";
-import { Store }                                  from "@ngrx/store";
-import { PaginationService }                      from "ng2-pagination";
-import { Configuration }                          from "../../commons/configuration";
-import { SortOrder }                              from "../../commons/directives/sort-link/sort-link.component";
-import { FEED_RETRIEVAL_METHOD }                  from "../../commons/services/api/feedsApi.service";
-import { UsersApiService }                        from "../../commons/services/api/usersApi.service";
-import { SessionService }                         from "../../commons/services/session.service";
-import { UtilsService }                           from "../../commons/services/utils.service";
-import { DatasetsActions }                        from "../../state/datasets/datasets.actions";
-import { DatasetsState }                          from "../../state/datasets/datasets.reducer";
-import { IFeedRow }                               from "../datasets/datasets.component";
+import { Component, Input, Output, EventEmitter }           from "@angular/core";
+import { Actions }                                          from "@ngrx/effects";
+import { Store }                                            from "@ngrx/store";
+import { PaginationService }                                from "ng2-pagination";
+import { Configuration }                                    from "../../commons/configuration";
+import { SortOrder }                                        from "../../commons/directives/sort-link/sort-link.component";
+import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense } from "../../commons/services/api/feedsApi.service";
+import { UsersApiService }                                  from "../../commons/services/api/usersApi.service";
+import { SessionService }                                   from "../../commons/services/session.service";
+import { UtilsService }                                     from "../../commons/services/utils.service";
+import { DatasetsActions }                                  from "../../state/datasets/datasets.actions";
+import { DatasetsState }                                    from "../../state/datasets/datasets.reducer";
+import { IFeedRow }                                         from "../datasets/datasets.component";
 
 @Component({
     selector:    'app-datasets-table',
@@ -26,7 +26,8 @@ export class DatasetsTableComponent {
     private page:number;
     private indexToUnsubscribe: number;
     private feedSubscribed: Array<String>;
-    
+    private licenses: Array<ILicense>;
+
     protected currentSort: SortOrder = {
         sort: 'name',
         order: 'asc'
@@ -36,6 +37,7 @@ export class DatasetsTableComponent {
         protected config: Configuration,
         private utils: UtilsService,
         private sessionService: SessionService,
+        private feedsApiService: FeedsApiService,
         private usersApiService: UsersApiService,
         protected store: Store<DatasetsState>,
         actions$: Actions,
@@ -45,6 +47,8 @@ export class DatasetsTableComponent {
     
     // overriden by childs
     @Input() set feeds(value: any) {
+        let that = this;
+        this.feedsApiService.getLicenses().then( licenses => {that.licenses = licenses} );
         if (!value) {
             this._feeds = null
             return
@@ -56,7 +60,21 @@ export class DatasetsTableComponent {
     get feeds() {
         return this._feeds;
     }
-    
+
+    getLicense(feed: IFeedRow) {
+        if (this.licenses) {
+            for (let i = 0; i < this.licenses.length; i++) {
+                if (this.licenses[i].feedIds) {
+                    for (let j = 0; j < this.licenses[i].feedIds.length; j++) {
+                        if (feed.id == this.licenses[i].feedIds[j]) {
+                            return this.licenses[i].name;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     protected setSort(sort) {
         this.sortChange.emit(sort);
     }

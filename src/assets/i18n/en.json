@@ -44,6 +44,7 @@
       "select": "Select a license",
       "licenseName": "License Name",
       "licenseFile": "License File (*.txt)",
+      "metadataFile": "Metadata File (*.zip)",
       "title": "Upload new dataset",
       "toggleOptions": {
         "show": "Show advanced options",
@@ -102,7 +103,9 @@
     "checkall": "Check all",
     "column": {
       "feedName": "Feed name",
-      "area": "Area"
+      "area": "Area",
+      "license": "License",
+      "subscribe": "Subscibe / Unsubscribe"
     }
   },
   "mydatasets-table": {

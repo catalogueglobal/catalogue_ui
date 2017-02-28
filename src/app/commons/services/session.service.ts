@@ -22,6 +22,7 @@ export class SessionService {
     constructor(private config: Configuration) {
         var options = {
             theme: {
+                logo: '../../../images/logo-horizontal-blanc.png',
                 primaryColor: 'blue',
                 authButtons: {
                     connectionName: {
@@ -32,7 +33,7 @@ export class SessionService {
             languageDictionary: {
                 title: "Catalogue"
             }
-        }
+        };
         this.lock = new Auth0Lock(this.config.AUTH_ID, this.config.AUTH_DOMAIN, options);
     }
 
