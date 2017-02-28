@@ -1686,7 +1686,7 @@ body.overflowhidden {
   max-width: 640px;
   width: 100%;
   padding: 30px 20px;
-  top: 30%;
+  top: 0px;
 }
 
 .popouterbox .popup-block.taller {
