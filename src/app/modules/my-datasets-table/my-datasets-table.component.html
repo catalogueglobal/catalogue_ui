@@ -88,8 +88,9 @@
           {{feed.lastUpdated|date:'y-MM-dd'}}
 	</td>
 	<td>
+		<a (click)="editFeed(feed)"> {{getCurrentLicense(feed).name}}</a>
 	</td>
-          <!--
+	<!--
 	<td>
           <div class="license-attr">
 	    <span class="unknown-attr requires disabled">
@@ -131,3 +132,19 @@
     </pagination-controls>
   </div>
 </div><!--/.dataset-table-->
+
+<app-modal>
+    <div class="app-modal-header">
+      header
+    </div>
+    <div class="app-modal-body">
+      <label>{{'popup.upload.select'|translate}}</label>
+    <select [ngModel]="newLicense" (ngModelChange)="onLicenseChanged($event)" >
+      <option [ngValue]="license" *ngFor="let license of licenses">{{license.name}}</option>
+    </select>
+    </div>
+    <div class="app-modal-footer">
+      <button type="button" class="btn btn-cancel" (click)="modal.hide()">{{'popup.cancel'|translate}}</button>
+      <button type="button" class="btn btn-validate" (click)="setLicense()">{{'popup.validate'|translate}}</button>
+    </div>
+  </app-modal>

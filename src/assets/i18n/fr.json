@@ -60,7 +60,9 @@
         "title": "Confirmer la suppression",
         "label": "Etes-vous sûr que vous voulez supprimer?"
       }
-    }
+    },
+    "cancel": "annuler",
+    "validate": "valider"
   },
   "datasets": {
     "title": "Téléchargement des données",

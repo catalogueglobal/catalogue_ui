@@ -60,7 +60,9 @@
           "title": "Confirm deletion",
           "label": "Are you sure you want to delete ?"
       }
-    }
+    },
+    "cancel": "cancel",
+    "validate": "validate"
   },
   "datasets": {
     "title": "Download datasets",

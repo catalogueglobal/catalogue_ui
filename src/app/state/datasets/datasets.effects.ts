@@ -200,6 +200,20 @@ export class DatasetsEffects {
             return this.action.confirmationDeleteProjectSuccess();
         }
     ).share();
+  
+    @Effect() FEED_CHANGE_LICENSE$: Observable<Action> = this.actions$.ofType(DatasetsActionType.FEED_CHANGE_LICENSE).map(action => action.payload).switchMap(
+        payload => {
+            const feedRef = payload.feedRef;
+            const license = payload.license;
+            console.log(feedRef.feedsourceId, license);
+            
+            return this.feedsApi.setLicense(feedRef.feedsourceId, license)
+                .map(updatedFeed => this.action.feedSetLicenseSuccess(updatedFeed))
+                .catch(e => {
+                    return Observable.of(this.action.feedSetLicenseFail(feedRef, e))
+                })
+        }
+    ).share();
 
     /*
       private addFeedToProject(createFeed: ICreateFeed, onProgress): Observable<IFeedApi> {

@@ -26,7 +26,7 @@ export class DatasetsTableComponent {
     private page:number;
     private indexToUnsubscribe: number;
     private feedSubscribed: Array<String>;
-    private licenses: Array<ILicense>;
+    protected licenses: Array<ILicense>;
 
     protected currentSort: SortOrder = {
         sort: 'name',

@@ -1,16 +1,18 @@
-import { Component, Output, EventEmitter, Input }               from "@angular/core";
+import { Component, Output, EventEmitter, Input, ViewChild }               from "@angular/core";
 import { Actions }                                              from "@ngrx/effects";
 import { Store }                                                from "@ngrx/store";
 import { PaginationService }                                    from "ng2-pagination";
 import { Configuration }                                        from "../../commons/configuration";
 import { InlineEditEvent }                                      from "../../commons/directives/inline-edit-text/inline-edit-generic.component";
-import { IFeed, FeedsApiService }                               from "../../commons/services/api/feedsApi.service";
+import { ModalComponent } from '../../commons/directives/modal/modal.component';
+import { IFeed, FeedsApiService}                               from "../../commons/services/api/feedsApi.service";
 import { UsersApiService }                                      from "../../commons/services/api/usersApi.service";
 import { SessionService }                                       from "../../commons/services/session.service";
 import { UtilsService }                                         from "../../commons/services/utils.service";
 import { DatasetsActions, toFeedReference, DatasetsActionType } from "../../state/datasets/datasets.actions";
 import { DatasetsState }                                        from "../../state/datasets/datasets.reducer";
 import { DatasetsTableComponent }                               from "../datasets-table/datasets-table.component";
+import { IFeedRow }                                         from "../datasets/datasets.component";
 
 const CONFIRM_EDIT_IDX_SETNAME = "setName"
 const CONFIRM_EDIT_IDX_SETFILE = "setFile"
@@ -22,7 +24,12 @@ const CONFIRM_EDIT_IDX_SETFILE = "setFile"
 })
 export class MyDatasetsTableComponent extends DatasetsTableComponent {
     @Output() protected sortChange = new EventEmitter();
-    private confirmEditById: Map<string,EventEmitter<any>> = new Map()
+    @Input() protected _feeds: IFeedRow[];
+    private confirmEditById: Map<string,EventEmitter<any>> = new Map();
+    public newLicense;
+    private currentFeed: IFeed;
+    @ViewChild(ModalComponent)
+    public readonly modal: ModalComponent;
     
     constructor(
         config: Configuration,
@@ -61,6 +68,8 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
     
     // override parent
     @Input() set feeds(value: any) {
+        let that = this;
+        this.feedsApi.getLicenses().then( licenses => {that.licenses = licenses} );
         if (!value) {
             this._feeds = null
             return
@@ -73,6 +82,38 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         return this._feeds;
     }
     
+    getCurrentLicense(feed: IFeedRow):any {   
+        if (this.licenses) {
+            for (let i = 0; i < this.licenses.length; i++) {
+                if (this.licenses[i].feedIds) {
+                    for (let j = 0; j < this.licenses[i].feedIds.length; j++) {
+                        if (feed.id === this.licenses[i].feedIds[j]) {
+                            return this.licenses[i];
+                        }
+                    }
+                }
+            }
+        }
+        return {};
+    }
+    
+    editFeed(feed: IFeed){
+      this.currentFeed = feed;
+      this.modal.show();
+    }
+  
+    onLicenseChanged(selectedLicense) {
+       this.newLicense = selectedLicense;
+    }
+  
+    setLicense(){
+      if (this.newLicense.id){
+        this.store.dispatch(this.datasetsAction.feedSetLicense(toFeedReference(this.currentFeed), this.newLicense.id));
+        this.newLicense = {};
+      }
+      this.modal.hide();
+    }
+  
     setSort(sort) {
         this.sortChange.emit(sort);
     }

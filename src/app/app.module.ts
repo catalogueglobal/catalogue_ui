@@ -23,6 +23,7 @@ import { DeleteFeedConfirmationComponent }                          from "./comm
 import { FeedCreateFormComponent }                                  from "./commons/directives/feed-create-form/feed-create-form.component";
 import { InlineEditFileComponent }                                  from "./commons/directives/inline-edit-file/inline-edit-file.component";
 import { InlineEditTextComponent }                                  from "./commons/directives/inline-edit-text/inline-edit-text.component";
+import { ModalComponent } from './commons/directives/modal/modal.component';
 import { SortLinkComponent }                                        from "./commons/directives/sort-link/sort-link.component";
 import { SpinnerComponent }                                         from "./commons/directives/spinner/spinner.component";
 import { StatusComponent }                                          from "./commons/directives/status/status.component";
@@ -103,7 +104,8 @@ export function composeProvider(state: any, action: any) {
         InlineEditFileComponent,
         SubscribeFormComponent,
         PaginatePipe,
-        DeleteFeedConfirmationComponent
+        DeleteFeedConfirmationComponent,
+        ModalComponent
     ],
 
     imports: [
