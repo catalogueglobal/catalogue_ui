@@ -61,18 +61,19 @@ export class DatasetsTableComponent {
         return this._feeds;
     }
 
-    getLicense(feed: IFeedRow) {
-        if (this.licenses) {
+    getLicense(feed: IFeedRow): any {
+       if (this.licenses) {
             for (let i = 0; i < this.licenses.length; i++) {
                 if (this.licenses[i].feedIds) {
                     for (let j = 0; j < this.licenses[i].feedIds.length; j++) {
-                        if (feed.id == this.licenses[i].feedIds[j]) {
-                            return this.licenses[i].name;
+                        if (feed.id === this.licenses[i].feedIds[j]) {
+                            return this.licenses[i];
                         }
                     }
                 }
             }
         }
+        return {};
     }
 
     protected setSort(sort) {
@@ -123,7 +124,7 @@ export class DatasetsTableComponent {
     // or not to the feed
     public isSubscribe(userInfos, feed_id){
         console.log(userInfos);
-        if (userInfos.app_metadata.datatools[0].subscriptions == null){
+        if (!userInfos.app_metadata || userInfos.app_metadata.datatools[0].subscriptions == null){
             return false;
         } else {
             for (var i = 0; i < userInfos.app_metadata.datatools[0].subscriptions[0].target.length; i++){

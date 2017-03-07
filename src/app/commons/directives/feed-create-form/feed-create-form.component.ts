@@ -43,7 +43,7 @@ export class FeedCreateFormComponent {
 
 
     onChange(selectedLicense) {
-        this.simpleUpload.licenseId = selectedLicense.id;
+        this.simpleUpload.license = selectedLicense;
     }
 
     private submit(): void {
@@ -56,9 +56,9 @@ export class FeedCreateFormComponent {
             isPublic: this.simpleUpload.isPrivate,
             file: this.simpleUpload.file,
             licenseName: this.simpleUpload.licenseName,
-            licenseId: this.simpleUpload.licenseId,
+            licenseId: this.simpleUpload.license.id,
             metadataFile: this.simpleUpload.metadataFile,
-            licenseFile: this.simpleUpload.license
+            licenseFile: this.simpleUpload.licenseFile
         }
         this.store.dispatch(this.datasetsAction.feedCreate(createFeed));    
     }
@@ -96,8 +96,8 @@ export class FeedCreateFormComponent {
             file: null,
             license: null,
             newLicense: false,
-            licenseId: null,
             metadataFile: null,
+            licenseFile: null,
             isPrivate: false
         };
     }

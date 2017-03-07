@@ -82,21 +82,6 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         return this._feeds;
     }
     
-    getCurrentLicense(feed: IFeedRow):any {   
-        if (this.licenses) {
-            for (let i = 0; i < this.licenses.length; i++) {
-                if (this.licenses[i].feedIds) {
-                    for (let j = 0; j < this.licenses[i].feedIds.length; j++) {
-                        if (feed.id === this.licenses[i].feedIds[j]) {
-                            return this.licenses[i];
-                        }
-                    }
-                }
-            }
-        }
-        return {};
-    }
-    
     editFeed(feed: IFeed){
       this.currentFeed = feed;
       this.modal.show();

@@ -207,7 +207,7 @@ export class DatasetsEffects {
             const license = payload.license;
             console.log(feedRef.feedsourceId, license);
             
-            return this.feedsApi.setLicense(feedRef.feedsourceId, license)
+            return this.feedsApi.setLicense([feedRef.feedsourceId], license)
                 .map(updatedFeed => this.action.feedSetLicenseSuccess(updatedFeed))
                 .catch(e => {
                     return Observable.of(this.action.feedSetLicenseFail(feedRef, e))

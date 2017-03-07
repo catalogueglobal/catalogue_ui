@@ -88,7 +88,7 @@
           {{feed.lastUpdated|date:'y-MM-dd'}}
 	</td>
 	<td>
-		<a (click)="editFeed(feed)"> {{getCurrentLicense(feed).name}}</a>
+		<a (click)="editFeed(feed)"> {{getLicense(feed).name}}</a>
 	</td>
 	<!--
 	<td>
@@ -134,9 +134,6 @@
 </div><!--/.dataset-table-->
 
 <app-modal>
-    <div class="app-modal-header">
-      header
-    </div>
     <div class="app-modal-body">
       <label>{{'popup.upload.select'|translate}}</label>
     <select [ngModel]="newLicense" (ngModelChange)="onLicenseChanged($event)" >
