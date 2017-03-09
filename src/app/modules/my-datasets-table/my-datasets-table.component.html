@@ -160,9 +160,10 @@
 					(change)="utils.setFileModelOnChange(newLicense.licenseFile, 'file', $event)">
 			</div>
 			<div>
-				<label>{{'popup.upload.feedName'|translate}} <input
+				<label for="licenseName">{{'popup.upload.feedName'|translate}}</label>
+				<input id="licenseName"
 					type="text" [(ngModel)]="newLicense.name">
-				</label>
+				
 			</div>
 			<div *ngIf="newLicense.error" class="alert alert-danger">
 				{{('mydatasets-table.' + newLicense.error) | translate}}</div>

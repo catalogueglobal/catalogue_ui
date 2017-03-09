@@ -20,7 +20,8 @@
   		}
   	}
   	.alert{
-  		margin: 0px;
+  		margin-top: 10px;
+  		margin-bottom: 0px;
   	}
   	.modal-header{
   		padding: 7px;
@@ -29,6 +30,7 @@
 	    	width: 100%;
 	    	label{
 	        	text-transform: uppercase;
+	        	font-weight: bold;
 	    	}
 	  	}
   	}
