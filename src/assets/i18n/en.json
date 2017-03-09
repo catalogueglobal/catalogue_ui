@@ -53,7 +53,8 @@
       "projectName": "Project name",
       "feedName": "Feed name",
       "isPublic": "Public dataset",
-      "submit": "Proceed to upload"
+      "submit": "Proceed to upload",
+      "changeLicense": "Change license"
     },
     "delete": {
       "confirm": {
@@ -62,7 +63,8 @@
       }
     },
     "cancel": "cancel",
-    "validate": "validate"
+    "validate": "validate",
+    "noLicense": "No license"
   },
   "datasets": {
     "title": "Download datasets",
@@ -126,7 +128,9 @@
       },
       "feedName": "Feed name",
       "area": "Area",
-      "updated": "Updated"
+      "updated": "Updated",
+      "add": "add",
+      "license name or file empty": "license name or file empty"
     }
   },
   "state": {

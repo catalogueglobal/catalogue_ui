@@ -53,7 +53,9 @@
       "projectName": "Nom du Projet",
       "feedName": "Nom du jeu de données",
       "isPublic": "Jeu de données public (Cocher pour rendre ces données disponibles au téléchargement)",
-      "submit": "Importer"
+      "submit": "Importer",
+      "noLicense": "Sans license",
+      "changeLicense": "Changer de license"
     },
     "delete": {
       "confirm": {
@@ -127,7 +129,9 @@
       "feedName": "Nom du lot",
       "area": "Zone",
       "updated": "Actualisé"
-    }
+    },
+    "add": "ajouter",
+    "license name or file empty": "nom de fichier et fichier obligatoire"
   },
   "state": {
     "USER_SUBSCRIBE": "Subscribing...",

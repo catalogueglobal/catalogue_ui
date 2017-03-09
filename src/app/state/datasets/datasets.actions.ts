@@ -74,8 +74,16 @@ export const DatasetsActionType = {
 
   FEED_CHANGE_LICENSE: `FEED_CHANGE_LICENSE`,
   FEED_CHANGE_LICENSE_FAIL: `FEED_CHANGE_LICENSE_FAIL`,
-  FEED_CHANGE_LICENSE_SUCCESS: `FEED_CHANGE_LICENSE_SUCCESS`
+  FEED_CHANGE_LICENSE_SUCCESS: `FEED_CHANGE_LICENSE_SUCCESS`,
 
+  FEED_UNSET_LICENSE: `FEED_UNSET_LICENSE`,
+  FEED_UNSET_LICENSE_FAIL: `FEED_UNSET_LICENSE_FAIL`,
+  FEED_UNSET_LICENSE_SUCCESS: `FEED_UNSET_LICENSE_SUCCESS`,
+  
+    FEED_CREATE_LICENSE: `FEED_CREATE_LICENSE`,
+  FEED_CREATE_LICENSE_FAIL: `FEED_CREATE_LICENSE_FAIL`,
+  FEED_CREATE_LICENSE_SUCCESS: `FEED_CREATE_LICENSE_SUCCESS`
+  
 };
 
 export type IFeedReference = {
@@ -568,21 +576,21 @@ export class DatasetsActions {
     }
   }
 
-  feedSetLicense(feedRef: IFeedReference, license: string): Action {
+  feedSetLicense(feedRef: IFeedReference, licenseId: string): Action {
     return {
       type: DatasetsActionType.FEED_CHANGE_LICENSE,
       payload: {
         feedRef: feedRef,
-        license: license
+        licenseId: licenseId
       }
     };
   }
 
-  feedSetLicenseSuccess(feed: ILicense): Action {
+  feedSetLicenseSuccess(license: ILicense): Action {
     return {
       type: DatasetsActionType.FEED_CHANGE_LICENSE_SUCCESS,
       payload: {
-        feed: feed
+        license: license
       }
     };
   }
@@ -590,6 +598,65 @@ export class DatasetsActions {
   feedSetLicenseFail(feedRef: IFeedReference, error: any): Action {
     return {
       type: DatasetsActionType.FEED_CHANGE_LICENSE_FAIL,
+      payload: {
+        feedRef: feedRef,
+        error: error
+      }
+    }
+  }
+
+  feedUnsetLicense(feedRef: IFeedReference, licenseId: string): Action {
+    return {
+      type: DatasetsActionType.FEED_UNSET_LICENSE,
+      payload: {
+        feedRef: feedRef,
+        licenseId: licenseId
+      }
+    };
+  }
+
+  feedUnsetLicenseSuccess(license: ILicense): Action {
+    return {
+      type: DatasetsActionType.FEED_UNSET_LICENSE_SUCCESS,
+      payload: {
+        license: license
+      }
+    };
+  }
+
+  feedUnsetLicenseFail(feedRef: IFeedReference, error: any): Action {
+    return {
+      type: DatasetsActionType.FEED_UNSET_LICENSE_FAIL,
+      payload: {
+        feedRef: feedRef,
+        error: error
+      }
+    }
+  }
+  
+   feedCreateLicense(feedRef: IFeedReference, licenseName: string, licenseFile: any): Action {
+    return {
+      type: DatasetsActionType.FEED_CREATE_LICENSE,
+      payload: {
+        feedRef: feedRef,
+        licenseName: licenseName,
+        licenseFile: licenseFile
+      }
+    };
+  }
+
+  feedCreateLicenseSuccess(license: ILicense): Action {
+    return {
+      type: DatasetsActionType.FEED_CREATE_LICENSE_SUCCESS,
+      payload: {
+        license: license
+      }
+    };
+  }
+
+  feedCreateLicenseFail(feedRef: IFeedReference, error: any): Action {
+    return {
+      type: DatasetsActionType.FEED_CREATE_LICENSE_FAIL,
       payload: {
         feedRef: feedRef,
         error: error

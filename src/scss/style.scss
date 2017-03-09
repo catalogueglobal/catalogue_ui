@@ -1,14 +1,35 @@
 .modal {
-  background: rgba(0,0,0,0.6);
-  .modal-dialog {
-  	top: 100px;
-  }
-  .btn-validate{
-  	background-color: #dea627;
-  	color: white;
-  }
-  .btn-cancel{
-  	background-color: grey;
-  	color: white;
-  }
+	background: rgba(0,0,0,0.6);
+  	.modal-dialog {
+  		top: 100px;
+  	}
+  	.btn-validate, .modal-header{
+  		background-color: #dea627;
+  		color: white;
+  	}
+  	.btn-cancel{
+  		background-color: grey;
+  		color: white;
+  	}
+  
+  	.customfile{
+  		width: 100% !important;
+  		height: 45px;
+  		.cust-btn{
+  			top:-6px !important;
+  		}
+  	}
+  	.alert{
+  		margin: 0px;
+  	}
+  	.modal-header{
+  		padding: 7px;
+	  	.app-modal-header{
+	 		text-align: center;
+	    	width: 100%;
+	    	label{
+	        	text-transform: uppercase;
+	    	}
+	  	}
+  	}
 }

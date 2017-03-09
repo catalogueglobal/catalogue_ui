@@ -43,7 +43,7 @@
 	</td>
 	-->
 	<td>
-        {{getLicense(feed).name}}
+        {{feedsLicenses[feed.id] ? feedsLicenses[feed.id].name : ''}}
 	</td>
           <!--
 	<td>
