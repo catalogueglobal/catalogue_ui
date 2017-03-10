@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { Actions } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { PaginationService } from "ng2-pagination";
 import { Configuration } from "../../commons/configuration";
+import { ModalComponent } from '../../commons/directives/modal/modal.component';
 import { SortOrder } from "../../commons/directives/sort-link/sort-link.component";
-import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense } from "../../commons/services/api/feedsApi.service";
+import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense, IFeed } from "../../commons/services/api/feedsApi.service";
 import { UsersApiService } from "../../commons/services/api/usersApi.service";
 import { SessionService } from "../../commons/services/session.service";
 import { UtilsService } from "../../commons/services/utils.service";
@@ -28,6 +29,9 @@ export class DatasetsTableComponent {
   private feedSubscribed: Array<String>;
   protected licenses: Array<ILicense>;
   protected feedsLicenses = {};
+  protected currentFeed: IFeed;
+  @ViewChild(ModalComponent)
+  public readonly modal: ModalComponent;
 
   protected currentSort: SortOrder = {
     sort: 'name',
@@ -71,7 +75,6 @@ export class DatasetsTableComponent {
   }
 
   setFeedsLicenses(value: any) {
-    console.log('set licenses')
     if (this.licenses && value) {
       for (let k = 0; k < value.length; k++) {
         let feed = value[k];
@@ -86,9 +89,20 @@ export class DatasetsTableComponent {
         }
       }
     }
-    console.log('feedsLicenses', this.feedsLicenses);
+  }
+    
+  displayLicense(feed){
+      this.currentFeed = feed;
+      console.log(this.feedsLicenses[this.currentFeed.id].text);
+      this.modal.show();
   }
 
+  onSubmitLicense(){
+      let uriContent = "data:application/octet-stream;charset=utf-16le;base64," + btoa(this.feedsLicenses[this.currentFeed.id].text);
+      let link = document.getElementById('downloadLicenselink');
+      link.setAttribute('href', uriContent);
+  }
+    
   protected setSort(sort) {
     this.sortChange.emit(sort);
   }

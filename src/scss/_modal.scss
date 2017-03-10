@@ -1,14 +1,10 @@
 .modal {
 	background: rgba(0,0,0,0.6);
   	.modal-dialog {
-  		top: 100px;
+/*   		top: 100px; */
   	}
-  	.btn-validate, .modal-header{
-  		background-color: #dea627;
-  		color: white;
-  	}
-  	.btn-cancel{
-  		background-color: grey;
+  	.modal-header{
+  		background-color: $ct-orange;
   		color: white;
   	}
   
@@ -23,6 +19,16 @@
   		margin-top: 10px;
   		margin-bottom: 0px;
   	}
+  	.modal-content{
+  		margin-top: 100px;
+  	}
+  	.modal-body{
+  		max-height: 500px;
+    	overflow-y: auto;
+    	.license-text{
+    		white-space: pre;
+    	}
+  	}
   	.modal-header{
   		padding: 7px;
 	  	.app-modal-header{
@@ -33,5 +39,10 @@
 	        	font-weight: bold;
 	    	}
 	  	}
+  	}
+  	#downloadLicenselink{
+  		cursor: pointer;
+  		color: white;
+  		text-transform: uppercase;
   	}
 }

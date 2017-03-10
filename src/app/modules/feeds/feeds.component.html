@@ -1,32 +1,79 @@
-<div class="banner" style="background-image:url(src/images/bgi/banner.jpg);margin-bottom:80px;">
-  <!--<div class="main-title"><h1 class="banner-title">{{'datasets.title'|translate}}</h1></div>-->
+<div class="banner"
+	style="background-image: url(src/images/bgi/banner.jpg); margin-bottom: 80px;">
+	<!--<div class="main-title"><h1 class="banner-title">{{'datasets.title'|translate}}</h1></div>-->
 </div>
 
-<div class="row">
-  <div class="column twelve">Coucou</div>
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <h1 *ngIf="infoFeed != null">{{infoFeed.name}}</h1>
-  <br />
-  <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Period of application: From {{infoFeed.latestValidation.startDate|date:'y-MM-dd'}} to {{infoFeed.latestValidation.endDate|date:'y-MM-dd'}}</h4>
-  <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Number of routes: {{infoFeed.latestValidation.routeCount}}</h4>
-  <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Number of trips: {{infoFeed.latestValidation.tripCount}}</h4>
-  <br />
-  <br />
-  <div class="column twelve" *ngIf="sessionService.loggedIn">
-    Notes :<br />
-    <ul>
-      <li *ngFor="let comment of notesFeed">
-	<strong>Author: {{comment.userEmail}}</strong><br />
-	<small><strong>Date:</strong> <i>{{comment.date|date:'y-MM-dd HH:mm:ss'}}</i></small><br />
-	{{comment.body}}
-      </li>
-    </ul>
-    <textarea [(ngModel)]="note"></textarea>
-    <button (click)="addNotesToFeed()">Submit</button>
-  </div>
+<!-- <div class="row"> -->
+<!--   <div class="column twelve">Coucou</div> -->
+<!--   <br /> -->
+<!--   <br /> -->
+<!--   <br /> -->
+<!--   <br /> -->
+<!--   <br /> -->
+<!--   <h1 *ngIf="infoFeed != null">{{infoFeed.name}}</h1> -->
+<!--   <br /> -->
+<!--   <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Period of application: From {{infoFeed.latestValidation.startDate|date:'y-MM-dd'}} to {{infoFeed.latestValidation.endDate|date:'y-MM-dd'}}</h4> -->
+<!--   <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Number of routes: {{infoFeed.latestValidation.routeCount}}</h4> -->
+<!--   <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Number of trips: {{infoFeed.latestValidation.tripCount}}</h4> -->
+<!--   <br /> -->
+<!--   <br /> -->
+<!--   <div class="column twelve" *ngIf="sessionService.loggedIn"> -->
+<!--     Notes :<br /> -->
+<!--     <ul> -->
+<!--       <li *ngFor="let comment of notesFeed"> -->
+<!-- 	<strong>Author: {{comment.userEmail}}</strong><br /> -->
+<!-- 	<small><strong>Date:</strong> <i>{{comment.date|date:'y-MM-dd HH:mm:ss'}}</i></small><br /> -->
+<!-- 	{{comment.body}} -->
+<!--       </li> -->
+<!--     </ul> -->
+<!--     <textarea [(ngModel)]="note"></textarea> -->
+<!--     <button (click)="addNotesToFeed()">Submit</button> -->
+<!--   </div> -->
 
+<!-- </div> -->
+<div class="container-fluid">
+	<div class="offset-md-1 panel panel-warning">
+		<div class="panel-heading">
+			<h3 *ngIf="infoFeed != null">{{infoFeed.name}}</h3>
+		</div>
+
+		<div class="panel-body">
+			<div *ngIf="infoFeed != null && infoFeed.latestValidation != null">
+				<label> <span class="leading-label">Period of
+						application:</span> <span>{{infoFeed.latestValidation.startDate|date:'y-MM-dd'}}</span>
+					<span class="leading-label">to</span> <span>{{infoFeed.latestValidation.endDate|date:'y-MM-dd'}}</span>
+				</label>
+			</div>
+			<div *ngIf="infoFeed != null && infoFeed.latestValidation != null">
+				<div>
+					<label> <span class="leading-label">Number of
+							routes: </span> <span>{{infoFeed.latestValidation.routeCount}}</span>
+					</label>
+
+				</div>
+				<div>
+					<label> <span class="leading-label">Number of trips:</span>
+						<span>{{infoFeed.latestValidation.tripCount}}</span>
+					</label>
+				</div>
+
+			</div>
+			<div>
+				<p class="leading-label">Notes:</p>
+				<ul *ngIf="notesFeed && notesFeed.length> 0">
+					<li *ngFor="let comment of notesFeed"><strong>Author:
+							{{comment.userEmail}}</strong><br /> <small><strong>Date:</strong>
+							<i>{{comment.date|date:'y-MM-dd HH:mm:ss'}}</i></small><br />
+						{{comment.body}}</li>
+				</ul>
+			</div>
+			<div>
+				<textarea [(ngModel)]="note"></textarea>
+			</div>
+		</div>
+
+		<div class="panel-footer">
+			<button class="btn btn-validate" (click)="addNotesToFeed()">Submit</button>
+		</div>
+	</div>
 </div>

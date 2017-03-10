@@ -1,10 +1,9 @@
-import { Component, Output, EventEmitter, Input, ViewChild } from "@angular/core";
+import { Component, Output, EventEmitter, Input } from "@angular/core";
 import { Actions } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { PaginationService } from "ng2-pagination";
 import { Configuration } from "../../commons/configuration";
 import { InlineEditEvent } from "../../commons/directives/inline-edit-text/inline-edit-generic.component";
-import { ModalComponent } from '../../commons/directives/modal/modal.component';
 import { IFeed, FeedsApiService } from "../../commons/services/api/feedsApi.service";
 import { UsersApiService } from "../../commons/services/api/usersApi.service";
 import { SessionService } from "../../commons/services/session.service";
@@ -27,10 +26,7 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
   @Input() protected _feeds: IFeedRow[];
   private confirmEditById: Map<string, EventEmitter<any>> = new Map();
   public newLicense;
-  private currentFeed: IFeed;
-  @ViewChild(ModalComponent)
-  public readonly modal: ModalComponent;
-
+  
   constructor(
     config: Configuration,
     utils: UtilsService,
@@ -116,7 +112,7 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
     );
   }
 
-  editFeed(feed: IFeed) {
+  displayLicense(feed: IFeed) {
     this.currentFeed = feed;
     this.newLicense.license = this.licenses.length > 0 ? this.licenses[0] : null;
     if (this.feedsLicenses[this.currentFeed.id]) {

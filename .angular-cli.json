@@ -20,7 +20,7 @@
             "../node_modules/bootstrap/dist/css/bootstrap.min.css",
             "styles.css",
             "css/style.css",
-            "scss/style.scss"
+            "scss/all.scss"
         ],
         "scripts": [],
         "environmentSource": "environments/environment.ts",

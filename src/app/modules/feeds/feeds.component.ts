@@ -14,8 +14,8 @@ import { DatasetsState }                       from "../../state/datasets/datase
 export class FeedsComponent {
     public note: string;
     public feedId: string;
-    public notesFeed: Array<Object>;
-    public infoFeed: Object;
+    public notesFeed: Array<any>;
+    public infoFeed: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -32,11 +32,11 @@ export class FeedsComponent {
         this.notesFeed = [];
         let that = this;
         feedsApi.getPublic(this.feedId).then(function(data){ that.infoFeed = data; });
-        if (sessionService.loggedIn == true){
+        if (sessionService.loggedIn === true){
             feedsApi.getNotes(this.feedId).then(function(data){
-                for (var i = data.length - 1; i >= 0 ; i--){
-                    that.notesFeed.push(data[i]);
-                }
+                that.notesFeed = data.reverse();
+            }).catch(function(err){
+              console.log(err);
             });
         }
         actions$.ofType(DatasetsActionType.FEEDS_ADD_NOTES_SUCCESS).subscribe(action => this.resetForm());

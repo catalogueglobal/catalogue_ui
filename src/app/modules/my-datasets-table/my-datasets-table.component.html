@@ -73,7 +73,15 @@
              <div>{{regionStateCountry(feed)}}</div>
 	</td> -->
 				<td class="lastUpdated">{{feed.lastUpdated|date:'y-MM-dd'}}</td>
-				<td><a (click)="editFeed(feed)"> {{feedsLicenses[feed.id] ? feedsLicenses[feed.id].name : ('mydatasets-table.add' | translate)}}</a>
+				<td>
+					<a (click)="displayLicense(feed)">
+						<span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsLicenses[feed.id]" class="btn btn-success">
+							<i class="fa fa-plus-square" aria-hidden="true"></i>
+						</span>
+						<span *ngIf="feedsLicenses[feed.id]">
+							{{feedsLicenses[feed.id].name}}
+						</span>
+					</a>
 				</td>
 				<!--
 	<td>
@@ -121,6 +129,8 @@
 </div>
 <!--/.dataset-table-->
 
+
+<!-- modal popup -->
 <app-modal>
  <div class="app-modal-header">
       <label>{{'popup.upload.changeLicense' | translate}}</label>

@@ -54,7 +54,8 @@
       "feedName": "Feed name",
       "isPublic": "Public dataset",
       "submit": "Proceed to upload",
-      "changeLicense": "Change license"
+      "changeLicense": "Change license",
+      "downloadLicense": "Download license"
     },
     "delete": {
       "confirm": {

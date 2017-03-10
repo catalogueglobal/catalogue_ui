@@ -43,7 +43,11 @@
 	</td>
 	-->
 	<td>
-        {{feedsLicenses[feed.id] ? feedsLicenses[feed.id].name : ''}}
+        <a (click)="displayLicense(feed)">
+			<span *ngIf="feedsLicenses[feed.id]">
+				{{feedsLicenses[feed.id].name}}
+			</span>
+		</a>
 	</td>
           <!--
 	<td>
@@ -90,3 +94,25 @@
     </pagination-controls>
   </div>
 </div><!--/.dataset-table-->
+
+
+<!-- modal popup -->
+<app-modal>
+ <div class="app-modal-header">
+      <label>{{'popup.upload.downloadLicense' | translate}}</label>
+ </div>
+        
+<div class="app-modal-body">
+	<div *ngIf="currentFeed && feedsLicenses[currentFeed.id]">
+		<p class="license-text">{{feedsLicenses[currentFeed.id].text}}</p>
+	</div>
+	
+</div>
+<div class="app-modal-footer">
+	<button type="button" class="btn btn-cancel" (click)="modal.hide()">{{'popup.cancel'|translate}}</button>
+<!-- 	<button type="button" class="btn btn-validate" -->
+<!-- 		(click)="onSubmitLicense()">{{'popup.validate'|translate}}</button> -->
+<a *ngIf="currentFeed && feedsLicenses[currentFeed.id]" download="{{feedsLicenses[currentFeed.id].name}}" id="downloadLicenselink" class="btn btn-validate" (click)="onSubmitLicense()">
+		 {{'popup.validate'|translate}}</a>
+</div>
+</app-modal>

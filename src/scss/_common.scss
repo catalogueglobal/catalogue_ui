@@ -1,0 +1,30 @@
+.container-fluid{
+	/* 	padding after the banner */
+	padding-top: 100px; 
+}
+
+.btn{
+	color: $ct-white;
+	text-transform: uppercase;
+}
+
+.btn-validate{
+	background-color: $ct-orange;
+	&:hover{
+		background-color: $ct-orange;
+	}
+}
+
+.btn-cancel{
+	background-color: $ct-grey;
+	&:hover{
+		background-color: $ct-grey;
+	}
+}
+
+.leading-label{
+	font-family: 'karbon-bold', Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 25px;
+	padding-right: 5px;
+}

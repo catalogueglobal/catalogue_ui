@@ -55,7 +55,8 @@
       "isPublic": "Jeu de données public (Cocher pour rendre ces données disponibles au téléchargement)",
       "submit": "Importer",
       "noLicense": "Sans license",
-      "changeLicense": "Changer de license"
+      "changeLicense": "Changer de license",
+      "downloadLicense": "Télécharger la license"
     },
     "delete": {
       "confirm": {
