@@ -194,7 +194,7 @@ export class DatasetsActions {
     return {
       type: DatasetsActionType.UPDATE_PROJECT,
       payload: {
-        //projectId: projectId,
+        projectId: projectId,
         updateProject: projectPutParams
       }
     }

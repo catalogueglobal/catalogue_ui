@@ -1,6 +1,24 @@
 .container-fluid{
 	/* 	padding after the banner */
-	padding-top: 100px; 
+	padding-top: 100px;
+	padding-bottom: 50px;
+}
+
+.feed-registry{
+	width: 50%;
+}
+
+#datasetmap{
+	margin: 0px;
+}
+
+.tools {
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+.pagination{
+	margin: 0px;	
 }
 
 .btn{
@@ -27,4 +45,18 @@
 	font-weight: bold;
 	font-size: 25px;
 	padding-right: 5px;
+}
+
+.subcribe-form {
+    .form-group {
+        margin-bottom: 0px;
+        padding: 0px;
+    }
+    .customfile {
+        height: 50px;
+        line-height: 50px;
+        .cust-btn {
+            line-height: inherit;
+        }
+    }
 }

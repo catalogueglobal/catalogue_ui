@@ -1,54 +1,50 @@
-<div class="banner" style="background-image:url(src/images/bgi/banner.jpg);">
-  <!--<div class="main-title"><h1 class="banner-title">{{'datasets.title'|translate}}</h1></div>-->
+<div class="banner"
+	style="background-image: url(src/images/bgi/banner.jpg);">
+	<!--<div class="main-title"><h1 class="banner-title">{{'datasets.title'|translate}}</h1></div>-->
 </div>
 <!--/.banner-->
-<div id="main">
-  <div id="primary" class="content-area one-column">
-    <div class="datasets-section">
-      <div class="row" style="margin-top:40px;max-width:100%;">
-        <div class="column six" style="min-width:500px;">
-          <div class="map-section">
-            <h4>{{'datasets.map.title'|translate}}</h4>
-            <div id="map-wrapper">
-              <app-datasets-map [feeds]="feeds$|async" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom" (boundsChange)="onBoundsChange($event)"></app-datasets-map>
-              <div id="search-input-wrapper" style="">
-                <div class="tools">
-                  <div class="autocompletebox">
-                    <app-datasets-autocomplete (selected)="onAutocompleteSelected($event)" placeholder="{{'datasets.table.search'|translate}}"></app-datasets-autocomplete>
-                  </div>
-                </div>
-                <!--/#tools-->
-              </div>
-              <!--/#search-input-wrapper-->
-            </div>
-            <!--/#map-wrapper-->
-          </div>
-          <!--/.map-section-->
-        </div>
 
-
-        <div class="six column">
-          <div class="feed-registry">
-            <h4>{{'datasets.table.title'|translate}}</h4>
-            <p>{{'datasets.table.intro'|translate}}</p>
-            <div class="tools">
-              <a *ngIf="feeds.length>0" href="#" class="generic-btn" [class.disabled]="!getCheckedFeeds().length" (click)="downloadFeeds($event)">
-                <i class="fa fa-download" aria-hidden="true"></i> {{'datasets.table.btn.download'|translate}}
-              </a>
-            </div>
-            <app-datasets-table [feeds]="feeds$|async" (sortChange)="onSortChange($event)"></app-datasets-table>
-
-            <div class="noresult" *ngIf="feeds.length==0">
-              {{'datasets.table.noresult.info'|translate}} <a (click)="resetSearch()">{{'datasets.table.noresult.reset'|translate}}</a>.
-            </div>
-          </div>
-          <!--/.feed-registry-->
-        </div>
-      </div>
-
-    </div>
-    <!--/.datasets-section-->
-  </div>
-  <!--/#primary-->
+<div class="container-fluid">
+	<div class="col-md-12">
+		<div class="col-md-6">
+			<h4>{{'datasets.map.title'|translate | uppercase}}</h4>
+		</div>
+		<div class="col-md-6 feed-registry">
+			<h4>{{'datasets.table.title'|translate}}</h4>
+			<p>{{'datasets.table.intro'|translate}}</p>
+		</div>
+	</div>
+	<div class="col-md-12 no-padding">
+		<div class="col-md-6 map-section">
+			<div id="map-wrapper">
+				<app-datasets-map [feeds]="feeds$|async" [mapId]="'datasetmap'"
+					[position]="mapPosition" [zoom]="mapZoom"
+					(boundsChange)="onBoundsChange($event)"></app-datasets-map>
+				<div id="search-input-wrapper" style="">
+					<div class="tools">
+						<div class="autocompletebox">
+							<app-datasets-autocomplete
+								(selected)="onAutocompleteSelected($event)"
+								placeholder="{{'datasets.table.search'|translate}}"></app-datasets-autocomplete>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<app-datasets-table [feeds]="feeds$|async"
+				(sortChange)="onSortChange($event)"></app-datasets-table>
+			<div class="tools" *ngIf="feeds.length>0">
+				<a *ngIf="feeds.length>0" href="#" class="generic-btn"
+					[class.disabled]="!getCheckedFeeds().length"
+					(click)="downloadFeeds($event)"> <i class="fa fa-download"
+					aria-hidden="true"></i> {{'datasets.table.btn.download'|translate}}
+				</a>
+			</div>
+			<div class="noresult" *ngIf="feeds.length==0">
+				{{'datasets.table.noresult.info'|translate}} <a
+					(click)="resetSearch()">{{'datasets.table.noresult.reset'|translate}}</a>.
+			</div>
+		</div>
+	</div>
 </div>
-<!--/#main-->

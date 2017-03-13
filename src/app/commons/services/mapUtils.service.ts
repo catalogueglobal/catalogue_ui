@@ -37,16 +37,9 @@ export class MapUtilsService {
         return leafletUntyped.QuickHull.getConvexHull(points);
     }
 
-    computeRedIcon() {
-        let redIcon = leaflet.icon({
-            iconUrl: 'src/images/markers/marker-icon-red.png',
-            shadowUrl: 'src/vendor/leaflet/dist/images/marker-shadow.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        });
-        return redIcon;
+    computeRedIcon(cluster) {
+        return new L.DivIcon({ html: '<div><span>' + cluster.getChildCount() + '</span></div>', 
+            className: 'marker-cluster marker-cluster-medium', iconSize: new L.Point(40, 40) });
     }
     
     private areaOver(map, source, eventOver, eventOut, computeConvexHull) {
