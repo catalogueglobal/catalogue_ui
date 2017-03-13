@@ -99,7 +99,7 @@
 <!-- modal popup -->
 <app-modal>
  <div class="app-modal-header">
-      <label>{{'popup.upload.downloadLicense' | translate}}</label>
+      <label *ngIf="currentFeed && feedsLicenses[currentFeed.id]">{{'popup.upload.downloadLicense' | translate}}: <span class="license-name">{{feedsLicenses[currentFeed.id].name}}</span></label>
  </div>
         
 <div class="app-modal-body">
@@ -109,10 +109,7 @@
 	
 </div>
 <div class="app-modal-footer">
-	<button type="button" class="btn btn-cancel" (click)="modal.hide()">{{'popup.cancel'|translate}}</button>
-<!-- 	<button type="button" class="btn btn-validate" -->
-<!-- 		(click)="onSubmitLicense()">{{'popup.validate'|translate}}</button> -->
-<a *ngIf="currentFeed && feedsLicenses[currentFeed.id]" download="{{feedsLicenses[currentFeed.id].name}}" id="downloadLicenselink" class="btn btn-validate" (click)="onSubmitLicense()">
-		 {{'popup.validate'|translate}}</a>
+	<a *ngIf="currentFeed && feedsLicenses[currentFeed.id]" download="{{feedsLicenses[currentFeed.id].name}}" id="downloadLicenselink" class="btn btn-validate" (click)="onSubmitLicense()">
+		 {{'datasets.table.btn.download'|translate}}</a>
 </div>
 </app-modal>

@@ -1,13 +1,5 @@
 .modal {
 	background: rgba(0,0,0,0.6);
-  	.modal-dialog {
-/*   		top: 100px; */
-  	}
-  	.modal-header{
-  		background-color: $ct-orange;
-  		color: white;
-  	}
-  
   	.customfile{
   		width: 100% !important;
   		height: 45px;
@@ -20,7 +12,7 @@
   		margin-bottom: 0px;
   	}
   	.modal-content{
-  		margin-top: 100px;
+  		margin-top: 50px;
   	}
   	.modal-body{
   		max-height: 500px;
@@ -31,13 +23,19 @@
   	}
   	.modal-header{
   		padding: 7px;
+  		background-color: $ct-orange;
+  		color: white;
 	  	.app-modal-header{
 	 		text-align: center;
 	    	width: 100%;
 	    	label{
 	        	text-transform: uppercase;
 	        	font-weight: bold;
-	    	}
+	        	.license-name{
+			  	    font-family: 'karbon-bold', Arial, Helvetica, sans-serif;
+			  	    font-weight: bold;
+			  	}
+		    }
 	  	}
   	}
   	#downloadLicenselink{
