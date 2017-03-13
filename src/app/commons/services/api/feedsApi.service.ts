@@ -153,7 +153,7 @@ export class FeedsApiService extends AbstractApiService {
     }
     
     public getLicenses() : Promise<any> {
-        return this.authHttp.get(this.FEED_LICENSE).map(response => response.json()).toPromise();
+        return this.http.get(this.FEED_LICENSE).map(response => response.json()).toPromise();
     }
     
     public createLicense(name: string, text: string, feedIds: string[]) : Observable<ILicense> {
