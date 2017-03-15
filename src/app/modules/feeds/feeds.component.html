@@ -10,30 +10,30 @@
 
 		<div class="panel-body">
 			<div *ngIf="infoFeed != null && infoFeed.latestValidation != null">
-				<label> <span class="leading-label">Period of
-						application:</span> <span>{{infoFeed.latestValidation.startDate|date:'y-MM-dd'}}</span>
-					<span class="leading-label">to</span> <span>{{infoFeed.latestValidation.endDate|date:'y-MM-dd'}}</span>
+				<label> <span class="leading-label">{{'feed.period'|translate}}</span>
+                		<span>{{infoFeed.latestValidation.startDate|date:'y-MM-dd'}}</span>
+					<span class="leading-label">{{'feed.period_to'|translate}}</span> <span>{{infoFeed.latestValidation.endDate|date:'y-MM-dd'}}</span>
 				</label>
 			</div>
 			<div *ngIf="infoFeed != null && infoFeed.latestValidation != null">
 				<div>
-					<label> <span class="leading-label">Number of
-							routes: </span> <span>{{infoFeed.latestValidation.routeCount}}</span>
+					<label> <span class="leading-label">{{'feed.routes'|translate}}</span>
+					 <span>{{infoFeed.latestValidation.routeCount}}</span>
 					</label>
 
 				</div>
 				<div>
-					<label> <span class="leading-label">Number of trips:</span>
+					<label> <span class="leading-label">{{'feed.trips'|translate}}</span>
 						<span>{{infoFeed.latestValidation.tripCount}}</span>
 					</label>
 				</div>
 
 			</div>
 			<div *ngIf="sessionService.loggedIn && notesFeed && notesFeed.length> 0">
-				<p class="leading-label">Notes:</p>
+				<p class="leading-label">{{'feed.note.title'|translate}}</p>
 				<ul>
-					<li *ngFor="let comment of notesFeed"><strong>Author:
-							{{comment.userEmail}}</strong><br /> <small><strong>Date:</strong>
+					<li *ngFor="let comment of notesFeed"><strong>{{'feed.note.author'|translate}}
+							{{comment.userEmail}}</strong><br /> <small><strong>{{'feed.note.date'|translate}}</strong>
 							<i>{{comment.date|date:'y-MM-dd HH:mm:ss'}}</i></small><br />
 						{{comment.body}}</li>
 				</ul>
@@ -44,7 +44,7 @@
 		</div>
 
 		<div *ngIf="sessionService.loggedIn" class="panel-footer">
-			<button class="btn btn-validate" (click)="addNotesToFeed()">Submit</button>
+			<button class="btn btn-validate" (click)="addNotesToFeed()">{{'feed.note.submit'|translate}}</button>
 		</div>
 	</div>
 </div>

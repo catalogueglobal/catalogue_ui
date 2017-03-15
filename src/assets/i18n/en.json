@@ -134,6 +134,18 @@
       "license name or file empty": "license name or file empty"
     }
   },
+  "feed": {
+    "period": "Period of application:",
+    "period_to": " to ",
+    "routes": "Number of routes:",
+    "trips": "Number of trips:",
+    "note": {
+      "title": "Notes:",
+      "author": "Author:",
+      "date": "Date:",
+      "submit": "Submit"
+    }
+  },
   "state": {
     "USER_SUBSCRIBE": "Subscribing...",
     "USER_SUBSCRIBE_SUCCESS": "Subscription success, thanks.",

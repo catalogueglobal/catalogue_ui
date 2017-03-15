@@ -134,6 +134,18 @@
     "add": "ajouter",
     "license name or file empty": "nom de fichier et fichier obligatoire"
   },
+  "feed": {
+    "period": "Periode d'application :",
+    "period_to": " à ",
+    "routes": "Nombre de lignes :",
+    "trips": "Nombre de courses :",
+    "note": {
+      "title": "Commentaires :",
+      "author": "Auteur :",
+      "date": "Date :",
+      "submit": "Soumettre"
+    }
+  },
   "state": {
     "USER_SUBSCRIBE": "Subscribing...",
     "USER_SUBSCRIBE_SUCCESS": "Subscription success, thanks.",
