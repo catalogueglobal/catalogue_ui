@@ -12,7 +12,7 @@ import { UtilsService } from "../../commons/services/utils.service";
 import { DatasetsActions } from "../../state/datasets/datasets.actions";
 import { DatasetsState } from "../../state/datasets/datasets.reducer";
 import { IFeedRow } from "../datasets/datasets.component";
-
+import { SharedService } from "../../commons/services/shared.service";
 @Component({
   selector: 'app-datasets-table',
   templateUrl: 'datasets-table.component.html',
@@ -46,7 +46,8 @@ export class DatasetsTableComponent {
     private usersApiService: UsersApiService,
     protected store: Store<DatasetsState>,
     actions$: Actions,
-    protected datasetsAction: DatasetsActions) {
+    protected datasetsAction: DatasetsActions,
+    protected shared: SharedService) {
   }
 
   // overriden by childs
@@ -69,6 +70,7 @@ export class DatasetsTableComponent {
     let that = this;
     this.feedsApiService.getLicenses().then(licenses => {
       that.licenses = licenses;
+      this.shared.setLicenses(licenses);
       that.feedsLicenses = {};
       that.setFeedsLicenses(value);
     });
@@ -90,7 +92,7 @@ export class DatasetsTableComponent {
       }
     }
   }
-    
+
   displayLicense(feed){
       this.currentFeed = feed;
       console.log(this.feedsLicenses[this.currentFeed.id].text);
@@ -102,7 +104,7 @@ export class DatasetsTableComponent {
       let link = document.getElementById('downloadLicenselink');
       link.setAttribute('href', uriContent);
   }
-    
+
   protected setSort(sort) {
     this.sortChange.emit(sort);
   }

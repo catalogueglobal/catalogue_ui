@@ -13,17 +13,21 @@ import { SharedService }                                         from "../../com
 import { UtilsService }                                          from "../../commons/services/utils.service";
 import { DatasetsActions }                                       from "../../state/datasets/datasets.actions";
 import { DatasetsState }                                         from "../../state/datasets/datasets.reducer";
+import { DatePipe } from '@angular/common';
+import {TranslateService} from 'ng2-translate';
 require('./../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster');
 
 @Component({
-    selector:    'app-datasets-map',
+    selector: 'app-datasets-map',
     templateUrl: 'datasets-map.component.html',
-    providers:   [ProjectsApiService]
+    providers: [ProjectsApiService]
 })
 export class DatasetsMapComponent implements AfterViewInit {
-    protected project$: Observable<IProject>; 
+    protected project$: Observable<IProject>;
     protected project: IProject;
     public updateProject: Function;
+    private datePipe = new DatePipe('en-US');
+    private feedsLicenses;
     @Input() mapId: string;
     @Output() protected boundsChange = new EventEmitter();
     private _feeds: IFeed[];
@@ -34,7 +38,9 @@ export class DatasetsMapComponent implements AfterViewInit {
     _position;
     initialZoom: number = this.config.MAP_ZOOM_UNKNOWN;
     _zoom: number;
-    
+    NumberedDivIcon;
+
+
     constructor(
         private utils: UtilsService,
         private config: Configuration,
@@ -44,12 +50,13 @@ export class DatasetsMapComponent implements AfterViewInit {
         protected store: Store<DatasetsState>,
         protected datasetsAction: DatasetsActions,
         private shared: SharedService,
-        private session: SessionService)
-    {
+        private translate: TranslateService,
+        private session: SessionService) {
         //this.geolocalize();
         this.setCenterMap();
         this.markers = new Array();
         this.updateProject = this.updateProjectProperty.bind(this);
+        this.initLeafletMakerStyle();
     }
 
     reset() {
@@ -58,7 +65,7 @@ export class DatasetsMapComponent implements AfterViewInit {
         this._position = this.initialPosition;
         this.goTo(this.map, this._position, true);
     }
-    
+
     @Input() set position(value: leaflet.LatLngExpression) {
         console.log('set position', value);
         if (!value) {
@@ -80,7 +87,7 @@ export class DatasetsMapComponent implements AfterViewInit {
             this.map.setZoom(value, null);
         }
     }
-    
+
     @Input() set feeds(value: IFeed[]) {
         this._feeds = value;
         if (this.map) {
@@ -88,7 +95,7 @@ export class DatasetsMapComponent implements AfterViewInit {
             this.populateMap();
         }
     }
-    
+
     ngAfterViewInit() {
         this.map = this.computeMap(this.mapId);
         this.populateMap();
@@ -107,7 +114,7 @@ export class DatasetsMapComponent implements AfterViewInit {
             );
         }
     }
-    
+
     private computeMap(cssId): leaflet.Map {
         this.markerClusterGroup = new (leaflet as any).MarkerClusterGroup(
             {
@@ -118,15 +125,14 @@ export class DatasetsMapComponent implements AfterViewInit {
                 iconCreateFunction: this.mapUtils.computeRedIcon
             }
         )
-        let thePosition;
         //leaflet.IconOptions.imagePath = 'vendor/leaflet/dist/images/';
         let tiles = leaflet.tileLayer(this.config.MAP_TILE_LAYER_URL, this.config.MAP_TILE_LAYER_OPTIONS);
-        let map = leaflet.map(cssId, {center: <any>this.initialPosition, zoom: this.initialZoom, zoomControl: false, minZoom: 2, layers: [tiles]});
+        let map = leaflet.map(cssId, { center: <any>this.initialPosition, zoom: this.initialZoom, zoomControl: false, minZoom: 2, layers: [tiles] });
         map.addLayer(this.markerClusterGroup);
         this.mapUtils.clusterAreaOver(this.markerClusterGroup, map);
         let that = this;
         map.on(
-            'moveend', function (e) {
+            'moveend', function(e) {
                 console.log('map move', map.getBounds());
                 let mapBounds = map.getBounds();
                 let newCenter = map.getCenter();
@@ -140,26 +146,27 @@ export class DatasetsMapComponent implements AfterViewInit {
         }
         return map;
     }
-    
+
     // remove all marker from the map when refresh
     private clearMap() {
         this.markerClusterGroup.clearLayers();
-        if (this.router.url === "/my-datasets"){
-            for (var i = 0; i < this.markers.length; i++){
+        if (this.router.url === "/my-datasets") {
+            for (var i = 0; i < this.markers.length; i++) {
                 this.map.removeLayer(this.markers[i]);
                 this.markers.splice(i, 1);
             }
         }
     }
-    
+
     private populateMap() {
         if (this._feeds && this.map) {
             this.clearMap();
             console.log("setFeeds", this._feeds.length);
+            this.setFeedsLicenses(this._feeds);
             this._feeds.map(
                 feed => {
                     if (feed.latestValidation && feed.latestValidation.bounds) {
-                        this.createMarker(feed);  
+                        this.createMarker(feed);
                     }
                     /*else {
                       console.log('new marker (no bounds)', feed);
@@ -168,21 +175,21 @@ export class DatasetsMapComponent implements AfterViewInit {
             );
         }
     }
-    
+
     private setCenterMap() {
         let lastCenter = this.shared.getCenterMap();
-        if (lastCenter.lat != 0 && lastCenter.lng != 0){
+        if (lastCenter.lat != 0 && lastCenter.lng != 0) {
             this.position = [lastCenter.lat, lastCenter.lng];
             //this.initialZoom = lastCenter.zoom;
         } else {
             this.geolocalize();
         }
     }
-    
+
     private goTo(theMap, thePosition, isReset) {
         let theZoom = this._zoom || this.config.MAP_ZOOM_POSITION;
         let lastCenter = this.shared.getCenterMap();
-        if (lastCenter.lat != 0 && lastCenter.lng != 0 && isReset == false){
+        if (lastCenter.lat != 0 && lastCenter.lng != 0 && isReset == false) {
             thePosition[0] = lastCenter.lat;
             thePosition[1] = lastCenter.lng;
             theZoom = lastCenter.zoom;
@@ -190,30 +197,78 @@ export class DatasetsMapComponent implements AfterViewInit {
         console.log('goTo', thePosition, theZoom);
         theMap.setView(thePosition, theZoom);
     }
-    
-    private computeMarker(name: string, latLng: [number, number], bounds: leaflet.LatLngExpression[], url: string, isPublic: boolean, id: string): leaflet.Marker {
-        var isDraggable: boolean = this.router.url === '/my-datasets' ? true : false;
-        let marker: any = leaflet.marker(latLng, {title: name, draggable: isDraggable});
+
+    private computeMarker(feed: IFeed, latLng: [number, number], bounds: leaflet.LatLngExpression[]): leaflet.Marker {
+        let isDraggable: boolean = this.router.url === '/my-datasets' ? true : false;
+        let marker: any = leaflet.marker(latLng, {
+            title: feed.name, draggable: isDraggable,
+            icon: new this.NumberedDivIcon({
+                number: feed.name.charAt(0)
+            })
+        });
         marker.data = {
             bounds: bounds,
-            id: id
+            id: feed.projectId
         }
-        let that;
-        if (isDraggable === true){
+        if (isDraggable === true) {
             marker.on("dragend", this.updateProject);
         }
-        marker.bindPopup(this.computeMarkerPopup(name, url));
+        let tooltipData = this.computeMarkerPopup(feed);
+        marker.bindTooltip(tooltipData, {
+            direction: 'top'
+        });
+        marker.bindPopup(tooltipData, {
+            direction: 'top'
+        });
         return marker;
     }
-    
-    private computeMarkerPopup(name: string, url: string): string {
-        var popupHtml = "<b>" + name + "</b>";
-        if (url) {
-            popupHtml += "<br><button onclick=\"document.location.href='" + url + "'\">Download feed</button>";
+
+    private setFeedsLicenses(value: any) {
+      let licenses =  this.shared.getLicenses();
+      this.feedsLicenses = {};
+      if (licenses && value) {
+        for (let k = 0; k < value.length; k++) {
+          let feed = value[k];
+          for (let i = 0; i < licenses.length; i++) {
+            if (licenses[i].feedIds) {
+              for (let j = 0; j < licenses[i].feedIds.length; j++) {
+                if (feed.id === licenses[i].feedIds[j]) {
+                  this.feedsLicenses[feed.id] = licenses[i];
+                }
+              }
+            }
+          }
         }
+      }
+    }
+
+    private computeMarkerPopup(feed:any): string {
+        let license = this.feedsLicenses[feed.id];
+        let popupHtml = "<b>" + feed.name + "</b> (";
+        if (feed.isPublic) {
+            popupHtml += this.translate.instant('mydatasets-table.column.isPublic.label') + ')';
+        } else {
+            popupHtml += this.translate.instant('mydatasets-table.column.isPublic.private') + ')';
+        }
+        if (feed.url) {
+            popupHtml += "<br><button onclick=\"document.location.href='" + feed.url + "'\">Download feed</button>";
+        }
+        if (license && license.id){
+          popupHtml += '<br/><b>License</b>: ' + license.name;
+        }
+        popupHtml += '<br/>';
+        popupHtml += '<b>Period of application</b>: ' + this.datePipe.transform(feed.latestValidation.startDate, 'y-MM-dd');
+        popupHtml += '<b> to</b>: ' + this.datePipe.transform(feed.latestValidation.endDate, 'y-MM-dd');
+        popupHtml += '<br/><b>Number of routes</b>: ' + feed.latestValidation.routeCount;
+        popupHtml += '<br/><b>Number of trips</b>: ' + feed.latestValidation.tripCount;
+        if (feed.lastUpdated) {
+            let date = this.datePipe.transform(feed.lastUpdated, 'y-MM-dd');
+            popupHtml += '<br/><b>' + this.translate.instant('mydatasets-table.column.updated') + '</b>: ' + date;
+        }
+
         return popupHtml;
     }
-    
+
     // Update the Lat and Lng of the project
     private updateProjectProperty(ev) {
         var projectsApi: ProjectsApiService;
@@ -225,9 +280,9 @@ export class DatasetsMapComponent implements AfterViewInit {
         };
         this.store.dispatch(this.datasetsAction.updateProject(ev.target.data.id, updateProject));
     }
-    
-    private extractData(data, feed){
-        if (data){
+
+    private extractData(data, feed) {
+        if (data) {
             let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
             let lat = data.defaultLocationLat;
             let lng = data.defaultLocationLon;
@@ -235,24 +290,43 @@ export class DatasetsMapComponent implements AfterViewInit {
                 lat = (bounds[0].lat + bounds[1].lat) / 2;
             if (!lng)
                 lng = (bounds[0].lng + bounds[2].lng) / 2;
-            let marker = this.computeMarker(feed.name, [lat, lng], bounds, feed.url, feed.isPublic, feed.projectId)
-            this.router.url === "/my-datasets" ? this.map.addLayer(marker) : this.markerClusterGroup.addLayer(marker);  
+            let marker = this.computeMarker(feed, [lat, lng], bounds);
+            this.router.url === "/my-datasets" ? this.map.addLayer(marker) : this.markerClusterGroup.addLayer(marker);
             this.markers.push(marker);
             // area over marker
             this.mapUtils.markerAreaOver(marker, this.map);
         }
     }
-    
-    private createMarker(feed: IFeed){
+
+    private createMarker(feed: IFeed) {
         // TODO : to change, the code is not clean
-        if (this.router.url == "/my-datasets"){
-            this.projectsApi.getPrivateProject(feed.projectId).then(function success(data){
+        if (this.router.url == "/my-datasets") {
+            this.projectsApi.getPrivateProject(feed.projectId).then(function success(data) {
                 return this.extractData(data, feed);
             }.bind(this));
         } else {
-            this.projectsApi.getPublicProject(feed.projectId).then(function success(data){
+            this.projectsApi.getPublicProject(feed.projectId).then(function success(data) {
                 return this.extractData(data, feed);
             }.bind(this));
         }
+    }
+    protected initLeafletMakerStyle() {
+        this.NumberedDivIcon = L.Icon.extend({
+            options: {
+                iconSize: new L.Point(30, 30),
+                iconAnchor: new L.Point(15, 0),
+                className: 'leaflet-div-number-icon'
+            },
+
+            createIcon: function() {
+                let div = document.createElement('div');
+                let numdiv = document.createElement('div');
+                numdiv.setAttribute("class", "number");
+                numdiv.innerHTML = this.options['number'] || '';
+                div.appendChild(numdiv);
+                this._setIconStyles(div, 'icon');
+                return div;
+            }
+        });
     }
 }

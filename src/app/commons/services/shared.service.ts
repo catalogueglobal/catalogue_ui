@@ -7,7 +7,9 @@ export class SharedService {
         lng: 0,
         zoom: 0
     };
-    
+
+    licenses = [];
+
     constructor() {
     }
 
@@ -19,5 +21,13 @@ export class SharedService {
         this.centerMap.lat = newCenter.lat;
         this.centerMap.lng = newCenter.lng;
         this.centerMap.zoom = zoom;
+    }
+
+    getLicenses(){
+      return this.licenses;
+    }
+
+    setLicenses(data){
+      this.licenses = data;
     }
 }

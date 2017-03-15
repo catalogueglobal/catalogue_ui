@@ -12,6 +12,7 @@ import { DatasetsActions, toFeedReference, DatasetsActionType } from "../../stat
 import { DatasetsState } from "../../state/datasets/datasets.reducer";
 import { DatasetsTableComponent } from "../datasets-table/datasets-table.component";
 import { IFeedRow } from "../datasets/datasets.component";
+import { SharedService } from "../../commons/services/shared.service";
 
 const CONFIRM_EDIT_IDX_SETNAME = "setName"
 const CONFIRM_EDIT_IDX_SETFILE = "setFile"
@@ -26,7 +27,7 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
   @Input() protected _feeds: IFeedRow[];
   private confirmEditById: Map<string, EventEmitter<any>> = new Map();
   public newLicense;
-  
+
   constructor(
     config: Configuration,
     utils: UtilsService,
@@ -35,8 +36,9 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
     protected datasetsAction: DatasetsActions,
     protected actions$: Actions,
     usersApiService: UsersApiService,
-    sessionService: SessionService) {
-    super(config, utils, sessionService, feedsApi, usersApiService, store, actions$, datasetsAction);
+    sessionService: SessionService,
+    protected shared: SharedService) {
+    super(config, utils, sessionService, feedsApi, usersApiService, store, actions$, datasetsAction, shared);
 
     this.resetForm(null);
     this.subscribeActions(actions$);
@@ -56,7 +58,7 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
       this.currentFeed = null;
       this.getLicenses(this._feeds);
     }
-    
+
     this.newLicense = {
       type: 'new',
       name: '',

@@ -29,9 +29,9 @@
 				</div>
 
 			</div>
-			<div>
+			<div *ngIf="sessionService.loggedIn && notesFeed && notesFeed.length> 0">
 				<p class="leading-label">Notes:</p>
-				<ul *ngIf="notesFeed && notesFeed.length> 0">
+				<ul>
 					<li *ngFor="let comment of notesFeed"><strong>Author:
 							{{comment.userEmail}}</strong><br /> <small><strong>Date:</strong>
 							<i>{{comment.date|date:'y-MM-dd HH:mm:ss'}}</i></small><br />
