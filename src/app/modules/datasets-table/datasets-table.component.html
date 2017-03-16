@@ -101,12 +101,12 @@
  <div class="app-modal-header">
       <label *ngIf="currentFeed && feedsLicenses[currentFeed.id]">{{'popup.upload.downloadLicense' | translate}}: <span class="license-name">{{feedsLicenses[currentFeed.id].name}}</span></label>
  </div>
-        
+
 <div class="app-modal-body">
 	<div *ngIf="currentFeed && feedsLicenses[currentFeed.id]">
 		<p class="license-text">{{feedsLicenses[currentFeed.id].text}}</p>
 	</div>
-	
+
 </div>
 <div class="app-modal-footer">
 	<a *ngIf="currentFeed && feedsLicenses[currentFeed.id]" download="{{feedsLicenses[currentFeed.id].name}}" id="downloadLicenselink" class="btn btn-validate" (click)="onSubmitLicense()">

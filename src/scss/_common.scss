@@ -86,6 +86,10 @@ table th {
 	border-width: 1px;
 	text-align: center;
 
+	&.private {
+		background-color: $ct-red;
+	}
+
 	> .number {
 		position: relative;
 		top: 5px;

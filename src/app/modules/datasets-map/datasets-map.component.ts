@@ -203,7 +203,8 @@ export class DatasetsMapComponent implements AfterViewInit {
         let marker: any = leaflet.marker(latLng, {
             title: feed.name, draggable: isDraggable,
             icon: new this.NumberedDivIcon({
-                number: feed.name.charAt(0)
+                number: feed.name.charAt(0),
+                surClass: feed.isPublic ? 'public' : 'private'
             })
         });
         marker.data = {
@@ -244,7 +245,7 @@ export class DatasetsMapComponent implements AfterViewInit {
 
     private computeMarkerPopup(feed:any): string {
         let license = this.feedsLicenses[feed.id];
-        let popupHtml = "<b>" + feed.name + "</b> (";
+        let popupHtml = '<b><a href="/feeds/' + feed.id + '">' + feed.name + "</a></b> (";
         if (feed.isPublic) {
             popupHtml += this.translate.instant('mydatasets-table.column.isPublic.label') + ')';
         } else {
@@ -257,13 +258,13 @@ export class DatasetsMapComponent implements AfterViewInit {
           popupHtml += '<br/><b>License</b>: ' + license.name;
         }
         popupHtml += '<br/>';
-        popupHtml += '<b>Period of application</b>: ' + this.datePipe.transform(feed.latestValidation.startDate, 'y-MM-dd');
-        popupHtml += '<b> to</b>: ' + this.datePipe.transform(feed.latestValidation.endDate, 'y-MM-dd');
-        popupHtml += '<br/><b>Number of routes</b>: ' + feed.latestValidation.routeCount;
-        popupHtml += '<br/><b>Number of trips</b>: ' + feed.latestValidation.tripCount;
+        popupHtml += '<b>' + this.translate.instant('feed.period') + '</b> ' + this.datePipe.transform(feed.latestValidation.startDate, 'y-MM-dd');
+        popupHtml += '<b>' + this.translate.instant('feed.period_to') + '</b> ' + this.datePipe.transform(feed.latestValidation.endDate, 'y-MM-dd');
+        popupHtml += '<br/><b>' + this.translate.instant('feed.routes') + '</b> ' + feed.latestValidation.routeCount;
+        popupHtml += '<br/><b>' + this.translate.instant('feed.trips') + '</b> ' + feed.latestValidation.tripCount;
         if (feed.lastUpdated) {
             let date = this.datePipe.transform(feed.lastUpdated, 'y-MM-dd');
-            popupHtml += '<br/><b>' + this.translate.instant('mydatasets-table.column.updated') + '</b>: ' + date;
+            popupHtml += '<br/><b>' + this.translate.instant('mydatasets-table.column.updated') + '</b> : ' + date;
         }
 
         return popupHtml;
@@ -320,6 +321,8 @@ export class DatasetsMapComponent implements AfterViewInit {
 
             createIcon: function() {
                 let div = document.createElement('div');
+                this.options.className += ' ' + this.options.surClass;
+
                 let numdiv = document.createElement('div');
                 numdiv.setAttribute("class", "number");
                 numdiv.innerHTML = this.options['number'] || '';
