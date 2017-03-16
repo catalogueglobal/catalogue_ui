@@ -1,184 +1,187 @@
 {
-  "layout": {
-    "menu": {
-      "use": "use",
-      "upload": "importer",
-      "download": "télécharger",
-      "manage": "gérer",
-      "subscribe": "souscrire",
-      "login": "connexion",
-      "logout": "déconnexion"
+    "layout": {
+        "menu": {
+            "use": "use",
+            "upload": "importer",
+            "download": "télécharger",
+            "manage": "gérer",
+            "subscribe": "souscrire",
+            "login": "connexion",
+            "logout": "déconnexion"
+        },
+        "footer": {
+            "home": "Accueil",
+            "about": "À Propos",
+            "faq": "FAQ",
+            "community": "Communauté",
+            "tools": "Outils",
+            "blog": "Blog",
+            "contact": "Contact",
+            "subscribe": "Souscrire",
+            "copyright": "&copy; {{year}} Catalogue. All Rights Reserved."
+        }
     },
-    "footer": {
-      "home": "Accueil",
-      "about": "À Propos",
-      "faq": "FAQ",
-      "community": "Communauté",
-      "tools": "Outils",
-      "blog": "Blog",
-      "contact": "Contact",
-      "subscribe": "Souscrire",
-      "copyright": "&copy; {{year}} Catalogue. All Rights Reserved."
+    "popup": {
+        "subscribe": {
+            "title": "Souscrire",
+            "name": "Nom",
+            "company": "Entreprise",
+            "email": "Email",
+            "type": {
+                "label": "Types",
+                "placeholder": "Choisir le Type",
+                "producer": "Producteur",
+                "developer": "Développeurs",
+                "community": "Communauté"
+            },
+            "submit": "Souscrire"
+        },
+        "upload": {
+            "login": "Connectez-vous pour continuer",
+            "file": "Fichier de données (*.zip)",
+            "browse": "Parcourir",
+            "check": "Cocher pour télécharger votre propre licence",
+            "select": "Choisir une licence",
+            "licenseName": "Nom de la licence",
+            "licenseFile": "Fichier de licence (*.txt)",
+            "metadataFile": "Fichier de Meta-données (*.zip)",
+            "title": "Importer un nouveau jeu de données",
+            "toggleOptions": {
+                "show": "Montrer les options avancées",
+                "hide": "Cacher les options avancées"
+            },
+            "projectName": "Nom du Projet",
+            "feedName": "Nom du jeu de données",
+            "isPublic": "Jeu de données public (Cocher pour rendre ces données disponibles au téléchargement)",
+            "submit": "Importer",
+            "noLicense": "Sans license",
+            "changeLicense": "Changer de license",
+            "downloadLicense": "Télécharger la license"
+        },
+        "delete": {
+            "confirm": {
+                "title": "Confirmer la suppression",
+                "label": "Etes-vous sûr que vous voulez supprimer?"
+            }
+        },
+        "cancel": "annuler",
+        "validate": "valider"
+    },
+    "datasets": {
+        "title": "Téléchargement des données",
+        "map": {
+            "title": "Choisir les jeux de données sur la carte ou chercher par zone géographique"
+        },
+        "table": {
+            "title": "catalogue des jeux de données",
+            "intro": "Depuis la liste des données affichées, cliquez pour sélectionner celles que vous souhaitez télécharger.",
+            "search": "Chercher ici",
+            "btn": {
+                "download": "télécharger"
+            },
+            "noresult": {
+                "info": "Aucue données disponible. Dézoomer ou",
+                "reset": "réinitialiser votre recherche"
+            },
+            "tooltips": {
+                "downloadLicense": "Cliquez ici pour télécharger la license"
+            }
+        }
+    },
+    "mydatasets": {
+        "title": "Gérer vos données",
+        "map": {
+            "title": "Choisir les jeux de données sur la carte ou chercher par zone géographique"
+        },
+        "table": {
+            "title": "catalogue des jeux de données",
+            "intro": "Depuis la liste des données affichées, cliquez pour sélectionner celles que vous souhaitez télécharger.",
+            "search": "Chercher ici",
+            "btn": {
+                "download": "télécharger",
+                "delete": "supprimer"
+            },
+            "noresult": {
+                "info": "Aucue données disponible. Dézoomer ou",
+                "reset": "réinitialiser votre recherche"
+            }
+        }
+    },
+    "datasets-table": {
+        "checkall": "Vérifier tout",
+        "column": {
+            "feedName": "Nom du lot",
+            "area": "Zone",
+            "license": "Licence",
+            "subscribe": "S'abonner / Se désabonner"
+        }
+    },
+    "mydatasets-table": {
+        "checkall": "Vérifier tout",
+        "column": {
+            "isPublic": {
+                "label": "Public",
+                "public": "public",
+                "private": "privé"
+            },
+            "type": {
+                "label": "Type",
+                "fetch": "Import auto.",
+                "upload": "Import Manuel",
+                "inhouse": "Production locale"
+            },
+            "feedName": "Nom du lot",
+            "area": "Zone",
+            "updated": "Actualisé"
+        },
+        "add": "ajouter",
+        "license name or file empty": "nom de fichier et fichier obligatoire"
+    },
+    "feed": {
+        "period": "Periode d'application :",
+        "period_to": " à ",
+        "routes": "Nombre de lignes :",
+        "trips": "Nombre de courses :",
+        "note": {
+            "title": "Commentaires :",
+            "author": "Auteur :",
+            "date": "Date :",
+            "submit": "Soumettre"
+        }
+    },
+    "state": {
+        "USER_SUBSCRIBE": "Subscribing...",
+        "USER_SUBSCRIBE_SUCCESS": "Subscription success, thanks.",
+        "USER_SUBSCRIBE_FAIL": "Sorry, subscription failed. Please try again",
+        "FEEDS_GET": {
+            "private": "Chargement des données privées...",
+            "public": "Chargement des données public..."
+        },
+        "FEEDS_GET_FAIL": {
+            "public": "Echec de chargement des données privées.",
+            "private": "Echec de chargement des données public."
+        },
+        "FEED_CREATE": "Creating feed: <i>{{feedName}</i>",
+        "FEED_CREATE_PROGRESS": "Creating feed: <i>{{feedName}}</i> ({{progress}})",
+        "FEED_CREATE_SUCCESS": "Feed created: <i>{{feedName}}</i>",
+        "FEED_CREATE_FAIL": "Feed creation failed: <i>{{feedName}}</i>",
+        "FEED_SET_PUBLIC": "Updating feed: <i>{{feedName}}</i>",
+        "FEED_SET_PUBLIC_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
+        "FEED_SET_PUBLIC_FAIL": "Feed update failed: <i>{{feedName}}</i>",
+        "FEED_SET_NAME": "Updating feed: <i>{{feedName}}</i>",
+        "FEED_SET_NAME_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
+        "FEED_SET_NAME_FAIL": "Feed update failed: <i>{{feedName}}</i>",
+        "FEED_SET_FILE": "Updating feed <i>{{feedName}}</i>...",
+        "FEED_SET_FILE_PROGRESS": "Updating feed <i>{{feedName}}</i> ({{progress}})",
+        "FEED_SET_FILE_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
+        "FEED_SET_FILE_FAIL": "Feeds update failed: <i>{{feedName}}</i>",
+        "FEED_DELETE": "Deleting {{countFeeds}} feed(s)...",
+        "FEED_DELETE_SUCCESS": "{{countFeeds}} feed(s) deleted.",
+        "FEED_DELETE_FAIL": "Failed to delete {{countFeeds}} feed(s) : {{feedLabels}}.",
+        "FEED_FETCH": "Refreshing feed <i>{{feedName}}</i>...",
+        "FEED_FETCH_SUCCESS": "Feed refreshed: <i>{{feedName}}</i>",
+        "FEED_FETCH_FAIL": "Feed refresh failed: <i>{{feedName}}</i>",
+        "ADD_FEED_TO_PROJECT_SUCCESS": "Feed have been added to the project",
+        "ADD_FEED_TO_PROJECT_FAIL": "Feed couldn't be added to the project"
     }
-  },
-  "popup": {
-    "subscribe": {
-      "title": "Souscrire",
-      "name": "Nom",
-      "company": "Entreprise",
-      "email": "Email",
-      "type": {
-        "label": "Types",
-        "placeholder": "Choisir le Type",
-        "producer": "Producteur",
-        "developer": "Développeurs",
-        "community": "Communauté"
-      },
-      "submit": "Souscrire"
-    },
-    "upload": {
-      "login": "Connectez-vous pour continuer",
-      "file": "Fichier de données (*.zip)",
-      "browse": "Parcourir",
-      "check": "Cocher pour télécharger votre propre licence",
-      "select": "Choisir une licence",
-      "licenseName": "Nom de la licence",
-      "licenseFile": "Fichier de licence (*.txt)",
-      "metadataFile": "Fichier de Meta-données (*.zip)",
-      "title": "Importer un nouveau jeu de données",
-      "toggleOptions": {
-        "show": "Montrer les options avancées",
-        "hide": "Cacher les options avancées"
-      },
-      "projectName": "Nom du Projet",
-      "feedName": "Nom du jeu de données",
-      "isPublic": "Jeu de données public (Cocher pour rendre ces données disponibles au téléchargement)",
-      "submit": "Importer",
-      "noLicense": "Sans license",
-      "changeLicense": "Changer de license",
-      "downloadLicense": "Télécharger la license"
-    },
-    "delete": {
-      "confirm": {
-        "title": "Confirmer la suppression",
-        "label": "Etes-vous sûr que vous voulez supprimer?"
-      }
-    },
-    "cancel": "annuler",
-    "validate": "valider"
-  },
-  "datasets": {
-    "title": "Téléchargement des données",
-    "map": {
-      "title": "Choisir les jeux de données sur la carte ou chercher par zone géographique"
-    },
-    "table": {
-      "title": "catalogue des jeux de données",
-      "intro": "Depuis la liste des données affichées, cliquez pour sélectionner celles que vous souhaitez télécharger.",
-      "search": "Chercher ici",
-      "btn": {
-        "download": "télécharger"
-      },
-      "noresult": {
-        "info": "Aucue données disponible. Dézoomer ou",
-        "reset": "réinitialiser votre recherche"
-      }
-    }
-  },
-  "mydatasets": {
-    "title": "Gérer vos données",
-    "map": {
-      "title": "Choisir les jeux de données sur la carte ou chercher par zone géographique"
-    },
-    "table": {
-      "title": "catalogue des jeux de données",
-      "intro": "Depuis la liste des données affichées, cliquez pour sélectionner celles que vous souhaitez télécharger.",
-      "search": "Chercher ici",
-      "btn": {
-        "download": "télécharger",
-        "delete": "supprimer"
-      },
-      "noresult": {
-        "info": "Aucue données disponible. Dézoomer ou",
-        "reset": "réinitialiser votre recherche"
-      }
-    }
-  },
-  "datasets-table": {
-    "checkall": "Vérifier tout",
-    "column": {
-      "feedName": "Nom du lot",
-      "area": "Zone",
-      "license": "Licence",
-      "subscribe": "S'abonner / Se désabonner"
-    }
-  },
-  "mydatasets-table": {
-    "checkall": "Vérifier tout",
-    "column": {
-      "isPublic": {
-        "label": "Public",
-        "public": "public",
-        "private": "privé"
-      },
-      "type": {
-        "label": "Type",
-        "fetch": "Import auto.",
-        "upload": "Import Manuel",
-        "inhouse": "Production locale"
-      },
-      "feedName": "Nom du lot",
-      "area": "Zone",
-      "updated": "Actualisé"
-    },
-    "add": "ajouter",
-    "license name or file empty": "nom de fichier et fichier obligatoire"
-  },
-  "feed": {
-    "period": "Periode d'application :",
-    "period_to": " à ",
-    "routes": "Nombre de lignes :",
-    "trips": "Nombre de courses :",
-    "note": {
-      "title": "Commentaires :",
-      "author": "Auteur :",
-      "date": "Date :",
-      "submit": "Soumettre"
-    }
-  },
-  "state": {
-    "USER_SUBSCRIBE": "Subscribing...",
-    "USER_SUBSCRIBE_SUCCESS": "Subscription success, thanks.",
-    "USER_SUBSCRIBE_FAIL": "Sorry, subscription failed. Please try again",
-    "FEEDS_GET": {
-      "private": "Chargement des données privées...",
-      "public": "Chargement des données public..."
-    },
-    "FEEDS_GET_FAIL": {
-      "public": "Echec de chargement des données privées.",
-      "private": "Echec de chargement des données public."
-    },
-    "FEED_CREATE": "Creating feed: <i>{{feedName}</i>",
-    "FEED_CREATE_PROGRESS": "Creating feed: <i>{{feedName}}</i> ({{progress}})",
-    "FEED_CREATE_SUCCESS": "Feed created: <i>{{feedName}}</i>",
-    "FEED_CREATE_FAIL": "Feed creation failed: <i>{{feedName}}</i>",
-    "FEED_SET_PUBLIC": "Updating feed: <i>{{feedName}}</i>",
-    "FEED_SET_PUBLIC_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
-    "FEED_SET_PUBLIC_FAIL": "Feed update failed: <i>{{feedName}}</i>",
-    "FEED_SET_NAME": "Updating feed: <i>{{feedName}}</i>",
-    "FEED_SET_NAME_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
-    "FEED_SET_NAME_FAIL": "Feed update failed: <i>{{feedName}}</i>",
-    "FEED_SET_FILE": "Updating feed <i>{{feedName}}</i>...",
-    "FEED_SET_FILE_PROGRESS": "Updating feed <i>{{feedName}}</i> ({{progress}})",
-    "FEED_SET_FILE_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
-    "FEED_SET_FILE_FAIL": "Feeds update failed: <i>{{feedName}}</i>",
-    "FEED_DELETE": "Deleting {{countFeeds}} feed(s)...",
-    "FEED_DELETE_SUCCESS": "{{countFeeds}} feed(s) deleted.",
-    "FEED_DELETE_FAIL": "Failed to delete {{countFeeds}} feed(s) : {{feedLabels}}.",
-    "FEED_FETCH": "Refreshing feed <i>{{feedName}}</i>...",
-    "FEED_FETCH_SUCCESS": "Feed refreshed: <i>{{feedName}}</i>",
-    "FEED_FETCH_FAIL": "Feed refresh failed: <i>{{feedName}}</i>",
-    "ADD_FEED_TO_PROJECT_SUCCESS": "Feed have been added to the project",
-    "ADD_FEED_TO_PROJECT_FAIL": "Feed couldn't be added to the project"
-  }
 }

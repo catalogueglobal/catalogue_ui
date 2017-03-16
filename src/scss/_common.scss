@@ -102,3 +102,11 @@ table th {
 .leaflet-popup-content-wrapper {
 	border-radius: 5px;
 }
+
+.tooltip-inner {
+	background-color: $ct-grey;
+}
+
+.tooltip-arrow {
+	border-top-color: $ct-grey !important;
+}

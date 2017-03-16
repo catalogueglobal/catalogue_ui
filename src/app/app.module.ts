@@ -51,6 +51,7 @@ import { MyDatasetsTableComponent }                                 from "./modu
 import { DatasetsActions }                                          from "./state/datasets/datasets.actions";
 import { DatasetsEffects }                                          from "./state/datasets/datasets.effects";
 import { appReducer }                                               from "./state/index.reducer";
+import { TooltipModule } from 'ng2-bootstrap';
 
 export function httpFactory(http: Http) {
     return new TranslateStaticLoader(http, '/assets/i18n', '.json');
@@ -129,7 +130,8 @@ export function composeProvider(state: any, action: any) {
             provide: TranslateLoader,
             useFactory: httpFactory,
             deps: [Http]
-        })
+        }),
+        TooltipModule.forRoot()
     ],
 
     entryComponents: [AppComponent],
