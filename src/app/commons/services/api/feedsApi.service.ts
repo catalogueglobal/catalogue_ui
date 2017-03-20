@@ -33,7 +33,7 @@ export type IFeedApi = {
 export type ILicense = {
     id: string,
     name: string,
-    text: string,
+    originalFileName: string,
     feedIds: string[]
 }
 
@@ -69,8 +69,8 @@ export class FeedsApiService extends AbstractApiService {
     private FEED_SECURE_VERSION_URL: string;
     private FEED_DOWNLOAD_URL: string;
     private FEED_NOTES: string;
-    private FEED_LICENSE: string;
-    
+    public FEED_LICENSE: string;
+
     constructor(
         protected http: Http,
         protected authHttp: AuthHttp,
@@ -89,7 +89,7 @@ export class FeedsApiService extends AbstractApiService {
         this.FEED_NOTES = this.config.ROOT_API + "/api/manager/secure/note?type=FEED_SOURCE&objectId="
         this.FEED_LICENSE = this.config.LICENSE_API + "/api/metadata/" + this.config.LICENSE_API_VERSION + "/secure/license";
     }
-    
+
     public create(name: string, projectId: string, isPublic: boolean): Observable<IFeedApi> {
         let data = JSON.stringify({
             name: name,
@@ -98,27 +98,27 @@ export class FeedsApiService extends AbstractApiService {
         });
         return this.authHttp.post(this.FEED_SECURE_URL, data).map(response => response.json());
     }
-    
+
     public setPublic(feedSourceId: string, value: boolean): Observable<IFeedApi> {
         return this.authHttp.put(this.FEED_SECURE_URL + "/" + feedSourceId, JSON.stringify({isPublic: value}))
             .map(response=>response.json());
     }
-    
+
     public setName(feedSourceId: string, value: string): Observable<IFeedApi> {
         return this.authHttp.put(this.FEED_SECURE_URL + "/" + feedSourceId, JSON.stringify({name: value}))
             .map(response=>response.json());
     }
-    
+
     public setFile(feedSourceId: string, file: File): Observable<any> {
         let formData: FormData = new FormData();
         formData.append("file", file, file.name);
         return this.uploadService.upload(this.FEED_SECURE_VERSION_URL + "?feedSourceId=" + feedSourceId, formData, this.computeAuthHeaders());
     }
-    
+
     public delete(feedSourceId: string): Observable<any> {
         return this.authHttp.delete(this.FEED_SECURE_URL + "/" + feedSourceId);
     }
-    
+
     public getDownloadUrl(feed: IFeedApi): Observable<string> {
         if (feed.url) {
             // direct download from the source
@@ -129,42 +129,40 @@ export class FeedsApiService extends AbstractApiService {
             .map(response => response.json())
             .map(result => this.FEED_DOWNLOAD_URL + '/' + result.id)
     }
-    
+
     public fetch(feedSourceId: string): Observable<any> {
         return this.authHttp.post(this.FEED_SECURE_URL + '/' + feedSourceId + '/fetch', "")
             .map(response => response.json())
     }
-    
+
     public getPublic(feedSourceId: string): Promise<any> {
         return this.http.get(this.FEED_PUBLIC_URL + '/' + feedSourceId).map(response => response.json()).toPromise();
     }
-    
+
     public get(feedSourceId: string): Observable<IFeedApi> {
         return this.authHttp.get(this.FEED_SECURE_URL + '/' + feedSourceId)
             .map(response => response.json())
     }
-    
+
     public getNotes(feedSourceId: string): Promise<any>{
         return this.authHttp.get(this.FEED_NOTES + feedSourceId).map(response => response.json()).toPromise();
     }
-    
+
     public addNotes(feedSourceId: string, note: string): Observable<any>{
         return this.authHttp.post(this.FEED_NOTES + feedSourceId, note).map(response => response.json())
     }
-    
+
     public getLicenses() : Promise<any> {
+        console.log('feed api', this.FEED_LICENSE);
         return this.http.get(this.FEED_LICENSE).map(response => response.json()).toPromise();
     }
-    
-    public createLicense(name: string, text: string, feedIds: string[]) : Observable<ILicense> {
-        let data = JSON.stringify({
-            name: name,
-            text: text,
-            feedIds: feedIds
-        });
-        return this.authHttp.post(this.FEED_LICENSE, data).map(response => response.json());
+
+    public createLicense(name: string, file: File, feedIds: string[]) : Observable<ILicense> {
+        let formData: FormData = new FormData();
+        formData.append('file', file, file.name);
+        return this.uploadService.upload(this.FEED_LICENSE + '?name=' + name + '&feeds=' + feedIds, formData, this.computeAuthHeaders());
     }
-    
+
     public setLicense(feedIds: string[], licenseId: string): Observable<ILicense>{
         let data = JSON.stringify({
             feedIds: feedIds
@@ -191,7 +189,7 @@ export class FeedsApiService extends AbstractApiService {
         }
         return this.adaptFeedsResponse(projects, params.secure, params.bounds, params.sortOrder);
     }
-    
+
     protected adaptFeedsResponse(projectsObservable: Observable<IProject[]>, retrieveSecureFeeds: boolean, bounds: IBounds, sortOrder: SortOrder): Observable<FeedsGetResponse> {
         return projectsObservable.flatMap(project => project)
             .map(p => this.feedsFromProject(p, retrieveSecureFeeds))
@@ -210,7 +208,7 @@ export class FeedsApiService extends AbstractApiService {
                 };
             });
     }
-    
+
     feedsFromProject(project: IProject, retrieveSecureFeeds: boolean): Observable<IFeed[]> {
         let projectFeeds: Observable<IFeedApi[]>;
         if (retrieveSecureFeeds) {
@@ -221,13 +219,13 @@ export class FeedsApiService extends AbstractApiService {
         }
         return projectFeeds.flatMap(f => f).map(feedApi => this.adaptFeed(project, feedApi)).toArray();
     }
-    
+
     adaptFeed(project: IProject, feedApi: IFeedApi): IFeed {
         // compute region, state & country
         let regionStateCountryData = this.computeRegionStateCountryData(project.name, feedApi.regions);
         return Object.assign({}, feedApi, regionStateCountryData);
     }
-    
+
     computeRegionStateCountryData(projectName: string, feedRegions: any[]): any {
         let region = "", state = "", country = "";
         if (feedRegions && feedRegions[0]) {
@@ -250,7 +248,7 @@ export class FeedsApiService extends AbstractApiService {
             country: country
         };
     }
-    
+
     getSecureFeeds(projectId: string): Observable<IFeedApi[]> {
         return this.authHttp.get(this.FEED_SECURE_URL + "?projectId=" + projectId)
             .map(response => response.json());

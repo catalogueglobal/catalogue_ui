@@ -46,8 +46,8 @@
 	</td>
 	-->
                 <td>
-                    <a (click)="displayLicense(feed)" tooltip="{{'datasets.table.tooltips.downloadLicense' | translate}}">
-                        <span *ngIf="feedsLicenses[feed.id]">
+                    <a *ngIf="feedsLicenses[feed.id]" download="{{feedsLicenses[feed.id].name}}" href="{{feedsLicenses[feed.id].licenseUrl}}" tooltip="{{'datasets.table.tooltips.downloadLicense' | translate}}">
+                        <span>
                             {{feedsLicenses[feed.id].name}}
                         </span>
                     </a>
@@ -106,23 +106,3 @@
     </div>
 </div>
 <!--/.dataset-table-->
-
-<!-- modal popup -->
-<app-modal>
-    <div class="app-modal-header">
-        <label *ngIf="currentFeed && feedsLicenses[currentFeed.id]">{{'popup.upload.downloadLicense' | translate}}:
-            <span class="license-name">{{feedsLicenses[currentFeed.id].name}}</span>
-        </label>
-    </div>
-
-    <div class="app-modal-body">
-        <div *ngIf="currentFeed && feedsLicenses[currentFeed.id]">
-            <p class="license-text">{{feedsLicenses[currentFeed.id].text}}</p>
-        </div>
-
-    </div>
-    <div class="app-modal-footer">
-        <a *ngIf="currentFeed && feedsLicenses[currentFeed.id]" download="{{feedsLicenses[currentFeed.id].name}}" id="downloadLicenselink" class="btn btn-validate" (click)="onSubmitLicense()">
-            {{'datasets.table.btn.download'|translate}}</a>
-    </div>
-</app-modal>
