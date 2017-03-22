@@ -52,6 +52,8 @@ import { DatasetsActions }                                          from "./stat
 import { DatasetsEffects }                                          from "./state/datasets/datasets.effects";
 import { appReducer }                                               from "./state/index.reducer";
 import { TooltipModule } from 'ng2-bootstrap';
+import { MiscDataModal } from './commons/directives/modal/miscdata-modal.component';
+import { LicenseModal } from './commons/directives/modal/license-modal.component';
 
 export function httpFactory(http: Http) {
     return new TranslateStaticLoader(http, '/assets/i18n', '.json');
@@ -106,7 +108,9 @@ export function composeProvider(state: any, action: any) {
         SubscribeFormComponent,
         PaginatePipe,
         DeleteFeedConfirmationComponent,
-        ModalComponent
+        ModalComponent,
+        LicenseModal,
+        MiscDataModal,
     ],
 
     imports: [

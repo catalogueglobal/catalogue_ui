@@ -230,9 +230,45 @@ export class DatasetsEffects {
     @Effect() FEED_CREATE_LICENSE$: Observable<Action> = this.actions$.ofType(DatasetsActionType.FEED_CREATE_LICENSE).map(action => action.payload).switchMap(
         payload => {
             const feedRef = payload.feedRef;
-            return this.createLicenseAndSetFile(feedRef, payload.licenseName, payload.licenseFile)
+            return this.createLicenseOrMiscDataAndSetFile(feedRef, payload.licenseName, payload.licenseFile, true)
                 .map(license => this.action.feedCreateLicenseSuccess(license)).catch(
                 e => Observable.of(this.action.feedCreateLicenseFail(feedRef, e)))
+        }
+    ).share();
+
+    @Effect() FEED_CHANGE_MISCDATA$: Observable<Action> = this.actions$.ofType(DatasetsActionType.FEED_CHANGE_MISCDATA).map(action => action.payload).switchMap(
+        payload => {
+            const feedRef = payload.feedRef;
+            const licenseId = payload.licenseId;
+
+            return this.feedsApi.setMiscData([feedRef.feedsourceId], licenseId)
+                .map(license => this.action.feedSetMiscDataSuccess(license))
+                .catch(e => {
+                    return Observable.of(this.action.feedSetMiscDataFail(feedRef, e))
+                })
+        }
+    ).share();
+
+    @Effect() FEED_UNSET_MISCDATA$: Observable<Action> = this.actions$.ofType(DatasetsActionType.FEED_UNSET_MISCDATA).map(action => action.payload).switchMap(
+        payload => {
+            const feedRef = payload.feedRef;
+            const licenseId = payload.licenseId;
+            console.log(feedRef.feedsourceId, licenseId);
+
+            return this.feedsApi.unsetMiscData([feedRef.feedsourceId], licenseId)
+                .map(license => this.action.feedSetMiscDataSuccess(license))
+                .catch(e => {
+                    return Observable.of(this.action.feedSetMiscDataFail(feedRef, e))
+                })
+        }
+    ).share();
+
+    @Effect() FEED_CREATE_MISCDATA$: Observable<Action> = this.actions$.ofType(DatasetsActionType.FEED_CREATE_MISCDATA).map(action => action.payload).switchMap(
+        payload => {
+            const feedRef = payload.feedRef;
+            return this.createLicenseOrMiscDataAndSetFile(feedRef, payload.licenseName, payload.licenseFile, false)
+                .map(license => this.action.feedCreateMiscDataSuccess(license)).catch(
+                e => Observable.of(this.action.feedCreateMiscDataFail(feedRef, e)))
         }
     ).share();
 
@@ -264,27 +300,44 @@ export class DatasetsEffects {
       }
     */
 
-    private createLicenseAndSetFile(feed: any, licenseName, licenseFile) {
-        let that = this;
+    private createLicenseOrMiscDataAndSetFile(feed: any, licenseName, licenseFile, license) {
         let myobservable = Observable.create((observer: any) => {
             if (!licenseName || !licenseFile) {
                 observer.error(new Error('license name or file empty'));
             } else {
-                let setFile$ = this.feedsApi.createLicense(licenseName, licenseFile, [feed.feedsourceId]);
-                setFile$.subscribe(
-                    progress => {
-                        console.log('setFile progress', progress)
-                    },
-                    err => {
-                        console.log('setFile error', err);
-                        observer.error(err);
-                    },
-                    () => {
-                        console.log('setFile complete')
-                        observer.next(feed);
-                        observer.complete();
-                    });
+                let listener;
+                let type;
+                if (license) {
+                    listener = this.feedsApi.createLicense(licenseName, licenseFile, [feed.feedsourceId]);
+                    type = 'createLicense';
+                } else {
+                    listener = this.feedsApi.createMiscData(licenseName, licenseFile, [feed.feedsourceId]);
+                    type = 'createMiscData';
+                }
+                return this.createObservable(listener, type, null, feed);
             }
+        });
+        return myobservable;
+    }
+
+    private createObservable(listener, type, onProgress, nextValue) {
+        let myobservable = Observable.create((observer: any) => {
+            listener.subscribe(
+                progress => {
+                    console.log(type + ' progress', progress)
+                    if (onProgress) {
+                        onProgress(type + ' uploading... ' + progress + '%');
+                    }
+                },
+                err => {
+                    console.log(type + ' error', err);
+                    observer.error(err);
+                },
+                () => {
+                    console.log(type + ' complete');
+                    observer.next(nextValue);
+                    observer.complete();
+                });
         });
         return myobservable;
     }
@@ -293,6 +346,7 @@ export class DatasetsEffects {
     private createProjectAndFeedAndSetFile(createFeed: ICreateFeed, onProgress) {
         return Observable.create(obs$ => {
             onProgress("creating project")
+            console.log('createFeed', createFeed);
             this.projectsApi.create(createFeed.projectName).subscribe(
                 project => {
                     console.log("created project:", project);
@@ -301,39 +355,27 @@ export class DatasetsEffects {
                         feed => {
                             console.log("created feed:", feed);
                             onProgress("uploading...")
+                            var allObs = [];
+
                             let setFile$ = this.feedsApi.setFile(feed.id, createFeed.file);
-                            setFile$.subscribe(
-                                progress => {
-                                    console.log('setFile progress', progress)
-                                    onProgress("uploading... " + progress + "%")
-                                },
-                                err => {
-                                    console.log('setFile error', err);
-                                    obs$.error(err);
-                                },
+                            allObs.push(setFile$, 'setFile', onProgress);
+
+                            if (createFeed.licenseFile) {
+                                let createLicense = this.feedsApi.createLicense(createFeed.licenseName, createFeed.licenseFile, [feed.id]);
+                                allObs.push(this.createObservable(createLicense, 'createLicense', onProgress, feed));
+                            } else if (createFeed.licenseId) {
+                                allObs.push(this.createObservable(this.feedsApi.setLicense([feed.id], createFeed.licenseId), 'setLicense', onProgress, feed));
+                            }
+                            if (createFeed.metadataFile) {
+                                let createMetadata = this.feedsApi.createMiscData(createFeed.metadataFile.name, createFeed.metadataFile, [feed.id]);
+                                allObs.push(this.createObservable(createMetadata, 'createMetadata', onProgress, feed));
+                            }
+                            return (Observable.forkJoin(allObs).subscribe(
                                 () => {
-                                    console.log('setFile complete')
-                                    if (createFeed.licenseFile) {
-                                        let createLicense = this.feedsApi.createLicense(createFeed.licenseName, createFeed.file, [feed.id]);
-                                        createLicense.subscribe(
-                                            progress => {
-                                                console.log('createLicense progress', progress)
-                                            },
-                                            err => {
-                                                console.log('createLicense error', err);
-                                                obs$.error(err);
-                                            },
-                                            () => {
-                                                console.log('createLicense complete')
-                                                obs$.next(feed);
-                                                obs$.complete();
-                                            });
-                                    } else if (createFeed.licenseId)
-                                        this.feedsApi.setLicense([feed.id], createFeed.licenseId);
-                                    if (createFeed.metadataFile)
-                                        console.log("ZZZZZZZZZZ licenseId", createFeed.metadataFile);
-                                });
-                            return setFile$;
+                                    obs$.next(feed);
+                                    obs$.complete;
+                                }
+                            ));
                         },
                         err => {
                             console.log('feed creation error', err);

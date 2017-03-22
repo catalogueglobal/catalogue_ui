@@ -9,6 +9,7 @@ export class SharedService {
     };
 
     licenses = [];
+    miscDatas = [];
 
     constructor() {
     }
@@ -29,5 +30,13 @@ export class SharedService {
 
     setLicenses(data){
       this.licenses = data;
+    }
+
+    getMiscDatas(){
+      return this.miscDatas;
+    }
+
+    setMiscDatas(data){
+      this.miscDatas = data;
     }
 }

@@ -54,8 +54,7 @@
             "feedName": "Feed name",
             "isPublic": "Public dataset",
             "submit": "Proceed to upload",
-            "changeLicense": "Change license",
-            "downloadLicense": "Download license"
+            "changeLicense": "Change license"
         },
         "delete": {
             "confirm": {
@@ -84,7 +83,13 @@
                 "reset": "reset your search"
             },
             "tooltips": {
-                "downloadLicense": "Click here to download the license"
+                "download": "Click here to download the item"
+            },
+            "miscData": {
+                "title": "change misc data",
+                "noMiscData": "none",
+                "select": "Choose a misc",
+                "new": "upload you file"
             }
         }
     },
@@ -113,6 +118,7 @@
             "feedName": "Feed name",
             "area": "Area",
             "license": "License",
+            "miscData": "Misc",
             "subscribe": "Subscibe / Unsubscribe"
         }
     },

@@ -1,5 +1,5 @@
 import { Injectable }                   from "@angular/core";
-import { Http }                         from "@angular/http";
+import { Http, Headers }                         from "@angular/http";
 import { AuthHttp, AuthConfig }         from "angular2-jwt";
 import { Observable }                   from "rxjs/Rx";
 import { Configuration }                from "../../configuration";
@@ -70,6 +70,7 @@ export class FeedsApiService extends AbstractApiService {
     private FEED_DOWNLOAD_URL: string;
     private FEED_NOTES: string;
     public FEED_LICENSE: string;
+    public FEED_MISC_DATA: string;
 
     constructor(
         protected http: Http,
@@ -88,6 +89,7 @@ export class FeedsApiService extends AbstractApiService {
         this.FEED_DOWNLOAD_URL = this.config.ROOT_API + "/api/manager/downloadfeed";
         this.FEED_NOTES = this.config.ROOT_API + "/api/manager/secure/note?type=FEED_SOURCE&objectId="
         this.FEED_LICENSE = this.config.LICENSE_API + "/api/metadata/" + this.config.LICENSE_API_VERSION + "/secure/license";
+        this.FEED_MISC_DATA = this.config.LICENSE_API + "/api/metadata/" + this.config.LICENSE_API_VERSION + "/secure/miscdata";
     }
 
     public create(name: string, projectId: string, isPublic: boolean): Observable<IFeedApi> {
@@ -153,8 +155,11 @@ export class FeedsApiService extends AbstractApiService {
     }
 
     public getLicenses() : Promise<any> {
-        console.log('feed api', this.FEED_LICENSE);
         return this.http.get(this.FEED_LICENSE).map(response => response.json()).toPromise();
+    }
+
+    public getMiscDatas() : Promise<any> {
+        return this.http.get(this.FEED_MISC_DATA).map(response => response.json()).toPromise();
     }
 
     public createLicense(name: string, file: File, feedIds: string[]) : Observable<ILicense> {
@@ -163,11 +168,23 @@ export class FeedsApiService extends AbstractApiService {
         return this.uploadService.upload(this.FEED_LICENSE + '?name=' + name + '&feeds=' + feedIds, formData, this.computeAuthHeaders());
     }
 
+    public createMiscData(name: string, file: File, feedIds: string[]) : Observable<ILicense> {
+        let formData: FormData = new FormData();
+        formData.append('file', file, file.name);
+        return this.uploadService.upload(this.FEED_MISC_DATA + '?name=' + name + '&feeds=' + feedIds, formData, this.computeAuthHeaders());
+    }
+
+    private getMultipartHeader(){
+      let myHeader = new Headers();
+      myHeader.append('Content-Type', 'multipart/form-data');
+      return myHeader;
+    }
+
     public setLicense(feedIds: string[], licenseId: string): Observable<ILicense>{
         let data = JSON.stringify({
             feedIds: feedIds
         });
-        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId , data).map(response => response.json());
+        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId , data, { headers: this.getMultipartHeader() }).map(response => response.json());
     }
 
     public unsetLicense(feedIds: string[], licenseId: string): Observable<ILicense>{
@@ -175,8 +192,24 @@ export class FeedsApiService extends AbstractApiService {
             action: "remove",
             feedIds: feedIds
         });
-        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId , data).map(response => response.json());
+        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId , data, { headers: this.getMultipartHeader() }).map(response => response.json());
     }
+
+    public setMiscData(feedIds: string[], licenseId: string): Observable<ILicense>{
+        let data = JSON.stringify({
+            feedIds: feedIds
+        });
+        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId , data, { headers: this.getMultipartHeader() }).map(response => response.json());
+    }
+
+    public unsetMiscData(feedIds: string[], licenseId: string): Observable<ILicense>{
+        let data = JSON.stringify({
+            action: "remove",
+            feedIds: feedIds
+        });
+        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId , data, { headers: this.getMultipartHeader() }).map(response => response.json());
+    }
+
 
     public getList(params: FeedsGetParams): Observable<FeedsGetResponse> {
         let projects;

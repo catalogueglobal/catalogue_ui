@@ -21,6 +21,9 @@
                 <th>
                     {{'datasets-table.column.license'|translate}}
                 </th>
+                <th>
+                    {{'datasets-table.column.miscData'|translate}}
+                </th>
                 <!--
 	<th>
 	  License Details<a href="#" class="question-circle"></a>
@@ -46,9 +49,17 @@
 	</td>
 	-->
                 <td>
-                    <a *ngIf="feedsLicenses[feed.id]" download="{{feedsLicenses[feed.id].name}}" href="{{feedsLicenses[feed.id].licenseUrl}}" tooltip="{{'datasets.table.tooltips.downloadLicense' | translate}}">
+                    <a *ngIf="feedsLicenses[feed.id]" download="{{feedsLicenses[feed.id].name}}" href="{{feedsLicenses[feed.id].licenseUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
                         <span>
                             {{feedsLicenses[feed.id].name}}
+                        </span>
+                    </a>
+                </td>
+
+                <td>
+                    <a *ngIf="feedsMiscDatas[feed.id]" download="{{feedsMiscDatas[feed.id].name}}" href="{{feedsMiscDatas[feed.id].miscDataUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
+                        <span>
+                            {{feedsMiscDatas[feed.id].name}}
                         </span>
                     </a>
                 </td>

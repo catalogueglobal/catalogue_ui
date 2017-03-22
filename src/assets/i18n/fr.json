@@ -55,8 +55,7 @@
             "isPublic": "Jeu de données public (Cocher pour rendre ces données disponibles au téléchargement)",
             "submit": "Importer",
             "noLicense": "Sans license",
-            "changeLicense": "Changer de license",
-            "downloadLicense": "Télécharger la license"
+            "changeLicense": "Changer de license"
         },
         "delete": {
             "confirm": {
@@ -84,7 +83,13 @@
                 "reset": "réinitialiser votre recherche"
             },
             "tooltips": {
-                "downloadLicense": "Cliquez ici pour télécharger la license"
+                "download": "Cliquez ici pour télécharger le contenu"
+            },
+            "miscData": {
+                "title": "changer les méta données",
+                "noMiscData": "aucune méta donnée",
+                "select": "Choisir une méta donnée",
+                "new": "Télécharger votre propre fichier"
             }
         }
     },
@@ -113,6 +118,7 @@
             "feedName": "Nom du lot",
             "area": "Zone",
             "license": "Licence",
+            "miscData": "Méta données",
             "subscribe": "S'abonner / Se désabonner"
         }
     },
