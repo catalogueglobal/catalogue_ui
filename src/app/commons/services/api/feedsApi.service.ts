@@ -181,35 +181,24 @@ export class FeedsApiService extends AbstractApiService {
     }
 
     public setLicense(feedIds: string[], licenseId: string): Observable<ILicense>{
-        let data = JSON.stringify({
-            feedIds: feedIds
-        });
-        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId , data, { headers: this.getMultipartHeader() }).map(response => response.json());
+        let params = '?feeds=' + feedIds.toString();
+        return this.authHttp.put(this.FEED_LICENSE + '/' + licenseId + params , null, { headers: this.getMultipartHeader() }).map(response => response.json());
     }
 
     public unsetLicense(feedIds: string[], licenseId: string): Observable<ILicense>{
-        let data = JSON.stringify({
-            action: "remove",
-            feedIds: feedIds
-        });
-        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId , data, { headers: this.getMultipartHeader() }).map(response => response.json());
+        let params = '?feeds=' + feedIds.toString() + '&action=remove';
+        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId + params, null, { headers: this.getMultipartHeader() }).map(response => response.json());
     }
 
     public setMiscData(feedIds: string[], licenseId: string): Observable<ILicense>{
-        let data = JSON.stringify({
-            feedIds: feedIds
-        });
-        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId , data, { headers: this.getMultipartHeader() }).map(response => response.json());
+        let params = '?feeds=' + feedIds.toString();
+        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId + params , null, { headers: this.getMultipartHeader() }).map(response => response.json());
     }
 
     public unsetMiscData(feedIds: string[], licenseId: string): Observable<ILicense>{
-        let data = JSON.stringify({
-            action: "remove",
-            feedIds: feedIds
-        });
-        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId , data, { headers: this.getMultipartHeader() }).map(response => response.json());
+        let params = '?feeds=' + feedIds.toString() + '&action=remove';
+        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId + params, null, { headers: this.getMultipartHeader() }).map(response => response.json());
     }
-
 
     public getList(params: FeedsGetParams): Observable<FeedsGetResponse> {
         let projects;
