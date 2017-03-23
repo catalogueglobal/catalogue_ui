@@ -266,7 +266,7 @@ export class DatasetsEffects {
     @Effect() FEED_CREATE_MISCDATA$: Observable<Action> = this.actions$.ofType(DatasetsActionType.FEED_CREATE_MISCDATA).map(action => action.payload).switchMap(
         payload => {
             const feedRef = payload.feedRef;
-            return this.createLicenseOrMiscDataAndSetFile(feedRef, payload.licenseName, payload.licenseFile, false)
+            return this.createLicenseOrMiscDataAndSetFile(feedRef, payload.licenseFile ? payload.licenseFile.name : null, payload.licenseFile, false)
                 .map(license => this.action.feedCreateMiscDataSuccess(license)).catch(
                 e => Observable.of(this.action.feedCreateMiscDataFail(feedRef, e)))
         }
@@ -301,22 +301,23 @@ export class DatasetsEffects {
     */
 
     private createLicenseOrMiscDataAndSetFile(feed: any, licenseName, licenseFile, license) {
-        let myobservable = Observable.create((observer: any) => {
-            if (!licenseName || !licenseFile) {
+        let myobservable;
+        if (!licenseName || !licenseFile) {
+            myobservable = Observable.create((observer: any) => {
                 observer.error(new Error('license name or file empty'));
+            });
+        } else {
+            let listener;
+            let type;
+            if (license) {
+                listener = this.feedsApi.createLicense(licenseName, licenseFile, [feed.feedsourceId]);
+                type = 'createLicense';
             } else {
-                let listener;
-                let type;
-                if (license) {
-                    listener = this.feedsApi.createLicense(licenseName, licenseFile, [feed.feedsourceId]);
-                    type = 'createLicense';
-                } else {
-                    listener = this.feedsApi.createMiscData(licenseName, licenseFile, [feed.feedsourceId]);
-                    type = 'createMiscData';
-                }
-                return this.createObservable(listener, type, null, feed);
+                listener = this.feedsApi.createMiscData(licenseName, licenseFile, [feed.feedsourceId]);
+                type = 'createMiscData';
             }
-        });
+            myobservable = this.createObservable(listener, type, null, feed);
+        }
         return myobservable;
     }
 

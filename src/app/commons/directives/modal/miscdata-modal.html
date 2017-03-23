@@ -36,12 +36,6 @@
 				<label>{{'popup.upload.file'|translate}}</label> <input type="file"
 					(change)="utils.setFileModelOnChange(newLicenseOrMiscData.itemFile, 'file', $event)">
 			</div>
-			<div>
-				<label for="miscDataName">{{'popup.upload.feedName'|translate}}</label>
-				<input id="miscDataName"
-					type="text" [(ngModel)]="newLicenseOrMiscData.name">
-
-			</div>
 			<div *ngIf="newLicenseOrMiscData.error" class="alert alert-danger">
 				{{('mydatasets-table.' + newLicenseOrMiscData.error) | translate}}</div>
 		</div>
