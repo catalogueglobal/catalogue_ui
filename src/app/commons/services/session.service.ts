@@ -1,8 +1,9 @@
 import { Injectable }      from "@angular/core";
 import { tokenNotExpired } from "angular2-jwt/angular2-jwt";
 import { LocalStorage }    from "ng2-webstorage";
-import { Observable }      from "rxjs/Rx";
 import { Configuration }   from "../configuration";
+import {UsersApiService} from './api/usersApi.service';
+import { Observable }      from "rxjs/Rx";
 
 export type Session = {
     user: any,
@@ -16,17 +17,22 @@ declare var Auth0Lock: any;
 
 @Injectable()
 export class SessionService {
-    @LocalStorage() session: Session;
+    public userId: string;
+    public tokenId: string;
+
     private lock: any;
+    userProfile: any;
+    tokenName = 'id_token';
+    userIdTokenName = 'Catalogue.userId';
 
     constructor(private config: Configuration) {
-        var options = {
+        let options = {
             theme: {
-                logo: '../../../images/logo-horizontal-blanc.png',
-                primaryColor: 'blue',
+                logo: '/src/images/logo-horizontal-blanc.png',
+                primaryColor: '#dea627',
                 authButtons: {
                     connectionName: {
-                        primaryColor: 'green'
+                        primaryColor: '#dea627'
                     }
                 }
             },
@@ -34,62 +40,56 @@ export class SessionService {
                 title: "Catalogue"
             }
         };
+
         this.lock = new Auth0Lock(this.config.AUTH_ID, this.config.AUTH_DOMAIN, options);
+        if (this.loggedIn) {
+            this.setProfile();
+        }
+
+        this.lock.on('authenticated', (authResult) => {
+            localStorage.setItem(this.tokenName, authResult.idToken);
+            this.setProfile();
+        });
+    }
+
+    public get loggedIn(): boolean {
+        return tokenNotExpired(null, localStorage.getItem(this.tokenName));
+    }
+
+    public login() {
+        this.lock.show();
+        return false;
     }
 
     // configured as HttpAuth tokenGetter
     public _tokenGetter() {
-        if (!this.session) {
-            console.log("_tokenGetter: null");
+        if (!this.loggedIn) {
             return null;
         }
-        return this.session.token;
+        return localStorage.getItem(this.tokenName);
     }
 
-    public get loggedIn(): boolean {
-        this.checkTokenNotExpired();
-        return this.session ? true : false;
-    }
-
-    public login() {
-        let that = this;
-        this.showLogin().subscribe(
-            session => {
-                that.session = session;
-                console.log("login success", that.session);
-            },
-            (err) => {
-                console.log('login error', err);
-            }
-        );
-        return false;
-    }
-
-    private checkTokenNotExpired() {
-        if (this.session && !tokenNotExpired(null, this.session.token)) {
-            console.log('token expired => logout');
-            this.logout();
-        }
-    }
-
-    private showLogin(): Observable<Session> {
-        return Observable.create(observer => {
-            // Show the Auth0 Lock widget
-            this.lock.show({}, (err, profile, token) => {
-                if (err) {
-                    observer.error(err);
+    public setProfile() {
+        if (!this.loggedIn) {
+            this.userProfile = null;
+        } else {
+            this.lock.getProfile(localStorage.getItem(this.tokenName), (error, profile) => {
+                if (error) {
+                    this.userProfile = null;
                     return;
                 }
-                let session = {
-                    user: profile,
-                    token: token
-                };
-                observer.next(session);
+                localStorage.setItem(this.userIdTokenName, profile.user_id);
+                this.userId = localStorage.getItem(this.userIdTokenName);
+                this.tokenId = localStorage.getItem(this.tokenName);
+                this.userProfile = profile;
             });
-        })
+        }
+
     }
 
     public logout(): void {
-        this.session = null;
+        this.userProfile = null;
+        localStorage.removeItem(this.tokenName);
+        localStorage.removeItem(this.userIdTokenName);
     }
 }

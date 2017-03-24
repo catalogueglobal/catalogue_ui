@@ -8,10 +8,11 @@ import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense, IFeed } from "../../c
 import { UsersApiService } from "../../commons/services/api/usersApi.service";
 import { SessionService } from "../../commons/services/session.service";
 import { UtilsService } from "../../commons/services/utils.service";
-import { DatasetsActions } from "../../state/datasets/datasets.actions";
+import { DatasetsActions, DatasetsActionType } from "../../state/datasets/datasets.actions";
 import { DatasetsState } from "../../state/datasets/datasets.reducer";
 import { IFeedRow } from "../datasets/datasets.component";
 import { SharedService } from "../../commons/services/shared.service";
+
 @Component({
     selector: 'app-datasets-table',
     templateUrl: 'datasets-table.component.html',
@@ -48,6 +49,7 @@ export class DatasetsTableComponent {
         actions$: Actions,
         protected datasetsAction: DatasetsActions,
         protected shared: SharedService) {
+          this.subscribeActions(actions$);
     }
 
     // overriden by childs
@@ -139,7 +141,7 @@ export class DatasetsTableComponent {
     }
 
     public actionOnFeed(feed_id) {
-        var response = this.usersApiService.getUser(this.sessionService.session.user.user_id);
+        var response = this.usersApiService.getUser(this.sessionService.userId);
         let that = this;
         response.then(function(data) {
             let isSubscribe = that.isSubscribe(data, feed_id);
@@ -160,6 +162,22 @@ export class DatasetsTableComponent {
         }
     }
 
+    protected subscribeActions(actions$) {
+          // close inline edit form on setName() success
+          actions$.ofType(DatasetsActionType.USER_SUBSCRIBE).subscribe(
+              () => {
+                  console.log('USER_SUBSCRIBE setting profile');
+                  this.sessionService.setProfile();
+              }
+          );
+          actions$.ofType(DatasetsActionType.UNSUBSCRIBE_FEED).subscribe(
+              () => {
+                  console.log('UNSUBSCRIBE_FEED setting profile');
+                  this.sessionService.setProfile();
+              }
+          );
+        }
+
     // Return true or false if the user is subscribe
     // or not to the feed
     public isSubscribe(userInfos, feed_id) {
@@ -178,7 +196,8 @@ export class DatasetsTableComponent {
     }
 
     public checkSubscribed(feed_id) {
-        var index = this.sessionService.session.user.app_metadata ? this.sessionService.session.user.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id) : -1;
+        var index = this.sessionService.userProfile && (this.sessionService.userProfile.app_metadata ?
+          this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id) : -1);
         if (index == -1) {
             return false
         }

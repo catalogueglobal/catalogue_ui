@@ -9,7 +9,7 @@ import { DatasetsState }                       from "../../state/datasets/datase
 
 @Component({
     selector:    'app-feeds',
-    templateUrl: 'feeds.component.html',    
+    templateUrl: 'feeds.component.html',
 })
 export class FeedsComponent {
     public note: string;
@@ -41,16 +41,16 @@ export class FeedsComponent {
         }
         actions$.ofType(DatasetsActionType.FEEDS_ADD_NOTES_SUCCESS).subscribe(action => this.resetForm());
     }
-    
+
     addNotesToFeed(){
         // add note to feed if not empty
-        if (this.note != null){
-            let data = {body: this.note, date: Date.now(), userEmail: this.sessionService.session.user.email}
+        if (this.note != null && this.sessionService.userProfile){
+            let data = {body: this.note, date: Date.now(), userEmail: this.sessionService.userProfile.email}
             this.store.dispatch(this.datasetsAction.feedAddNotes(this.feedId, data));
             this.notesFeed.unshift(data);
         }
     }
-    
+
     resetForm(){
         this.note = "";
     }

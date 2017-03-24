@@ -91,7 +91,7 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         this.newLicenseOrMiscData.error = error.message;
     }
 
-    subscribeActions(actions$) {
+    protected subscribeActions(actions$) {
         // close inline edit form on setName() success
         actions$.ofType(DatasetsActionType.FEED_SET_NAME_SUCCESS).subscribe(
             action => {
