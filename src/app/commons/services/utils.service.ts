@@ -19,7 +19,7 @@ export class UtilsService {
         // return averaged location
         return leaflet.latLng((latNorth + latSouth) / 2, (lngWest + lngEast) / 2);
     }
-    
+
     public computeBoundsToLatLng(bounds: IBounds): leaflet.LatLng[] {
         if (!bounds)
             return null
@@ -34,7 +34,7 @@ export class UtilsService {
             leaflet.latLng(latSouth, lngWest)
         ];
     }
-    
+
     public computeLatLngToBounds(latLng: leaflet.LatLng[]): IBounds {
         if (!latLng)
             return null
@@ -47,7 +47,7 @@ export class UtilsService {
             west: southWest.lng
         }
     }
-    
+
     public setFileModelOnChange(model, property, event) {
         try {
             model[property] = event.target.files[0];
@@ -56,11 +56,11 @@ export class UtilsService {
             model[property] = null;
         }
     }
-    
+
     public toggleOrder(value) {
         return (value == 'asc' ? 'desc' : 'asc');
     }
-    
+
     public regionStateCountry(feed) {
         let parts = [];
         if (feed.region && feed.region.trim().length) {
@@ -74,11 +74,18 @@ export class UtilsService {
         }
         return parts.join(', ');
     }
-    
-    public addFeedIdToJson(userInfos, feed_id){
+
+    public addFeedIdToJson(userInfos, feed_id) {
         console.log("add feed_id to json");
-        if (userInfos.app_metadata.datatools[0].subscriptions == null){
-            let b = {"type": "feed-updated", target: []};
+        if (!userInfos.app_metadata) {
+            userInfos.app_metadata = {
+                datatools: [{
+                    subscriptions: null
+                }]
+            }
+        }
+        if (userInfos.app_metadata.datatools[0].subscriptions == null) {
+            let b = { "type": "feed-updated", target: [] };
             userInfos.app_metadata.datatools[0].subscriptions = [];
             userInfos.app_metadata.datatools[0].subscriptions.push(b);
             userInfos.app_metadata.datatools[0].subscriptions[0].target.push(feed_id);

@@ -2,8 +2,6 @@ import { Injectable }      from "@angular/core";
 import { tokenNotExpired } from "angular2-jwt/angular2-jwt";
 import { LocalStorage }    from "ng2-webstorage";
 import { Configuration }   from "../configuration";
-import {UsersApiService} from './api/usersApi.service';
-import { Observable }      from "rxjs/Rx";
 
 export type Session = {
     user: any,
@@ -84,7 +82,6 @@ export class SessionService {
                 this.userProfile = profile;
             });
         }
-
     }
 
     public logout(): void {
