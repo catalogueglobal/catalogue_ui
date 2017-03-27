@@ -121,13 +121,13 @@ export class FeedsApiService extends AbstractApiService {
         return this.authHttp.delete(this.FEED_SECURE_URL + "/" + feedSourceId);
     }
 
-    public getDownloadUrl(feed: IFeedApi): Observable<string> {
-        if (feed.url) {
+    public getDownloadUrl(feed: IFeedApi, versionId: string): Observable<string> {
+        if (feed.url && !versionId) {
             // direct download from the source
             return Observable.of(feed.url);
         }
         // download with a token
-        return this.http.get(this.FEED_PUBLIC_VERSION_URL + '/' + feed.latestVersionId + '/downloadtoken')
+        return this.http.get(this.FEED_PUBLIC_VERSION_URL + '/' + versionId ? versionId : feed.latestVersionId + '/downloadtoken')
             .map(response => response.json())
             .map(result => this.FEED_DOWNLOAD_URL + '/' + result.id)
     }
@@ -274,5 +274,13 @@ export class FeedsApiService extends AbstractApiService {
     getSecureFeeds(projectId: string): Observable<IFeedApi[]> {
         return this.authHttp.get(this.FEED_SECURE_URL + "?projectId=" + projectId)
             .map(response => response.json());
+    }
+
+    public getFeedVersions(feedSourceId: string, isPublic: boolean) : Promise<any> {
+        if (isPublic){
+          return this.http.get(this.FEED_PUBLIC_VERSION_URL + '?feedSourceId=' + feedSourceId).map(response => response.json()).toPromise();
+        }else{
+            return this.authHttp.get(this.FEED_SECURE_VERSION_URL + '?feedSourceId=' + feedSourceId, ).map(response => response.json()).toPromise();
+        }
     }
 }

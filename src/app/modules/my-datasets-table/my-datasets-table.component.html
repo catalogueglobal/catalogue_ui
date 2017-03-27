@@ -1,4 +1,4 @@
-<div class="dataset-table" *ngIf="feeds && feeds.length>0">
+<div class="dataset-table datasets-table-component" *ngIf="feeds && feeds.length>0">
 	<table id="datatable" class="display responsive nowrap" cellspacing="0"
 		width="100%">
 		<thead>
@@ -73,7 +73,16 @@
 				<!-- <td class="area">
              <div>{{regionStateCountry(feed)}}</div>
 	</td> -->
-				<td class="lastUpdated">{{feed.lastUpdated|date:'y-MM-dd'}}</td>
+				<td class="lastUpdated">
+					<div *ngIf="feed.feedVersionCount <= 1">
+						{{feed.lastUpdated|date:'y-MM-dd'}}
+					</div>
+					<div *ngIf="feed.feedVersionCount > 1" class="form-group">
+							<select class="form-control"[ngModel]="feed.selectedVersion">
+								<option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
+							</select>
+					</div>
+				</td>
 				<td>
 					<a (click)="displayLicense(feed)">
 						<span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsLicenses[feed.id]" class="btn btn-success">

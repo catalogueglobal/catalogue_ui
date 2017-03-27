@@ -161,6 +161,7 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
 
     displayLicense(feed: IFeed) {
         this.currentFeed = feed;
+        console.log('feed', feed);
         for (let i = 0; i < this.licenses.length; i++) {
             if (this.feedsLicenses[this.currentFeed.id] && this.licenses[i].id === this.feedsLicenses[this.currentFeed.id].id) {
                 this.newLicenseOrMiscData.item = this.licenses[i];
@@ -172,7 +173,6 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         if (!this.newLicenseOrMiscData.item){
             this.newLicenseOrMiscData.item = this.licenses.length > 0 ? this.licenses[0] : null;
         }
-        console.log(this.newLicenseOrMiscData);
         this.licenseModal.show();
     }
 

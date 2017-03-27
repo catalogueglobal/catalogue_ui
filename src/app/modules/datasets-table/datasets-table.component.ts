@@ -49,7 +49,7 @@ export class DatasetsTableComponent {
         actions$: Actions,
         protected datasetsAction: DatasetsActions,
         protected shared: SharedService) {
-          this.subscribeActions(actions$);
+        this.subscribeActions(actions$);
     }
 
     // overriden by childs
@@ -68,9 +68,24 @@ export class DatasetsTableComponent {
         return this._feeds;
     }
 
+    getFeedsVersion(values: any) {
+        for (var i = 0; values && i < values.length; i++) {
+            let feed = values[i];
+            if (feed.feedVersionCount > 1) {
+                console.log(feed.id, feed.isPublic);
+                this.feedsApiService.getFeedVersions(feed.id, feed.isPublic).then(versions => {
+                    feed.allVersions = versions;
+                    feed.selectedVersion = versions[0];
+                });
+            }
+        }
+        console.log('new feeds', values);
+    }
+
     getLicenses(value: any) {
         let that = this;
         this.getMiscDatas(value);
+        this.getFeedsVersion(value);
         this.feedsApiService.getLicenses().then(licenses => {
             that.licenses = licenses;
             this.shared.setLicenses(licenses);
@@ -163,20 +178,20 @@ export class DatasetsTableComponent {
     }
 
     protected subscribeActions(actions$) {
-          // close inline edit form on setName() success
-          actions$.ofType(DatasetsActionType.USER_SUBSCRIBE).subscribe(
-              () => {
-                  console.log('USER_SUBSCRIBE setting profile');
-                  this.sessionService.setProfile();
-              }
-          );
-          actions$.ofType(DatasetsActionType.UNSUBSCRIBE_FEED).subscribe(
-              () => {
-                  console.log('UNSUBSCRIBE_FEED setting profile');
-                  this.sessionService.setProfile();
-              }
-          );
-        }
+        // close inline edit form on setName() success
+        actions$.ofType(DatasetsActionType.USER_SUBSCRIBE).subscribe(
+            () => {
+                console.log('USER_SUBSCRIBE setting profile');
+                this.sessionService.setProfile();
+            }
+        );
+        actions$.ofType(DatasetsActionType.UNSUBSCRIBE_FEED).subscribe(
+            () => {
+                console.log('UNSUBSCRIBE_FEED setting profile');
+                this.sessionService.setProfile();
+            }
+        );
+    }
 
     // Return true or false if the user is subscribe
     // or not to the feed
@@ -197,7 +212,7 @@ export class DatasetsTableComponent {
 
     public checkSubscribed(feed_id) {
         var index = this.sessionService.userProfile && (this.sessionService.userProfile.app_metadata ?
-          this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id) : -1);
+            this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id) : -1);
         if (index == -1) {
             return false
         }
