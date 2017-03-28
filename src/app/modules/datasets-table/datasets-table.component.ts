@@ -72,14 +72,18 @@ export class DatasetsTableComponent {
         for (var i = 0; values && i < values.length; i++) {
             let feed = values[i];
             if (feed.feedVersionCount > 1) {
-                console.log(feed.id, feed.isPublic);
                 this.feedsApiService.getFeedVersions(feed.id, feed.isPublic).then(versions => {
                     feed.allVersions = versions;
-                    feed.selectedVersion = versions[0];
+                    feed.selectedVersion = feed.allVersions[0];
                 });
+            }else{
+              var copy = Object.assign({}, feed);
+              copy.updated = copy.lastUpdated;
+              copy.id = copy.latestVersionId;
+              feed.allVersions = [copy];
+              feed.selectedVersion = feed.allVersions[0];
             }
         }
-        console.log('new feeds', values);
     }
 
     getLicenses(value: any) {

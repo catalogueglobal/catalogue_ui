@@ -127,7 +127,7 @@ export class FeedsApiService extends AbstractApiService {
             return Observable.of(feed.url);
         }
         // download with a token
-        return this.http.get(this.FEED_PUBLIC_VERSION_URL + '/' + versionId ? versionId : feed.latestVersionId + '/downloadtoken')
+        return this.http.get(this.FEED_PUBLIC_VERSION_URL + '/' + (versionId ? versionId : feed.latestVersionId) + '/downloadtoken')
             .map(response => response.json())
             .map(result => this.FEED_DOWNLOAD_URL + '/' + result.id)
     }
