@@ -134,10 +134,7 @@ export class DatasetsMapComponent implements AfterViewInit {
             zoomControl: false,
             minZoom: 2,
             maxZoom: this.isFeedItem ? 10 : undefined,
-            layers: [tiles],
-            dragging: !this.isFeedItem,
-            scrollWheelZoom: !this.isFeedItem,
-            doubleClickZoom: !this.isFeedItem
+            layers: [tiles]
         }
         let map = leaflet.map(cssId, options);
         map.addLayer(this.markerClusterGroup);

@@ -84,8 +84,8 @@ export class FeedsComponent extends DatatoolComponent {
             that.feeds =[that.feed];
             that.getLicenses(that.feeds);
             that.mapPosition = that.utils.computeLatLng(that.feed.latestValidation.bounds);
-            that.checkAuthorisations();
             if (that.sessionService.loggedIn === true) {
+                that.checkAuthorisations();
                 that.subscribeActions(that.actions$);
             }
             if (that.sessionService.loggedIn === true) {
