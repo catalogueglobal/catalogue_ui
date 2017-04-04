@@ -29,6 +29,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     private datePipe = new DatePipe('en-US');
     private feedsLicenses;
     @Input() mapId: string;
+    @Input() isFeedItem: Boolean;
     @Output() protected boundsChange = new EventEmitter();
     private _feeds: IFeed[];
     map: leaflet.Map;
@@ -105,7 +106,7 @@ export class DatasetsMapComponent implements AfterViewInit {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 response => {
-                    this.position = [response.coords.latitude, response.coords.longitude];
+                    this.position = this.isFeedItem ? this.position : [response.coords.latitude, response.coords.longitude];
                     console.log("geolocalize: available", this._position);
                 },
                 () => {
@@ -127,20 +128,33 @@ export class DatasetsMapComponent implements AfterViewInit {
         )
         //leaflet.IconOptions.imagePath = 'vendor/leaflet/dist/images/';
         let tiles = leaflet.tileLayer(this.config.MAP_TILE_LAYER_URL, this.config.MAP_TILE_LAYER_OPTIONS);
-        let map = leaflet.map(cssId, { center: <any>this.initialPosition, zoom: this.initialZoom, zoomControl: false, minZoom: 2, layers: [tiles] });
+        let options = {
+            center: <any>this.initialPosition,
+            zoom: this.initialZoom,
+            zoomControl: false,
+            minZoom: 2,
+            maxZoom: this.isFeedItem ? 10 : undefined,
+            layers: [tiles],
+            dragging: !this.isFeedItem,
+            scrollWheelZoom: !this.isFeedItem,
+            doubleClickZoom: !this.isFeedItem
+        }
+        let map = leaflet.map(cssId, options);
         map.addLayer(this.markerClusterGroup);
         this.mapUtils.clusterAreaOver(this.markerClusterGroup, map);
         let that = this;
-        map.on(
-            'moveend', function(e) {
-                console.log('map move', map.getBounds());
-                let mapBounds = map.getBounds();
-                let newCenter = map.getCenter();
-                that.shared.setNewCenter(newCenter, e.target._zoom);
-                let areaBounds = that.utils.computeLatLngToBounds([mapBounds.getNorthEast(), mapBounds.getSouthWest()]);
-                that.boundsChange.emit(areaBounds);
-            }
-        )
+        if (!this.isFeedItem) {
+            map.on(
+                'moveend', function(e) {
+                    console.log('map move', map.getBounds());
+                    let mapBounds = map.getBounds();
+                    let newCenter = map.getCenter();
+                    that.shared.setNewCenter(newCenter, e.target._zoom);
+                    let areaBounds = that.utils.computeLatLngToBounds([mapBounds.getNorthEast(), mapBounds.getSouthWest()]);
+                    that.boundsChange.emit(areaBounds);
+                }
+            )
+        }
         if (this._position) {
             this.goTo(map, this._position, false);
         }
@@ -178,7 +192,7 @@ export class DatasetsMapComponent implements AfterViewInit {
 
     private setCenterMap() {
         let lastCenter = this.shared.getCenterMap();
-        if (lastCenter.lat != 0 && lastCenter.lng != 0) {
+        if (!this.isFeedItem && lastCenter.lat != 0 && lastCenter.lng != 0) {
             this.position = [lastCenter.lat, lastCenter.lng];
             //this.initialZoom = lastCenter.zoom;
         } else {
@@ -189,7 +203,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     private goTo(theMap, thePosition, isReset) {
         let theZoom = this._zoom || this.config.MAP_ZOOM_POSITION;
         let lastCenter = this.shared.getCenterMap();
-        if (lastCenter.lat != 0 && lastCenter.lng != 0 && isReset == false) {
+        if (!this.isFeedItem && lastCenter.lat != 0 && lastCenter.lng != 0 && isReset == false) {
             thePosition[0] = lastCenter.lat;
             thePosition[1] = lastCenter.lng;
             theZoom = lastCenter.zoom;
@@ -225,25 +239,25 @@ export class DatasetsMapComponent implements AfterViewInit {
     }
 
     private setFeedsLicenses(value: any) {
-      let licenses =  this.shared.getLicenses();
-      this.feedsLicenses = {};
-      if (licenses && value) {
-        for (let k = 0; k < value.length; k++) {
-          let feed = value[k];
-          for (let i = 0; i < licenses.length; i++) {
-            if (licenses[i].feedIds) {
-              for (let j = 0; j < licenses[i].feedIds.length; j++) {
-                if (feed.id === licenses[i].feedIds[j]) {
-                  this.feedsLicenses[feed.id] = licenses[i];
+        let licenses = this.shared.getLicenses();
+        this.feedsLicenses = {};
+        if (licenses && value) {
+            for (let k = 0; k < value.length; k++) {
+                let feed = value[k];
+                for (let i = 0; i < licenses.length; i++) {
+                    if (licenses[i].feedIds) {
+                        for (let j = 0; j < licenses[i].feedIds.length; j++) {
+                            if (feed.id === licenses[i].feedIds[j]) {
+                                this.feedsLicenses[feed.id] = licenses[i];
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
         }
-      }
     }
 
-    private computeMarkerPopup(feed:any): string {
+    private computeMarkerPopup(feed: any): string {
         let license = this.feedsLicenses[feed.id];
         let popupHtml = '<b><a href="/feeds/' + feed.id + '">' + feed.name + "</a></b> (";
         if (feed.isPublic) {
@@ -254,8 +268,8 @@ export class DatasetsMapComponent implements AfterViewInit {
         if (feed.url) {
             popupHtml += "<br><button onclick=\"document.location.href='" + feed.url + "'\">Download feed</button>";
         }
-        if (license && license.id){
-          popupHtml += '<br/><b>License</b>: ' + license.name;
+        if (license && license.id) {
+            popupHtml += '<br/><b>License</b>: ' + license.name;
         }
         popupHtml += '<br/>';
         popupHtml += '<b>' + this.translate.instant('feed.period') + '</b> ' + this.datePipe.transform(feed.latestValidation.startDate, 'y-MM-dd');
@@ -296,9 +310,16 @@ export class DatasetsMapComponent implements AfterViewInit {
             this.markers.push(marker);
             // area over marker
             this.mapUtils.markerAreaOver(marker, this.map);
+            this.fitBounds();
         }
     }
 
+    private fitBounds() {
+        if (this.isFeedItem && this._position && this.markers.length > 0) {
+            var group = leaflet.featureGroup(this.markers);
+            this.map.fitBounds(group.getBounds());
+        }
+    }
     private createMarker(feed: IFeed) {
         // TODO : to change, the code is not clean
         if (this.router.url == "/my-datasets") {
@@ -307,10 +328,12 @@ export class DatasetsMapComponent implements AfterViewInit {
             }.bind(this));
         } else {
             this.projectsApi.getPublicProject(feed.projectId).then(function success(data) {
-                return this.extractData(data, feed);
+                this.extractData(data, feed);
+                this.fitBounds();
             }.bind(this));
         }
     }
+
     protected initLeafletMakerStyle() {
         this.NumberedDivIcon = L.Icon.extend({
             options: {

@@ -14,7 +14,7 @@ export interface DatasetsState {
 
 const initialState: DatasetsState = {
     status: {},
-    feeds: null,
+    feeds: [],
     feedsGetParams: {
         secure: null,
         sortOrder: null,

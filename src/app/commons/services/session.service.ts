@@ -71,6 +71,7 @@ export class SessionService {
         if (!this.loggedIn) {
             this.userProfile = null;
         } else {
+            this.userProfile = null;
             this.lock.getProfile(localStorage.getItem(this.tokenName), (error, profile) => {
                 if (error) {
                     this.userProfile = null;

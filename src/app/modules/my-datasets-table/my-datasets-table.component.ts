@@ -34,26 +34,21 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
 
     @ViewChild(MiscDataModal)
     public readonly miscDataModal: MiscDataModal;
-    public testLicenses: any;
     private confirmEditById: Map<string, EventEmitter<any>> = new Map();
-    public newLicenseOrMiscData;
-    public onSelectionChangeCallback: Function;
-    public onItemChangedCallback: Function;
-    public onSubmitLicenseCallback: Function;
-    public onSubmitMiscDataCallback: Function;
+
     constructor(
-        config: Configuration,
-        utils: UtilsService,
-        private feedsApi: FeedsApiService,
+        protected config: Configuration,
+        protected utils: UtilsService,
+        protected feedsApi: FeedsApiService,
         protected store: Store<DatasetsState>,
         protected datasetsAction: DatasetsActions,
         protected actions$: Actions,
-        usersApiService: UsersApiService,
-        sessionService: SessionService,
+        protected usersApiService: UsersApiService,
+        protected sessionService: SessionService,
         protected shared: SharedService) {
         super(config, utils, sessionService, feedsApi, usersApiService, store, actions$, datasetsAction, shared);
 
-        this.resetForm();
+        this.resetForm(this._feeds);
         this.subscribeActions(actions$);
     }
 
@@ -70,25 +65,6 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
             confirmEdit.emit(true);
             this.confirmEditById.delete(idx)
         }
-    }
-
-    private resetForm() {
-        if (this.currentFeed) {
-            this.currentFeed = null;
-            this.getLicenses(this._feeds);
-        }
-
-        this.newLicenseOrMiscData = {
-            type: 'new',
-            name: '',
-            item: null,
-            error: null,
-            itemFile: {}
-        };
-    }
-
-    private createLicenseFail(feed, error) {
-        this.newLicenseOrMiscData.error = error.message;
     }
 
     protected subscribeActions(actions$) {
@@ -115,20 +91,20 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         actions$.ofType(DatasetsActionType.FEED_CREATE_LICENSE_SUCCESS).subscribe(
             action => {
                 this.licenseModal.hide();
-                this.resetForm();
+                this.resetForm(this._feeds);
             }
         );
 
         actions$.ofType(DatasetsActionType.FEED_UNSET_LICENSE_SUCCESS).subscribe(
             action => {
                 this.licenseModal.hide();
-                this.resetForm();
+                this.resetForm(this._feeds);
             }
         );
         actions$.ofType(DatasetsActionType.FEED_CHANGE_LICENSE_SUCCESS).subscribe(
             action => {
                 this.licenseModal.hide();
-                this.resetForm();
+                this.resetForm(this._feeds);
             }
         );
 
@@ -141,106 +117,68 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         actions$.ofType(DatasetsActionType.FEED_CREATE_MISCDATA_SUCCESS).subscribe(
             action => {
                 this.miscDataModal.hide();
-                this.resetForm();
+                this.resetForm(this._feeds);
             }
         );
 
         actions$.ofType(DatasetsActionType.FEED_UNSET_MISCDATA_SUCCESS).subscribe(
             action => {
                 this.miscDataModal.hide();
-                this.resetForm();
+                this.resetForm(this._feeds);
             }
         );
         actions$.ofType(DatasetsActionType.FEED_CHANGE_MISCDATA_SUCCESS).subscribe(
             action => {
                 this.miscDataModal.hide();
-                this.resetForm();
+                this.resetForm(this._feeds);
             }
         );
     }
 
-    displayLicense(feed: IFeed) {
-        this.currentFeed = feed;
-        for (let i = 0; i < this.licenses.length; i++) {
-            if (this.feedsLicenses[this.currentFeed.id] && this.licenses[i].id === this.feedsLicenses[this.currentFeed.id].id) {
-                this.newLicenseOrMiscData.item = this.licenses[i];
-            }
-            if (!this.newLicenseOrMiscData.item && this.licenses[i].id === 'a0e867a2-a2c9-4180-9249-4fe7e97e6c61') {
-                this.newLicenseOrMiscData.item = this.licenses[i];
-            }
-        }
-        if (!this.newLicenseOrMiscData.item){
-            this.newLicenseOrMiscData.item = this.licenses.length > 0 ? this.licenses[0] : null;
-        }
+    protected displayLicense(feed: IFeed) {
+        super.displayLicense(feed);
         this.licenseModal.show();
     }
 
-    displayMiscData(feed: IFeed) {
-        this.currentFeed = feed;
-        this.newLicenseOrMiscData.item = this.miscDatas.length > 0 ? this.miscDatas[0] : null;
-        if (this.feedsLicenses[this.currentFeed.id]) {
-            for (let i = 0; i < this.miscDatas.length; i++) {
-                if (this.miscDatas[i].id === this.feedsLicenses[this.currentFeed.id].id) {
-                    this.newLicenseOrMiscData.item = this.miscDatas[i];
-                }
-            }
-        }
+    protected displayMiscData(feed: IFeed) {
+        super.displayMiscData(feed);
         this.miscDataModal.show();
     }
 
-    onItemChanged(item) {
-        console.log('selectedItem', item);
-        this.newLicenseOrMiscData.item = item;
+    protected setLicense():boolean {
+        let res = !super.setLicense();
+        if (!res) {
+          this.licenseModal.hide();
+        }
+        return res;
     }
 
-    setLicense() {
-        if (this.newLicenseOrMiscData.item.id) {
-            this.store.dispatch(this.datasetsAction.feedSetLicense(toFeedReference(this.currentFeed), this.newLicenseOrMiscData.item.id));
-        } else {
+    protected unsetLicense():boolean {
+        let res = super.unsetLicense();
+        if (!res) {
             this.licenseModal.hide();
         }
+        return res;
     }
 
-    unsetLicense() {
-        if (this.feedsLicenses[this.currentFeed.id]) {
-            this.store.dispatch(this.datasetsAction.feedUnsetLicense(toFeedReference(this.currentFeed), this.feedsLicenses[this.currentFeed.id].id));
-        } else {
+    protected setMiscData(): boolean{
+        let res = super.setMiscData();
+        if (!res) {
             this.licenseModal.hide();
         }
+        return res;
     }
 
-    createLicense() {
-        this.store.dispatch(this.datasetsAction.feedCreateLicense(toFeedReference(this.currentFeed), this.newLicenseOrMiscData.name, this.newLicenseOrMiscData.itemFile.file));
-    }
-
-    setMiscData() {
-        if (this.newLicenseOrMiscData.item.id) {
-            this.store.dispatch(this.datasetsAction.feedSetMiscData(toFeedReference(this.currentFeed), this.newLicenseOrMiscData.item.id));
-        } else {
-            this.licenseModal.hide();
-        }
-    }
-
-    unsetMiscData() {
-        if (this.feedsMiscDatas[this.currentFeed.id]) {
-            this.store.dispatch(this.datasetsAction.feedUnsetMiscData(toFeedReference(this.currentFeed), this.feedsMiscDatas[this.currentFeed.id].id));
-        } else {
+    protected unsetMiscData():boolean {
+      let res = super.unsetMiscData();
+        if (!res) {
             this.miscDataModal.hide();
         }
-    }
-
-    createMiscData() {
-        this.store.dispatch(this.datasetsAction.feedCreateMiscData(toFeedReference(this.currentFeed), this.newLicenseOrMiscData.name, this.newLicenseOrMiscData.itemFile.file));
+        return res;
     }
 
     setSort(sort) {
         this.sortChange.emit(sort);
-    }
-
-    togglePublic(feed: IFeed) {
-        let value = !feed.isPublic;
-        this.store.dispatch(this.datasetsAction.feedSetPublic(toFeedReference(feed), value));
-        return false;
     }
 
     setName(feed, event: InlineEditEvent<string>) {
@@ -261,43 +199,5 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
 
     fetchFeed(feed) {
         this.store.dispatch(this.datasetsAction.feedFetch(toFeedReference(feed)));
-    }
-
-    onSelectionChange(type) {
-        console.log('onSelectionChange', type);
-        this.newLicenseOrMiscData.type = type;
-    }
-
-    onSubmitLicense() {
-        switch (this.newLicenseOrMiscData.type) {
-            case 'no':
-                this.unsetLicense();
-                break;
-            case 'custom':
-                this.createLicense();
-                break;
-            case 'new':
-                this.setLicense();
-                break;
-            default:
-                break;
-        }
-    }
-
-    onSubmitMiscData() {
-        switch (this.newLicenseOrMiscData.type) {
-            case 'no':
-                this.unsetMiscData();
-                break;
-            case 'custom':
-                this.createMiscData();
-                break;
-            case 'new':
-                this.setMiscData();
-                break;
-            default:
-                break;
-        }
-
     }
 }

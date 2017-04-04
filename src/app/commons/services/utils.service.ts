@@ -94,4 +94,92 @@ export class UtilsService {
         }
         return userInfos;
     }
+
+    public userHasAdminRightOnFeed(userInfo, projectId, feedId) {
+        if (userInfo.app_metadata && userInfo.app_metadata.datatools &&
+            userInfo.app_metadata.datatools[0].permissions) {
+            for (let i = 0; i < userInfo.app_metadata.datatools[0].permissions.length; i++) {
+                if (userInfo.app_metadata.datatools[0].permissions[i].type === 'administer-application') {
+                    return true;
+                }
+            }
+            for (let i = 0; i < userInfo.app_metadata.datatools[0].projects.length; i++) {
+                let project = userInfo.app_metadata.datatools[0].projects[i];
+                if (project.project_id === projectId) {
+                    if (project.permissions) {
+                        for (let j = 0; j < project.permissions.length; j++) {
+                            if (project.permissions[j].type === 'administer-project') {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public userHasManageRightOnFeed(userInfo, projectId, feedId) {
+        return this.userHasEditRightOnFeed(userInfo, projectId, feedId, 'manage-feed');
+    }
+
+    public userHasEditRightOnFeed(userInfo, projectId, feedId, type) {
+        type = type || 'edit-gtfs'
+        if (userInfo.app_metadata && userInfo.app_metadata.datatools &&
+            userInfo.app_metadata.datatools[0].projects) {
+            for (let i = 0; i < userInfo.app_metadata.datatools[0].projects.length; i++) {
+                let project = userInfo.app_metadata.datatools[0].projects[i];
+                if (project.project_id === projectId) {
+                    if (project.permissions) {
+                        for (let j = 0; j < project.permissions.length; j++) {
+                            if (project.permissions[j].type === type) {
+                                if (!project.permissions[j].feeds || project.permissions[j].feeds === ['*'] ||
+                                    project.permissions[j].feeds.indexOf(feedId) > -1) {
+                                    return true;
+                                }
+                                return false;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    public userHasRightsOnFeed(userInfo, projectId, feedId) {
+        if (userInfo && userInfo.app_metadata && userInfo.app_metadata.datatools &&
+            userInfo.app_metadata.datatools[0].permissions) {
+            for (let i = 0; i < userInfo.app_metadata.datatools[0].permissions.length; i++) {
+                if (userInfo.app_metadata.datatools[0].permissions[i].type === 'administer-application') {
+                    return true;
+                }
+            }
+            for (let i = 0; i < userInfo.app_metadata.datatools[0].projects.length; i++) {
+                let project = userInfo.app_metadata.datatools[0].projects[i];
+                if (project.project_id === projectId) {
+                    if (project.permissions) {
+                        var j = 0;
+                        for (j = 0; j < project.permissions.length; j++) {
+                            if (project.permissions[j].type === 'administer-project') {
+                                return true;
+                            }
+                        }
+                        if (project.permissions[j].type === 'manage-feed' ||
+                            project.permissions[j].type === 'edit-gtfs') {
+                            if (!project.permissions[j].feeds || project.permissions[j].feeds === ['*'] ||
+                                project.permissions[j].feeds.indexOf(feedId) > -1) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
 }

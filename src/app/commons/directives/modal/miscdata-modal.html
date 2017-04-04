@@ -17,15 +17,7 @@
 			(change)="onSelectionChange('custom')">{{'datasets.table.miscData.new'|translate}}</label>
 	</div>
 
-	<div [ngSwitch]="newLicenseOrMiscData.type">
-		<div *ngSwitchCase="'new'">
-			<select [ngModel]="newLicenseOrMiscData.item"
-				(ngModelChange)="onItemChanged($event)">
-				<option [ngValue]="item" *ngFor="let item of items">{{item.name}}</option>
-			</select>
-		</div>
-
-		<div *ngSwitchCase="'custom'">
+		<div *ngIf="newLicenseOrMiscData.type === 'custom'">
 			<div>
 				<label>{{'popup.upload.file'|translate}}</label> <input type="file"
 					(change)="utils.setFileModelOnChange(newLicenseOrMiscData.itemFile, 'file', $event)">
@@ -33,7 +25,6 @@
 			<div *ngIf="newLicenseOrMiscData.error" class="alert alert-danger">
 				{{('mydatasets-table.' + newLicenseOrMiscData.error) | translate}}</div>
 		</div>
-	</div>
 </div>
 <div class="app-modal-footer">
 	<button type="button" class="btn btn-cancel" (click)="hide()">{{'popup.cancel'|translate}}</button>

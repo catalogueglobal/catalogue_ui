@@ -54,6 +54,7 @@ import { appReducer }                                               from "./stat
 import { TooltipModule } from 'ng2-bootstrap';
 import { MiscDataModal } from './commons/directives/modal/miscdata-modal.component';
 import { LicenseModal } from './commons/directives/modal/license-modal.component';
+import { DatatoolComponent }                                            from "./commons/components/datatool.component";
 
 export function httpFactory(http: Http) {
     return new TranslateStaticLoader(http, '/assets/i18n', '.json');
@@ -111,6 +112,7 @@ export function composeProvider(state: any, action: any) {
         ModalComponent,
         LicenseModal,
         MiscDataModal,
+        DatatoolComponent
     ],
 
     imports: [
