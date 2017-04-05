@@ -14,11 +14,9 @@ import { DatasetsTableComponent } from "../datasets-table/datasets-table.compone
 import { IFeedRow } from "../datasets/datasets.component";
 import { SharedService } from "../../commons/services/shared.service";
 import { LicenseModal } from '../../commons/directives/modal/license-modal.component';
-
 import { MiscDataModal } from '../../commons/directives/modal/miscdata-modal.component';
 
 
-const CONFIRM_EDIT_IDX_SETNAME = "setName"
 const CONFIRM_EDIT_IDX_SETFILE = "setFile"
 
 @Component({
@@ -34,7 +32,6 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
 
     @ViewChild(MiscDataModal)
     public readonly miscDataModal: MiscDataModal;
-    private confirmEditById: Map<string, EventEmitter<any>> = new Map();
 
     constructor(
         protected config: Configuration,
@@ -59,27 +56,19 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         this.onSubmitMiscDataCallback = this.onSubmitMiscData.bind(this);
     }
 
-    private processConfirm(idx: string) {
-        let confirmEdit = this.confirmEditById.get(idx)
-        if (confirmEdit) {
-            confirmEdit.emit(true);
-            this.confirmEditById.delete(idx)
-        }
-    }
-
     protected subscribeActions(actions$) {
         // close inline edit form on setName() success
         actions$.ofType(DatasetsActionType.FEED_SET_NAME_SUCCESS).subscribe(
             action => {
-                let updatedFeed = action.payload.feed
-                this.processConfirm(CONFIRM_EDIT_IDX_SETNAME + updatedFeed.id)
+                let updatedFeed = action.payload.feed;
+                this.processConfirm('setName' + updatedFeed.id);
             }
         )
         // close inline edit form on setFile() success
         actions$.ofType(DatasetsActionType.FEED_SET_FILE_SUCCESS).subscribe(
             action => {
-                let updatedFeed = action.payload.feed
-                this.processConfirm(CONFIRM_EDIT_IDX_SETFILE + updatedFeed.id)
+                let updatedFeed = action.payload.feed;
+                this.processConfirm(CONFIRM_EDIT_IDX_SETFILE + updatedFeed.id);
             }
         )
         actions$.ofType(DatasetsActionType.FEED_CREATE_LICENSE_FAIL).subscribe(
@@ -179,14 +168,6 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
 
     setSort(sort) {
         this.sortChange.emit(sort);
-    }
-
-    setName(feed, event: InlineEditEvent<string>) {
-        // observer will be notified to close inline form on success
-        this.confirmEditById.set(CONFIRM_EDIT_IDX_SETNAME + feed.id, event.confirm$)
-        // process
-        this.store.dispatch(this.datasetsAction.feedSetName(toFeedReference(feed), event.value));
-        return false;
     }
 
     setFile(feed, event: InlineEditEvent<File>) {

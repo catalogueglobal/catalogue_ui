@@ -115,6 +115,14 @@ export class FeedsComponent extends DatatoolComponent {
             }
         );
 
+        actions$.ofType(DatasetsActionType.FEED_SET_NAME_SUCCESS).subscribe(
+            action => {
+                let updatedFeed = action.payload.feed;
+                this.feed.name = action.payload.feed.name;
+                this.processConfirm('setName' + updatedFeed.id);
+            }
+        )
+
         // close inline edit form on setName() success
         actions$.ofType(DatasetsActionType.FEED_SET_PUBLIC_SUCCESS).subscribe(
             action => {

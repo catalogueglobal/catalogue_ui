@@ -1,4 +1,4 @@
-import {Component, ViewChild, Input, Output} from '@angular/core';
+import {Component, ViewChild, Input, EventEmitter, Output} from '@angular/core';
 import { Store } from "@ngrx/store";
 import { Actions } from "@ngrx/effects";
 import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense, IFeed } from '../services/api/feedsApi.service';
@@ -9,6 +9,7 @@ import { UsersApiService } from "./../services/api/usersApi.service";
 import { DatasetsState } from "../../state/datasets/datasets.reducer";
 import { DatasetsActions, toFeedReference, DatasetsActionType } from "../../state/datasets/datasets.actions";
 import { SharedService } from "../services/shared.service";
+import { InlineEditEvent } from "../../commons/directives/inline-edit-text/inline-edit-generic.component";
 
 @Component({
   template: ''
@@ -20,6 +21,7 @@ export class DatatoolComponent {
     protected miscDatas: Array<ILicense>;
     protected feedsMiscDatas = {};
     protected currentFeed: IFeed;
+    protected confirmEditById: Map<string, EventEmitter<any>> = new Map();
 
     //edition
     protected newLicenseOrMiscData;
@@ -321,4 +323,18 @@ export class DatatoolComponent {
         this.store.dispatch(this.datasetsAction.feedSetPublic(toFeedReference(feed), value));
         return false;
     }
+
+    protected setName(feed, event: InlineEditEvent<string>) {
+        this.confirmEditById.set('setName' + feed.id, event.confirm$)
+        this.store.dispatch(this.datasetsAction.feedSetName(toFeedReference(feed), event.value));
+    }
+
+    protected processConfirm(idx: string) {
+        let confirmEdit = this.confirmEditById.get(idx)
+        if (confirmEdit) {
+            confirmEdit.emit(true);
+            this.confirmEditById.delete(idx)
+        }
+    }
+
 }
