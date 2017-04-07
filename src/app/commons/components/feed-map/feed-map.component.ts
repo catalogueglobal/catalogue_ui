@@ -9,8 +9,6 @@ import { Configuration }                                         from "../../con
 import * as leaflet                                              from "leaflet";
 require('../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster');
 
-require('../../../../../node_modules/leaflet-panel-layers/dist/leaflet-panel-layers.min');
-
 @Component({
     selector: 'ct-feed-map',
     templateUrl: 'feed-map.html',
@@ -156,7 +154,7 @@ export class FeedMapComponent implements AfterViewInit {
     }
 
     private clickSSMarker(event) {
-  
+
     }
 
     protected createStops(stops) {
