@@ -97,6 +97,18 @@ table th {
 		z-index: 300;
 		text-transform: capitalize;
 	}
+
+	> .img-icon {
+		margin-top: 8px;
+	}
+
+	&.stop-marker {
+		background-color: $ct-green;
+	}
+
+	&.station-marker {
+		background-color: $ct-orange;
+	}
 }
 
 .leaflet-popup-content-wrapper {

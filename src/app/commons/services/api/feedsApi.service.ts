@@ -71,6 +71,7 @@ export class FeedsApiService extends AbstractApiService {
     private FEED_NOTES: string;
     public FEED_LICENSE: string;
     public FEED_MISC_DATA: string;
+    private FEED_STOPS_URL:string;
 
     constructor(
         protected http: Http,
@@ -90,6 +91,7 @@ export class FeedsApiService extends AbstractApiService {
         this.FEED_NOTES = this.config.ROOT_API + "/api/manager/secure/note?type=FEED_SOURCE&objectId="
         this.FEED_LICENSE = this.config.LICENSE_API + "/api/metadata/" + this.config.LICENSE_API_VERSION + "/secure/license";
         this.FEED_MISC_DATA = this.config.LICENSE_API + "/api/metadata/" + this.config.LICENSE_API_VERSION + "/secure/miscdata";
+        this.FEED_STOPS_URL = this.config.ROOT_API + '/api/manager/secure/stop';
     }
 
     public create(name: string, projectId: string, isPublic: boolean): Observable<IFeedApi> {
@@ -280,7 +282,15 @@ export class FeedsApiService extends AbstractApiService {
         if (isPublic){
           return this.http.get(this.FEED_PUBLIC_VERSION_URL + '?feedSourceId=' + feedSourceId).map(response => response.json()).toPromise();
         }else{
-            return this.authHttp.get(this.FEED_SECURE_VERSION_URL + '?feedSourceId=' + feedSourceId, ).map(response => response.json()).toPromise();
+            return this.authHttp.get(this.FEED_SECURE_VERSION_URL + '?feedSourceId=' + feedSourceId).map(response => response.json()).toPromise();
         }
+    }
+
+    public getStops(feedId:string):Promise<any>{
+      return this.authHttp.get(this.FEED_STOPS_URL + '?feedId=' + feedId).map(response => response.json()).toPromise();
+    }
+
+    public getStop(feedId:string, stopId:string):Promise<any>{
+      return this.authHttp.get(this.FEED_STOPS_URL + '/' + stopId + '?feedId=' + feedId).map(response => response.json()).toPromise();
     }
 }

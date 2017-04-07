@@ -29,7 +29,6 @@ export class DatasetsMapComponent implements AfterViewInit {
     private datePipe = new DatePipe('en-US');
     private feedsLicenses;
     @Input() mapId: string;
-    @Input() isFeedItem: Boolean;
     @Output() protected boundsChange = new EventEmitter();
     private _feeds: IFeed[];
     map: leaflet.Map;
@@ -57,7 +56,7 @@ export class DatasetsMapComponent implements AfterViewInit {
         this.setCenterMap();
         this.markers = new Array();
         this.updateProject = this.updateProjectProperty.bind(this);
-        this.initLeafletMakerStyle();
+        this.NumberedDivIcon = mapUtils.createNumMarker();
     }
 
     reset() {
@@ -106,7 +105,7 @@ export class DatasetsMapComponent implements AfterViewInit {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 response => {
-                    this.position = this.isFeedItem ? this.position : [response.coords.latitude, response.coords.longitude];
+                    this.position = [response.coords.latitude, response.coords.longitude];
                     console.log("geolocalize: available", this._position);
                 },
                 () => {
@@ -133,25 +132,22 @@ export class DatasetsMapComponent implements AfterViewInit {
             zoom: this.initialZoom,
             zoomControl: false,
             minZoom: 2,
-            maxZoom: this.isFeedItem ? 10 : undefined,
             layers: [tiles]
         }
         let map = leaflet.map(cssId, options);
         map.addLayer(this.markerClusterGroup);
         this.mapUtils.clusterAreaOver(this.markerClusterGroup, map);
         let that = this;
-        if (!this.isFeedItem) {
-            map.on(
-                'moveend', function(e) {
-                    console.log('map move', map.getBounds());
-                    let mapBounds = map.getBounds();
-                    let newCenter = map.getCenter();
-                    that.shared.setNewCenter(newCenter, e.target._zoom);
-                    let areaBounds = that.utils.computeLatLngToBounds([mapBounds.getNorthEast(), mapBounds.getSouthWest()]);
-                    that.boundsChange.emit(areaBounds);
-                }
-            )
-        }
+        map.on(
+            'moveend', function(e) {
+                console.log('map move', map.getBounds());
+                let mapBounds = map.getBounds();
+                let newCenter = map.getCenter();
+                that.shared.setNewCenter(newCenter, e.target._zoom);
+                let areaBounds = that.utils.computeLatLngToBounds([mapBounds.getNorthEast(), mapBounds.getSouthWest()]);
+                that.boundsChange.emit(areaBounds);
+            }
+        );
         if (this._position) {
             this.goTo(map, this._position, false);
         }
@@ -189,7 +185,7 @@ export class DatasetsMapComponent implements AfterViewInit {
 
     private setCenterMap() {
         let lastCenter = this.shared.getCenterMap();
-        if (!this.isFeedItem && lastCenter.lat != 0 && lastCenter.lng != 0) {
+        if (lastCenter.lat != 0 && lastCenter.lng != 0) {
             this.position = [lastCenter.lat, lastCenter.lng];
             //this.initialZoom = lastCenter.zoom;
         } else {
@@ -200,7 +196,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     private goTo(theMap, thePosition, isReset) {
         let theZoom = this._zoom || this.config.MAP_ZOOM_POSITION;
         let lastCenter = this.shared.getCenterMap();
-        if (!this.isFeedItem && lastCenter.lat != 0 && lastCenter.lng != 0 && isReset == false) {
+        if (lastCenter.lat != 0 && lastCenter.lng != 0 && isReset == false) {
             thePosition[0] = lastCenter.lat;
             thePosition[1] = lastCenter.lng;
             theZoom = lastCenter.zoom;
@@ -307,16 +303,9 @@ export class DatasetsMapComponent implements AfterViewInit {
             this.markers.push(marker);
             // area over marker
             this.mapUtils.markerAreaOver(marker, this.map);
-            this.fitBounds();
         }
     }
 
-    private fitBounds() {
-        if (this.isFeedItem && this._position && this.markers.length > 0) {
-            var group = leaflet.featureGroup(this.markers);
-            this.map.fitBounds(group.getBounds());
-        }
-    }
     private createMarker(feed: IFeed) {
         // TODO : to change, the code is not clean
         if (this.router.url == "/my-datasets") {
@@ -326,30 +315,7 @@ export class DatasetsMapComponent implements AfterViewInit {
         } else {
             this.projectsApi.getPublicProject(feed.projectId).then(function success(data) {
                 this.extractData(data, feed);
-                this.fitBounds();
             }.bind(this));
         }
-    }
-
-    protected initLeafletMakerStyle() {
-        this.NumberedDivIcon = L.Icon.extend({
-            options: {
-                iconSize: new L.Point(30, 30),
-                iconAnchor: new L.Point(15, 0),
-                className: 'leaflet-div-number-icon'
-            },
-
-            createIcon: function() {
-                let div = document.createElement('div');
-                this.options.className += ' ' + this.options.surClass;
-
-                let numdiv = document.createElement('div');
-                numdiv.setAttribute("class", "number");
-                numdiv.innerHTML = this.options['number'] || '';
-                div.appendChild(numdiv);
-                this._setIconStyles(div, 'icon');
-                return div;
-            }
-        });
     }
 }
