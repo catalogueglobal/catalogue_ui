@@ -156,9 +156,7 @@ export class FeedMapComponent implements AfterViewInit {
     }
 
     private clickSSMarker(event) {
-        this.feedsApi.getStop(this._feed.id, event.target.model.id).then(function(response) {
-            console.log(response);
-        });
+  
     }
 
     protected createStops(stops) {
