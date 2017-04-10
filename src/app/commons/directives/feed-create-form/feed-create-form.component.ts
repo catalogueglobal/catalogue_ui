@@ -33,13 +33,9 @@ export class FeedCreateFormComponent {
         actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.resetForm());
         actions$.ofType(DatasetsActionType.ADD_FEED_TO_PROJECT_SUCCESS).subscribe(() => this.resetForm());
         let that = this;
+        that.simpleUpload.license = {};
         this.feedsService.getLicenses().then(licenses => {
             that.licenses = licenses;
-            for (let i = 0; i < licenses.length; i++) {
-                if (licenses[i].id === 'a0e867a2-a2c9-4180-9249-4fe7e97e6c61') {
-                    that.simpleUpload.license = licenses[i];
-                }
-            }
         });
     }
 
