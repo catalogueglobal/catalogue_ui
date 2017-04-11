@@ -2,17 +2,17 @@ import { Component, ViewChild, Input }                           from "@angular/
 import { Router, ActivatedRoute }              from '@angular/router';
 import { Actions }                             from "@ngrx/effects";
 import { Store }                               from "@ngrx/store";
-import { FeedsApiService, IFeed }                     from '../../commons/services/api/feedsApi.service';
-import { SessionService }                      from "../../commons/services/session.service";
-import { DatasetsActions, DatasetsActionType } from "../../state/datasets/datasets.actions";
-import { DatasetsState }                       from "../../state/datasets/datasets.reducer";
-import { Configuration } from "../../commons/configuration";
-import { UtilsService } from "../../commons/services/utils.service";
-import { UsersApiService } from "../../commons/services/api/usersApi.service";
-import { SharedService } from "../../commons/services/shared.service";
-import { DatatoolComponent } from "../../commons/components/datatool.component";
-import { LicenseModal } from '../../commons/directives/modal/license-modal.component';
-import { MiscDataModal } from '../../commons/directives/modal/miscdata-modal.component';
+import { FeedsApiService, IFeed }                     from 'app/commons/services/api/feedsApi.service';
+import { SessionService }                      from "app/commons/services/session.service";
+import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
+import { DatasetsState }                       from "app/state/datasets/datasets.reducer";
+import { Configuration } from "app/commons/configuration";
+import { UtilsService } from "app/commons/services/utils.service";
+import { UsersApiService } from "app/commons/services/api/usersApi.service";
+import { SharedService } from "app/commons/services/shared.service";
+import { DatatoolComponent } from "app/commons/components/datatool.component";
+import { LicenseModal } from 'app/commons/directives/modal/license-modal.component';
+import { MiscDataModal } from 'app/commons/directives/modal/miscdata-modal.component';
 
 @Component({
     selector: 'app-feeds',

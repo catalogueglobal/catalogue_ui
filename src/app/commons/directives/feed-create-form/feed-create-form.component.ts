@@ -1,13 +1,13 @@
 import { Component } from "@angular/core";
 import { Actions } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
-import { DatasetsActions, DatasetsActionType } from "../../../state/datasets/datasets.actions";
-import { ICreateFeed } from "../../../state/datasets/datasets.effects";
-import { DatasetsState } from "../../../state/datasets/datasets.reducer";
-import { ProjectsApiService } from "../../services/api/projectsApi.service";
-import { FeedsApiService } from "../../services/api/feedsApi.service";
-import { SessionService } from "../../services/session.service";
-import { UtilsService } from "../../services/utils.service";
+import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
+import { ICreateFeed } from "app/state/datasets/datasets.effects";
+import { DatasetsState } from "app/state/datasets/datasets.reducer";
+import { ProjectsApiService } from "app/commons/services/api/projectsApi.service";
+import { FeedsApiService } from "app/commons/services/api/feedsApi.service";
+import { SessionService } from "app/commons/services/session.service";
+import { UtilsService } from "app/commons/services/utils.service";
 
 @Component({
     selector: 'app-feed-create-form',
@@ -74,7 +74,7 @@ export class FeedCreateFormComponent {
             this.projectsService.getAllSecureProject().subscribe(response => {
                 let name;
                 let id;
-                for (var i = 0; i < response.length; i++) {
+                for (var i = 0; response && i < response.length; i++) {
                     name = response[i]["name"];
                     id = response[i]["id"];
                     this.projectsName[i] = {

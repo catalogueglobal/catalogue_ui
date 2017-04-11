@@ -3,19 +3,19 @@ import { Router }                                                from '@angular/
 import { Store }                                                 from "@ngrx/store";
 import * as leaflet                                              from "leaflet";
 import { Observable }                                            from "rxjs/Rx";
-import { Configuration }                                         from "../../commons/configuration";
-import { ProjectsApiService }                                    from "../../commons/services/api/projectsApi.service";
-import { IFeed }                                                 from "../../commons/services/api/feedsApi.service";
-import { IProject }                                              from "../../commons/services/api/projectsApi.service";
-import { MapUtilsService }                                       from "../../commons/services/mapUtils.service";
-import { SessionService }                                        from "../../commons/services/session.service"
-import { SharedService }                                         from "../../commons/services/shared.service"
-import { UtilsService }                                          from "../../commons/services/utils.service";
-import { DatasetsActions }                                       from "../../state/datasets/datasets.actions";
-import { DatasetsState }                                         from "../../state/datasets/datasets.reducer";
 import { DatePipe } from '@angular/common';
 import {TranslateService} from 'ng2-translate';
-require('./../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster');
+require('leaflet.markercluster');
+import { Configuration }                                         from "app/commons/configuration";
+import { ProjectsApiService }                                    from "app/commons/services/api/projectsApi.service";
+import { IFeed }                                                 from "app/commons/services/api/feedsApi.service";
+import { IProject }                                              from "app/commons/services/api/projectsApi.service";
+import { MapUtilsService }                                       from "app/commons/services/mapUtils.service";
+import { SessionService }                                        from "app/commons/services/session.service"
+import { SharedService }                                         from "app/commons/services/shared.service"
+import { UtilsService }                                          from "app/commons/services/utils.service";
+import { DatasetsActions }                                       from "app/state/datasets/datasets.actions";
+import { DatasetsState }                                         from "app/state/datasets/datasets.reducer";
 
 @Component({
     selector: 'app-datasets-map',

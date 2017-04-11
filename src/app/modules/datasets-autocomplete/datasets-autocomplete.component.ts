@@ -1,6 +1,6 @@
 import { Component, Output, Input }                    from '@angular/core';
 import { CompleterService, RemoteData, CompleterItem } from 'ng2-completer';
-import { Configuration }                               from "../../commons/configuration";
+import { Configuration }                               from "app/commons/configuration";
 import { EventEmitter }                                from "@angular/common/src/facade/async";
 import * as leaflet                                    from "leaflet";
 
@@ -19,7 +19,7 @@ export class DatasetsAutocompleteComponent {
     private searchInput: string;
     @Output() private selected = new EventEmitter<AutocompleteItem>();
     @Input() private placeholder: string;
-    
+
     constructor(
         private completerService: CompleterService,
         private config: Configuration)

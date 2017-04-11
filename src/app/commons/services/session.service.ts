@@ -1,7 +1,7 @@
 import { Injectable }      from "@angular/core";
 import { tokenNotExpired } from "angular2-jwt/angular2-jwt";
 import { LocalStorage }    from "ng2-webstorage";
-import { Configuration }   from "../configuration";
+import { Configuration }   from "app/commons/configuration";
 
 export type Session = {
     user: any,

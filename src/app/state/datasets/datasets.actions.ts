@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Action } from "@ngrx/store";
-import { FeedsGetResponse, IFeedApi, FeedsGetParams, IFeed, ILicense } from "../../commons/services/api/feedsApi.service";
-import { IProject } from "../../commons/services/api/projectsApi.service";
-import { UserSubscribeParams } from "../../commons/services/api/usersApi.service";
+import { FeedsGetResponse, IFeedApi, FeedsGetParams, IFeed, ILicense } from "app/commons/services/api/feedsApi.service";
+import { IProject } from "app/commons/services/api/projectsApi.service";
+import { UserSubscribeParams } from "app/commons/services/api/usersApi.service";
 import { ICreateFeed } from "./datasets.effects";
 
 export const DatasetsActionType = {

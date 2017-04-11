@@ -11,10 +11,10 @@ import { ConfirmationPopoverModule }                                from 'angula
 import { AuthConfig, AuthHttp }                                     from "angular2-jwt";
 import { ToasterModule }                                            from "angular2-toaster";
 import { Ng2CompleterModule  }                                      from "ng2-completer";
-import { PaginationControlsCmp, PaginatePipe }                      from "ng2-pagination";
 import { TranslateModule }                                          from "ng2-translate";
 import { TranslateService, TranslateLoader, TranslateStaticLoader } from "ng2-translate/src/translate.service";
 import { storeLogger }                                              from "ngrx-store-logger";
+import { Ng2PaginationModule }                                      from "ng2-pagination";
 import { AppComponent }                                             from "./app.component";
 import { routing }                                                  from "./app.routes";
 import { Configuration }                                            from "./commons/configuration";
@@ -52,6 +52,7 @@ import { DatasetsActions }                                          from "./stat
 import { DatasetsEffects }                                          from "./state/datasets/datasets.effects";
 import { appReducer }                                               from "./state/index.reducer";
 import { TooltipModule } from 'ng2-bootstrap';
+import {CommonComponent} from './commons/directives/modal/common-modal.component';
 import { MiscDataModal } from './commons/directives/modal/miscdata-modal.component';
 import { LicenseModal } from './commons/directives/modal/license-modal.component';
 import { DatatoolComponent }                                            from "./commons/components/datatool.component";
@@ -95,7 +96,6 @@ export function composeProvider(state: any, action: any) {
         DatasetsMapComponent,
         DatasetsTableComponent,
         DatasetsAutocompleteComponent,
-        PaginationControlsCmp,
         SortLinkComponent,
         MyDatasetsTableComponent,
 
@@ -108,8 +108,8 @@ export function composeProvider(state: any, action: any) {
         InlineEditTextComponent,
         InlineEditFileComponent,
         SubscribeFormComponent,
-        PaginatePipe,
         DeleteFeedConfirmationComponent,
+        CommonComponent,
         ModalComponent,
         LicenseModal,
         MiscDataModal,
@@ -125,6 +125,7 @@ export function composeProvider(state: any, action: any) {
         HttpModule,
         ToasterModule,
         routing,
+        Ng2PaginationModule,
 
         ConfirmationPopoverModule.forRoot({
             confirmButtonType: 'danger' // set defaults here

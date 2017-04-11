@@ -2,17 +2,17 @@ import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core
 import { Actions } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { PaginationService } from "ng2-pagination";
-import { Configuration } from "../../commons/configuration";
-import { SortOrder } from "../../commons/directives/sort-link/sort-link.component";
-import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense, IFeed } from "../../commons/services/api/feedsApi.service";
-import { UsersApiService } from "../../commons/services/api/usersApi.service";
-import { SessionService } from "../../commons/services/session.service";
-import { UtilsService } from "../../commons/services/utils.service";
-import { DatasetsActions, DatasetsActionType } from "../../state/datasets/datasets.actions";
-import { DatasetsState } from "../../state/datasets/datasets.reducer";
-import { IFeedRow } from "../datasets/datasets.component";
-import { SharedService } from "../../commons/services/shared.service";
-import { DatatoolComponent } from "../../commons/components/datatool.component";
+import { Configuration } from "app/commons/configuration";
+import { SortOrder } from "app/commons/directives/sort-link/sort-link.component";
+import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense, IFeed } from "app/commons/services/api/feedsApi.service";
+import { UsersApiService } from "app/commons/services/api/usersApi.service";
+import { SessionService } from "app/commons/services/session.service";
+import { UtilsService } from "app/commons/services/utils.service";
+import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
+import { DatasetsState } from "app/state/datasets/datasets.reducer";
+import { IFeedRow } from "app/modules/datasets/datasets.component";
+import { SharedService } from "app/commons/services/shared.service";
+import { DatatoolComponent } from "app/commons/components/datatool.component";
 
 @Component({
     selector: 'app-datasets-table',
@@ -23,6 +23,7 @@ export class DatasetsTableComponent extends DatatoolComponent{
     @Input() protected _feeds: IFeedRow[];
     @Input() protected chkAll: boolean = false;
     @Output() protected sortChange = new EventEmitter();
+    
     private FEED_RETRIEVAL_METHOD = FEED_RETRIEVAL_METHOD; // used by the template
     private checkById: Map<string, boolean> = new Map<string, boolean>();
     private page: number;

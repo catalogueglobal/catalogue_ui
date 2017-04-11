@@ -1,15 +1,15 @@
 import {Component, ViewChild, Input, EventEmitter, Output} from '@angular/core';
 import { Store } from "@ngrx/store";
 import { Actions } from "@ngrx/effects";
-import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense, IFeed } from '../services/api/feedsApi.service';
-import { Configuration } from "../configuration";
-import { UtilsService } from "./../services/utils.service";
-import { SessionService } from "./../services/session.service";
-import { UsersApiService } from "./../services/api/usersApi.service";
-import { DatasetsState } from "../../state/datasets/datasets.reducer";
-import { DatasetsActions, toFeedReference, DatasetsActionType } from "../../state/datasets/datasets.actions";
-import { SharedService } from "../services/shared.service";
-import { InlineEditEvent } from "../../commons/directives/inline-edit-text/inline-edit-generic.component";
+import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense, IFeed } from 'app/commons/services/api/feedsApi.service';
+import { Configuration } from "app/commons/configuration";
+import { UtilsService } from "app/commons/services/utils.service";
+import { SessionService } from "app/commons/services/session.service";
+import { UsersApiService } from "app/commons/services/api/usersApi.service";
+import { DatasetsState } from "app/state/datasets/datasets.reducer";
+import { DatasetsActions, toFeedReference, DatasetsActionType } from "app/state/datasets/datasets.actions";
+import { SharedService } from "app/commons/services/shared.service";
+import { InlineEditEvent } from "app/commons/directives/inline-edit-text/inline-edit-generic.component";
 
 @Component({
   template: ''
@@ -82,12 +82,15 @@ export class DatatoolComponent {
 
     protected getMiscDatas(value: any) {
         let that = this;
-        this.feedsApiService.getMiscDatas().then(miscDatas => {
+        this.feedsApiService.getMiscDatas()
+        .then(miscDatas => {
             that.miscDatas = miscDatas;
             this.shared.setMiscDatas(miscDatas);
             that.feedsMiscDatas = {};
             that.setFeedsItemsObj(value, false);
-        });
+        }).catch(error=>{
+          console.log(error);
+        })
     }
 
     protected getDownloadUrl(feed: any){
@@ -113,9 +116,9 @@ export class DatatoolComponent {
           downloadUrl = 'miscDataUrl';
       }
 
-      for (let i = 0; i < itemsList.length; i++) {
+      for (let i = 0; itemsList && i < itemsList.length; i++) {
           if (itemsList[i].feedIds) {
-              for (let j = 0; j < itemsList[i].feedIds.length; j++) {
+              for (let j = 0; itemsList[i].feedIds && j < itemsList[i].feedIds.length; j++) {
                   if (feed.id === itemsList[i].feedIds[j]) {
                       itemsObj[feed.id] = itemsList[i];
                       itemsObj[feed.id][downloadUrl] = apiUrl + '/' + itemsList[i].id;
@@ -205,7 +208,7 @@ export class DatatoolComponent {
 
      protected displayLicense(feed: IFeed) {
          this.currentFeed = feed;
-         for (let i = 0; i < this.licenses.length; i++) {
+         for (let i = 0; this.licenses && i < this.licenses.length; i++) {
              if (this.feedsLicenses[this.currentFeed.id] && this.licenses[i].id === this.feedsLicenses[this.currentFeed.id].id) {
                  this.newLicenseOrMiscData.item = this.licenses[i];
              }
@@ -214,14 +217,14 @@ export class DatatoolComponent {
              }
          }
          if (!this.newLicenseOrMiscData.item){
-             this.newLicenseOrMiscData.item = this.licenses.length > 0 ? this.licenses[0] : null;
+             this.newLicenseOrMiscData.item = (this.licenses && this.licenses.length > 0) ? this.licenses[0] : null;
          }
      }
 
      protected displayMiscData(feed: IFeed) {
          this.currentFeed = feed;
-         this.newLicenseOrMiscData.item = this.miscDatas.length > 0 ? this.miscDatas[0] : null;
-         if (this.feedsLicenses[this.currentFeed.id]) {
+         this.newLicenseOrMiscData.item = (this.miscDatas && this.miscDatas.length > 0) ? this.miscDatas[0] : null;
+         if (this.feedsLicenses[this.currentFeed.id] && this.miscDatas) {
              for (let i = 0; i < this.miscDatas.length; i++) {
                  if (this.miscDatas[i].id === this.feedsLicenses[this.currentFeed.id].id) {
                      this.newLicenseOrMiscData.item = this.miscDatas[i];

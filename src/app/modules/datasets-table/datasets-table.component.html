@@ -43,7 +43,7 @@
                     <a [routerLink]="['/feeds/', feed.id]">
                         {{feed.name}}</a>
                     <div class="form-group">
-                        <select class="form-control"[ngModel]="feed.selectedVersion">
+                        <select class="form-control" [ngModel]="feed.selectedVersion">
                   				<option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
                   			</select>
                     </div>
@@ -91,7 +91,7 @@
     </table>
 
     <div class="pagination">
-        <pagination-controls #p (pageChange)="page = $event">
+        <pagination-template #p="paginationApi" (pageChange)="page = $event" autoHide="true">
             <ul class="ng2-pagination custom" *ngIf="p.pages.length > 1">
                 <li class="pagination-previous" [class.disabled]="p.isFirstPage()">
                     <a *ngIf="1 < p.getCurrent()" (click)="p.previous()">
@@ -118,7 +118,7 @@
                     </span>
                 </li>
             </ul>
-        </pagination-controls>
+        </pagination-template>
     </div>
 </div>
 <!--/.dataset-table-->

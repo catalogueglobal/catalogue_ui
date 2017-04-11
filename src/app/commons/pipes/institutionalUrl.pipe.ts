@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Configuration }       from "../configuration";
+import { Configuration }       from "app/commons/configuration";
 
 @Pipe({name: 'institutionalUrl'})
 export class InstitutionalUrlPipe implements PipeTransform {

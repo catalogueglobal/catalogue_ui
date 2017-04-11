@@ -3,9 +3,9 @@ import { Injectable } from "@angular/core";
 import { Effect, Actions } from "@ngrx/effects";
 import { Action, Store } from "@ngrx/store";
 import { Observable } from "rxjs/Observable";
-import { FeedsApiService, FeedsGetParams, IFeedApi, IFeed, FeedsGetResponse, ILicense } from "../../commons/services/api/feedsApi.service";
-import { ProjectsApiService } from "../../commons/services/api/projectsApi.service";
-import { UsersApiService, UserSubscribeParams } from "../../commons/services/api/usersApi.service";
+import { FeedsApiService, FeedsGetParams, IFeedApi, IFeed, FeedsGetResponse, ILicense } from "app/commons/services/api/feedsApi.service";
+import { ProjectsApiService } from "app/commons/services/api/projectsApi.service";
+import { UsersApiService, UserSubscribeParams } from "app/commons/services/api/usersApi.service";
 import { DatasetsActionType, DatasetsActions, IFeedReference } from "./datasets.actions";
 import { DatasetsState } from "./datasets.reducer";
 

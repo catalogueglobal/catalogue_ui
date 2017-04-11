@@ -1,13 +1,13 @@
 import {  Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
-import { IFeed, FeedsApiService }                                from "../../services/api/feedsApi.service";
-import { MapUtilsService }                                       from "../../services/mapUtils.service";
-import { SessionService }                                        from "../../services/session.service"
-import { UtilsService }                                          from "../../services/utils.service";
-import { DatasetsActions }                                       from "../../../state/datasets/datasets.actions";
-import { DatasetsState }                                         from "../../../state/datasets/datasets.reducer";
-import { Configuration }                                         from "../../configuration";
 import * as leaflet                                              from "leaflet";
-require('../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster');
+require('leaflet.markercluster');
+import { IFeed, FeedsApiService }                                from "app/commons/services/api/feedsApi.service";
+import { MapUtilsService }                                       from "app/commons/services/mapUtils.service";
+import { SessionService }                                        from "app/commons/services/session.service"
+import { UtilsService }                                          from "app/commons/services/utils.service";
+import { DatasetsActions }                                       from "app/state/datasets/datasets.actions";
+import { DatasetsState }                                         from "app/state/datasets/datasets.reducer";
+import { Configuration }                                         from "app/commons/configuration";
 
 @Component({
     selector: 'ct-feed-map',

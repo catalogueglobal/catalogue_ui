@@ -1,7 +1,7 @@
 import { Component }          from "@angular/core";
 import { Actions }            from "@ngrx/effects";
-import { SessionService }     from "../commons/services/session.service";
-import { DatasetsActionType } from "../state/datasets/datasets.actions";
+import { SessionService }     from "app/commons/services/session.service";
+import { DatasetsActionType } from "app/state/datasets/datasets.actions";
 
 @Component({
     selector:    'app-layout',

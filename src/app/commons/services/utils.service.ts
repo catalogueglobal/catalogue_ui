@@ -1,4 +1,3 @@
-/// <reference path="../../../../node_modules/@types/leaflet/index.d.ts" />
 import { Injectable } from "@angular/core";
 import * as leaflet   from "leaflet";
 import { IBounds }    from "./api/feedsApi.service";

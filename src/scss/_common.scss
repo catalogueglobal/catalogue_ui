@@ -19,6 +19,12 @@ table th {
 	width: 100px;
 }
 
+#datatable {
+	td {
+		max-width: 100px;
+	}
+}
+
 #datasetmap {
 	margin: 0;
 }
