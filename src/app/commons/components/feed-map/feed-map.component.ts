@@ -82,10 +82,9 @@ export class FeedMapComponent implements AfterViewInit {
         };
         let options = {
             center: <any>this.initialPosition,
-            zoom: this.initialZoom,
+            zoom: 10,
             zoomControl: false,
             minZoom: 2,
-            maxZoom: 10,
             layers: [tiles]
         }
         let map = leaflet.map(id, options);
@@ -109,26 +108,21 @@ export class FeedMapComponent implements AfterViewInit {
                 let lat = (bounds[0].lat + bounds[1].lat) / 2;
                 let lng = (bounds[0].lng + bounds[2].lng) / 2;
                 this.feedMarker = this.createMarker(this._feed, [lat, lng], bounds);
+                var coord: leaflet.LatLngExpression = leaflet.latLng(lat, lng);
+                this.map.setView(coord, 10);
                 this.map.addLayer(this.feedMarker);
-                this.fitBounds(true, false);
             }
         }
     }
 
-    private fitBounds(initial: boolean, stop: boolean) {
-
-        if (initial) {
-            let group = leaflet.featureGroup([this.feedMarker]);
-            this.map.fitBounds(group.getBounds());
+    private fitBounds(stop: boolean) {
+        if (stop) {
+            if (this.stopsMarkers.length > 0) {
+                this.map.fitBounds(this.stopsMarkersClusterGroup.getBounds());
+            }
         } else {
-            if (stop) {
-                if (this.stopsMarkers.length > 0) {
-                    this.map.fitBounds(this.stopsMarkersClusterGroup.getBounds());
-                }
-            } else {
-                if (this.stationsMarkers.length > 0) {
-                    this.map.fitBounds(this.stationsMarkersClusterGroup.getBounds());
-                }
+            if (this.stationsMarkers.length > 0) {
+                this.map.fitBounds(this.stationsMarkersClusterGroup.getBounds());
             }
         }
     }
@@ -150,7 +144,7 @@ export class FeedMapComponent implements AfterViewInit {
 
     private clickMarker(event) {
         this.stopsMarkersClusterGroup.bringToFront();
-        this.fitBounds(false, true);
+        this.fitBounds(true);
     }
 
     private clickSSMarker(event) {

@@ -26,7 +26,7 @@ export class SessionService {
     constructor(private config: Configuration) {
         let options = {
             theme: {
-                logo: '/src/images/logo-horizontal-blanc.png',
+                logo: 'images/logo-horizontal-blanc.png',
                 primaryColor: '#dea627',
                 authButtons: {
                     connectionName: {

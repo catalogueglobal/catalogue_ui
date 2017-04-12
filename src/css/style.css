@@ -831,7 +831,7 @@ p.drop-caps.secundary:first-child:first-letter {
 }
 
 .socials li a.social {
-    background: url(/src/images/bgi/sprites.png) no-repeat 0 0;
+    background: url(/images/bgi/sprites.png) no-repeat 0 0;
     width: 40px;
     height: 40px;
     text-indent: -999em;
@@ -877,11 +877,11 @@ p.drop-caps.secundary:first-child:first-letter {
 ========================================================================================*/
 
 .sprites {
-    background-image: url(/src/images/bgi/sprites.png);
+    background-image: url(/images/bgi/sprites.png);
 }
 
 .sp-after:after {
-    background-image: url(/src/images/bgi/sprites.png);
+    background-image: url(/images/bgi/sprites.png);
     display: inline-block;
     width: 25px;
     height: 25px;
@@ -891,7 +891,7 @@ p.drop-caps.secundary:first-child:first-letter {
 }
 
 .sp-before:before {
-    background-image: url(/src/images/bgi/sprites.png);
+    background-image: url(/images/bgi/sprites.png);
     display: inline-block;
     width: 25px;
     height: 25px;
@@ -974,7 +974,7 @@ p.drop-caps.secundary:first-child:first-letter {
     content: '';
     display: block;
     margin: 18px auto 0;
-    background: url(/src/images/bgi/sprites.png) no-repeat -105px -17px;
+    background: url(/images/bgi/sprites.png) no-repeat -105px -17px;
     width: 14px;
     height: 20px;
     -moz-transition: all 0.2s ease-in-out 0s;
@@ -1120,7 +1120,7 @@ p.drop-caps.secundary:first-child:first-letter {
 .category-section .tab-data li:before {
     content: '';
     position: absolute;
-    background: url(/src/images/bgi/sprites.png) no-repeat -120px 0;
+    background: url(/images/bgi/sprites.png) no-repeat -120px 0;
     width: 7px;
     height: 13px;
     top: 50%;
@@ -1334,7 +1334,7 @@ p.drop-caps.secundary:first-child:first-letter {
     left: 50px;
     top: 50%;
     margin-top: -23px;
-    background: url(/src/images/bgi/sprites.png) no-repeat 0 0;
+    background: url(/images/bgi/sprites.png) no-repeat 0 0;
     height: 43px;
 }
 
@@ -1445,7 +1445,7 @@ p.drop-caps.secundary:first-child:first-letter {
 .features-section .subscribe-btn:after {
     content: '';
     display: inline-block;
-    background: url(/src/images/bgi/sprites.png) no-repeat -121px -15px;
+    background: url(/images/bgi/sprites.png) no-repeat -121px -15px;
     width: 12px;
     height: 22px;
     vertical-align: middle;
@@ -1479,7 +1479,7 @@ p.drop-caps.secundary:first-child:first-letter {
 .video-section .video-title:after {
     content: '';
     display: block;
-    background: url(/src/images/bgi/sprites.png) no-repeat -137px 0;
+    background: url(/images/bgi/sprites.png) no-repeat -137px 0;
     width: 100px;
     height: 100px;
     margin: 30px auto 0;
@@ -1537,7 +1537,7 @@ p.drop-caps.secundary:first-child:first-letter {
 .module-box h5:before {
     content: '';
     display: block;
-    background: url(/src/images/bgi/sprites.png) no-repeat 0 0;
+    background: url(/images/bgi/sprites.png) no-repeat 0 0;
     width: 80px;
     height: 80px;
     margin: 0 auto 28px;
@@ -1584,7 +1584,7 @@ p.drop-caps.secundary:first-child:first-letter {
 .module-box-section .see-more:after {
     content: '';
     display: inline-block;
-    background: url(/src/images/bgi/sprites.png) no-repeat -121px -15px;
+    background: url(/images/bgi/sprites.png) no-repeat -121px -15px;
     width: 12px;
     height: 22px;
     vertical-align: middle;
@@ -1672,7 +1672,7 @@ p.drop-caps.secundary:first-child:first-letter {
 }
 
 .close-dialogbox {
-    background: url(/src/images/bgi/sprites.png) no-repeat -119px -104px;
+    background: url(/images/bgi/sprites.png) no-repeat -119px -104px;
     width: 24px;
     height: 24px;
     position: absolute;
@@ -2017,7 +2017,7 @@ input[type="submit"].submit-btn {
     content: '';
     display: inline-block;
     vertical-align: middle;
-    background: url(/src/images/bgi/sprites.png) no-repeat 0 0;
+    background: url(/images/bgi/sprites.png) no-repeat 0 0;
     width: 18px;
     height: 18px;
     margin-right: 7px;
@@ -2447,7 +2447,7 @@ input[type="submit"].submit-btn {
 .message-info:before {
     content: '';
     display: block;
-    background: #252525 url(/src/images/bgi/sprites.png) no-repeat 0 0;
+    background: #252525 url(/images/bgi/sprites.png) no-repeat 0 0;
     width: 70px;
     height: 70px;
     border-radius: 100%;
@@ -2455,7 +2455,7 @@ input[type="submit"].submit-btn {
 }
 
 .message-info.success-box:before {
-    background: #34b166 url(/src/images/bgi/sprites.png) no-repeat -244px -2px;
+    background: #34b166 url(/images/bgi/sprites.png) no-repeat -244px -2px;
 }
 
 .message-info>h3 {
@@ -2477,7 +2477,7 @@ input[type="submit"].submit-btn {
 }
 
 .message-info.error-box:before {
-    background: #d34f49 url(/src/images/bgi/sprites.png) no-repeat -244px -75px;
+    background: #d34f49 url(/images/bgi/sprites.png) no-repeat -244px -75px;
 }
 
 .popups #main {
@@ -2550,7 +2550,7 @@ input[type="submit"].submit-btn {
 
 .tools .autocompletebox:after {
     content: '';
-    background: url(/src/images/bgi/sprites.png) no-repeat -160px -212px;
+    background: url(/images/bgi/sprites.png) no-repeat -160px -212px;
     width: 20px;
     height: 20px;
     right: 15px;
@@ -2584,7 +2584,7 @@ input[type="submit"].submit-btn {
     content: '';
     display: inline-block;
     vertical-align: middle;
-    background: url(/src/images/bgi/sprites.png) no-repeat -207px -213px;
+    background: url(/images/bgi/sprites.png) no-repeat -207px -213px;
     width: 19px;
     height: 19px;
     position: relative;
@@ -2606,7 +2606,7 @@ input[type="submit"].submit-btn {
 }
 
 .license-attr .unknown-attr {
-    background: url(/src/images/bgi/sprites.png) no-repeat 0 0;
+    background: url(/images/bgi/sprites.png) no-repeat 0 0;
     width: 21px;
     height: 22px;
     float: left;
@@ -2716,7 +2716,7 @@ input[type="submit"].submit-btn {
 }
 
 .ex-link {
-    background: url(/src/images/bgi/sprites.png) no-repeat -220px -234px;
+    background: url(/images/bgi/sprites.png) no-repeat -220px -234px;
     width: 20px;
     height: 17px;
     display: block;
@@ -2728,7 +2728,7 @@ input[type="submit"].submit-btn {
 }
 
 .question-circle {
-    background: url(/src/images/bgi/sprites.png) no-repeat -202px -234px;
+    background: url(/images/bgi/sprites.png) no-repeat -202px -234px;
     width: 15px;
     height: 15px;
     display: inline-block;
@@ -2792,7 +2792,7 @@ input[type="submit"].submit-btn {
     vertical-align: middle;
     position: relative;
     top: -1px;
-    background: url(/src/images/bgi/sprites.png) no-repeat -244px -220px;
+    background: url(/images/bgi/sprites.png) no-repeat -244px -220px;
     width: 18px;
     height: 18px;
     margin-right: 5px;
@@ -2804,7 +2804,7 @@ input[type="submit"].submit-btn {
     vertical-align: middle;
     position: relative;
     top: -1px;
-    background: url(/src/images/bgi/sprites.png) no-repeat -265px -220px;
+    background: url(/images/bgi/sprites.png) no-repeat -265px -220px;
     width: 18px;
     height: 18px;
     margin-left: 5px;
@@ -2916,7 +2916,7 @@ select::-ms-expand {
 
 .custom-select:after {
     content: '';
-    background: url(/src/images/bgi/sprites.png) no-repeat -105px 0;
+    background: url(/images/bgi/sprites.png) no-repeat -105px 0;
     width: 14px;
     height: 16px;
     position: absolute;
@@ -3460,7 +3460,7 @@ table caption+thead tr:first-child th, table caption+thead tr:first-child td, ta
     top: 15px;
     width: 24px;
     height: 24px;
-    background: url(/src/images/bgi/sprites.png) no-repeat 0 0;
+    background: url(/images/bgi/sprites.png) no-repeat 0 0;
 }
 
 .alert-notification {
@@ -3712,7 +3712,7 @@ table caption+thead tr:first-child th, table caption+thead tr:first-child td, ta
 }
 
 .wp-pagenavi a.previouspostslink {
-    background: #f2f2f2 url(/src/images/bgi/sprites.png) no-repeat -121px -213px;
+    background: #f2f2f2 url(/images/bgi/sprites.png) no-repeat -121px -213px;
     width: 38px;
     height: 37px;
     position: relative;
@@ -3729,7 +3729,7 @@ table caption+thead tr:first-child th, table caption+thead tr:first-child td, ta
 }
 
 .wp-pagenavi a.nextpostslink {
-    background: #f2f2f2 url(/src/images/bgi/sprites.png) no-repeat 0 -213px;
+    background: #f2f2f2 url(/images/bgi/sprites.png) no-repeat 0 -213px;
     width: 38px;
     height: 37px;
     position: relative;
@@ -3755,7 +3755,7 @@ table caption+thead tr:first-child th, table caption+thead tr:first-child td, ta
 }
 
 #search .search-btn {
-    background: url(/src/images/bgi/sprites.png) no-repeat -160px -212px;
+    background: url(/images/bgi/sprites.png) no-repeat -160px -212px;
     width: 20px;
     height: 20px;
     background-color: transparent;
@@ -3783,7 +3783,7 @@ table caption+thead tr:first-child th, table caption+thead tr:first-child td, ta
 }
 
 .newslatter .send-btn {
-    background: url(/src/images/bgi/sprites.png) no-repeat -182px -212px;
+    background: url(/images/bgi/sprites.png) no-repeat -182px -212px;
     width: 22px;
     height: 20px;
     background-color: transparent;
@@ -3897,7 +3897,7 @@ table caption+thead tr:first-child th, table caption+thead tr:first-child td, ta
 .blog_archives li a:before {
     content: "";
     position: absolute;
-    background: url(/src/images/bgi/sprites.png) no-repeat -115px -87px;
+    background: url(/images/bgi/sprites.png) no-repeat -115px -87px;
     width: 5px;
     height: 8px;
     top: 50%;
@@ -4021,7 +4021,7 @@ table caption+thead tr:first-child th, table caption+thead tr:first-child td, ta
 }
 
 .admin:before {
-    background: url(/src/images/bgi/sprites.png) no-repeat -164px -101px;
+    background: url(/images/bgi/sprites.png) no-repeat -164px -101px;
     content: '';
     display: inline-block;
     width: 12px;
@@ -4036,7 +4036,7 @@ table caption+thead tr:first-child th, table caption+thead tr:first-child td, ta
 }
 
 .admin_comment:before {
-    background: url(/src/images/bgi/sprites.png) no-repeat -144px -101px;
+    background: url(/images/bgi/sprites.png) no-repeat -144px -101px;
     content: '';
     display: inline-block;
     width: 18px;
@@ -4065,7 +4065,7 @@ table caption+thead tr:first-child th, table caption+thead tr:first-child td, ta
 }
 
 .post_info h3.share:before {
-    background: url(/src/images/bgi/sprites.png) no-repeat -178px -102px;
+    background: url(/images/bgi/sprites.png) no-repeat -178px -102px;
     content: '';
     display: inline-block;
     width: 12px;
@@ -4076,7 +4076,7 @@ table caption+thead tr:first-child th, table caption+thead tr:first-child td, ta
 }
 
 .post_info h3.tag_detail:before {
-    background: url(/src/images/bgi/sprites.png) no-repeat -192px -102px;
+    background: url(/images/bgi/sprites.png) no-repeat -192px -102px;
     content: '';
     display: inline-block;
     width: 14px;
