@@ -1,13 +1,15 @@
 import {  Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import * as leaflet                                              from "leaflet";
+import { Store }                                                 from "@ngrx/store";
 require('leaflet.markercluster');
 import { IFeed, FeedsApiService }                                from "app/commons/services/api/feedsApi.service";
 import { MapUtilsService }                                       from "app/commons/services/mapUtils.service";
-import { SessionService }                                        from "app/commons/services/session.service"
 import { UtilsService }                                          from "app/commons/services/utils.service";
 import { DatasetsActions }                                       from "app/state/datasets/datasets.actions";
 import { DatasetsState }                                         from "app/state/datasets/datasets.reducer";
 import { Configuration }                                         from "app/commons/configuration";
+import { ProjectsApiService }                                    from "app/commons/services/api/projectsApi.service";
+import { SessionService }                      from "app/commons/services/session.service";
 
 @Component({
     selector: 'ct-feed-map',
@@ -28,13 +30,17 @@ export class FeedMapComponent implements AfterViewInit {
     stopsMarkersClusterGroup;
     stationsMarkersClusterGroup;
     feedMarker;
+    isAuthorised;
 
     constructor(private utils: UtilsService,
         private config: Configuration,
         private mapUtils: MapUtilsService,
         protected datasetsAction: DatasetsActions,
         private session: SessionService,
-        private feedsApi: FeedsApiService
+        private feedsApi: FeedsApiService,
+        private store: Store<DatasetsState>,
+        private sessionService: SessionService,
+        private projectsApi: ProjectsApiService
 
     ) {
         this.stopsMarkers = new Array();
@@ -71,6 +77,11 @@ export class FeedMapComponent implements AfterViewInit {
             }
         );
     }
+
+    private checkAuthorisations() {
+        this.isAuthorised = this.utils.userHasRightsOnFeed(this.sessionService.userProfile, this._feed.projectId, this._feed.id);
+    }
+
     protected computeMap(id): leaflet.Map {
         let tiles = leaflet.tileLayer(this.config.MAP_TILE_LAYER_URL, this.config.MAP_TILE_LAYER_OPTIONS);
         this.stopsMarkersClusterGroup = this.createClusterGroup(true);
@@ -100,18 +111,36 @@ export class FeedMapComponent implements AfterViewInit {
         this.stationsMarkersClusterGroup.clearLayers();
     }
 
-    private populateMap() {
+    private extractData(data) {
         if (this._feed && this.map) {
             this.clearMap();
-            if (this._feed.latestValidation && this._feed.latestValidation.bounds) {
+            if (data) {
                 let bounds = this.utils.computeBoundsToLatLng(this._feed.latestValidation.bounds);
-                let lat = (bounds[0].lat + bounds[1].lat) / 2;
-                let lng = (bounds[0].lng + bounds[2].lng) / 2;
+                let lat = data.defaultLocationLat;
+                let lng = data.defaultLocationLon;
+                if (!lat)
+                    lat = (bounds[0].lat + bounds[1].lat) / 2;
+                if (!lng)
+                    lng = (bounds[0].lng + bounds[2].lng) / 2;
                 this.feedMarker = this.createMarker(this._feed, [lat, lng], bounds);
                 var coord: leaflet.LatLngExpression = leaflet.latLng(lat, lng);
                 this.map.setView(coord, 10);
                 this.map.addLayer(this.feedMarker);
             }
+        }
+    }
+
+    private populateMap() {
+        let that = this;
+        this.checkAuthorisations();
+        if (this.isAuthorised) {
+            this.projectsApi.getPrivateProject(this._feed.projectId).then(function success(data) {
+                that.extractData(data);
+            });
+        } else {
+            this.projectsApi.getPublicProject(this._feed.projectId).then(function success(data) {
+                that.extractData(data);
+            });
         }
     }
 
@@ -128,8 +157,9 @@ export class FeedMapComponent implements AfterViewInit {
     }
 
     protected createMarker(feed, latLng, bounds): leaflet.Marker {
+        let isDraggable: boolean = this.isAuthorised;
         let marker: any = leaflet.marker(latLng, {
-            title: feed.name, draggable: false,
+            title: feed.name, draggable: isDraggable,
             icon: new this.NumberedDivIcon({
                 number: feed.name.charAt(0),
                 surClass: feed.isPublic ? 'public' : 'private'
@@ -139,7 +169,27 @@ export class FeedMapComponent implements AfterViewInit {
         marker.on('click', function(event) {
             that.clickMarker(event);
         });
+        if (isDraggable === true) {
+            marker.data = {
+                bounds: bounds,
+                id: feed.projectId
+            };
+            marker.on('dragend', function(event) {
+                that.updateProjectProperty(event);
+            });
+        }
         return marker;
+    }
+
+    // Update the Lat and Lng of the project
+    private updateProjectProperty(ev) {
+        var updateProject;
+        var changedPos = ev.target.getLatLng();
+        updateProject = {
+            defaultLocationLat: changedPos.lat,
+            defaultLocationLon: changedPos.lng
+        };
+        this.store.dispatch(this.datasetsAction.updateProject(ev.target.data.id, updateProject));
     }
 
     private clickMarker(event) {
