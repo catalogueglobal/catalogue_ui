@@ -42,7 +42,7 @@
                 <td>
                     <a [routerLink]="['/feeds/', feed.id]">
                         {{feed.name}}</a>
-                    <div class="form-group">
+                    <div class="form-group" *ngIf="feed.feedVersionCount > 0">
                         <select class="form-control" [ngModel]="feed.selectedVersion">
                   				<option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
                   			</select>
