@@ -1,0 +1,57 @@
+.modal {
+	background: rgba(0,0,0,0.6);
+
+	.customfile {
+		width: 100% !important;
+		height: 45px;
+
+		.cust-btn {
+			top: -6px !important;
+		}
+	}
+
+	.alert {
+		margin-top: 10px;
+		margin-bottom: 0;
+	}
+
+	.modal-content {
+		margin-top: 50px;
+	}
+
+	.modal-body {
+		max-height: 500px;
+		overflow-y: auto;
+
+		.license-text {
+			white-space: pre;
+		}
+	}
+
+	.modal-header {
+		padding: 7px;
+		background-color: $ct-orange;
+		color: white;
+
+		.app-modal-header {
+			text-align: center;
+			width: 100%;
+
+			label {
+				text-transform: uppercase;
+				font-weight: bold;
+
+				.license-name {
+					font-family: 'karbon-bold', Arial, Helvetica, sans-serif;
+					font-weight: bold;
+				}
+			}
+		}
+	}
+
+	#downloadLicenselink {
+		cursor: pointer;
+		color: white;
+		text-transform: uppercase;
+	}
+}

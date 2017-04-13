@@ -1,49 +1,46 @@
-import { Component }                           from "@angular/core";
-import { Actions }                             from "@ngrx/effects";
-import { Store }                               from "@ngrx/store";
-import { DatasetsActions, DatasetsActionType } from "../../../state/datasets/datasets.actions";
-import { ICreateFeed }                         from "../../../state/datasets/datasets.effects";
-import { DatasetsState }                       from "../../../state/datasets/datasets.reducer";
-import { ProjectsApiService }                  from "../../services/api/projectsApi.service";
-import { FeedsApiService }                     from "../../services/api/feedsApi.service";
-import { SessionService }                      from "../../services/session.service";
-import { UtilsService }                        from "../../services/utils.service";
+import { Component } from "@angular/core";
+import { Actions } from "@ngrx/effects";
+import { Store } from "@ngrx/store";
+import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
+import { ICreateFeed } from "app/state/datasets/datasets.effects";
+import { DatasetsState } from "app/state/datasets/datasets.reducer";
+import { ProjectsApiService } from "app/commons/services/api/projectsApi.service";
+import { FeedsApiService } from "app/commons/services/api/feedsApi.service";
+import { SessionService } from "app/commons/services/session.service";
+import { UtilsService } from "app/commons/services/utils.service";
 
 @Component({
-    selector:    'app-feed-create-form',
+    selector: 'app-feed-create-form',
     templateUrl: 'feed-create-form.component.html'
 })
 export class FeedCreateFormComponent {
-    public simpleUpload;
+    public simpleUpload: any = {};
     public showOptionsUpload: boolean;
     public addToProject: boolean;
     public projectsName = [];
     public licenses = [];
 
     constructor(
-        private sessionService:   SessionService,
-        private utils:            UtilsService,
-        protected store:          Store<DatasetsState>,
+        private sessionService: SessionService,
+        private utils: UtilsService,
+        protected store: Store<DatasetsState>,
         protected datasetsAction: DatasetsActions,
-        private projectsService:  ProjectsApiService,
-        private feedsService:     FeedsApiService,
-        actions$:                 Actions)
-    {
+        private projectsService: ProjectsApiService,
+        private feedsService: FeedsApiService,
+        actions$: Actions) {
         this.resetForm();
         // reset form on upload success
         actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.resetForm());
         actions$.ofType(DatasetsActionType.ADD_FEED_TO_PROJECT_SUCCESS).subscribe(() => this.resetForm());
         let that = this;
-        this.feedsService.getLicenses().then(function(data) {
-            for (var i = data.length - 1; i >= 0 ; i--) {
-                that.licenses.push(data[i]);
-            }
+        that.simpleUpload.license = {};
+        this.feedsService.getLicenses().then(licenses => {
+            that.licenses = licenses;
         });
     }
 
-
     onChange(selectedLicense) {
-        this.simpleUpload.licenseId = selectedLicense.id;
+        this.simpleUpload.license = selectedLicense;
     }
 
     private submit(): void {
@@ -56,28 +53,28 @@ export class FeedCreateFormComponent {
             isPublic: this.simpleUpload.isPrivate,
             file: this.simpleUpload.file,
             licenseName: this.simpleUpload.licenseName,
-            licenseId: this.simpleUpload.licenseId,
+            licenseId: this.simpleUpload.license.id,
             metadataFile: this.simpleUpload.metadataFile,
-            licenseFile: this.simpleUpload.license
+            licenseFile: this.simpleUpload.licenseFile
         }
-        this.store.dispatch(this.datasetsAction.feedCreate(createFeed));    
+        this.store.dispatch(this.datasetsAction.feedCreate(createFeed));
     }
-    
+
     private toggleShowOptionsUpload($event) {
         this.showOptionsUpload = !this.showOptionsUpload;
         return false;
     }
-    
-    private toggleAddToProject($event){
+
+    private toggleAddToProject($event) {
         this.addToProject = !this.addToProject;
     }
-    
-    public getAllProjectNames(){
-        if (this.sessionService.loggedIn == true){
+
+    public getAllProjectNames() {
+        if (this.sessionService.loggedIn == true) {
             this.projectsService.getAllSecureProject().subscribe(response => {
                 let name;
                 let id;
-                for (var i = 0; i < response.length; i++) {
+                for (var i = 0; response && i < response.length; i++) {
                     name = response[i]["name"];
                     id = response[i]["id"];
                     this.projectsName[i] = {
@@ -85,10 +82,11 @@ export class FeedCreateFormComponent {
                         id: id
                     }
                     this.simpleUpload.projectId = this.projectsName[0]["id"];
-                }});
-             }
+                }
+            });
+        }
     }
-    
+
     private resetForm() {
         this.showOptionsUpload = false;
         this.simpleUpload = {
@@ -96,8 +94,8 @@ export class FeedCreateFormComponent {
             file: null,
             license: null,
             newLicense: false,
-            licenseId: null,
             metadataFile: null,
+            licenseFile: null,
             isPrivate: false
         };
     }

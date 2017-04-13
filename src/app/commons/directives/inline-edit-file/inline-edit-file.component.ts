@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter, Renderer}    from "@angular/core";
-import { Configuration }                               from "../../configuration";
-import { UtilsService }                                from "../../services/utils.service";
-import { InlineEditGenericComponent, InlineEditEvent } from "../inline-edit-text/inline-edit-generic.component";
+import { Configuration }                               from "app/commons/configuration";
+import { UtilsService }                                from "app/commons/services/utils.service";
+import { InlineEditGenericComponent, InlineEditEvent } from "app/commons/directives/inline-edit-text/inline-edit-generic.component";
 
 @Component({
     selector:    'app-inline-edit-file',

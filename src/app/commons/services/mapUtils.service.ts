@@ -1,4 +1,3 @@
-/// <reference path="../../../../node_modules/@types/leaflet/index.d.ts" />
 import { Injectable } from "@angular/core";
 import * as leaflet   from "leaflet";
 
@@ -10,7 +9,7 @@ export class MapUtilsService {
 
     clusterAreaOver(markerClusterGroup, map) {
         let that = this;
-        let computeClusterHull = function (e) {
+        let computeClusterHull = function(e) {
             return that.computeConvexHull(e.layer.getAllChildMarkers())
         }
         this.areaOver(map, markerClusterGroup, 'clustermouseover', 'clustermouseout', computeClusterHull)
@@ -18,7 +17,7 @@ export class MapUtilsService {
 
     markerAreaOver(marker, map) {
         let that = this;
-        let computeMarkerHull = function () {
+        let computeMarkerHull = function() {
             return that.computeConvexHull([marker])
         }
         this.areaOver(map, marker, 'mouseover', 'mouseout', computeMarkerHull)
@@ -37,18 +36,28 @@ export class MapUtilsService {
         return leafletUntyped.QuickHull.getConvexHull(points);
     }
 
-    computeRedIcon() {
-        let redIcon = leaflet.icon({
-            iconUrl: 'src/images/markers/marker-icon-red.png',
-            shadowUrl: 'src/vendor/leaflet/dist/images/marker-shadow.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
+    computeRedIcon(cluster) {
+        return new L.DivIcon({
+            html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+            className: 'marker-cluster marker-cluster-medium', iconSize: new L.Point(40, 40)
         });
-        return redIcon;
     }
-    
+
+    computeStopIcon(cluster) {
+        return new L.DivIcon({
+            html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+            className: 'marker-cluster marker-cluster-small', iconSize: new L.Point(40, 40)
+        });
+    }
+
+    computeStationIcon(cluster) {
+        return new L.DivIcon({
+            html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+            className: 'marker-cluster marker-cluster-large', iconSize: new L.Point(40, 40)
+        });
+    }
+
+
     private areaOver(map, source, eventOver, eventOut, computeConvexHull) {
         var polygon;
         function removePolygon() {
@@ -57,12 +66,55 @@ export class MapUtilsService {
                 polygon = null;
             }
         }
-        source.on(eventOver, function (e) {
+        source.on(eventOver, function(e) {
             removePolygon();
             polygon = leaflet.polygon(computeConvexHull(e));
             map.addLayer(polygon);
         });
         source.on(eventOut, removePolygon);
         map.on('zoomend', removePolygon);
+    }
+
+    public createNumMarker() {
+        return L.Icon.extend({
+            options: {
+                iconSize: new L.Point(30, 30),
+                iconAnchor: new L.Point(15, 0),
+                className: 'leaflet-div-number-icon'
+            },
+
+            createIcon: function() {
+                let div = document.createElement('div');
+                this.options.className += ' ' + this.options.surClass;
+
+                let numdiv = document.createElement('div');
+                numdiv.setAttribute("class", "number");
+                numdiv.innerHTML = this.options['number'] || '';
+                div.appendChild(numdiv);
+                this._setIconStyles(div, 'icon');
+                return div;
+            }
+        });
+    }
+
+    public createIconMarker() {
+        return L.Icon.extend({
+            options: {
+                iconSize: new L.Point(30, 30),
+                iconAnchor: new L.Point(15, 0),
+                className: 'leaflet-div-number-icon'
+            },
+
+            createIcon: function() {
+                let div = document.createElement('div');
+                this.options.className += ' ' + this.options.surClass;
+
+                let icondiv = document.createElement('i');
+                icondiv.setAttribute("class", 'img-icon fa fa-lg ' + this.options['faIcon'] || '');
+                div.appendChild(icondiv);
+                this._setIconStyles(div, 'icon');
+                return div;
+            }
+        });
     }
 }

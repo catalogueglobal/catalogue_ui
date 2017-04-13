@@ -1,171 +1,199 @@
 {
-  "layout": {
-    "menu": {
-      "use": "use",
-      "upload": "upload",
-      "download": "download",
-      "manage": "manage",
-      "subscribe": "subscribe",
-      "login": "login",
-      "logout": "logout"
+    "layout": {
+        "menu": {
+            "use": "use",
+            "upload": "upload",
+            "download": "download",
+            "manage": "manage",
+            "subscribe": "subscribe",
+            "login": "login",
+            "logout": "logout"
+        },
+        "footer": {
+            "home": "Home",
+            "about": "About",
+            "faq": "FAQ",
+            "community": "Community",
+            "tools": "Tools",
+            "blog": "Blog",
+            "contact": "Contact",
+            "subscribe": "Subscribe",
+            "copyright": "&copy; {{year}} Catalogue. All Rights Reserved."
+        }
     },
-    "footer": {
-      "home": "Home",
-      "about": "About",
-      "faq": "FAQ",
-      "community": "Community",
-      "tools": "Tools",
-      "blog": "Blog",
-      "contact": "Contact",
-      "subscribe": "Subscribe",
-      "copyright": "&copy; {{year}} Catalogue. All Rights Reserved."
+    "popup": {
+        "subscribe": {
+            "title": "Subscribe Now",
+            "name": "Name",
+            "company": "Company",
+            "email": "Email",
+            "type": {
+                "label": "Types",
+                "placeholder": "Select your Type",
+                "producer": "Producer",
+                "developer": "Developers",
+                "community": "Community"
+            },
+            "submit": "Subscribe"
+        },
+        "upload": {
+            "login": "Login to proceed",
+            "file": "Data file (*.zip)",
+            "browse": "Browse",
+            "check": "Check to download your own license",
+            "select": "Select a license",
+            "licenseName": "License Name",
+            "licenseFile": "License File (*.txt)",
+            "metadataFile": "Metadata File (*.zip)",
+            "title": "Upload new dataset",
+            "toggleOptions": {
+                "show": "Show advanced options",
+                "hide": "Hide advanced options"
+            },
+            "projectName": "Project name",
+            "feedName": "Feed name",
+            "isPublic": "Public dataset",
+            "submit": "Proceed to upload",
+            "changeLicense": "Change license"
+        },
+        "delete": {
+            "confirm": {
+                "title": "Confirm deletion",
+                "label": "Are you sure you want to delete ?"
+            }
+        },
+        "cancel": "cancel",
+        "validate": "validate",
+        "noLicense": "No license"
+    },
+    "datasets": {
+        "title": "Download datasets",
+        "map": {
+            "title": "Select datasets on the map or search by location"
+        },
+        "table": {
+            "title": "catalogue datasets",
+            "intro": "From the list of displayed datasets, click to select those you want to download.",
+            "search": "Search here",
+            "btn": {
+                "download": "download"
+            },
+            "noresult": {
+                "info": "No feed found for your search. Try zooming out or",
+                "reset": "reset your search"
+            },
+            "tooltips": {
+                "download": "Click here to download the item"
+            },
+            "miscData": {
+                "title": "change misc data",
+                "noMiscData": "none",
+                "select": "Choose a misc",
+                "new": "upload you file"
+            }
+        }
+    },
+    "mydatasets": {
+        "title": "Manage your datasets",
+        "map": {
+            "title": "Select datasets on the map or search by location"
+        },
+        "table": {
+            "title": "catalogue datasets",
+            "intro": "From the list of displayed datasets, click to select those you want to download.",
+            "search": "Search here",
+            "btn": {
+                "download": "download",
+                "delete": "delete"
+            },
+            "noresult": {
+                "info": "No feed found for your search. Try zooming out or",
+                "reset": "reset your search"
+            }
+        }
+    },
+    "datasets-table": {
+        "checkall": "Check all",
+        "column": {
+            "feedName": "Feed name",
+            "area": "Area",
+            "license": "License",
+            "miscData": "Misc",
+            "subscribe": "Subscibe / Unsubscribe"
+        }
+    },
+    "mydatasets-table": {
+        "checkall": "Check all",
+        "column": {
+            "isPublic": {
+                "label": "Public",
+                "public": "public",
+                "private": "private"
+            },
+            "type": {
+                "label": "Type",
+                "fetch": "Fetch auto.",
+                "upload": "Manual upload",
+                "inhouse": "In house prod."
+            },
+            "feedName": "Feed name",
+            "area": "Area",
+            "updated": "Updated",
+            "add": "add",
+            "license name or file empty": "license name or file empty"
+        }
+    },
+    "feed": {
+        "period": "Period of application:",
+        "period_to": " to ",
+        "routes": "Number of routes:",
+        "trips": "Number of trips:",
+        "note": {
+            "title": "Notes:",
+            "author": "Author:",
+            "date": "Date:",
+            "submit": "Submit"
+        }
+    },
+    "state": {
+        "USER_SUBSCRIBE": "Subscribing...",
+        "USER_SUBSCRIBE_SUCCESS": "Subscription success, thanks.",
+        "USER_SUBSCRIBE_FAIL": "Sorry, subscription failed. Please try again",
+        "FEEDS_GET": {
+            "private": "Loading private feeds...",
+            "public": "Loading public feeds..."
+        },
+        "FEEDS_GET_FAIL": {
+            "public": "Failed to load public feeds.",
+            "private": "Failed to load private feeds."
+        },
+        "FEED_CREATE": "Creating feed: <i>{{feedName}</i>",
+        "FEED_CREATE_PROGRESS": "Creating feed: <i>{{feedName}}</i> ({{progress}})",
+        "FEED_CREATE_SUCCESS": "Feed created: <i>{{feedName}}</i>",
+        "FEED_CREATE_FAIL": "Feed creation failed: <i>{{feedName}}</i>",
+        "FEED_SET_PUBLIC": "Updating feed: <i>{{feedName}}</i>",
+        "FEED_SET_PUBLIC_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
+        "FEED_SET_PUBLIC_FAIL": "Feed update failed: <i>{{feedName}}</i>",
+        "FEED_SET_NAME": "Updating feed: <i>{{feedName}}</i>",
+        "FEED_SET_NAME_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
+        "FEED_SET_NAME_FAIL": "Feed update failed: <i>{{feedName}}</i>",
+        "FEED_SET_FILE": "Updating feed <i>{{feedName}}</i>...",
+        "FEED_SET_FILE_PROGRESS": "Updating feed <i>{{feedName}}</i> ({{progress}})",
+        "FEED_SET_FILE_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
+        "FEED_SET_FILE_FAIL": "Feeds update failed: <i>{{feedName}}</i>",
+        "FEED_DELETE": "Deleting {{countFeeds}} feed(s)...",
+        "FEED_DELETE_SUCCESS": "{{countFeeds}} feed(s) deleted.",
+        "FEED_DELETE_FAIL": "Failed to delete {{countFeeds}} feed(s) : {{feedLabels}}.",
+        "FEED_FETCH": "Refreshing feed <i>{{feedName}}</i>...",
+        "FEED_FETCH_SUCCESS": "Feed refreshed: <i>{{feedName}}</i>",
+        "FEED_FETCH_FAIL": "Feed refresh failed: <i>{{feedName}}</i>",
+        "ADD_FEED_TO_PROJECT_SUCCESS": "Feed have been added to the project",
+        "ADD_FEED_TO_PROJECT_FAIL": "Feed couldn't be added to the project",
+        "SUBSCRIBE_FEED": "Subscribing to feed",
+        "SUBSCRIBE_FEED_SUCCESS": "You have been subscribed to the feed",
+        "SUBSCRIBE_FEED_FAIL": "Fail to subscribe to the feed",
+        "UNSUBSCRIBE_FEED": "Unsubscribing to feed",
+        "UNSUBSCRIBE_FEED_SUCCESS": "You have been unsubscribed to the feed",
+        "UNSUBSCRIBE_FEED_FAIL": "Fail to unsubscribe to the feed"
     }
-  },
-  "popup": {
-    "subscribe": {
-      "title": "Subscribe Now",
-      "name": "Name",
-      "company": "Company",
-      "email": "Email",
-      "type": {
-        "label": "Types",
-        "placeholder": "Select your Type",
-        "producer": "Producer",
-        "developer": "Developers",
-        "community": "Community"
-      },
-      "submit": "Subscribe"
-    },
-    "upload": {
-      "login": "Login to proceed",
-      "file": "Data file (*.zip)",
-      "browse": "Browse",
-      "check": "Check to download your own license",
-      "select": "Select a license",
-      "licenseName": "License Name",
-      "licenseFile": "License File (*.txt)",
-      "metadataFile": "Metadata File (*.zip)",
-      "title": "Upload new dataset",
-      "toggleOptions": {
-        "show": "Show advanced options",
-        "hide": "Hide advanced options"
-      },
-      "projectName": "Project name",
-      "feedName": "Feed name",
-      "isPublic": "Public dataset",
-      "submit": "Proceed to upload"
-    },
-    "delete": {
-      "confirm": {
-          "title": "Confirm deletion",
-          "label": "Are you sure you want to delete ?"
-      }
-    }
-  },
-  "datasets": {
-    "title": "Download datasets",
-    "map": {
-      "title": "Select datasets on the map or search by location"
-    },
-    "table": {
-      "title": "catalogue datasets",
-      "intro": "From the list of displayed datasets, click to select those you want to download.",
-      "search": "Search here",
-      "btn": {
-        "download": "download"
-      },
-      "noresult": {
-        "info": "No feed found for your search. Try zooming out or",
-        "reset": "reset your search"
-      }
-    }
-  },
-  "mydatasets": {
-    "title": "Manage your datasets",
-    "map": {
-      "title": "Select datasets on the map or search by location"
-    },
-    "table": {
-      "title": "catalogue datasets",
-      "intro": "From the list of displayed datasets, click to select those you want to download.",
-      "search": "Search here",
-      "btn": {
-        "download": "download",
-        "delete": "delete"
-      },
-      "noresult": {
-        "info": "No feed found for your search. Try zooming out or",
-        "reset": "reset your search"
-      }
-    }
-  },
-  "datasets-table": {
-    "checkall": "Check all",
-    "column": {
-      "feedName": "Feed name",
-      "area": "Area",
-      "license": "License",
-      "subscribe": "Subscibe / Unsubscribe"
-    }
-  },
-  "mydatasets-table": {
-    "checkall": "Check all",
-    "column": {
-      "isPublic": {
-        "label": "Public",
-        "public": "public",
-        "private": "private"
-      },
-      "type": {
-        "label": "Type",
-        "fetch": "Fetch auto.",
-        "upload": "Manual upload",
-        "inhouse": "In house prod."
-      },
-      "feedName": "Feed name",
-      "area": "Area",
-      "updated": "Updated"
-    }
-  },
-  "state": {
-    "USER_SUBSCRIBE": "Subscribing...",
-    "USER_SUBSCRIBE_SUCCESS": "Subscription success, thanks.",
-    "USER_SUBSCRIBE_FAIL": "Sorry, subscription failed. Please try again",
-    "FEEDS_GET": {
-      "private": "Loading private feeds...",
-      "public": "Loading public feeds..."
-    },
-    "FEEDS_GET_FAIL": {
-      "public": "Failed to load public feeds.",
-      "private": "Failed to load private feeds."
-    },
-    "FEED_CREATE": "Creating feed: <i>{{feedName}</i>",
-    "FEED_CREATE_PROGRESS": "Creating feed: <i>{{feedName}}</i> ({{progress}})",
-    "FEED_CREATE_SUCCESS": "Feed created: <i>{{feedName}}</i>",
-    "FEED_CREATE_FAIL": "Feed creation failed: <i>{{feedName}}</i>",
-    "FEED_SET_PUBLIC": "Updating feed: <i>{{feedName}}</i>",
-    "FEED_SET_PUBLIC_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
-    "FEED_SET_PUBLIC_FAIL": "Feed update failed: <i>{{feedName}}</i>",
-    "FEED_SET_NAME": "Updating feed: <i>{{feedName}}</i>",
-    "FEED_SET_NAME_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
-    "FEED_SET_NAME_FAIL": "Feed update failed: <i>{{feedName}}</i>",
-    "FEED_SET_FILE": "Updating feed <i>{{feedName}}</i>...",
-    "FEED_SET_FILE_PROGRESS": "Updating feed <i>{{feedName}}</i> ({{progress}})",
-    "FEED_SET_FILE_SUCCESS": "Feed updated: <i>{{feedName}}</i>",
-    "FEED_SET_FILE_FAIL": "Feeds update failed: <i>{{feedName}}</i>",
-    "FEED_DELETE": "Deleting {{countFeeds}} feed(s)...",
-    "FEED_DELETE_SUCCESS": "{{countFeeds}} feed(s) deleted.",
-    "FEED_DELETE_FAIL": "Failed to delete {{countFeeds}} feed(s) : {{feedLabels}}.",
-    "FEED_FETCH": "Refreshing feed <i>{{feedName}}</i>...",
-    "FEED_FETCH_SUCCESS": "Feed refreshed: <i>{{feedName}}</i>",
-    "FEED_FETCH_FAIL":"Feed refresh failed: <i>{{feedName}}</i>",
-    "ADD_FEED_TO_PROJECT_SUCCESS": "Feed have been added to the project",
-    "ADD_FEED_TO_PROJECT_FAIL": "Feed couldn't be added to the project",
-    "SUBSCRIBE_FEED": "Subscribing to feed",
-    "SUBSCRIBE_FEED_SUCCESS": "You have been subscribed to the feed",
-    "SUBSCRIBE_FEED_FAIL": "Fail to subscribe to the feed",
-    "UNSUBSCRIBE_FEED": "Unsubscribing to feed",
-    "UNSUBSCRIBE_FEED_SUCCESS": "You have been unsubscribed to the feed",
-    "UNSUBSCRIBE_FEED_FAIL": "Fail to unsubscribe to the feed"
-  }
 }

@@ -2,8 +2,8 @@ import { Injectable }           from "@angular/core";
 import { Http }                 from "@angular/http";
 import { AuthHttp, AuthConfig } from "angular2-jwt";
 import { Observable }           from "rxjs/Rx";
-import { Configuration }        from "../../configuration";
-import { SortOrder }            from "../../directives/sort-link/sort-link.component";
+import { Configuration }        from "app/commons/configuration";
+import { SortOrder }            from "app/commons/directives/sort-link/sort-link.component";
 import { AbstractApiService }   from "./abstractApi.service";
 import { IFeedApi, IBounds }    from "./feedsApi.service";
 
@@ -51,19 +51,19 @@ export class ProjectsApiService extends AbstractApiService {
         return this.authHttp.get(this.PROJECT_SECURE_URL + "?" + this.sortQuery(sortOrder) + "&" + this.boundsQuery(bounds))
             .map(response => response.json());
     }
-    
+
     public getPublicProject(projectId: string): Promise<IProject> {
         return this.http.get(this.PROJECT_PUBLIC_URL + "/" + projectId).map(response => response.json()).toPromise();
     }
-    
+
     public getAllSecureProject() : Observable<IProject[]> {
         return this.authHttp.get(this.PROJECT_SECURE_URL).map(response => response.json());
     }
-    
+
     public getPrivateProject(projectId: string): Promise<IProject> {
         return this.authHttp.get(this.PROJECT_SECURE_URL + "/" + projectId).map(response => response.json()).toPromise();
     }
-    
+
 
     public updateProject(project: JSON, projectId: string): Observable<IProject> {
         return this.authHttp.put(this.PROJECT_SECURE_URL + "/" + projectId, JSON.stringify(project)).map(response => response.json());
@@ -75,7 +75,7 @@ export class ProjectsApiService extends AbstractApiService {
         }
         return "sort=" + sortOrder.sort + "&order=" + sortOrder.order;
     }
-    
+
     private boundsQuery(bounds: IBounds) {
         if (!bounds) {
             return "";

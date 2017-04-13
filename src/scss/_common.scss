@@ -1,0 +1,130 @@
+.container-fluid {
+	/* 	padding after the banner */
+	padding-top: 100px;
+	padding-bottom: 50px;
+}
+
+.feed-registry {
+	width: 50%;
+}
+
+table td,
+table th {
+	vertical-align: middle;
+	padding: 5px;
+	word-wrap: break-word;
+}
+
+.dataset-table td.area div {
+	width: 100px;
+}
+
+#datatable {
+	td {
+		max-width: 100px;
+	}
+}
+
+#datasetmap {
+	margin: 0;
+}
+
+.tools {
+	margin-bottom: 0;
+	margin-top: 10px;
+}
+
+.pagination {
+	margin: 0;
+}
+
+.btn {
+	color: $ct-white;
+	text-transform: uppercase;
+}
+
+.btn-validate {
+	background-color: $ct-orange;
+
+	&:hover {
+		background-color: $ct-orange;
+	}
+}
+
+.btn-cancel {
+	background-color: $ct-grey;
+
+	&:hover {
+		background-color: $ct-grey;
+	}
+}
+
+.leading-label {
+	font-family: 'karbon-bold', Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 20px;
+	padding-right: 5px;
+}
+
+.subcribe-form {
+	.form-group {
+		margin-bottom: 0;
+		padding: 0;
+	}
+
+	.customfile {
+		height: 50px;
+		line-height: 50px;
+
+		.cust-btn {
+			line-height: inherit;
+		}
+	}
+}
+
+.leaflet-div-number-icon {
+	background-color: $ct-blue;
+	border: none;
+	color: $ct-white;
+	font-weight: bold;
+	border-style: solid;
+	border-radius: 50%;
+	border-width: 1px;
+	text-align: center;
+
+	&.private {
+		background-color: $ct-red;
+	}
+
+	> .number {
+		position: relative;
+		top: 5px;
+		font-size: 12px;
+		z-index: 300;
+		text-transform: capitalize;
+	}
+
+	> .img-icon {
+		margin-top: 8px;
+	}
+
+	&.stop-marker {
+		background-color: $ct-green;
+	}
+
+	&.station-marker {
+		background-color: $ct-orange;
+	}
+}
+
+.leaflet-popup-content-wrapper {
+	border-radius: 5px;
+}
+
+.tooltip-inner {
+	background-color: $ct-grey;
+}
+
+.tooltip-arrow {
+	border-top-color: $ct-grey !important;
+}

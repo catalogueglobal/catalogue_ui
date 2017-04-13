@@ -23,19 +23,19 @@
   </div>
   <div class="form-group form-group-file" *ngIf="simpleUpload.newLicense">
     <label>{{'popup.upload.licenseFile'|translate}}</label>
-    <input type="file" (change)="utils.setFileModelOnChange(simpleUpload, 'license', $event)" name="licenseFile" >
+    <input type="file" (change)="utils.setFileModelOnChange(simpleUpload, 'licenseFile', $event)" name="licenseFile" >
   </div>
 
   <div class="form-group" *ngIf="!simpleUpload.newLicense">
     <label>{{'popup.upload.select'|translate}}</label>
-    <select [ngModel]="simpleUpload.licenseId" (ngModelChange)="onChange($event)" name="sel2" >
-      <option [value]="license.id" *ngFor="let license of licenses">{{license.name}}</option>
+    <select [ngModel]="simpleUpload.license" (ngModelChange)="onChange($event)" name="sel2" >
+      <option [ngValue]="license" *ngFor="let license of licenses">{{license.name}}</option>
     </select>
   </div>
 
   <div class="form-group form-group-file">
     <label>{{'popup.upload.metadataFile'|translate}}</label>
-    <input type="file" (change)="utils.setFileModelOnChange(simpleUpload, 'metadatFile', $event)" name="metadataFile">
+    <input type="file" (change)="utils.setFileModelOnChange(simpleUpload, 'metadataFile', $event)" name="metadataFile">
   </div>
 
   <!--/.form-group-->

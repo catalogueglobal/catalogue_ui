@@ -1,4 +1,3 @@
-/// <reference path="../../../../node_modules/@types/leaflet/index.d.ts" />
 import { Injectable } from "@angular/core";
 import * as leaflet   from "leaflet";
 import { IBounds }    from "./api/feedsApi.service";
@@ -19,7 +18,7 @@ export class UtilsService {
         // return averaged location
         return leaflet.latLng((latNorth + latSouth) / 2, (lngWest + lngEast) / 2);
     }
-    
+
     public computeBoundsToLatLng(bounds: IBounds): leaflet.LatLng[] {
         if (!bounds)
             return null
@@ -34,7 +33,7 @@ export class UtilsService {
             leaflet.latLng(latSouth, lngWest)
         ];
     }
-    
+
     public computeLatLngToBounds(latLng: leaflet.LatLng[]): IBounds {
         if (!latLng)
             return null
@@ -47,7 +46,7 @@ export class UtilsService {
             west: southWest.lng
         }
     }
-    
+
     public setFileModelOnChange(model, property, event) {
         try {
             model[property] = event.target.files[0];
@@ -56,11 +55,11 @@ export class UtilsService {
             model[property] = null;
         }
     }
-    
+
     public toggleOrder(value) {
         return (value == 'asc' ? 'desc' : 'asc');
     }
-    
+
     public regionStateCountry(feed) {
         let parts = [];
         if (feed.region && feed.region.trim().length) {
@@ -74,11 +73,18 @@ export class UtilsService {
         }
         return parts.join(', ');
     }
-    
-    public addFeedIdToJson(userInfos, feed_id){
+
+    public addFeedIdToJson(userInfos, feed_id) {
         console.log("add feed_id to json");
-        if (userInfos.app_metadata.datatools[0].subscriptions == null){
-            let b = {"type": "feed-updated", target: []};
+        if (!userInfos.app_metadata) {
+            userInfos.app_metadata = {
+                datatools: [{
+                    subscriptions: null
+                }]
+            }
+        }
+        if (userInfos.app_metadata.datatools[0].subscriptions == null) {
+            let b = { "type": "feed-updated", target: [] };
             userInfos.app_metadata.datatools[0].subscriptions = [];
             userInfos.app_metadata.datatools[0].subscriptions.push(b);
             userInfos.app_metadata.datatools[0].subscriptions[0].target.push(feed_id);
@@ -86,5 +92,93 @@ export class UtilsService {
             userInfos.app_metadata.datatools[0].subscriptions[0].target.push(feed_id);
         }
         return userInfos;
+    }
+
+    public userHasAdminRightOnFeed(userInfo, projectId, feedId) {
+        if (userInfo.app_metadata && userInfo.app_metadata.datatools &&
+            userInfo.app_metadata.datatools[0].permissions) {
+            for (let i = 0; i < userInfo.app_metadata.datatools[0].permissions.length; i++) {
+                if (userInfo.app_metadata.datatools[0].permissions[i].type === 'administer-application') {
+                    return true;
+                }
+            }
+            for (let i = 0; i < userInfo.app_metadata.datatools[0].projects.length; i++) {
+                let project = userInfo.app_metadata.datatools[0].projects[i];
+                if (project.project_id === projectId) {
+                    if (project.permissions) {
+                        for (let j = 0; j < project.permissions.length; j++) {
+                            if (project.permissions[j].type === 'administer-project') {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public userHasManageRightOnFeed(userInfo, projectId, feedId) {
+        return this.userHasEditRightOnFeed(userInfo, projectId, feedId, 'manage-feed');
+    }
+
+    public userHasEditRightOnFeed(userInfo, projectId, feedId, type) {
+        type = type || 'edit-gtfs'
+        if (userInfo.app_metadata && userInfo.app_metadata.datatools &&
+            userInfo.app_metadata.datatools[0].projects) {
+            for (let i = 0; i < userInfo.app_metadata.datatools[0].projects.length; i++) {
+                let project = userInfo.app_metadata.datatools[0].projects[i];
+                if (project.project_id === projectId) {
+                    if (project.permissions) {
+                        for (let j = 0; j < project.permissions.length; j++) {
+                            if (project.permissions[j].type === type) {
+                                if (!project.permissions[j].feeds || project.permissions[j].feeds === ['*'] ||
+                                    project.permissions[j].feeds.indexOf(feedId) > -1) {
+                                    return true;
+                                }
+                                return false;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    public userHasRightsOnFeed(userInfo, projectId, feedId) {
+        if (userInfo && userInfo.app_metadata && userInfo.app_metadata.datatools &&
+            userInfo.app_metadata.datatools[0].permissions) {
+            for (let i = 0; i < userInfo.app_metadata.datatools[0].permissions.length; i++) {
+                if (userInfo.app_metadata.datatools[0].permissions[i].type === 'administer-application') {
+                    return true;
+                }
+            }
+            for (let i = 0; i < userInfo.app_metadata.datatools[0].projects.length; i++) {
+                let project = userInfo.app_metadata.datatools[0].projects[i];
+                if (project.project_id === projectId) {
+                    if (project.permissions) {
+                        var j = 0;
+                        for (j = 0; j < project.permissions.length; j++) {
+                            if (project.permissions[j].type === 'administer-project') {
+                                return true;
+                            }
+                        }
+                        if (project.permissions[j].type === 'manage-feed' ||
+                            project.permissions[j].type === 'edit-gtfs') {
+                            if (!project.permissions[j].feeds || project.permissions[j].feeds === ['*'] ||
+                                project.permissions[j].feeds.indexOf(feedId) > -1) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 }

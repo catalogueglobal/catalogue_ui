@@ -1,32 +1,172 @@
-<div class="banner" style="background-image:url(src/images/bgi/banner.jpg);margin-bottom:80px;">
-  <!--<div class="main-title"><h1 class="banner-title">{{'datasets.title'|translate}}</h1></div>-->
+<div class="banner" style="background-image: url(images/bgi/banner.jpg); margin-bottom: 80px;"></div>
+
+<div class="container-fluid feed-component">
+    <div class="offset-md-1 panel panel-warning">
+        <div class="panel-heading col-md-12">
+            <div class="col-md-6">
+                <h3 *ngIf="feed != null && !isAuthorised">{{feed.name}}</h3>
+                <div *ngIf="feed !=null && isAuthorised">
+                    <app-inline-edit-text [initialValue]="feed.name" (onSave)="setName(feed, $event)">
+                        {{feed.name}} </app-inline-edit-text>
+                </div>
+
+            </div>
+            <div class="feed-tools pull-right">
+                <div *ngIf="sessionService.loggedIn" class="text-container">
+                    <span class="item-title">{{'datasets-table.column.subscribe'|translate}}</span>
+                    <input type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)">
+                </div>
+                <div class="text-container">
+                    <div *ngIf="!isAuthorised">
+                        <span class="item-title">{{'mydatasets-table.column.isPublic.label'|translate}}: </span>
+                        <span>{{feed.isPublic}}</span>
+                    </div>
+                    <div *ngIf="isAuthorised">
+                        <a href="#" (click)="togglePublic(feed)">
+                            <div *ngIf="feed.isPublic">
+                                <i class="fa fa-toggle-on" title="Public"></i> <span class="details">{{'mydatasets-table.column.isPublic.public'|translate}}</span>
+                            </div>
+                            <div *ngIf="!feed.isPublic">
+                                <i class="fa fa-toggle-off" title="Private"></i> <span class="details">{{'mydatasets-table.column.isPublic.private'|translate}}</span>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuDownload" data-toggle="dropdown">
+                        {{'layout.menu.download' | translate}}
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDownload">
+                        <li>
+                            <a (click)="getDownloadUrl(feed)">
+                                <span>
+                                  {{'datasets-table.column.feedName'|translate}}: {{feed.name}}
+                              </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a *ngIf="feedsLicenses[feed.id]" download="{{feedsLicenses[feed.id].name}}" href="{{feedsLicenses[feed.id].licenseUrl}}">
+                                <span>
+                                    {{'datasets-table.column.license'|translate}}: {{feedsLicenses[feed.id].name}}
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a *ngIf="feedsMiscDatas[feed.id]" download="{{feedsMiscDatas[feed.id].name}}" href="{{feedsMiscDatas[feed.id].miscDataUrl}}">
+                                <span>
+                                    {{'datasets-table.column.miscData'|translate}}: {{feedsMiscDatas[feed.id].name}}
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div *ngIf="isAuthorised" class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuEdit" data-toggle="dropdown">
+                        {{'layout.menu.manage' | translate}}
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuEdit">
+                        <li>
+                            <a (click)="displayLicense(feed)">
+                                <span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsLicenses[feed.id]" class="btn btn-success">
+                              <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            </span>{{'datasets-table.column.license'|translate}}
+                                <span *ngIf="feedsLicenses[feed.id]">
+                              {{feedsLicenses[feed.id].name}}
+                            </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a (click)="displayMiscData(feed)">
+                                <span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsMiscDatas[feed.id]" class="btn btn-success">
+                              <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            </span>{{'datasets-table.column.miscData'|translate}}
+                                <span *ngIf="feedsMiscDatas[feed.id]">
+                              {{feedsMiscDatas[feed.id].name}}
+                            </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <div class="col-md-6">
+                <div *ngIf="feed != null && feed.latestValidation != null">
+                    <div>
+                        <label>
+                        <span class="leading-label">{{'feed.period'|translate}}</span>
+                        <span>{{feed.latestValidation.startDate|date:'y-MM-dd'}}</span>
+                        <span class="leading-label">{{'feed.period_to'|translate}}</span>
+                        <span>{{feed.latestValidation.endDate|date:'y-MM-dd'}}</span>
+                    </label>
+                    </div>
+
+                    <div *ngIf="feedsLicenses && feedsLicenses[feed.id]">
+                        <label>
+                        <span class="leading-label">{{'datasets-table.column.license'|translate}}</span>
+                        <span>  {{feedsLicenses[feed.id].name}}</span>
+                    </label>
+                    </div>
+                    <div *ngIf="feedsMiscDatas && feedsMiscDatas[feed.id]">
+                        <label>
+                        <span class="leading-label">{{'datasets-table.column.miscData'|translate}}</span>
+                        <span>  {{feedsMiscDatas[feed.id].name}}</span>
+                    </label>
+                    </div>
+
+                </div>
+                <div *ngIf="feed != null && feed.latestValidation != null">
+                    <div>
+                        <label>
+                          <span class="leading-label">{{'feed.routes'|translate}}</span>
+                          <span>{{feed.latestValidation.routeCount}}</span>
+                      </label>
+
+                    </div>
+                    <div>
+                        <label>
+                          <span class="leading-label">{{'feed.trips'|translate}}</span>
+                          <span>{{feed.latestValidation.tripCount}}</span>
+                      </label>
+                    </div>
+
+                </div>
+                <div *ngIf="sessionService.loggedIn && notesFeed && notesFeed.length> 0">
+                    <p class="leading-label">{{'feed.note.title'|translate}}</p>
+                    <ul>
+                        <li *ngFor="let comment of notesFeed">
+                            <strong>{{'feed.note.author'|translate}}
+                              {{comment.userEmail}}</strong><br/>
+                            <small>
+                              <strong>{{'feed.note.date'|translate}}</strong>
+                              <i>{{comment.date|date:'y-MM-dd HH:mm:ss'}}</i>
+                          </small><br/> {{comment.body}}
+                        </li>
+                    </ul>
+                </div>
+                <div *ngIf="sessionService.loggedIn">
+                    <textarea [(ngModel)]="note"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6 map-container">
+                <ct-feed-map [feed]="feed" [mapId]="'datasetmap'"></ct-feed-map>
+            </div>
+
+        </div>
+
+        <div *ngIf="sessionService.loggedIn" class="panel-footer">
+            <button class="btn" (click)="addNotesToFeed()">{{'feed.note.submit'|translate}}</button>
+        </div>
+    </div>
 </div>
 
-<div class="row">
-  <div class="column twelve">Coucou</div>
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <h1 *ngIf="infoFeed != null">{{infoFeed.name}}</h1>
-  <br />
-  <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Period of application: From {{infoFeed.latestValidation.startDate|date:'y-MM-dd'}} to {{infoFeed.latestValidation.endDate|date:'y-MM-dd'}}</h4>
-  <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Number of routes: {{infoFeed.latestValidation.routeCount}}</h4>
-  <h4 *ngIf="infoFeed != null && infoFeed.latestValidation != null">Number of trips: {{infoFeed.latestValidation.tripCount}}</h4>
-  <br />
-  <br />
-  <div class="column twelve" *ngIf="sessionService.loggedIn">
-    Notes :<br />
-    <ul>
-      <li *ngFor="let comment of notesFeed">
-	<strong>Author: {{comment.userEmail}}</strong><br />
-	<small><strong>Date:</strong> <i>{{comment.date|date:'y-MM-dd HH:mm:ss'}}</i></small><br />
-	{{comment.body}}
-      </li>
-    </ul>
-    <textarea [(ngModel)]="note"></textarea>
-    <button (click)="addNotesToFeed()">Submit</button>
-  </div>
+<!-- modal popup -->
 
-</div>
+<license-modal [newLicenseOrMiscData]="newLicenseOrMiscData" [onSelectionChange]="onSelectionChangeCallback" [utils]="utils" [items]="licenses" [onItemChanged]="onItemChangedCallback" [onSubmit]="onSubmitLicenseCallback"></license-modal>
+
+<miscdata-modal [newLicenseOrMiscData]="newLicenseOrMiscData" [onSelectionChange]="onSelectionChangeCallback" [utils]="utils" [items]="miscDatas" [onItemChanged]="onItemChangedCallback" [onSubmit]="onSubmitMiscDataCallback"></miscdata-modal>

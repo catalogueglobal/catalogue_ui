@@ -1,7 +1,7 @@
 import { Injectable }           from "@angular/core";
 import { Http }                 from "@angular/http";
 import { AuthHttp, AuthConfig } from "angular2-jwt";
-import { Configuration }        from "../../configuration";
+import { Configuration }        from "app/commons/configuration";
 
 @Injectable()
 export abstract class AbstractApiService {
@@ -13,7 +13,7 @@ export abstract class AbstractApiService {
 	    protected config: Configuration)
     {
     }
-    
+
     protected computeAuthHeaders(): Map<string,string> {
 	    let headers: Map<string,string> = new Map<string,string>();
 	    headers.set(this.authConfig.getConfig().headerName, this.authConfig.getConfig().headerPrefix + this.authConfig.getConfig().tokenGetter());

@@ -1,11 +1,11 @@
 import { Component, AfterViewInit }                      from '@angular/core';
 import { Store }                                         from "@ngrx/store";
+import { Observable }                                    from "rxjs";
 import { ToasterService, ToasterConfig, BodyOutputType } from "angular2-toaster/angular2-toaster";
 import { TranslateService }                              from "ng2-translate/src/translate.service";
-import { Observable }                                    from "rxjs";
-import { Configuration }                                 from "../../../commons/configuration";
-import { DatasetsActions }                               from "../../../state/datasets/datasets.actions";
-import { DatasetsState }                                 from "../../../state/datasets/datasets.reducer";
+import { Configuration }                                 from "app/commons/configuration";
+import { DatasetsActions }                               from "app/state/datasets/datasets.actions";
+import { DatasetsState }                                 from "app/state/datasets/datasets.reducer";
 
 @Component({
     selector:    'app-status',

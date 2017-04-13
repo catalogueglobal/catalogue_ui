@@ -1,94 +1,89 @@
-import { Component, Input, Output, EventEmitter }           from "@angular/core";
-import { Actions }                                          from "@ngrx/effects";
-import { Store }                                            from "@ngrx/store";
-import { PaginationService }                                from "ng2-pagination";
-import { Configuration }                                    from "../../commons/configuration";
-import { SortOrder }                                        from "../../commons/directives/sort-link/sort-link.component";
-import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense } from "../../commons/services/api/feedsApi.service";
-import { UsersApiService }                                  from "../../commons/services/api/usersApi.service";
-import { SessionService }                                   from "../../commons/services/session.service";
-import { UtilsService }                                     from "../../commons/services/utils.service";
-import { DatasetsActions }                                  from "../../state/datasets/datasets.actions";
-import { DatasetsState }                                    from "../../state/datasets/datasets.reducer";
-import { IFeedRow }                                         from "../datasets/datasets.component";
+import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
+import { Actions } from "@ngrx/effects";
+import { Store } from "@ngrx/store";
+import { PaginationService } from "ng2-pagination";
+import { Configuration } from "app/commons/configuration";
+import { SortOrder } from "app/commons/directives/sort-link/sort-link.component";
+import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense, IFeed } from "app/commons/services/api/feedsApi.service";
+import { UsersApiService } from "app/commons/services/api/usersApi.service";
+import { SessionService } from "app/commons/services/session.service";
+import { UtilsService } from "app/commons/services/utils.service";
+import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
+import { DatasetsState } from "app/state/datasets/datasets.reducer";
+import { IFeedRow } from "app/modules/datasets/datasets.component";
+import { SharedService } from "app/commons/services/shared.service";
+import { DatatoolComponent } from "app/commons/components/datatool.component";
 
 @Component({
-    selector:    'app-datasets-table',
+    selector: 'app-datasets-table',
     templateUrl: 'datasets-table.component.html',
-    providers:   [PaginationService]
+    providers: [PaginationService]
 })
-export class DatasetsTableComponent {
+export class DatasetsTableComponent extends DatatoolComponent{
     @Input() protected _feeds: IFeedRow[];
     @Input() protected chkAll: boolean = false;
     @Output() protected sortChange = new EventEmitter();
+    
     private FEED_RETRIEVAL_METHOD = FEED_RETRIEVAL_METHOD; // used by the template
-    private checkById: Map<string,boolean> = new Map<string,boolean>();
-    private page:number;
-    private indexToUnsubscribe: number;
-    private feedSubscribed: Array<String>;
-    private licenses: Array<ILicense>;
+    private checkById: Map<string, boolean> = new Map<string, boolean>();
+    private page: number;
 
     protected currentSort: SortOrder = {
         sort: 'name',
         order: 'asc'
     };
-    
+
     constructor(
         protected config: Configuration,
-        private utils: UtilsService,
-        private sessionService: SessionService,
-        private feedsApiService: FeedsApiService,
-        private usersApiService: UsersApiService,
+        protected utils: UtilsService,
+        protected sessionService: SessionService,
+        protected feedsApiService: FeedsApiService,
+        protected usersApiService: UsersApiService,
         protected store: Store<DatasetsState>,
-        actions$: Actions,
-        protected datasetsAction: DatasetsActions)
-    {
+        protected actions$: Actions,
+        protected datasetsAction: DatasetsActions,
+        protected shared: SharedService) {
+          super(config, utils, sessionService, feedsApiService, usersApiService, store,
+          actions$, datasetsAction, shared);
+        this.subscribeActions(actions$);
     }
-    
+
     // overriden by childs
     @Input() set feeds(value: any) {
-        let that = this;
-        this.feedsApiService.getLicenses().then( licenses => {that.licenses = licenses} );
+
+        this.getLicenses(value);
         if (!value) {
             this._feeds = null
             return
         }
         this._feeds = value
     }
-    
+
     // overriden by childs
     get feeds() {
         return this._feeds;
     }
 
-    getLicense(feed: IFeedRow) {
-        if (this.licenses) {
-            for (let i = 0; i < this.licenses.length; i++) {
-                if (this.licenses[i].feedIds) {
-                    for (let j = 0; j < this.licenses[i].feedIds.length; j++) {
-                        if (feed.id == this.licenses[i].feedIds[j]) {
-                            return this.licenses[i].name;
-                        }
-                    }
-                }
-            }
+    protected getFeedsVersion(values: any) {
+        for (var i = 0; values && i < values.length; i++) {
+            this.getFeedVersion(values[i]);
         }
     }
 
     protected setSort(sort) {
         this.sortChange.emit(sort);
     }
-    
+
     protected checkAll() {
         let newValue = !this.chkAll;
         this.feeds.forEach(feed => { this.checkById[feed.id] = newValue; });
         this.chkAll = newValue;
     }
-    
+
     protected regionStateCountry(feed) {
         return this.utils.regionStateCountry(feed);
     }
-    
+
     public getCheckedFeeds(): IFeedRow[] {
         if (!this.feeds) {
             // component not initialized yet
@@ -96,54 +91,23 @@ export class DatasetsTableComponent {
         }
         return this.feeds.filter(feed => this.checkById[feed.id]);
     }
-    
-    public actionOnFeed(feed_id){
-        var response = this.usersApiService.getUser(this.sessionService.session.user.user_id);
-        let that = this;
-        response.then(function(data) {
-            let isSubscribe = that.isSubscribe(data, feed_id);
-            that.subscribeOrUnsubscribeFeed(data, feed_id, isSubscribe); 
-        });
-    }
-    
-    public subscribeOrUnsubscribeFeed(data, feed_id, isSubscribe){
-        if (isSubscribe == false){
-            console.log("SUBSCRIBE");
-            data = this.utils.addFeedIdToJson(data, feed_id);
-            this.store.dispatch(this.datasetsAction.subscribeToFeed(data.user_id, {"data": data.app_metadata.datatools}));
-        } else {
-            console.log("UNSUBSCRIBE");
-            data.app_metadata.datatools[0].subscriptions[0].target.splice(this.indexToUnsubscribe, 1);
-            console.log(data.app_metadata.datatools[0]);
-            this.store.dispatch(this.datasetsAction.unsubscribeToFeed(data.user_id, {"data": data.app_metadata.datatools}));
-        }
-    }
-    
-    // Return true or false if the user is subscribe
-    // or not to the feed
-    public isSubscribe(userInfos, feed_id){
-        console.log(userInfos);
-        if (userInfos.app_metadata.datatools[0].subscriptions == null){
-            return false;
-        } else {
-            for (var i = 0; i < userInfos.app_metadata.datatools[0].subscriptions[0].target.length; i++){
-                if (userInfos.app_metadata.datatools[0].subscriptions[0].target[i] == feed_id){
-                    this.indexToUnsubscribe = i;
-                    return true;
-                }
+
+    protected subscribeActions(actions$) {
+        // close inline edit form on setName() success
+        actions$.ofType(DatasetsActionType.USER_SUBSCRIBE_SUCCESS).subscribe(
+            () => {
+                console.log('USER_SUBSCRIBE setting profile');
+                this.sessionService.setProfile();
             }
-            return false
-        }
+        );
+        actions$.ofType(DatasetsActionType.UNSUBSCRIBE_FEED_SUCCESS).subscribe(
+            () => {
+                console.log('UNSUBSCRIBE_FEED setting profile');
+                this.sessionService.setProfile();
+            }
+        );
     }
-    
-    public checkSubscribed(feed_id){
-        var index = this.sessionService.session.user.app_metadata ? this.sessionService.session.user.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id) : -1;
-        if (index == -1){
-            return false
-        }
-        return true
-    }
-    
+
     public resetPage() {
         this.page = 1;
     }

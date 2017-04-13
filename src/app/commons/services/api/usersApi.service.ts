@@ -2,8 +2,8 @@ import { Injectable }                   from "@angular/core";
 import { Http }                         from "@angular/http";
 import { AuthHttp, AuthConfig }         from "angular2-jwt";
 import { Observable }                   from "rxjs/Rx";
-import { Configuration }                from "../../configuration";
-import { UploadService }                from "../upload.service";
+import { Configuration }                from "app/commons/configuration";
+import { UploadService }                from "app/commons/services/upload.service";
 import { AbstractApiService }           from "./abstractApi.service";
 import { LocalFiltersService }          from "./localFilters.service";
 import { ProjectsApiService, IProject } from "./projectsApi.service";
@@ -11,7 +11,7 @@ import { ProjectsApiService, IProject } from "./projectsApi.service";
 export type UserSubscribeParams = {
     NAME: string,
     EMAIL: string,
-    COMPANY: string,  
+    COMPANY: string,
     TYPE: string
 }
 
@@ -52,7 +52,7 @@ export class UsersApiService extends AbstractApiService {
     public getUser(user_id: string): Promise<any> {
         return this.authHttp.get(this.USER_SECURE_URL + user_id).map(response => response.json()).toPromise();
     }
-    
+
     public updateUser(user_id, data: any): Observable<any> {
         return this.authHttp.put(this.USER_SECURE_URL + user_id, data);
     }

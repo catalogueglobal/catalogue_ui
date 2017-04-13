@@ -1,76 +1,101 @@
-import { Injectable }                                        from "@angular/core";
-import { Action }                                            from "@ngrx/store";
-import { FeedsGetResponse, IFeedApi, FeedsGetParams, IFeed } from "../../commons/services/api/feedsApi.service";
-import { IProject }                                          from "../../commons/services/api/projectsApi.service";
-import { UserSubscribeParams }                               from "../../commons/services/api/usersApi.service";
-import { ICreateFeed }                                       from "./datasets.effects";
+import { Injectable } from "@angular/core";
+import { Action } from "@ngrx/store";
+import { FeedsGetResponse, IFeedApi, FeedsGetParams, IFeed, ILicense } from "app/commons/services/api/feedsApi.service";
+import { IProject } from "app/commons/services/api/projectsApi.service";
+import { UserSubscribeParams } from "app/commons/services/api/usersApi.service";
+import { ICreateFeed } from "./datasets.effects";
 
 export const DatasetsActionType = {
     STATUS_ERROR_MESSAGE: `STATUS_ERROR_MESSAGE`,
     STATUS_CLEAR_NOTIFY_MESSAGE: `STATUS_CLEAR_NOTIFY_MESSAGE`,
-    
+
     USER_SUBSCRIBE: `USER_SUBSCRIBE`,
     USER_SUBSCRIBE_SUCCESS: `USER_SUBSCRIBE_SUCCESS`,
     USER_SUBSCRIBE_FAIL: `USER_SUBSCRIBE_FAIL`,
-    
+
     FEEDS_GET: `FEEDS_GET`,
     FEEDS_GET_LOCALLY: `FEEDS_GET_LOCALLY`,
     FEEDS_GET_SUCCESS: `FEEDS_GET_SUCCESS`,
     FEEDS_GET_FAIL: `FEEDS_GET_FAIL`,
-    
+
     FEED_CREATE: `FEED_CREATE`,
     FEED_CREATE_PROGRESS: `FEED_CREATE_PROGRESS`,
     FEED_CREATE_SUCCESS: `FEED_CREATE_SUCCESS`,
     FEED_CREATE_FAIL: `FEED_CREATE_FAIL`,
-    
+
     FEED_SET_PUBLIC: `FEED_SET_PUBLIC`,
     FEED_SET_PUBLIC_SUCCESS: `FEED_SET_PUBLIC_SUCCESS`,
     FEED_SET_PUBLIC_FAIL: `FEED_SET_PUBLIC_FAIL`,
-    
+
     FEED_SET_NAME: `FEED_SET_NAME`,
     FEED_SET_NAME_SUCCESS: `FEED_SET_NAME_SUCCESS`,
     FEED_SET_NAME_FAIL: `FEED_SET_NAME_FAIL`,
-    
+
     FEED_SET_FILE: `FEED_SET_FILE`,
     FEED_SET_FILE_PROGRESS: `FEED_SET_FILE_PROGRESS`,
     FEED_SET_FILE_SUCCESS: `FEED_SET_FILE_SUCCESS`,
     FEED_SET_FILE_FAIL: `FEED_SET_FILE_FAIL`,
-    
+
     FEED_DELETE: `FEED_DELETE`,
     FEED_DELETE_SUCCESS: `FEED_DELETE_SUCCESS`,
     FEED_DELETE_FAIL: `FEED_DELETE_FAIL`,
-    
+
     FEED_FETCH: `FEED_FETCH`,
     FEED_FETCH_SUCCESS: `FEED_FETCH_SUCCESS`,
     FEED_FETCH_FAIL: `FEED_FETCH_FAIL`,
-    
+
     GET_PUBLIC_PROJECT: `GET_PUBLIC_PROJECT`,
     GET_PRIVATE_PROJECT: `GET_PUBLIC_PROJECT`,
     GET_PUBLIC_PROJECT_SUCCESS: `GET_PUBLIC_PROJECT_SUCCESS`,
     GET_PUBLIC_PROJECT_FAIL: `GET_PUBLIC_PROJECT_FAIL`,
-    
+
     UPDATE_PROJECT: 'UPDATE_PROJECT',
     UPDATE_PROJECT_SUCCESS: 'UPDATE_PROJECT_SUCCESS',
     UPDATE_PROJECT_FAIL: 'UPDATE_PROJECT_FAIL',
-    
+
     ADD_FEED_TO_PROJECT: 'ADD_FEED_TO_PROJECT',
     ADD_FEED_TO_PROJECT_SUCCESS: 'ADD_FEED_TO_PROJECT_SUCCESS',
     ADD_FEED_TO_PROJECT_FAIL: 'ADD_FEED_TO_PROJECT_FAIL',
-    
+
     CONFIRM_DELETE_FEED: 'CONFIRM_DELETE_FEED',
     CONFIRM_DELETE_FEED_SUCCESS: 'CONFIRM_DELETE_FEED_SUCCESS',
-    
+
     SUBSCRIBE_FEED: 'SUBSCRIBE_FEED',
     SUBSCRIBE_FEED_SUCCESS: 'SUBSCRIBE_FEED_SUCCESS',
     SUBSCRIBE_FEED_FAIL: 'SUBSCRIBE_FEED_FAIL',
-    
+
     UNSUBSCRIBE_FEED: 'UNSUBSCRIBE_FEED',
     UNSUBSCRIBE_FEED_SUCCESS: 'UNSUBSCRIBE_FEED_SUCCESS',
     UNSUBSCRIBE_FEED_FAIL: 'UNSUBSCRIBE_FEED_FAIL',
-    
+
     FEEDS_ADD_NOTES: "FEEDS_ADD_NOTES",
     FEEDS_ADD_NOTES_SUCCESS: 'FEEDS_ADD_NOTES_SUCCESS',
-    FEEDS_ADD_NOTES_FAIL: 'FEEDS_ADD_NOTES_FAIL'
+    FEEDS_ADD_NOTES_FAIL: 'FEEDS_ADD_NOTES_FAIL',
+
+    FEED_CHANGE_LICENSE: `FEED_CHANGE_LICENSE`,
+    FEED_CHANGE_LICENSE_FAIL: `FEED_CHANGE_LICENSE_FAIL`,
+    FEED_CHANGE_LICENSE_SUCCESS: `FEED_CHANGE_LICENSE_SUCCESS`,
+
+    FEED_UNSET_LICENSE: `FEED_UNSET_LICENSE`,
+    FEED_UNSET_LICENSE_FAIL: `FEED_UNSET_LICENSE_FAIL`,
+    FEED_UNSET_LICENSE_SUCCESS: `FEED_UNSET_LICENSE_SUCCESS`,
+
+    FEED_CREATE_LICENSE: `FEED_CREATE_LICENSE`,
+    FEED_CREATE_LICENSE_FAIL: `FEED_CREATE_LICENSE_FAIL`,
+    FEED_CREATE_LICENSE_SUCCESS: `FEED_CREATE_LICENSE_SUCCESS`,
+
+    FEED_CHANGE_MISCDATA: `FEED_CHANGE_MISCDATA`,
+    FEED_CHANGE_MISCDATA_FAIL: `FEED_CHANGE_MISCDATA_FAIL`,
+    FEED_CHANGE_MISCDATA_SUCCESS: `FEED_CHANGE_MISCDATA_SUCCESS`,
+
+    FEED_UNSET_MISCDATA: `FEED_UNSET_MISCDATA`,
+    FEED_UNSET_MISCDATA_FAIL: `FEED_UNSET_MISCDATA_FAIL`,
+    FEED_UNSET_MISCDATA_SUCCESS: `FEED_UNSET_MISCDATA_SUCCESS`,
+
+    FEED_CREATE_MISCDATA: `FEED_CREATE_MISCDATA`,
+    FEED_CREATE_MISCDATA_FAIL: `FEED_CREATE_MISCDATA_FAIL`,
+    FEED_CREATE_MISCDATA_SUCCESS: `FEED_CREATE_MISCDATA_SUCCESS`
+
 };
 
 export type IFeedReference = {
@@ -87,7 +112,7 @@ export function toFeedReference(feed: IFeedApi): IFeedReference {
 
 @Injectable()
 export class DatasetsActions {
-    
+
     statusErrorMessage(errorMessage: string): Action {
         return {
             type: DatasetsActionType.STATUS_ERROR_MESSAGE,
@@ -96,13 +121,13 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     statusClearNotifyMessage(): Action {
         return {
             type: DatasetsActionType.STATUS_CLEAR_NOTIFY_MESSAGE
         }
     }
-    
+
     userSubscribe(userSubscribeParams: UserSubscribeParams): Action {
         return {
             type: DatasetsActionType.USER_SUBSCRIBE,
@@ -111,7 +136,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     userSubscribeSuccess(userSubscribeParams: UserSubscribeParams): Action {
         return {
             type: DatasetsActionType.USER_SUBSCRIBE_SUCCESS,
@@ -120,7 +145,7 @@ export class DatasetsActions {
             }
         };
     }
-    
+
     userSubscribeFail(userSubscribeParams: UserSubscribeParams, error: any): Action {
         return {
             type: DatasetsActionType.USER_SUBSCRIBE_FAIL,
@@ -129,7 +154,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedsGet(feedsGetParams: FeedsGetParams): Action {
         return {
             type: DatasetsActionType.FEEDS_GET,
@@ -138,7 +163,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedsGetLocally(feedsGetParams: FeedsGetParams, feeds: IFeed[]): Action {
         return {
             type: DatasetsActionType.FEEDS_GET_LOCALLY,
@@ -148,8 +173,8 @@ export class DatasetsActions {
             }
         }
     }
-    
-    publicProjectGet(projectGetParams: string) : Action {
+
+    publicProjectGet(projectGetParams: string): Action {
         return {
             type: DatasetsActionType.GET_PUBLIC_PROJECT,
             payload: {
@@ -157,8 +182,8 @@ export class DatasetsActions {
             }
         }
     }
-    
-    publicProjectGetSuccess(projectGetResponse: IProject) : Action {
+
+    publicProjectGetSuccess(projectGetResponse: IProject): Action {
         return {
             type: DatasetsActionType.GET_PUBLIC_PROJECT_SUCCESS,
             payload: {
@@ -166,8 +191,8 @@ export class DatasetsActions {
             }
         }
     }
-    
-    publicProjectGetFail(projectGetParams: string, error: any) : Action {
+
+    publicProjectGetFail(projectGetParams: string, error: any): Action {
         return {
             type: DatasetsActionType.GET_PUBLIC_PROJECT_FAIL,
             payload: {
@@ -176,18 +201,18 @@ export class DatasetsActions {
             }
         };
     }
-    
-    updateProject(projectId: string, projectPutParams: any) : Action {
+
+    updateProject(projectId: string, projectPutParams: any): Action {
         return {
             type: DatasetsActionType.UPDATE_PROJECT,
             payload: {
-                //projectId: projectId,
+                projectId: projectId,
                 updateProject: projectPutParams
             }
         }
     }
-    
-    updateProjectSuccess(projectPutResponse: IProject) : Action {
+
+    updateProjectSuccess(projectPutResponse: IProject): Action {
         return {
             type: DatasetsActionType.UPDATE_PROJECT_SUCCESS,
             payload: {
@@ -195,8 +220,8 @@ export class DatasetsActions {
             }
         }
     }
-    
-    updateProjectFail(projectId: string, projectPutParams: any, error: any) : Action {
+
+    updateProjectFail(projectId: string, projectPutParams: any, error: any): Action {
         return {
             type: DatasetsActionType.UPDATE_PROJECT_FAIL,
             payload: {
@@ -206,7 +231,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedsGetSuccess(feedsGetResponse: FeedsGetResponse): Action {
         return {
             type: DatasetsActionType.FEEDS_GET_SUCCESS,
@@ -215,7 +240,7 @@ export class DatasetsActions {
             }
         };
     }
-    
+
     feedsGetFail(feedsGetParams: FeedsGetParams, error: any): Action {
         return {
             type: DatasetsActionType.FEEDS_GET_FAIL,
@@ -224,7 +249,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedCreate(createFeed: ICreateFeed): Action {
         // use filename as default project/feed name
         let defaultName = createFeed.file.name;
@@ -241,7 +266,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedCreateProgress(createFeed: ICreateFeed, progress: string): Action {
         return {
             type: DatasetsActionType.FEED_CREATE_PROGRESS,
@@ -251,7 +276,7 @@ export class DatasetsActions {
             }
         };
     }
-    
+
     feedCreateSuccess(createFeed: ICreateFeed, feed: IFeedApi): Action {
         return {
             type: DatasetsActionType.FEED_CREATE_SUCCESS,
@@ -261,7 +286,7 @@ export class DatasetsActions {
             }
         };
     }
-    
+
     feedCreateFail(createFeed: ICreateFeed, error: any): Action {
         return {
             type: DatasetsActionType.FEED_CREATE_FAIL,
@@ -271,7 +296,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedSetPublic(feedRef: IFeedReference, value: boolean): Action {
         return {
             type: DatasetsActionType.FEED_SET_PUBLIC,
@@ -281,7 +306,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedSetPublicSuccess(feed: IFeedApi): Action {
         return {
             type: DatasetsActionType.FEED_SET_PUBLIC_SUCCESS,
@@ -290,7 +315,7 @@ export class DatasetsActions {
             }
         };
     }
-    
+
     feedSetPublicFail(feedRef: IFeedReference, error: any): Action {
         return {
             type: DatasetsActionType.FEED_SET_PUBLIC_FAIL,
@@ -300,7 +325,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedDelete(feedRefs: IFeedReference[]): Action {
         return {
             type: DatasetsActionType.FEED_DELETE,
@@ -309,7 +334,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedDeleteSuccess(feedRefs: IFeedReference[]): Action {
         return {
             type: DatasetsActionType.FEED_DELETE_SUCCESS,
@@ -318,7 +343,7 @@ export class DatasetsActions {
             }
         };
     }
-    
+
     feedDeleteFail(feedRefs: IFeedReference[], errors: any[]): Action {
         return {
             type: DatasetsActionType.FEED_DELETE_FAIL,
@@ -327,7 +352,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedSetName(feedRef: IFeedReference, name: string): Action {
         return {
             type: DatasetsActionType.FEED_SET_NAME,
@@ -337,7 +362,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedSetNameSuccess(feed: IFeedApi): Action {
         return {
             type: DatasetsActionType.FEED_SET_NAME_SUCCESS,
@@ -346,7 +371,7 @@ export class DatasetsActions {
             }
         };
     }
-    
+
     feedSetNameFail(feedRef: IFeedReference, error: any): Action {
         return {
             type: DatasetsActionType.FEED_SET_NAME_FAIL,
@@ -356,7 +381,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedAddNotes(feedId: string, data: any): Action {
         return {
             type: DatasetsActionType.FEEDS_ADD_NOTES,
@@ -366,7 +391,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedAddNotesSuccess(feedId: string, data: any): Action {
         return {
             type: DatasetsActionType.FEEDS_ADD_NOTES_SUCCESS,
@@ -376,7 +401,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedAddNotesFail(feedId: string, data: any, error: any): Action {
         return {
             type: DatasetsActionType.FEEDS_ADD_NOTES_FAIL,
@@ -387,7 +412,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedSetFile(feedRef: IFeedReference, file: File): Action {
         return {
             type: DatasetsActionType.FEED_SET_FILE,
@@ -397,7 +422,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedSetFileProgress(feedRef: IFeedReference, progress: string): Action {
         return {
             type: DatasetsActionType.FEED_SET_FILE_PROGRESS,
@@ -407,7 +432,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedSetFileSuccess(feed: IFeedApi): Action {
         return {
             type: DatasetsActionType.FEED_SET_FILE_SUCCESS,
@@ -416,7 +441,7 @@ export class DatasetsActions {
             }
         };
     }
-    
+
     feedSetFileFail(feedRef: IFeedReference, error: any): Action {
         return {
             type: DatasetsActionType.FEED_SET_FILE_FAIL,
@@ -426,7 +451,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedFetch(feedRef: IFeedReference): Action {
         return {
             type: DatasetsActionType.FEED_FETCH,
@@ -435,7 +460,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     feedFetchSuccess(feed: IFeedApi): Action {
         return {
             type: DatasetsActionType.FEED_FETCH_SUCCESS,
@@ -444,7 +469,7 @@ export class DatasetsActions {
             }
         };
     }
-    
+
     feedFetchFail(feedRef: IFeedReference, error: any): Action {
         return {
             type: DatasetsActionType.FEED_FETCH_FAIL,
@@ -453,7 +478,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     addFeedToProject(createFeed: ICreateFeed): Action {
         // use filename as default project/feed name
         let defaultName = createFeed.file.name;
@@ -470,7 +495,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     addFeedToProjectSuccess(feed: IFeedApi): Action {
         return {
             type: DatasetsActionType.ADD_FEED_TO_PROJECT_SUCCESS,
@@ -479,7 +504,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     addFeedToProjectFail(createFeed: ICreateFeed, error: any): Action {
         return {
             type: DatasetsActionType.ADD_FEED_TO_PROJECT_FAIL,
@@ -489,8 +514,8 @@ export class DatasetsActions {
             }
         }
     }
-    
-    confirmationDeleteProject(deleteProject: boolean): Action{
+
+    confirmationDeleteProject(deleteProject: boolean): Action {
         return {
             type: DatasetsActionType.CONFIRM_DELETE_FEED,
             payload: {
@@ -498,13 +523,13 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     confirmationDeleteProjectSuccess(): Action {
         return {
             type: DatasetsActionType.CONFIRM_DELETE_FEED_SUCCESS
         }
     }
-    
+
     subscribeToFeed(user_id, userInfos: Object): Action {
         return {
             type: DatasetsActionType.SUBSCRIBE_FEED,
@@ -514,7 +539,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     subscribeToFeedSuccess(userInfos: Object): Action {
         return {
             type: DatasetsActionType.SUBSCRIBE_FEED_SUCCESS,
@@ -523,8 +548,8 @@ export class DatasetsActions {
             }
         }
     }
-    
-    subscribeToFeedFail(userInfos: Object, error: any) : Action {
+
+    subscribeToFeedFail(userInfos: Object, error: any): Action {
         return {
             type: DatasetsActionType.SUBSCRIBE_FEED_FAIL,
             payload: {
@@ -533,7 +558,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     unsubscribeToFeed(user_id, userInfos: Object): Action {
         return {
             type: DatasetsActionType.UNSUBSCRIBE_FEED,
@@ -543,7 +568,7 @@ export class DatasetsActions {
             }
         }
     }
-    
+
     unsubscribeToFeedSuccess(userInfos: Object): Action {
         return {
             type: DatasetsActionType.UNSUBSCRIBE_FEED_SUCCESS,
@@ -552,12 +577,189 @@ export class DatasetsActions {
             }
         }
     }
-    
-    unsubscribeToFeedFail(userInfos: Object, error: any) : Action {
+
+    unsubscribeToFeedFail(userInfos: Object, error: any): Action {
         return {
             type: DatasetsActionType.UNSUBSCRIBE_FEED_FAIL,
             payload: {
                 userInfos: userInfos,
+                error: error
+            }
+        }
+    }
+
+    feedSetLicense(feedRef: IFeedReference, licenseId: string): Action {
+        return {
+            type: DatasetsActionType.FEED_CHANGE_LICENSE,
+            payload: {
+                feedRef: feedRef,
+                licenseId: licenseId
+            }
+        };
+    }
+
+    feedSetLicenseSuccess(license: ILicense): Action {
+        return {
+            type: DatasetsActionType.FEED_CHANGE_LICENSE_SUCCESS,
+            payload: {
+                license: license
+            }
+        };
+    }
+
+    feedSetLicenseFail(feedRef: IFeedReference, error: any): Action {
+        return {
+            type: DatasetsActionType.FEED_CHANGE_LICENSE_FAIL,
+            payload: {
+                feedRef: feedRef,
+                error: error
+            }
+        }
+    }
+
+    feedUnsetLicense(feedRef: IFeedReference, licenseId: string): Action {
+        return {
+            type: DatasetsActionType.FEED_UNSET_LICENSE,
+            payload: {
+                feedRef: feedRef,
+                licenseId: licenseId
+            }
+        };
+    }
+
+    feedUnsetLicenseSuccess(license: ILicense): Action {
+        return {
+            type: DatasetsActionType.FEED_UNSET_LICENSE_SUCCESS,
+            payload: {
+                license: license
+            }
+        };
+    }
+
+    feedUnsetLicenseFail(feedRef: IFeedReference, error: any): Action {
+        return {
+            type: DatasetsActionType.FEED_UNSET_LICENSE_FAIL,
+            payload: {
+                feedRef: feedRef,
+                error: error
+            }
+        }
+    }
+
+    feedCreateLicense(feedRef: IFeedReference, licenseName: string, licenseFile: any): Action {
+        return {
+            type: DatasetsActionType.FEED_CREATE_LICENSE,
+            payload: {
+                feedRef: feedRef,
+                licenseName: licenseName,
+                licenseFile: licenseFile
+            }
+        };
+    }
+
+    feedCreateLicenseSuccess(license: ILicense): Action {
+        return {
+            type: DatasetsActionType.FEED_CREATE_LICENSE_SUCCESS,
+            payload: {
+                license: license
+            }
+        };
+    }
+
+    feedCreateLicenseFail(feedRef: IFeedReference, error: any): Action {
+        return {
+            type: DatasetsActionType.FEED_CREATE_LICENSE_FAIL,
+            payload: {
+                feedRef: feedRef,
+                error: error
+            }
+        }
+    }
+
+
+    feedSetMiscData(feedRef: IFeedReference, licenseId: string): Action {
+        return {
+            type: DatasetsActionType.FEED_CHANGE_MISCDATA,
+            payload: {
+                feedRef: feedRef,
+                licenseId: licenseId
+            }
+        };
+    }
+
+    feedSetMiscDataSuccess(license: ILicense): Action {
+        return {
+            type: DatasetsActionType.FEED_CHANGE_MISCDATA_SUCCESS,
+            payload: {
+                license: license
+            }
+        };
+    }
+
+    feedSetMiscDataFail(feedRef: IFeedReference, error: any): Action {
+        return {
+            type: DatasetsActionType.FEED_CHANGE_MISCDATA_FAIL,
+            payload: {
+                feedRef: feedRef,
+                error: error
+            }
+        }
+    }
+
+    feedUnsetMiscData(feedRef: IFeedReference, licenseId: string): Action {
+        return {
+            type: DatasetsActionType.FEED_UNSET_MISCDATA,
+            payload: {
+                feedRef: feedRef,
+                licenseId: licenseId
+            }
+        };
+    }
+
+    feedUnsetMiscDataSuccess(license: ILicense): Action {
+        return {
+            type: DatasetsActionType.FEED_UNSET_MISCDATA_SUCCESS,
+            payload: {
+                license: license
+            }
+        };
+    }
+
+    feedUnsetMiscDataFail(feedRef: IFeedReference, error: any): Action {
+        return {
+            type: DatasetsActionType.FEED_UNSET_MISCDATA_FAIL,
+            payload: {
+                feedRef: feedRef,
+                error: error
+            }
+        }
+    }
+
+    feedCreateMiscData(feedRef: IFeedReference, licenseName: string, licenseFile: any): Action {
+        return {
+            type: DatasetsActionType.FEED_CREATE_MISCDATA,
+            payload: {
+                feedRef: feedRef,
+                licenseName: licenseName,
+                licenseFile: licenseFile
+            }
+        };
+    }
+
+    feedCreateMiscDataSuccess(license: ILicense): Action {
+        return {
+            type: DatasetsActionType.FEED_CREATE_MISCDATA_SUCCESS,
+            payload: {
+                license: license
+            }
+        };
+    }
+
+    feedCreateMiscDataFail(feedRef: IFeedReference, error: any): Action {
+        return {
+            type: DatasetsActionType.FEED_CREATE_MISCDATA_FAIL,
+            payload: {
+                feedRef: feedRef,
                 error: error
             }
         }

@@ -1,56 +1,74 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "project": {
-    "version": "1.0.0-beta.32.3",
-    "name": "catalogue-ui"
-  },
-  "apps": [
-    {
-      "root": "src",
-      "outDir": "dist",
-      "assets": [
-        "assets",
-        "favicon.ico"
-      ],
-      "index": "index.html",
-      "main": "main.ts",
-      "test": "test.ts",
-      "tsconfig": "tsconfig.json",
-      "prefix": "app",
-      "styles": [
-        "styles.css",
-        "css/style.css"
-      ],
-      "scripts": [],
-      "environmentSource": "environments/environment.ts",
-      "environments": {
-        "dev": "environments/environment.ts",
-        "prod": "environments/environment.prod.ts"
-      }
-    }
-  ],
-  "e2e": {
-    "protractor": {
-      "config": "./protractor.conf.js"
-    }
-  },
-  "lint": [
-    {
-      "files": "src/**/*.ts",
-      "project": "src/tsconfig.json"
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "project": {
+        "version": "1.0.0-beta.32.3",
+        "name": "catalogue-ui"
     },
-    {
-      "files": "e2e/**/*.ts",
-      "project": "e2e/tsconfig.json"
+    "apps": [{
+        "root": "src",
+        "outDir": "dist",
+        "assets": [
+            "assets",
+            "favicon.ico",
+            "images"
+        ],
+        "index": "index.html",
+        "main": "main.ts",
+        "test": "test.ts",
+        "tsconfig": "tsconfig.json",
+        "prefix": "app",
+        "styles": [
+            "css/responsive.css",
+            "css/vendor/venobox.css",
+            "../node_modules/pills/dist/pills.min.css",
+            "../node_modules/easy-autocomplete/dist/easy-autocomplete.min.css",
+            "../node_modules/owl.carousel/dist/assets/owl.carousel.min.css",
+            "../node_modules/leaflet/dist/leaflet.css",
+            "../node_modules/leaflet.markercluster/dist/MarkerCluster.css",
+            "../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
+            "../node_modules/font-awesome/css/font-awesome.min.css",
+            "../node_modules/angular2-toaster/toaster.css",
+
+            "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+            "styles.css",
+            "css/style.css",
+            "scss/all.scss"
+        ],
+        "scripts": [
+            "../node_modules/jquery/dist/jquery.min.js",
+            "../node_modules/jquery-match-height/dist/jquery.matchHeight-min.js",
+            "../node_modules/owl.carousel/dist/owl.carousel.min.js",
+            "../node_modules/bootstrap/dist/js/bootstrap.js",
+            "js/vendor/venobox.js",
+            "js/vendor/customfileinput.js",
+            "js/vendor/jquery.easy-autocomplete.min.js",
+            "js/general.js"
+        ],
+        "environmentSource": "environments/environment.ts",
+        "environments": {
+            "dev": "environments/environment.ts",
+            "prod": "environments/environment.prod.ts"
+        }
+    }],
+    "e2e": {
+        "protractor": {
+            "config": "./protractor.conf.js"
+        }
+    },
+    "lint": [{
+        "files": "src/**/*.ts",
+        "project": "src/tsconfig.json"
+    }, {
+        "files": "e2e/**/*.ts",
+        "project": "e2e/tsconfig.json"
+    }],
+    "test": {
+        "karma": {
+            "config": "./karma.conf.js"
+        }
+    },
+    "defaults": {
+        "styleExt": "css",
+        "component": {}
     }
-  ],
-  "test": {
-    "karma": {
-      "config": "./karma.conf.js"
-    }
-  },
-  "defaults": {
-    "styleExt": "css",
-    "component": {}
-  }
 }

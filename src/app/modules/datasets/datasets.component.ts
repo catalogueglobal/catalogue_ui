@@ -2,17 +2,17 @@ import { Component, ViewChild, AfterViewInit } from "@angular/core";
 import { Actions }                             from "@ngrx/effects";
 import { Store }                               from "@ngrx/store";
 import { Observable }                          from "rxjs/Rx";
-import { Configuration }                       from "../../commons/configuration";
-import { SortOrder }                           from "../../commons/directives/sort-link/sort-link.component";
-import { IFeed, IBounds, FeedsApiService }     from "../../commons/services/api/feedsApi.service";
-import { LocalFiltersService }                 from "../../commons/services/api/localFilters.service";
-import { ProjectsApiService }                  from "../../commons/services/api/projectsApi.service";
-import { UtilsService }                        from "../../commons/services/utils.service";
-import { DatasetsState }                       from "../../state/datasets/datasets.reducer";
-import { DatasetsActions, DatasetsActionType } from "../../state/datasets/datasets.actions";
-import { DatasetsMapComponent }                from "../datasets-map/datasets-map.component";
-import { AutocompleteItem }                    from "../datasets-autocomplete/datasets-autocomplete.component";
-import { DatasetsTableComponent }              from "../datasets-table/datasets-table.component";
+import { Configuration }                       from "app/commons/configuration";
+import { SortOrder }                           from "app/commons/directives/sort-link/sort-link.component";
+import { IFeed, IBounds, FeedsApiService }     from "app/commons/services/api/feedsApi.service";
+import { LocalFiltersService }                 from "app/commons/services/api/localFilters.service";
+import { ProjectsApiService }                  from "app/commons/services/api/projectsApi.service";
+import { UtilsService }                        from "app/commons/services/utils.service";
+import { DatasetsState }                       from "app/state/datasets/datasets.reducer";
+import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
+import { DatasetsMapComponent }                from "app/modules/datasets-map/datasets-map.component";
+import { AutocompleteItem }                    from "app/modules/datasets-autocomplete/datasets-autocomplete.component";
+import { DatasetsTableComponent }              from "app/modules/datasets-table/datasets-table.component";
 import LatLngExpression = L.LatLngExpression;
 
 export type IFeedRow = IFeed & {
@@ -68,15 +68,15 @@ export class DatasetsComponent implements AfterViewInit {
         // refresh feeds on upload success
         actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.store.dispatch(datasetsAction.feedsGet(this.getFeedsParams())));
     }
-    
+
     protected initDatasets(isSecure: boolean) {
         this.isSecure = isSecure;
     }
-    
+
     ngAfterViewInit() {
         this.fetchFeeds();
     }
-    
+
     private getFeedsParams() {
         return {
             sortOrder: this.currentSort,
@@ -84,17 +84,18 @@ export class DatasetsComponent implements AfterViewInit {
             secure: this.isSecure
         }
     }
-    
-    protected getCheckedFeeds(): IFeed[] {
+
+    protected getCheckedFeeds(): any[] {
         return this.tableComponent.getCheckedFeeds();
     }
-    
+
     protected downloadFeeds(event: Event) {
         let checkedFeeds = this.getCheckedFeeds();
         checkedFeeds.forEach(
             feed => {
-                this.feedsApi.getDownloadUrl(feed).subscribe(
+                this.feedsApi.getDownloadUrl(feed, feed.selectedVersion ? feed.selectedVersion.id : null).subscribe(
                     url => {
+                      console.log('getDownloadUrl: ', url, feed);
                         if (url) {
                             console.log('getDownloadUrl: ', url);
                             //window.location.assign(url);
@@ -106,13 +107,13 @@ export class DatasetsComponent implements AfterViewInit {
         );
         event.preventDefault();
     }
-    
+
     protected onAutocompleteSelected(selected: AutocompleteItem) {
         console.log('onAutocompleteSelected', selected);
         this.mapPosition = selected.position;
         this.mapZoom = this.config.MAP_ZOOM_BY_AUTOCOMPLETE_TYPE(selected.type);
     }
-    
+
     protected onSortChange(value: SortOrder) {
         this.currentSort = value;
         this.tableComponent.resetPage();
@@ -122,17 +123,17 @@ export class DatasetsComponent implements AfterViewInit {
         let sortedFeeds = this.localFilters.sortFeeds(this.feeds, value)
         this.store.dispatch(this.datasetsAction.feedsGetLocally(this.getFeedsParams(), sortedFeeds));
     }
-    
+
     protected onBoundsChange(value: IBounds) {
         this.tableComponent.resetPage();
         this.currentBounds = value;
         this.fetchFeeds();
     }
-    
+
     private fetchFeeds() {
         this.store.dispatch(this.datasetsAction.feedsGet(this.getFeedsParams()));
     }
-    
+
     private resetSearch() {
         this.currentSort = INITIAL_SORT;
         this.mapComponent.reset();

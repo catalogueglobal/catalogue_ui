@@ -1,133 +1,123 @@
-<div class="dataset-table" *ngIf="feeds && feeds.length>0">
-  <table id="datatable" class="display responsive nowrap" cellspacing="0" width="100%">
-    <thead>
-      <tr>
-	<th class="chkMulti"><i class="fa fa-check-square-o checkAll" aria-hidden="true"
-				(click)="checkAll()"
-				title="{{'mydatasets-table.checkall'|translate}}"></i></th>
-	<th class="togglePublic">
-          <app-sort-link sortValue="isPublic" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
-            {{'mydatasets-table.column.isPublic.label'|translate}}
-          </app-sort-link>
-	</th>
-	<th class="retrievalMethod">
-          <app-sort-link sortValue="retrievalMethod" [(value)]="currentSort" (valueChange)="setSort($event)"
-			 defaultOrder="desc">
-            {{'mydatasets-table.column.type.label'|translate}}
-          </app-sort-link>
-	</th>
-	<th>
-          <app-sort-link sortValue="name" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="asc">
-            {{'mydatasets-table.column.feedName'|translate}}
-          </app-sort-link>
-	</th>
-	<!-- <th class="area">
-             <app-sort-link sortValue="regionStateCountry" [(value)]="currentSort" (valueChange)="setSort($event)"
-			    defaultOrder="asc">
-               {{'mydatasets-table.column.area'|translate}}
-             </app-sort-link>
-	</th> -->
-	<th class="lastUpdated">
-          <app-sort-link sortValue="lastUpdated" [(value)]="currentSort" (valueChange)="setSort($event)"
-			 defaultOrder="desc">
-            {{'mydatasets-table.column.updated'|translate}}
-          </app-sort-link>
-	</th>
-	<th>
-        {{'datasets-table.column.license'|translate}}
-	</th>
-          <!--
-	<th class="licenseDetails">
-	  License Details<a href="#" class="question-circle"></a>
-	</th>
-	-->
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let feed of feeds | paginate: { itemsPerPage: config.PAGINATION_ITEMS_PER_PAGE, maxSize: config.PAGINATION_LINKS_MAX, currentPage: page }">
-	<td class="chkMulti">
-          <div><input type="checkbox" [(ngModel)]="checkById[feed.id]"></div>
-	</td>
-	<td class="togglePublic">
-          <a href="#" (click)="togglePublic(feed)">
-            <div *ngIf="feed.isPublic">
-              <i class="fa fa-toggle-on" title="Public"></i>
-              <span class="details">{{'mydatasets-table.column.isPublic.public'|translate}}</span>
-            </div>
-            <div *ngIf="!feed.isPublic">
-              <i class="fa fa-toggle-off" title="Private"></i>
-              <span class="details">{{'mydatasets-table.column.isPublic.private'|translate}}</span>
-            </div>
-          </a>
-	</td>
-	<td class="retrievalMethod">
-          <a *ngIf="feed.retrievalMethod==FEED_RETRIEVAL_METHOD.FETCHED_AUTOMATICALLY"
-             (click)="fetchFeed(feed)"
-             title="Refresh">
-            <i class="fa fa-refresh" title="Refresh"></i>
-            <span class="details">{{'mydatasets-table.column.type.fetch'|translate}}</span>
-          </a>
-          <app-inline-edit-file *ngIf="feed.retrievalMethod==FEED_RETRIEVAL_METHOD.MANUALLY_UPLOADED"
-				(onSave)="setFile(feed, $event)">
-            <i class="fa fa-upload"></i>
-            <span class="details">{{'mydatasets-table.column.type.upload'|translate}}</span>
-          </app-inline-edit-file>
-	  <span *ngIf="feed.retrievalMethod==FEED_RETRIEVAL_METHOD.PRODUCED_IN_HOUSE" class="details">
-            {{'mydatasets-table.column.type.inhouse'|translate}}
-          </span>
-	</td>
-	<td>
-          <app-inline-edit-text [initialValue]="feed.name" (onSave)="setName(feed, $event)">
-            {{feed.name}}
-          </app-inline-edit-text>
-	</td>
-	<!-- <td class="area">
+<div class="dataset-table datasets-table-component" *ngIf="feeds && feeds.length>0">
+	<table id="datatable" class="display responsive nowrap" cellspacing="0" width="100%">
+		<thead>
+			<tr>
+				<th class="chkMulti"><i class="fa fa-check-square-o checkAll" aria-hidden="true" (click)="checkAll()" title="{{'mydatasets-table.checkall'|translate}}"></i></th>
+				<th class="togglePublic">
+					<app-sort-link sortValue="isPublic" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
+						{{'mydatasets-table.column.isPublic.label'|translate}} </app-sort-link>
+				</th>
+				<th class="retrievalMethod">
+					<app-sort-link sortValue="retrievalMethod" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
+						{{'mydatasets-table.column.type.label'|translate}} </app-sort-link>
+				</th>
+				<th>
+					<app-sort-link sortValue="name" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="asc">
+						{{'mydatasets-table.column.feedName'|translate}} </app-sort-link>
+				</th>
+
+				<th class="lastUpdated">
+					<app-sort-link sortValue="lastUpdated" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
+						{{'mydatasets-table.column.updated'|translate}} </app-sort-link>
+				</th>
+				<th>{{'datasets-table.column.license'|translate}}</th>
+				<th>{{'datasets-table.column.miscData'|translate}}</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let feed of feeds | paginate: { itemsPerPage: config.PAGINATION_ITEMS_PER_PAGE, maxSize: config.PAGINATION_LINKS_MAX, currentPage: page }">
+				<td class="chkMulti">
+					<div>
+						<input type="checkbox" [(ngModel)]="checkById[feed.id]">
+					</div>
+				</td>
+				<td class="togglePublic">
+					<a href="#" (click)="togglePublic(feed)">
+						<div *ngIf="feed.isPublic">
+							<i class="fa fa-toggle-on" title="Public"></i> <span class="details">{{'mydatasets-table.column.isPublic.public'|translate}}</span>
+						</div>
+						<div *ngIf="!feed.isPublic">
+							<i class="fa fa-toggle-off" title="Private"></i> <span class="details">{{'mydatasets-table.column.isPublic.private'|translate}}</span>
+						</div>
+					</a>
+				</td>
+				<td class="retrievalMethod">
+					<a *ngIf="feed.retrievalMethod==FEED_RETRIEVAL_METHOD.FETCHED_AUTOMATICALLY" (click)="fetchFeed(feed)" title="Refresh"> <i class="fa fa-refresh" title="Refresh"></i> <span class="details">{{'mydatasets-table.column.type.fetch'|translate}}</span>
+					</a>
+					<app-inline-edit-file *ngIf="feed.retrievalMethod==FEED_RETRIEVAL_METHOD.MANUALLY_UPLOADED" (onSave)="setFile(feed, $event)"> <i class="fa fa-upload"></i> <span class="details">{{'mydatasets-table.column.type.upload'|translate}}</span>
+					</app-inline-edit-file> <span *ngIf="feed.retrievalMethod==FEED_RETRIEVAL_METHOD.PRODUCED_IN_HOUSE" class="details">
+						{{'mydatasets-table.column.type.inhouse'|translate}} </span></td>
+				<td>
+					<app-inline-edit-text [initialValue]="feed.name" (onSave)="setName(feed, $event)">
+						{{feed.name}} </app-inline-edit-text>
+				</td>
+				<!-- <td class="area">
              <div>{{regionStateCountry(feed)}}</div>
 	</td> -->
-	<td class="lastUpdated">
-          {{feed.lastUpdated|date:'y-MM-dd'}}
-	</td>
-	<td>
-	</td>
-          <!--
-	<td>
-          <div class="license-attr">
-	    <span class="unknown-attr requires disabled">
-	      <span class="tool-tip-info">Unknown whether<br> agency requires<br>attribution.</span>
-	    </span>
-	    <span class="unknown-attr allow-derivation disabled">
-	      <span class="tool-tip-info">You may create a<br>derived data product<br>from this feed.</span>
-	    </span>
-	    <span class="unknown-attr allow-redistribution disabled">
-	      <span class="tool-tip-info">You may redistribute<br>this feed.</span>
-	    </span>
-          </div>
-	</td>
-	-->
-      </tr>
-    </tbody>
-  </table>
-  
-  <div class="pagination">
-    <pagination-controls #p (pageChange)="page = $event">
-      <ul class="ng2-pagination custom">
-        <li class="pagination-previous" [class.disabled]="p.isFirstPage()">
-          <a *ngIf="1 < p.getCurrent()" (click)="p.previous()"><i class="fa fa-arrow-left"></i></a>
-          <span *ngIf="p.isFirstPage()"><i class="fa fa-arrow-left"></i></span>
-        </li>
-        <li [class.current]="p.getCurrent() === page.value" *ngFor="let page of p.pages">
-          <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
-            <span>{{ page.label }}</span>
-          </a>
-          <div *ngIf="p.getCurrent() === page.value">
-            <span>{{ page.label }}</span>
-          </div>
-        </li>
-        <li class="pagination-next" [class.disabled]="p.isLastPage()">
-          <a *ngIf="!p.isLastPage()" (click)="p.next()"><i class="fa fa-arrow-right"></i></a>
-          <span *ngIf="p.isLastPage()"><i class="fa fa-arrow-right"></i></span>
-        </li>
-      </ul>
-    </pagination-controls>
-  </div>
-</div><!--/.dataset-table-->
+				<td class="lastUpdated">
+					<div *ngIf="feed.feedVersionCount <= 1">
+						{{feed.lastUpdated|date:'y-MM-dd'}}
+					</div>
+					<div *ngIf="feed.feedVersionCount > 1" class="form-group">
+						<select class="form-control" [ngModel]="feed.selectedVersion">
+								<option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
+							</select>
+					</div>
+				</td>
+				<td>
+					<a (click)="displayLicense(feed)">
+						<span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsLicenses[feed.id]" class="btn btn-success">
+							<i class="fa fa-plus-square" aria-hidden="true"></i>
+						</span>
+						<span *ngIf="feedsLicenses[feed.id]">
+							{{feedsLicenses[feed.id].name}}
+						</span>
+					</a>
+				</td>
+
+				<td>
+					<a (click)="displayMiscData(feed)">
+						<span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsMiscDatas[feed.id]" class="btn btn-success">
+							<i class="fa fa-plus-square" aria-hidden="true"></i>
+						</span>
+						<span *ngIf="feedsMiscDatas[feed.id]">
+							{{feedsMiscDatas[feed.id].name}}
+						</span>
+					</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="pagination">
+		<pagination-template #p="paginationApi" (pageChange)="page = $event" autoHide="true">
+			<ul class="ng2-pagination custom" *ngIf="p.pages.length > 1">
+				<li class="pagination-previous" [class.disabled]="p.isFirstPage()">
+					<a *ngIf="1 < p.getCurrent()" (click)="p.previous()"><i
+					class="fa fa-arrow-left"></i></a> <span *ngIf="p.isFirstPage()"><i
+					class="fa fa-arrow-left"></i></span>
+				</li>
+				<li [class.current]="p.getCurrent() === page.value" *ngFor="let page of p.pages">
+					<a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value"> <span>{{
+						page.label }}</span>
+					</a>
+					<div *ngIf="p.getCurrent() === page.value">
+						<span>{{ page.label }}</span>
+					</div>
+				</li>
+				<li class="pagination-next" [class.disabled]="p.isLastPage()"><a *ngIf="!p.isLastPage()" (click)="p.next()"><i
+					class="fa fa-arrow-right"></i></a> <span *ngIf="p.isLastPage()"><i
+					class="fa fa-arrow-right"></i></span></li>
+			</ul>
+		</pagination-template>
+	</div>
+</div>
+<!--/.dataset-table-->
+
+
+<!-- modal popup -->
+
+<license-modal [newLicenseOrMiscData]="newLicenseOrMiscData" [onSelectionChange]="onSelectionChangeCallback" [utils]="utils" [items]="licenses" [onItemChanged]="onItemChangedCallback" [onSubmit]="onSubmitLicenseCallback"></license-modal>
+
+<miscdata-modal [newLicenseOrMiscData]="newLicenseOrMiscData" [onSelectionChange]="onSelectionChangeCallback" [utils]="utils" [items]="miscDatas" [onItemChanged]="onItemChangedCallback" [onSubmit]="onSubmitMiscDataCallback"></miscdata-modal>

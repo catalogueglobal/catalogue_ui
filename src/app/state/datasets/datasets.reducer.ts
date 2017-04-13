@@ -1,5 +1,5 @@
 import { Action }                                            from "@ngrx/store";
-import { FeedsGetResponse, IFeed, IFeedApi, FeedsGetParams } from "../../commons/services/api/feedsApi.service";
+import { FeedsGetResponse, IFeed, IFeedApi, FeedsGetParams } from "app/commons/services/api/feedsApi.service";
 import { DatasetsActionType, IFeedReference }                from "./datasets.actions";
 
 export interface DatasetsState {
@@ -14,7 +14,7 @@ export interface DatasetsState {
 
 const initialState: DatasetsState = {
     status: {},
-    feeds: null,
+    feeds: [],
     feedsGetParams: {
         secure: null,
         sortOrder: null,

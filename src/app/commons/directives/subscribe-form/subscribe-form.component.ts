@@ -1,9 +1,9 @@
 import { Component }                           from "@angular/core";
 import { Actions }                             from "@ngrx/effects";
 import { Store }                               from "@ngrx/store";
-import { DatasetsActions, DatasetsActionType } from "../../../state/datasets/datasets.actions";
-import { DatasetsState }                       from "../../../state/datasets/datasets.reducer";
-import { UserSubscribeParams }                 from "../../services/api/usersApi.service";
+import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
+import { DatasetsState }                       from "app/state/datasets/datasets.reducer";
+import { UserSubscribeParams }                 from "app/commons/services/api/usersApi.service";
 
 @Component({
     selector:    'app-subscribe-form',

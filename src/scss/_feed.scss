@@ -1,0 +1,44 @@
+.feed-component {
+    .btn.focus,
+    .btn:focus,
+    .btn:hover {
+        color: $ct-orange;
+    }
+
+    .feed-tools {
+        display: flex;
+    }
+
+    .dropdown {
+        height: 100%;
+    }
+
+    .text-container {
+        max-width: 120px;
+        margin-right: 10px;
+    }
+
+    .item-title {
+        font-style: italic;
+    }
+
+    .btn-success {
+        padding: 0;
+        margin: 0 5px 0 0;
+        width: 22px;
+        height: 22px;
+    }
+
+    .map-container {
+        padding: 15px;
+    }
+
+    a {
+        cursor: pointer;
+    }
+
+    .viewing {
+        font-family: 'karbon-bold', Arial, Helvetica, sans-serif;
+        font-size: 25px;
+    }
+}

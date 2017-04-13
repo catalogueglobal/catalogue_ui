@@ -1,14 +1,14 @@
 import { Injectable }     from "@angular/core";
-import { SortOrder }      from "../../directives/sort-link/sort-link.component";
-import { UtilsService }   from "../utils.service";
+import { SortOrder }      from "app/commons/directives/sort-link/sort-link.component";
+import { UtilsService }   from "app/commons/services/utils.service";
 import { IFeed, IBounds } from "./feedsApi.service";
 
 @Injectable()
 export class LocalFiltersService {
-    
+
     constructor(private utils: UtilsService) {
     }
-    
+
     public filterFeedsInArea(feeds: IFeed[], area: IBounds) {
         console.log("FILTER FEEDS IN AREA", feeds);
         return feeds.filter(feed => this.isFeedWithinArea(feed, area));
@@ -37,7 +37,7 @@ export class LocalFiltersService {
         }
         return true;
     }
-    
+
     private isPointWithinArea(lat: number, lng: number, area: IBounds): boolean {
         if (lat >= area.west && lat <= area.east) {
             if (lng >= area.south && lng <= area.north) {
@@ -70,7 +70,7 @@ export class LocalFiltersService {
         let res = this.computeSort(feeds, sortFactor, sortProperty)
         return res;
     }
-    
+
     private computeSort(array, byVal, sortProperty) {
         array.sort((a: any, b: any) => {
             let aValue = sortProperty(a);

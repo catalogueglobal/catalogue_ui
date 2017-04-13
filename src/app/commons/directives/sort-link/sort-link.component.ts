@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { UtilsService }                                   from "../../services/utils.service";
+import { UtilsService }                                   from "app/commons/services/utils.service";
 
 export type SortOrder = {
     sort: string,
