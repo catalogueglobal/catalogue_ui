@@ -36,6 +36,13 @@ export class SessionService {
             },
             languageDictionary: {
                 title: "Catalogue"
+            },
+            auth: {
+                redirectUrl: window.location.origin + '/datasets',
+                responseType: 'token',
+                params: {
+                    scope: 'openid'
+                }
             }
         };
 
