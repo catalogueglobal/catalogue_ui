@@ -12,6 +12,8 @@ import { ProjectsApiService }                                    from "app/commo
 import { SessionService }                      from "app/commons/services/session.service";
 import {FeedMapUtilsService} from "app/commons/components/feed-map/feed-map-utils.service";
 
+const NB_ROUTE_MAX = 100;
+
 @Component({
     selector: 'ct-feed-map',
     templateUrl: 'feed-map.html'
@@ -21,7 +23,6 @@ export class FeedMapComponent implements AfterViewInit {
     private _feed;
     private routes = [];
     private allShapesGeojsonsFeatures;
-    private allStopConnectionsGeojsonsFeatures;
     map: leaflet.Map;
     stopsMarkers: Array<leaflet.Marker>;
     stationsMarkers: Array<leaflet.Marker>;
@@ -36,8 +37,6 @@ export class FeedMapComponent implements AfterViewInit {
     patternsGroup;
     feedMarker;
     isAuthorised;
-    oldRouteShapeMarkers;
-    patterns;
 
     constructor(private utils: UtilsService,
         private config: Configuration,
@@ -66,6 +65,8 @@ export class FeedMapComponent implements AfterViewInit {
             this.populateMap();
         }
         if (this._feed && this._feed.id && this.sessionService.loggedIn) {
+            this.allShapesGeojsonsFeatures = {};
+
             let that = this;
             this.feedsApi.getStops(this._feed.id).then(function(response) {
                 that.createStops(response);
@@ -235,30 +236,10 @@ export class FeedMapComponent implements AfterViewInit {
         let stop = event.target.model;
         let tooltip = '<b>' + stop.stopName + '</b>';
         tooltip += ('<br><b>type:</b> ' + stop.locationType);
-        var extraData: any = {
-          defaultDwellTime: 0,
-          defaultTravelTime: 0,
-          shapeDistTraveled: 0
-        };
-        if (this.patterns) {
-            for (var i = 0; i < this.patterns.length; i++) {
-                for (var j = 0; j < this.patterns[i].patternStops.length; j++) {
-                    if (this.patterns[i].patternStops[j].stopId === stop.id) {
-                        extraData.defaultDwellTime = Math.max(extraData.defaultDwellTime, this.patterns[i].patternStops[j].defaultDwellTime);
-                        extraData.defaultTravelTime = Math.max(extraData.defaultTravelTime, this.patterns[i].patternStops[j].defaultTravelTime);
-                        extraData.shapeDistTraveled = Math.max(extraData.shapeDistTraveled, this.patterns[i].patternStops[j].shapeDistTraveled);
-                    }
-                }
-            }
-        }
-        //console.log(stop, this.patterns[0], this.routes[0]);
-        tooltip += extraData.defaultDwellTime > 0 ? ('<br><b>defaultDwellTime:</b> ' + extraData.defaultDwellTime) : '';
-        tooltip += extraData.defaultTravelTime > 0 ? ('<br><b>defaultTravelTime:</b> ' + extraData.defaultTravelTime) : '';
-        tooltip += extraData.shapeDistTraveled > 0 ? ('<br><b>shapeDistTraveled:</b> ' + extraData.shapeDistTraveled) : '';
         tooltip += stop.bikeParking ? ('<br>bikeParking: ' + stop.bikeParking) : '';
         tooltip += stop.carParking ? ('<br>carParking: ' + stop.carParking) : '';
 
-        event.target.bindTooltip(tooltip,  { direction: 'top' }).openTooltip();
+        event.target.bindTooltip(tooltip, { direction: 'top' }).openTooltip();
         event.target.bindPopup(tooltip);
     }
 
@@ -286,35 +267,68 @@ export class FeedMapComponent implements AfterViewInit {
             geojson.eachLayer(this.addEventsToRoute.bind(this));
             geojson.setStyle(this.feedMapUtils.getGeoJSONStyle);
             geojson.addTo(this.patternsGroup);
+            if (!this.allShapesGeojsonsFeatures[pattern.routeId]) {
+                this.allShapesGeojsonsFeatures[pattern.routeId] = [];
+            }
+            this.allShapesGeojsonsFeatures[pattern.routeId].push(geojson);
             this.map.fitBounds(this.patternsGroup.getBounds());
         }
     }
 
-    private createTripPatterns() {
-        if (this.patterns) {
+    private createTripPatterns(patterns) {
+        if (patterns) {
 
-            for (var i = 0; i < this.patterns.length; i++) {
-                this.createPattern('shape', this.patterns[i]);
-                this.createPattern('stopConnections', this.patterns[i]);
+            for (var i = 0; i < patterns.length; i++) {
+                this.createPattern('shape', patterns[i]);
+                this.createPattern('stopConnections', patterns[i]);
             }
         }
     }
 
-    private onRouteSelected(event, route) {
-        this.patternsGroup.clearLayers();
-        this.allShapesGeojsonsFeatures = {};
-        this.allStopConnectionsGeojsonsFeatures = {};
-        this.patterns = null;
-        this.oldRouteShapeMarkers = {};
+    private onRouteCheckAll(event) {
         if (event.target.checked) {
-            var data = this.feedMapUtils.getRouteData(route.id, this.routes);
+            for (var i = 0; i < Math.min(this.routes.length, NB_ROUTE_MAX); i++) {
+                this.routes[i].checked = event.target.checked;
+                this.onRouteChecked(event, this.routes[i]);
+            }
+        } else {
+            for (var i = 0; i < this.routes.length; i++) {
+                this.routes[i].checked = event.target.checked;
+            }
+            this.allShapesGeojsonsFeatures = {};
+            this.patternsGroup.clearLayers();
+        }
+    }
+
+    private onRouteChecked(event, route) {
+        var checkRoute = function(vm) {
+            var data = vm.feedMapUtils.getRouteData(route.id, vm.routes);
             if (data) {
-                let that = this;
-                this.feedsApi.getRouteTripPattern(this._feed.id, data.id).then(function(responseTrip) {
-                    that.patterns = responseTrip;
-                    that.createTripPatterns();
+                let that = vm;
+                vm.feedsApi.getRouteTripPattern(vm._feed.id, data.id).then(function(responseTrip) {
+                    that.createTripPatterns(responseTrip);
                 });
             }
+        };
+
+        var unCheckRoute = function(vm) {
+            for (var i = 0; i < vm.allShapesGeojsonsFeatures[route.id].length; i++) {
+                if (vm.patternsGroup.hasLayer(vm.allShapesGeojsonsFeatures[route.id][i])) {
+                    vm.patternsGroup.removeLayer(vm.allShapesGeojsonsFeatures[route.id][i]);
+                    delete vm.allShapesGeojsonsFeatures[route.id];
+                }
+            }
+        }
+
+        if (event.target.checked) {
+            if (!this.allShapesGeojsonsFeatures[route.id] || this.allShapesGeojsonsFeatures[route.id].length === 0) {
+                checkRoute(this);
+            }
+        } else {
+            if (this.allShapesGeojsonsFeatures[route.id]) {
+                unCheckRoute(this);
+            }
+
         }
     }
 
@@ -323,7 +337,8 @@ export class FeedMapComponent implements AfterViewInit {
             let color = layer.feature.properties.routeData.routeTextColor ?
                 ('#' + layer.feature.properties.routeData.routeTextColor) : '';
             let label = '<label style="color:' + color + '">' + layer.feature.properties.routeData.routeLongName +
-                '</label>'
+                '</label>';
+            console.log(label, layer.feature.properties.routeData.routeTextColor);
             layer.bindTooltip(label, { direction: 'top' });
             layer.bindPopup(label);
         }
@@ -335,7 +350,7 @@ export class FeedMapComponent implements AfterViewInit {
             layer.on('mouseover', function(event) {
                 if (event.target.feature.properties.type === 'stop') {
                     event.target.bringToFront();
-                }else{
+                } else {
                     event.target.bringToBack();
                 }
                 event.target.setStyle(that.feedMapUtils.getGeoJSONStyleOver())
@@ -351,6 +366,9 @@ export class FeedMapComponent implements AfterViewInit {
     }
 
     private createGeoJSONFeature(type: string, pattern: any): leaflet.GeoJSON {
+        if (!pattern || !pattern[type]){
+            return;
+        }
         if (type === 'shape') {
             var patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON();
             var geojsonFeature = {
@@ -362,10 +380,6 @@ export class FeedMapComponent implements AfterViewInit {
                 geometry: pattern[type]
             };
             patternsGeoJSON.addData(geojsonFeature);
-            if (!this.allShapesGeojsonsFeatures[pattern.routeId]) {
-                this.allShapesGeojsonsFeatures[pattern.routeId] = [];
-            }
-            this.allShapesGeojsonsFeatures[pattern.routeId].push(pattern[type]);
             return patternsGeoJSON;
         } else {
             var routeData = this.feedMapUtils.getRouteData(pattern.routeId, this.routes);
@@ -382,14 +396,10 @@ export class FeedMapComponent implements AfterViewInit {
                 };
                 try {
                     patternsGeoJSON.addData(feature);
-                } catch(error){
+                } catch (error) {
                     console.log(error);
                 }
             }
-            if (!this.allStopConnectionsGeojsonsFeatures[pattern.routeId]) {
-                this.allStopConnectionsGeojsonsFeatures[pattern.routeId] = [];
-            }
-            this.allStopConnectionsGeojsonsFeatures[pattern.routeId].push(pattern[type]);
             return patternsGeoJSON;
         }
     }

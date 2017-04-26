@@ -24,9 +24,8 @@ export class FeedMapUtilsService {
         return {
             weight: feature.properties.type === 'stop' ? 8 : 5,
             opacity: 1,
-            color: feature.properties.routeData.routeColor ?
-                ('#' + feature.properties.routeData.routeColor) :
-                (feature.properties.type === 'stop' ? 'red' : '#808080'),
+            color: feature.properties.type === 'stop' ? 'red' : (feature.properties.routeData.routeColor ?
+                ('#' + feature.properties.routeData.routeColor) : '#808080'),
             dashArray: feature.properties.type === 'stop' ? null : '5'
         };
     }

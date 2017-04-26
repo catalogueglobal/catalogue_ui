@@ -159,7 +159,8 @@
             "submit": "Submit"
         },
         "filter": "filter",
-        "select_roads": "Choose path"
+        "select_roads": "Choose path",
+        "check_all": "Check all"
     },
     "state": {
         "USER_SUBSCRIBE": "Subscribing...",

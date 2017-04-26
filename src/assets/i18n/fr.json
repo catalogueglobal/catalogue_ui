@@ -159,7 +159,8 @@
             "submit": "Soumettre"
         },
         "filter": "filtrer",
-        "select_roads": "Choisir un reseau"
+        "select_roads": "Choisir un reseau",
+        "check_all": "Tout cocher"
     },
     "state": {
         "USER_SUBSCRIBE": "Subscribing...",
