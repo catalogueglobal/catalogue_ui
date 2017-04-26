@@ -57,6 +57,8 @@ import { MiscDataModal } from './commons/directives/modal/miscdata-modal.compone
 import { LicenseModal } from './commons/directives/modal/license-modal.component';
 import { DatatoolComponent }                                            from "./commons/components/datatool.component";
 import { FeedMapComponent }                                            from "./commons/components/feed-map/feed-map.component";
+import {FeedMapUtilsService} from "./commons/components/feed-map/feed-map-utils.service";
+import {RouteFilter} from  "./commons/components/feed-map/route.filter";
 
 export function httpFactory(http: Http) {
     return new TranslateStaticLoader(http, '/assets/i18n', '.json');
@@ -101,6 +103,7 @@ export function composeProvider(state: any, action: any) {
 
         // pipes
         InstitutionalUrlPipe,
+        RouteFilter,
         OrderByPipe,
         SpinnerComponent,
         StatusComponent,
@@ -150,7 +153,7 @@ export function composeProvider(state: any, action: any) {
     providers: [
         TranslateService, SessionService, Configuration, UploadService,
         UtilsService, MapUtilsService, ProjectsApiService, FeedsApiService, UsersApiService, LocalFiltersService,
-        DatasetsActions, SharedService,
+        DatasetsActions, SharedService, FeedMapUtilsService,
         AuthGuard,
         //NG2_WEBSTORAGE,
 

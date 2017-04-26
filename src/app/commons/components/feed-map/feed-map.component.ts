@@ -10,14 +10,18 @@ import { DatasetsState }                                         from "app/state
 import { Configuration }                                         from "app/commons/configuration";
 import { ProjectsApiService }                                    from "app/commons/services/api/projectsApi.service";
 import { SessionService }                      from "app/commons/services/session.service";
+import {FeedMapUtilsService} from "app/commons/components/feed-map/feed-map-utils.service";
 
 @Component({
     selector: 'ct-feed-map',
-    templateUrl: 'feed-map.html',
+    templateUrl: 'feed-map.html'
 })
 export class FeedMapComponent implements AfterViewInit {
     @Input() mapId: string;
     private _feed;
+    private routes = [];
+    private allShapesGeojsonsFeatures;
+    private allStopConnectionsGeojsonsFeatures;
     map: leaflet.Map;
     stopsMarkers: Array<leaflet.Marker>;
     stationsMarkers: Array<leaflet.Marker>;
@@ -29,18 +33,21 @@ export class FeedMapComponent implements AfterViewInit {
     ImageDivIcon;
     stopsMarkersClusterGroup;
     stationsMarkersClusterGroup;
+    patternsGroup;
     feedMarker;
     isAuthorised;
+    oldRouteShapeMarkers;
+    patterns;
 
     constructor(private utils: UtilsService,
         private config: Configuration,
         private mapUtils: MapUtilsService,
         protected datasetsAction: DatasetsActions,
-        private session: SessionService,
         private feedsApi: FeedsApiService,
         private store: Store<DatasetsState>,
         private sessionService: SessionService,
-        private projectsApi: ProjectsApiService
+        private projectsApi: ProjectsApiService,
+        private feedMapUtils: FeedMapUtilsService
 
     ) {
         this.stopsMarkers = new Array();
@@ -58,24 +65,15 @@ export class FeedMapComponent implements AfterViewInit {
         if (this.map) {
             this.populateMap();
         }
-        if (this._feed && this._feed.id && this.session.loggedIn) {
+        if (this._feed && this._feed.id && this.sessionService.loggedIn) {
             let that = this;
             this.feedsApi.getStops(this._feed.id).then(function(response) {
                 that.createStops(response);
+            });
+            this.feedsApi.getRoutes(this._feed.id).then(function(response) {
+                that.routes = response;
             })
         }
-    }
-
-    private createClusterGroup(stop: boolean) {
-        return new (leaflet as any).MarkerClusterGroup(
-            {
-                //disableClusteringAtZoom: 16,
-                zoomToBoundsOnClick: true,
-                chunkedLoading: true,
-                showCoverageOnHover: false,
-                iconCreateFunction: stop ? this.mapUtils.computeStopIcon : this.mapUtils.computeStationIcon
-            }
-        );
     }
 
     private checkAuthorisations() {
@@ -84,9 +82,9 @@ export class FeedMapComponent implements AfterViewInit {
 
     protected computeMap(id): leaflet.Map {
         let tiles = leaflet.tileLayer(this.config.MAP_TILE_LAYER_URL, this.config.MAP_TILE_LAYER_OPTIONS);
-        this.stopsMarkersClusterGroup = this.createClusterGroup(true);
-        this.stationsMarkersClusterGroup = this.createClusterGroup(false);
-
+        this.stopsMarkersClusterGroup = this.feedMapUtils.createClusterGroup(true);
+        this.stationsMarkersClusterGroup = this.feedMapUtils.createClusterGroup(false);
+        this.patternsGroup = leaflet.featureGroup();
         var overlayMaps = {
             '<i class="fa fa-lg fa-flag-checkered"></i> Stops': this.stopsMarkersClusterGroup,
             '<i class="fa fa-lg fa-train"></i> Stations': this.stationsMarkersClusterGroup
@@ -101,8 +99,8 @@ export class FeedMapComponent implements AfterViewInit {
         let map = leaflet.map(id, options);
         this.stopsMarkersClusterGroup.addTo(map);
         this.stationsMarkersClusterGroup.addTo(map);
-        let control = leaflet.control.layers(null, overlayMaps).addTo(map);
-        control.addTo(map);
+        this.patternsGroup.addTo(map);
+        leaflet.control.layers(null, overlayMaps).addTo(map);
         return map;
     }
 
@@ -115,9 +113,12 @@ export class FeedMapComponent implements AfterViewInit {
         if (this._feed && this.map) {
             this.clearMap();
             if (data) {
-                let bounds = this.utils.computeBoundsToLatLng(this._feed.latestValidation.bounds);
                 let lat = data.defaultLocationLat;
                 let lng = data.defaultLocationLon;
+                let bounds = this.utils.computeBoundsToLatLng(this._feed.latestValidation.bounds);
+                if (!lat && !bounds) {
+                    return;
+                }
                 if (!lat)
                     lat = (bounds[0].lat + bounds[1].lat) / 2;
                 if (!lng)
@@ -212,15 +213,13 @@ export class FeedMapComponent implements AfterViewInit {
                     surClass: (stop.locationType === 'STOP' ? 'stop-marker' : 'station-marker')
                 })
             });
-            var tooltip = '<b>' + stop.stopName + '</b>';
-            tooltip += ('<br><b>type:</b> ' + stop.locationType);
-            tooltip += stop.bikeParking ? ('<br>bikeParking: ' + stop.bikeParking) : '';
-            tooltip += stop.carParking ? ('<br>carParking: ' + stop.carParking) : '';
             let that = this;
             marker.model = stop;
-            marker.bindTooltip(tooltip, { direction: 'top' });
-            marker.on('click', function(event) {
-                that.clickSSMarker(event);
+            marker.on('mouseover', function(event) {
+                that.onMouseOverStopMarker(event);
+            });
+            marker.on('mouseout', function(event) {
+                that.onMouseOutStopMarker(event);
             });
             if (stop.locationType === 'STOP') {
                 this.stopsMarkersClusterGroup.addLayer(marker);
@@ -229,6 +228,169 @@ export class FeedMapComponent implements AfterViewInit {
                 this.stationsMarkersClusterGroup.addLayer(marker);
                 this.stationsMarkers.push(marker);
             }
+        }
+    }
+
+    private onMouseOverStopMarker(event) {
+        let stop = event.target.model;
+        let tooltip = '<b>' + stop.stopName + '</b>';
+        tooltip += ('<br><b>type:</b> ' + stop.locationType);
+        var extraData: any = {
+          defaultDwellTime: 0,
+          defaultTravelTime: 0,
+          shapeDistTraveled: 0
+        };
+        if (this.patterns) {
+            for (var i = 0; i < this.patterns.length; i++) {
+                for (var j = 0; j < this.patterns[i].patternStops.length; j++) {
+                    if (this.patterns[i].patternStops[j].stopId === stop.id) {
+                        extraData.defaultDwellTime = Math.max(extraData.defaultDwellTime, this.patterns[i].patternStops[j].defaultDwellTime);
+                        extraData.defaultTravelTime = Math.max(extraData.defaultTravelTime, this.patterns[i].patternStops[j].defaultTravelTime);
+                        extraData.shapeDistTraveled = Math.max(extraData.shapeDistTraveled, this.patterns[i].patternStops[j].shapeDistTraveled);
+                    }
+                }
+            }
+        }
+        console.log(stop, this.patterns[0], this.routes[0]);
+        tooltip += extraData.defaultDwellTime > 0 ? ('<br><b>defaultDwellTime:</b> ' + extraData.defaultDwellTime) : '';
+        tooltip += extraData.defaultTravelTime > 0 ? ('<br><b>defaultTravelTime:</b> ' + extraData.defaultTravelTime) : '';
+        tooltip += extraData.shapeDistTraveled > 0 ? ('<br><b>shapeDistTraveled:</b> ' + extraData.shapeDistTraveled) : '';
+        tooltip += stop.bikeParking ? ('<br>bikeParking: ' + stop.bikeParking) : '';
+        tooltip += stop.carParking ? ('<br>carParking: ' + stop.carParking) : '';
+
+        event.target.bindTooltip(tooltip,  { direction: 'top' }).openTooltip();
+        event.target.bindPopup(tooltip);
+    }
+
+    private onMouseOutStopMarker(event) {
+        event.target.bindTooltip('').closeTooltip();
+    }
+
+    /**
+      *
+      *
+      *
+      *
+      *                   PATTERNS
+      *
+      *
+      *
+      *
+      *
+    */
+
+    private createPattern(type, pattern) {
+        var geojson = this.createGeoJSONFeature(type, pattern);
+        if (geojson) {
+            geojson.eachLayer(this.bindTooltipToRoute.bind(this));
+            geojson.eachLayer(this.addEventsToRoute.bind(this));
+            geojson.setStyle(this.feedMapUtils.getGeoJSONStyle);
+            geojson.addTo(this.patternsGroup);
+            this.map.fitBounds(this.patternsGroup.getBounds());
+        }
+    }
+
+    private createTripPatterns() {
+        if (this.patterns) {
+
+            for (var i = 0; i < this.patterns.length; i++) {
+                this.createPattern('shape', this.patterns[i]);
+                this.createPattern('stopConnections', this.patterns[i]);
+            }
+        }
+    }
+
+    private onRouteSelected(event, route) {
+        this.patternsGroup.clearLayers();
+        this.allShapesGeojsonsFeatures = {};
+        this.allStopConnectionsGeojsonsFeatures = {};
+        this.patterns = null;
+        this.oldRouteShapeMarkers = {};
+        if (event.target.checked) {
+            var data = this.feedMapUtils.getRouteData(route.id, this.routes);
+            if (data) {
+                let that = this;
+                this.feedsApi.getRouteTripPattern(this._feed.id, data.id).then(function(responseTrip) {
+                    that.patterns = responseTrip;
+                    that.createTripPatterns();
+                });
+            }
+        }
+    }
+
+    private bindTooltipToRoute(layer) {
+        if (layer.feature.properties.routeData) {
+            let color = layer.feature.properties.routeData.routeTextColor ?
+                ('#' + layer.feature.properties.routeData.routeTextColor) : '';
+            let label = '<label style="color:' + color + '">' + layer.feature.properties.routeData.routeLongName +
+                '</label>'
+            layer.bindTooltip(label, { direction: 'top' });
+            layer.bindPopup(label);
+        }
+    }
+
+    private addEventsToRoute(layer) {
+        if (layer.feature.properties.routeData) {
+            let that = this;
+            layer.on('mouseover', function(event) {
+                if (event.target.feature.properties.type === 'stop') {
+                    event.target.bringToFront();
+                }else{
+                    event.target.bringToBack();
+                }
+                event.target.setStyle(that.feedMapUtils.getGeoJSONStyleOver())
+            })
+            layer.on('mouseout', function(event) {
+                event.target.setStyle(that.feedMapUtils.getGeoJSONStyle(event.target.feature))
+            })
+            layer.on('click', function(event) {
+                event.target.bringToFront();
+                that.map.fitBounds(event.target._bounds);
+            })
+        }
+    }
+
+    private createGeoJSONFeature(type: string, pattern: any): leaflet.GeoJSON {
+        if (type === 'shape') {
+            var patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON();
+            var geojsonFeature = {
+                type: 'Feature',
+                properties: {
+                    pattern: pattern,
+                    routeData: this.feedMapUtils.getRouteData(pattern.routeId, this.routes)
+                },
+                geometry: pattern[type]
+            };
+            patternsGeoJSON.addData(geojsonFeature);
+            if (!this.allShapesGeojsonsFeatures[pattern.routeId]) {
+                this.allShapesGeojsonsFeatures[pattern.routeId] = [];
+            }
+            this.allShapesGeojsonsFeatures[pattern.routeId].push(pattern[type]);
+            return patternsGeoJSON;
+        } else {
+            var routeData = this.feedMapUtils.getRouteData(pattern.routeId, this.routes);
+            var patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON();
+            for (var i = 0; i < pattern[type].length; i++) {
+                var feature = {
+                    type: 'Feature',
+                    properties: {
+                        pattern: pattern[type][i],
+                        routeData: routeData,
+                        type: 'stop'
+                    },
+                    geometry: pattern[type][i]
+                };
+                try {
+                    patternsGeoJSON.addData(feature);
+                } catch(error){
+                    console.log(error);
+                }
+            }
+            if (!this.allStopConnectionsGeojsonsFeatures[pattern.routeId]) {
+                this.allStopConnectionsGeojsonsFeatures[pattern.routeId] = [];
+            }
+            this.allStopConnectionsGeojsonsFeatures[pattern.routeId].push(pattern[type]);
+            return patternsGeoJSON;
         }
     }
 }

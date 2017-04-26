@@ -72,6 +72,7 @@ export class FeedsApiService extends AbstractApiService {
     public FEED_LICENSE: string;
     public FEED_MISC_DATA: string;
     private FEED_STOPS_URL:string;
+    private SECURE_URL: string;
 
     constructor(
         protected http: Http,
@@ -83,6 +84,7 @@ export class FeedsApiService extends AbstractApiService {
         protected localFilters: LocalFiltersService)
     {
         super(http, authHttp, authConfig, config);
+        this.SECURE_URL = this.config.ROOT_API + '/api/manager/secure';
         this.FEED_PUBLIC_URL = this.config.ROOT_API + "/api/manager/public/feedsource";
         this.FEED_SECURE_URL = this.config.ROOT_API + "/api/manager/secure/feedsource";
         this.FEED_PUBLIC_VERSION_URL = this.config.ROOT_API + "/api/manager/public/feedversion";
@@ -293,4 +295,16 @@ export class FeedsApiService extends AbstractApiService {
     public getStop(feedId:string, stopId:string):Promise<any>{
       return this.authHttp.get(this.FEED_STOPS_URL + '/' + stopId + '?feedId=' + feedId).map(response => response.json()).toPromise();
     }
+
+    public getRoutes(feedId:string):Promise<any>{
+      var url = this.SECURE_URL + '/route'
+      return this.authHttp.get(url + '?feedId=' + feedId).map(response => response.json()).toPromise();
+    }
+
+    public getRouteTripPattern(feedId:string, routeId: string):Promise<any>{
+      var url = this.SECURE_URL + '/trippattern'
+      return this.authHttp.get(url + '?feedId=' + feedId + '&routeId=' + routeId).map(response => response.json()).toPromise();
+    }
+
+
 }

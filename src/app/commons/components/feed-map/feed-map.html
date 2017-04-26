@@ -1,1 +1,23 @@
-<div id="{{mapId}}"></div>
+<div class="col-xs-12" *ngIf="sessionService.loggedIn && routes.length > 0">
+    <div class="dropdown pull-right show-on-hover">
+        <button class="btn dropdown-toggle" type="button" id="dropdownMenuRoute" data-toggle="dropdown">
+          {{'feed.select_roads' | translate}}
+          <span class="caret"></span>
+        </button>
+        <input type="text" class="filter-route-input" [(ngModel)]="routeFilterModel" placeholder="{{'feed.filter' | translate}}" />
+        <ul class="dropdown-menu dropdown-menu-right routes-list-containers" aria-labelledby="dropdownMenuRoute">
+            <li *ngFor="let route of routes | routeFilter:routeFilterModel">
+                <label>
+                    <input type="radio" name="radiogroupRoute" (change)="onRouteSelected($event, route)" />
+                    {{route.routeLongName}}
+                </label>
+
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="col-xs-12">
+    <div id="{{mapId}}"></div>
+
+</div>
