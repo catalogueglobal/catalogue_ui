@@ -22,7 +22,11 @@
 				</th>
 				<th>{{'datasets-table.column.license'|translate}}</th>
 				<th>{{'datasets-table.column.miscData'|translate}}</th>
-
+		<!--
+                <th>
+		  {{'datasets-table.validation'|translate}}
+		</th>
+		-->
 			</tr>
 		</thead>
 		<tbody>
@@ -86,6 +90,17 @@
 						</span>
 					</a>
 				</td>
+				<!--
+
+                <td>
+		  <a download="{{'datasets-table.validation'|translate}}" href="{{this.config.ROOT_API + '/api/manager/secure/feedversion/' + feed.latestVersionId + '/validation'}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
+                        <span>
+			  {{'datasets-table.validation'|translate}}
+                        </span>
+                    </a>
+
+                </td>
+		-->
 			</tr>
 		</tbody>
 	</table>

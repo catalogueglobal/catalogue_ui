@@ -114,6 +114,10 @@
     },
     "datasets-table": {
         "checkall": "Vérifier tout",
+        "validation": "Validation",
+        "btn":  {
+            "edit": "Edit"    
+        },
         "column": {
             "feedName": "Nom du lot",
             "area": "Zone",

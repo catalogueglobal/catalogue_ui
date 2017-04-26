@@ -32,6 +32,10 @@
                 <th *ngIf="sessionService.loggedIn">
                     {{'datasets-table.column.subscribe'|translate}}
                 </th>
+
+		<th>
+		  {{'datasets-table.validation'|translate}}
+		</th>
             </tr>
         </thead>
         <tbody>
@@ -86,6 +90,16 @@
                 <td class="" *ngIf="sessionService.loggedIn">
                     <input type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)">
                 </td>
+
+                <td>
+		  <a download="{{'datasets-table.validation'|translate}}" href="{{this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.latestVersionId + '/validation'}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
+                        <span>
+			  {{'datasets-table.validation'|translate}}
+                        </span>
+                    </a>
+
+                </td>
+
             </tr>
         </tbody>
     </table>

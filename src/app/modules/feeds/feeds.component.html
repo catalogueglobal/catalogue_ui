@@ -9,9 +9,18 @@
                     <app-inline-edit-text [initialValue]="feed.name" (onSave)="setName(feed, $event)">
                         {{feed.name}} </app-inline-edit-text>
                 </div>
-
+		
+		<div>
+		  <a href="http://data.catalogue.global:4200/feed/{{feed.id}}/edit">
+		    <button class="btn"> {{'datasets-table.btn.edit'|translate}}
+		    </button>
+		  </a>
+		</div>
+		
             </div>
-            <div class="feed-tools pull-right">
+	    
+	    <div class="feed-tools pull-right">
+
                 <div *ngIf="sessionService.loggedIn" class="text-container">
                     <span class="item-title">{{'datasets-table.column.subscribe'|translate}}</span>
                     <input type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)">
@@ -33,6 +42,7 @@
                     </div>
 
                 </div>
+
                 <div class="dropdown show-on-hover">
                     <button class="btn dropdown-toggle" type="button" id="dropdownMenuDownload" data-toggle="dropdown">
                         {{'layout.menu.download' | translate}}
@@ -60,6 +70,14 @@
                                 </span>
                             </a>
                         </li>
+                        <li>
+			  <a download="{{'datasets-table.validation'|translate}}" href="{{this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.latestVersionId + '/validation'}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
+                            <span>
+			      {{'datasets-table.validation'|translate}}: {{feed.name}}
+                            </span>
+			  </a>
+                        </li>
+
                     </ul>
                 </div>
 

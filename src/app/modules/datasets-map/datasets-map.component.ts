@@ -252,11 +252,11 @@ export class DatasetsMapComponent implements AfterViewInit {
 
     private computeMarkerPopup(feed: any): string {
         let license = this.feedsLicenses[feed.id];
-        let popupHtml = '<b><a href="/feeds/' + feed.id + '">' + feed.name + "</a></b> (";
+        let popupHtml = '<b>';
         if (feed.isPublic) {
-            popupHtml += this.translate.instant('mydatasets-table.column.isPublic.label') + ')';
+            popupHtml += '<a href="/feeds/' + feed.id + '">' + feed.name + "</a></b> (" + this.translate.instant('mydatasets-table.column.isPublic.label') + ')';
         } else {
-            popupHtml += this.translate.instant('mydatasets-table.column.isPublic.private') + ')';
+            popupHtml += feed.name + '</b> (' + this.translate.instant('mydatasets-table.column.isPublic.private') + ')';
         }
         if (feed.url) {
             popupHtml += "<br><button onclick=\"document.location.href='" + feed.url + "'\">Download feed</button>";

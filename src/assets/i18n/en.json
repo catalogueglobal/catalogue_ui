@@ -114,6 +114,10 @@
     },
     "datasets-table": {
         "checkall": "Check all",
+        "validation": "Validation",
+        "btn":  {
+            "edit": "Edit"    
+        },
         "column": {
             "feedName": "Feed name",
             "area": "Area",

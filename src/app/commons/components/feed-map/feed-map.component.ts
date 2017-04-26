@@ -251,7 +251,7 @@ export class FeedMapComponent implements AfterViewInit {
                 }
             }
         }
-        console.log(stop, this.patterns[0], this.routes[0]);
+        //console.log(stop, this.patterns[0], this.routes[0]);
         tooltip += extraData.defaultDwellTime > 0 ? ('<br><b>defaultDwellTime:</b> ' + extraData.defaultDwellTime) : '';
         tooltip += extraData.defaultTravelTime > 0 ? ('<br><b>defaultTravelTime:</b> ' + extraData.defaultTravelTime) : '';
         tooltip += extraData.shapeDistTraveled > 0 ? ('<br><b>shapeDistTraveled:</b> ' + extraData.shapeDistTraveled) : '';
