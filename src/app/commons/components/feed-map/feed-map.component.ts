@@ -338,7 +338,6 @@ export class FeedMapComponent implements AfterViewInit {
                 ('#' + layer.feature.properties.routeData.routeTextColor) : '';
             let label = '<label style="color:' + color + '">' + layer.feature.properties.routeData.routeLongName +
                 '</label>';
-            console.log(label, layer.feature.properties.routeData.routeTextColor);
             layer.bindTooltip(label, { direction: 'top' });
             layer.bindPopup(label);
         }
