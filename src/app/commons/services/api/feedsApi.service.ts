@@ -118,7 +118,7 @@ export class FeedsApiService extends AbstractApiService {
     public setFile(feedSourceId: string, file: File): Observable<any> {
         let formData: FormData = new FormData();
         formData.append("file", file, file.name);
-        return this.uploadService.upload(this.FEED_SECURE_VERSION_URL + "?feedSourceId=" + feedSourceId, formData, this.computeAuthHeaders());
+        return this.uploadService.upload(this.FEED_SECURE_VERSION_URL + "?feedSourceId=" + feedSourceId+"&lastModified="+file.lastModifiedDate.getTime(), formData, this.computeAuthHeaders());
     }
 
     public delete(feedSourceId: string): Observable<any> {
