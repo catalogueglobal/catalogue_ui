@@ -34,14 +34,5 @@ export class MyDatasetsComponent extends DatasetsComponent {
     {
         super(utils, projectsApiService, store, datasetsAction, config, feedsApi, localFilters, actions$);
         this.initDatasets(true); // show private feeds
-        actions$.ofType(DatasetsActionType.CONFIRM_DELETE_FEED_SUCCESS).subscribe(action => this.deleteFeeds());
-    }
-
-    deleteFeeds() {
-        let feedRefsToDelete: IFeedReference[] = this.getCheckedFeeds().map((feed: IFeed) => toFeedReference(feed));
-        if (feedRefsToDelete.length > 0) {
-            this.store.dispatch(this.datasetsAction.feedDelete(feedRefsToDelete));
-        }
-        return false;
     }
 }

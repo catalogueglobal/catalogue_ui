@@ -94,7 +94,15 @@ export const DatasetsActionType = {
 
     FEED_CREATE_MISCDATA: `FEED_CREATE_MISCDATA`,
     FEED_CREATE_MISCDATA_FAIL: `FEED_CREATE_MISCDATA_FAIL`,
-    FEED_CREATE_MISCDATA_SUCCESS: `FEED_CREATE_MISCDATA_SUCCESS`
+    FEED_CREATE_MISCDATA_SUCCESS: `FEED_CREATE_MISCDATA_SUCCESS`,
+
+    FEED_DELETE_LICENSES: `FEED_DELETE_LICENSES`,
+    FEED_DELETE_LICENSES_SUCCESS: `FEED_DELETE_LICENSES_SUCCESS`,
+    FEED_DELETE_LICENSES_FAIL: `FEED_DELETE_LICENSES_FAIL`,
+
+    FEED_DELETE_MISCS: `FEED_DELETE_MISCS`,
+    FEED_DELETE_MISCS_SUCCESS: `FEED_DELETE_MISCS_SUCCESS`,
+    FEED_DELETE_MISCS_FAIL: `FEED_DELETE_MISCS_FAIL`,
 
 };
 
@@ -761,6 +769,60 @@ export class DatasetsActions {
             payload: {
                 feedRef: feedRef,
                 error: error
+            }
+        }
+    }
+
+    feedDeleteLicenses(licenses: any): Action {
+        return {
+            type: DatasetsActionType.FEED_DELETE_LICENSES,
+            payload: {
+                licenses: licenses
+            }
+        }
+    }
+
+    feedDeleteLicensesSuccess(licenses: any): Action {
+        return {
+            type: DatasetsActionType.FEED_DELETE_LICENSES_SUCCESS,
+            payload: {
+                licenses: licenses
+            }
+        };
+    }
+
+    feedDeleteLicensesFail(licenses: any, errors: any[]): Action {
+        return {
+            type: DatasetsActionType.FEED_DELETE_LICENSES_FAIL,
+            payload: {
+                licenses: licenses
+            }
+        }
+    }
+
+    feedDeleteMiscs(miscs: any): Action {
+        return {
+            type: DatasetsActionType.FEED_DELETE_MISCS,
+            payload: {
+                miscs: miscs
+            }
+        }
+    }
+
+    feedDeleteMiscsSuccess(miscs: any): Action {
+        return {
+            type: DatasetsActionType.FEED_DELETE_MISCS_SUCCESS,
+            payload: {
+                miscs: miscs
+            }
+        };
+    }
+
+    feedDeleteMiscsFail(miscs: any, errors: any[]): Action {
+        return {
+            type: DatasetsActionType.FEED_DELETE_MISCS_FAIL,
+            payload: {
+                miscs: miscs
             }
         }
     }

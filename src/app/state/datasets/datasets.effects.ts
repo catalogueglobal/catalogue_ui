@@ -272,6 +272,69 @@ export class DatasetsEffects {
         }
     ).share();
 
+    @Effect() FEED_DELETE_LICENSES$: Observable<Action> = this.actions$.ofType(DatasetsActionType.FEED_DELETE_LICENSES).map(action => action.payload).map(
+        payload => {
+            const licenses = payload.licenses;
+            let failedLicenses = [];
+            let errors: any[] = [];
+            let nbSuccess = 0;
+            var keys = Object.keys(licenses);
+            keys.forEach(key => {
+                console.log('deleting ' + nbSuccess + '/' + keys.length, key, licenses[key]);
+                this.feedsApi.unsetLicense(licenses[key], key).subscribe(() => {
+                    console.log('delete success');
+                    nbSuccess++;
+                }, e => {
+                    console.log('delete failed', e);
+                    failedLicenses.push(key);
+                    errors.push(e);
+                });
+            });
+
+            if (failedLicenses.length == 0) {
+                return this.action.feedDeleteLicensesSuccess(licenses);
+            } else {
+                return this.action.feedDeleteLicensesFail(failedLicenses, errors);
+            }
+        }
+    ).share();
+
+    @Effect() FEED_DELETE_MISCS$: Observable<Action> = this.actions$.ofType(DatasetsActionType.FEED_DELETE_MISCS).map(action => action.payload).map(
+        payload => {
+            const miscs = payload.miscs;
+            let failedMiscs = [];
+            let errors: any[] = [];
+            let nbSuccess = 0;
+            var keys = Object.keys(miscs);
+            var failedCb = function(e, key){
+                console.log('delete failed', e);
+                failedMiscs.push(key);
+                errors.push(e);
+            };
+            keys.forEach(key => {
+                console.log('deleting ' + nbSuccess + '/' + keys.length, key, miscs[key]);
+                // remove the miscdata from the list
+                this.feedsApi.unsetMiscData(miscs[key], key).subscribe(() => {
+                    // delete the miscdata file
+                    this.feedsApi.deletMiscData(key).subscribe(() => {
+                        console.log('delete success');
+                        nbSuccess++;
+                    }, e => {
+                        failedCb(e, key);
+                    });
+                }, e => {
+                    failedCb(e, key);
+                });
+            });
+
+            if (failedMiscs.length == 0) {
+                return this.action.feedDeleteMiscsSuccess(miscs);
+            } else {
+                return this.action.feedDeleteMiscsFail(failedMiscs, errors);
+            }
+        }
+    ).share();
+
     /*
       private addFeedToProject(createFeed: ICreateFeed, onProgress): Observable<IFeedApi> {
       return Observable.create(obs$ => {

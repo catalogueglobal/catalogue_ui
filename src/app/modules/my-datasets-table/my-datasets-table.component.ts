@@ -8,7 +8,7 @@ import { IFeed, FeedsApiService } from "app/commons/services/api/feedsApi.servic
 import { UsersApiService } from "app/commons/services/api/usersApi.service";
 import { SessionService } from "app/commons/services/session.service";
 import { UtilsService } from "app/commons/services/utils.service";
-import { DatasetsActions, toFeedReference, DatasetsActionType } from "app/state/datasets/datasets.actions";
+import { DatasetsActions, toFeedReference, DatasetsActionType,IFeedReference } from "app/state/datasets/datasets.actions";
 import { DatasetsState } from "app/state/datasets/datasets.reducer";
 import { DatasetsTableComponent } from "app/modules/datasets-table/datasets-table.component";
 import { IFeedRow } from "app/modules/datasets/datasets.component";
@@ -46,7 +46,6 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         super(config, utils, sessionService, feedsApi, usersApiService, store, actions$, datasetsAction, shared);
 
         this.resetForm(this._feeds);
-        this.subscribeActions(actions$);
     }
 
     public ngOnInit() {
@@ -122,6 +121,9 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
                 this.resetForm(this._feeds);
             }
         );
+
+        actions$.ofType(DatasetsActionType.CONFIRM_DELETE_FEED_SUCCESS).subscribe(
+          action => this.deleteFeeds());
     }
 
     protected displayLicense(feed: IFeed) {
@@ -164,6 +166,33 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
             this.miscDataModal.hide();
         }
         return res;
+    }
+
+    protected deleteFeeds() {
+        let feedRefsToDelete: IFeedReference[] = this.getCheckedFeeds().map((feed: IFeed) => toFeedReference(feed));
+        if (feedRefsToDelete.length > 0) {
+            var licenses = {};
+            var miscs = {};
+            for (var i = 0; i < feedRefsToDelete.length; i++){
+              if (this.feedsLicenses[feedRefsToDelete[i].feedsourceId]){
+                if (!licenses[this.feedsLicenses[feedRefsToDelete[i].feedsourceId].id]){
+                  licenses[this.feedsLicenses[feedRefsToDelete[i].feedsourceId].id] = [];
+                }
+                licenses[this.feedsLicenses[feedRefsToDelete[i].feedsourceId].id].push(feedRefsToDelete[i].feedsourceId);
+              }
+              if (this.feedsMiscDatas[feedRefsToDelete[i].feedsourceId]){
+                if (!miscs[this.feedsMiscDatas[feedRefsToDelete[i].feedsourceId].id]){
+                  miscs[this.feedsMiscDatas[feedRefsToDelete[i].feedsourceId].id] = [];
+                }
+                miscs[this.feedsMiscDatas[feedRefsToDelete[i].feedsourceId].id].push(feedRefsToDelete[i].feedsourceId);
+              }
+            }
+            this.store.dispatch(this.datasetsAction.feedDeleteLicenses(licenses));
+            this.store.dispatch(this.datasetsAction.feedDeleteMiscs(miscs));
+            this.store.dispatch(this.datasetsAction.feedDelete(feedRefsToDelete));
+
+        }
+        return false;
     }
 
     setSort(sort) {

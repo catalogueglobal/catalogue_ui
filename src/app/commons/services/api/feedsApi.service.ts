@@ -204,6 +204,10 @@ export class FeedsApiService extends AbstractApiService {
         return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId + params, null, { headers: this.getMultipartHeader() }).map(response => response.json());
     }
 
+    public deletMiscData(licenseId: string): Observable<ILicense>{
+        return this.authHttp.delete(this.FEED_MISC_DATA + "/" + licenseId).map(response => response.json());
+    }
+
     public getList(params: FeedsGetParams): Observable<FeedsGetResponse> {
         let projects;
         if (params.secure) {
