@@ -153,8 +153,17 @@ export class DatatoolComponent {
     }
 
     protected checkSubscribed(feed_id) {
-        var index = this.sessionService.userProfile && (this.sessionService.userProfile.app_metadata ?
-            this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id) : -1);
+        var index =  -1;
+        if (this.sessionService.userProfile &&
+            this.sessionService.userProfile.app_metadata &&
+            this.sessionService.userProfile.app_metadata.datatools &&
+            this.sessionService.userProfile.app_metadata.datatools[0] &&
+            this.sessionService.userProfile.app_metadata.datatools[0].subscriptions &&
+            this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0] &&
+            this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target &&
+            this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.length > 0){
+              index = this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id);
+        }
         if (index == -1) {
             return false
         }
