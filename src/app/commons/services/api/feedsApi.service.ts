@@ -71,7 +71,7 @@ export class FeedsApiService extends AbstractApiService {
     private FEED_NOTES: string;
     public FEED_LICENSE: string;
     public FEED_MISC_DATA: string;
-    private FEED_STOPS_URL:string;
+    private FEED_STOPS_URL: string;
     private SECURE_URL: string;
 
     constructor(
@@ -81,8 +81,7 @@ export class FeedsApiService extends AbstractApiService {
         protected config: Configuration,
         protected projectsApiService: ProjectsApiService,
         protected uploadService: UploadService,
-        protected localFilters: LocalFiltersService)
-    {
+        protected localFilters: LocalFiltersService) {
         super(http, authHttp, authConfig, config);
         this.SECURE_URL = this.config.ROOT_API + '/api/manager/secure';
         this.FEED_PUBLIC_URL = this.config.ROOT_API + "/api/manager/public/feedsource";
@@ -106,19 +105,19 @@ export class FeedsApiService extends AbstractApiService {
     }
 
     public setPublic(feedSourceId: string, value: boolean): Observable<IFeedApi> {
-        return this.authHttp.put(this.FEED_SECURE_URL + "/" + feedSourceId, JSON.stringify({isPublic: value}))
-            .map(response=>response.json());
+        return this.authHttp.put(this.FEED_SECURE_URL + "/" + feedSourceId, JSON.stringify({ isPublic: value }))
+            .map(response => response.json());
     }
 
     public setName(feedSourceId: string, value: string): Observable<IFeedApi> {
-        return this.authHttp.put(this.FEED_SECURE_URL + "/" + feedSourceId, JSON.stringify({name: value}))
-            .map(response=>response.json());
+        return this.authHttp.put(this.FEED_SECURE_URL + "/" + feedSourceId, JSON.stringify({ name: value }))
+            .map(response => response.json());
     }
 
     public setFile(feedSourceId: string, file: File): Observable<any> {
         let formData: FormData = new FormData();
         formData.append("file", file, file.name);
-        return this.uploadService.upload(this.FEED_SECURE_VERSION_URL + "?feedSourceId=" + feedSourceId+"&lastModified="+file.lastModifiedDate.getTime(), formData, this.computeAuthHeaders());
+        return this.uploadService.upload(this.FEED_SECURE_VERSION_URL + "?feedSourceId=" + feedSourceId + "&lastModified=" + file.lastModifiedDate.getTime(), formData, this.computeAuthHeaders());
     }
 
     public delete(feedSourceId: string): Observable<any> {
@@ -150,65 +149,65 @@ export class FeedsApiService extends AbstractApiService {
             .map(response => response.json())
     }
 
-    public getNotes(feedSourceId: string): Promise<any>{
+    public getNotes(feedSourceId: string): Promise<any> {
         return this.authHttp.get(this.FEED_NOTES + feedSourceId).map(response => response.json()).toPromise();
     }
 
-    public addNotes(feedSourceId: string, note: string): Observable<any>{
+    public addNotes(feedSourceId: string, note: string): Observable<any> {
         return this.authHttp.post(this.FEED_NOTES + feedSourceId, note).map(response => response.json())
     }
 
-    public getLicenses() : Promise<any> {
+    public getLicenses(): Promise<any> {
         return this.http.get(this.FEED_LICENSE).map(response => response.json()).toPromise();
     }
 
-    public getMiscDatas() : Promise<any> {
+    public getMiscDatas(): Promise<any> {
         return this.http.get(this.FEED_MISC_DATA).map(response => response.json()).toPromise();
     }
 
-    public createLicense(name: string, file: File, feedIds: string[]) : Observable<ILicense> {
+    public createLicense(name: string, file: File, feedIds: string[]): Observable<ILicense> {
         let formData: FormData = new FormData();
         formData.append('file', file, file.name);
         return this.uploadService.upload(this.FEED_LICENSE + '?name=' + name + '&feeds=' + feedIds, formData, this.computeAuthHeaders());
     }
 
-    public createMiscData(name: string, file: File, feedIds: string[]) : Observable<ILicense> {
+    public createMiscData(name: string, file: File, feedIds: string[]): Observable<ILicense> {
         let formData: FormData = new FormData();
         formData.append('file', file, file.name);
         return this.uploadService.upload(this.FEED_MISC_DATA + '?name=' + name + '&feeds=' + feedIds, formData, this.computeAuthHeaders());
     }
 
-    private getMultipartHeader(){
-      let myHeader = new Headers();
-      myHeader.append('Content-Type', 'multipart/form-data');
-      return myHeader;
+    private getMultipartHeader() {
+        let myHeader = new Headers();
+        myHeader.append('Content-Type', 'multipart/form-data');
+        return myHeader;
     }
 
-    public setLicense(feedIds: string[], licenseId: string): Observable<ILicense>{
+    public setLicense(feedIds: string[], licenseId: string): Observable<ILicense> {
         let params = '?feeds=' + feedIds.toString();
-        return this.authHttp.put(this.FEED_LICENSE + '/' + licenseId + params , null, { headers: this.getMultipartHeader() }).map(response => response.json());
+        return this.authHttp.put(this.FEED_LICENSE + '/' + licenseId + params, null, { headers: this.getMultipartHeader() }).map(response => response.json());
     }
 
-    public unsetLicense(feedIds: string[], licenseId: string): Observable<ILicense>{
+    public unsetLicense(feedIds: string[], licenseId: string): Observable<ILicense> {
         let params = '?feeds=' + feedIds.toString() + '&action=remove';
         return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId + params, null, { headers: this.getMultipartHeader() }).map(response => response.json());
     }
 
-    public setMiscData(feedIds: string[], licenseId: string): Observable<ILicense>{
+    public setMiscData(feedIds: string[], licenseId: string): Observable<ILicense> {
         let params = '?feeds=' + feedIds.toString();
-        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId + params , null, { headers: this.getMultipartHeader() }).map(response => response.json());
+        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId + params, null, { headers: this.getMultipartHeader() }).map(response => response.json());
     }
 
-    public unsetMiscData(feedIds: string[], licenseId: string): Observable<ILicense>{
+    public unsetMiscData(feedIds: string[], licenseId: string): Observable<ILicense> {
         let params = '?feeds=' + feedIds.toString() + '&action=remove';
         return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId + params, null, { headers: this.getMultipartHeader() }).map(response => response.json());
     }
 
-    public deletMiscData(licenseId: string): Observable<ILicense>{
+    public deletMiscData(licenseId: string): Observable<ILicense> {
         return this.authHttp.delete(this.FEED_MISC_DATA + "/" + licenseId).map(response => response.json());
     }
 
-    public getList(params: FeedsGetParams): Observable<FeedsGetResponse> {
+    public getList(params: FeedsGetParams) {
         let projects;
         if (params.secure) {
             projects = this.projectsApiService.getSecureList(params.bounds, params.sortOrder);
@@ -217,7 +216,23 @@ export class FeedsApiService extends AbstractApiService {
         else {
             projects = this.projectsApiService.getPublicList(params.bounds, params.sortOrder);
         }
-        return this.adaptFeedsResponse(projects, params.secure, params.bounds, params.sortOrder);
+        var observableRes = Observable.create(obs => {
+            projects.subscribe(
+                data => {
+                    if (!data || data.length == 0) {
+                        obs.error(new Error('empty values'));
+                    } else {
+                        this.adaptFeedsResponse(projects, params.secure, params.bounds, params.sortOrder).subscribe(
+                        response => {
+                            console.log(response);
+                            obs.next(response);
+                            obs.complete;    
+                        });
+                   }
+                },
+            )
+        });
+        return observableRes;
     }
 
     protected adaptFeedsResponse(projectsObservable: Observable<IProject[]>, retrieveSecureFeeds: boolean, bounds: IBounds, sortOrder: SortOrder): Observable<FeedsGetResponse> {
@@ -236,7 +251,7 @@ export class FeedsApiService extends AbstractApiService {
                 return {
                     feeds: feedArray
                 };
-            });
+            })
     }
 
     feedsFromProject(project: IProject, retrieveSecureFeeds: boolean): Observable<IFeed[]> {
@@ -284,30 +299,30 @@ export class FeedsApiService extends AbstractApiService {
             .map(response => response.json());
     }
 
-    public getFeedVersions(feedSourceId: string, isPublic: boolean) : Promise<any> {
-        if (isPublic){
-          return this.http.get(this.FEED_PUBLIC_VERSION_URL + '?feedSourceId=' + feedSourceId).map(response => response.json()).toPromise();
-        }else{
+    public getFeedVersions(feedSourceId: string, isPublic: boolean): Promise<any> {
+        if (isPublic) {
+            return this.http.get(this.FEED_PUBLIC_VERSION_URL + '?feedSourceId=' + feedSourceId).map(response => response.json()).toPromise();
+        } else {
             return this.authHttp.get(this.FEED_SECURE_VERSION_URL + '?feedSourceId=' + feedSourceId).map(response => response.json()).toPromise();
         }
     }
 
-    public getStops(feedId:string):Promise<any>{
-      return this.authHttp.get(this.FEED_STOPS_URL + '?feedId=' + feedId).map(response => response.json()).toPromise();
+    public getStops(feedId: string): Promise<any> {
+        return this.authHttp.get(this.FEED_STOPS_URL + '?feedId=' + feedId).map(response => response.json()).toPromise();
     }
 
-    public getStop(feedId:string, stopId:string):Promise<any>{
-      return this.authHttp.get(this.FEED_STOPS_URL + '/' + stopId + '?feedId=' + feedId).map(response => response.json()).toPromise();
+    public getStop(feedId: string, stopId: string): Promise<any> {
+        return this.authHttp.get(this.FEED_STOPS_URL + '/' + stopId + '?feedId=' + feedId).map(response => response.json()).toPromise();
     }
 
-    public getRoutes(feedId:string):Promise<any>{
-      var url = this.SECURE_URL + '/route'
-      return this.authHttp.get(url + '?feedId=' + feedId).map(response => response.json()).toPromise();
+    public getRoutes(feedId: string): Promise<any> {
+        var url = this.SECURE_URL + '/route'
+        return this.authHttp.get(url + '?feedId=' + feedId).map(response => response.json()).toPromise();
     }
 
-    public getRouteTripPattern(feedId:string, routeId: string):Promise<any>{
-      var url = this.SECURE_URL + '/trippattern'
-      return this.authHttp.get(url + '?feedId=' + feedId + '&routeId=' + routeId).map(response => response.json()).toPromise();
+    public getRouteTripPattern(feedId: string, routeId: string): Promise<any> {
+        var url = this.SECURE_URL + '/trippattern'
+        return this.authHttp.get(url + '?feedId=' + feedId + '&routeId=' + routeId).map(response => response.json()).toPromise();
     }
 
 
