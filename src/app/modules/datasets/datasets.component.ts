@@ -25,9 +25,9 @@ const INITIAL_SORT = {
 };
 
 @Component({
-    selector:    'app-datasets',
+    selector: 'app-datasets',
     templateUrl: 'datasets.component.html',
-    providers:   [ProjectsApiService]
+    providers: [ProjectsApiService]
 })
 
 export class DatasetsComponent implements AfterViewInit {
@@ -41,7 +41,6 @@ export class DatasetsComponent implements AfterViewInit {
     @ViewChild(DatasetsMapComponent) public mapComponent: DatasetsMapComponent;
     @ViewChild(DatasetsTableComponent) public tableComponent: DatasetsTableComponent;
     protected isSecure: boolean;
-    actions;
 
     constructor(
         protected utils: UtilsService,
@@ -51,30 +50,30 @@ export class DatasetsComponent implements AfterViewInit {
         protected config: Configuration,
         protected feedsApi: FeedsApiService,
         protected localFilters: LocalFiltersService,
-        actions$: Actions)
-    {
+        actions$: Actions) {
         // request feeds
         this.currentSort = INITIAL_SORT;
         this.currentBounds = null;
         this.initDatasets(false); // show public feeds
-        this.actions = actions$;
         // refresh feeds on upload success
         actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.store.dispatch(datasetsAction.feedsGet(this.getFeedsParams())));
         this.subscribeActions();
     }
 
-    protected subscribeActions(){
-      this.feeds$ = this.store.select('datasets').map(<DatasetsState>(datasets) => datasets.feeds);
-      this.feeds$.subscribe(
-          feeds => {
-              if (feeds) {
-                  console.log('FEEDS:', feeds.length);
-                  this.feeds = feeds.map(feed => <IFeedRow>feed);
-              }
-          }
-      );
-
+    protected subscribeActions() {
+        this.feeds$ = this.store.select('datasets').map(<DatasetsState>(datasets) => datasets.feeds);
+        this.feeds$.subscribe(
+            feeds => {
+                if (feeds) {
+                    console.log('FEEDS:', feeds.length);
+                    this.feeds = feeds.map(feed => <IFeedRow>feed);
+                } else {
+                    this.feeds = [];
+                }
+            }
+        );
     }
+
     protected initDatasets(isSecure: boolean) {
         this.isSecure = isSecure;
     }
@@ -101,7 +100,7 @@ export class DatasetsComponent implements AfterViewInit {
             feed => {
                 this.feedsApi.getDownloadUrl(feed, feed.selectedVersion ? feed.selectedVersion.id : null).subscribe(
                     url => {
-                      console.log('getDownloadUrl: ', url, feed);
+                        console.log('getDownloadUrl: ', url, feed);
                         if (url) {
                             console.log('getDownloadUrl: ', url);
                             //window.location.assign(url);

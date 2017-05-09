@@ -166,7 +166,6 @@ export class DatasetsMapComponent implements AfterViewInit {
     private populateMap() {
         if (this._feeds && this.map) {
             this.clearMap();
-            console.log("setFeeds", this._feeds.length);
             this.setFeedsLicenses(this._feeds);
             if (this._feeds.length > 0){
               this._feeds.map(

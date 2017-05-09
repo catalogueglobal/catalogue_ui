@@ -16,7 +16,7 @@
 	<div class="col-md-12 no-padding">
 		<div class="col-md-6 map-section">
 			<div id="map-wrapper">
-				<app-datasets-map [feeds]="feeds" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom" (boundsChange)="onBoundsChange($event)"></app-datasets-map>
+				<app-datasets-map [feeds]="feeds$|async" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom" (boundsChange)="onBoundsChange($event)"></app-datasets-map>
 				<div id="search-input-wrapper" style="">
 					<div class="tools">
 						<div class="autocompletebox">
@@ -27,7 +27,7 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<app-my-datasets-table [feeds]="feeds" (sortChange)="onSortChange($event)"></app-my-datasets-table>
+			<app-my-datasets-table [feeds]="feeds$|async" (sortChange)="onSortChange($event)"></app-my-datasets-table>
 			<div class="tools" *ngIf="feeds && feeds.length>0">
 				<a [class.disabled]="!getCheckedFeeds().length" href="#" class="generic-btn poptrigger" data-rel="deletefeedpopup"> <i class="fa fa-trash" aria-hidden="true"></i> {{'mydatasets.table.btn.delete'|translate}}
 				</a>

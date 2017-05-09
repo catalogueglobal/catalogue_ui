@@ -35,14 +35,4 @@ export class MyDatasetsComponent extends DatasetsComponent {
         super(utils, projectsApiService, store, datasetsAction, config, feedsApi, localFilters, actions$);
         this.initDatasets(true); // show private feeds
     }
-    protected subscribeActions(){
-      this.actions.ofType(DatasetsActionType.FEEDS_GET_SUCCESS).subscribe(
-          action => {
-              this.feeds = action.payload.feedsGetResponse.feeds || [];
-          },
-          error => {
-            this.feeds = [];
-          }
-      );
-    }
 }

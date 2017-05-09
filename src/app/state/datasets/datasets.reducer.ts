@@ -104,7 +104,6 @@ export function datasetsReducer(state = initialState, action: Action): DatasetsS
             error: payload.error
         });
     }
-    case DatasetsActionType.FEEDS_GET:
     case DatasetsActionType.FEEDS_GET_LOCALLY: {
         const feedsGetParams: FeedsGetParams = payload.feedsGetParams;
         let messageKey = (feedsGetParams.secure ? "state.FEEDS_GET.private" : "state.FEEDS_GET.public");
