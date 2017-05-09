@@ -41,6 +41,7 @@ export class DatasetsComponent implements AfterViewInit {
     @ViewChild(DatasetsMapComponent) public mapComponent: DatasetsMapComponent;
     @ViewChild(DatasetsTableComponent) public tableComponent: DatasetsTableComponent;
     protected isSecure: boolean;
+    actions;
 
     constructor(
         protected utils: UtilsService,
@@ -52,23 +53,28 @@ export class DatasetsComponent implements AfterViewInit {
         protected localFilters: LocalFiltersService,
         actions$: Actions)
     {
-        this.feeds$ = store.select('datasets').map(<DatasetsState>(datasets) => datasets.feeds);
-        this.feeds$.subscribe(
-            feeds => {
-                if (feeds) {
-                    console.log('FEEDS:', feeds.length);
-                    this.feeds = feeds.map(feed => <IFeedRow>feed);
-                }
-            }
-        );
         // request feeds
         this.currentSort = INITIAL_SORT;
         this.currentBounds = null;
         this.initDatasets(false); // show public feeds
+        this.actions = actions$;
         // refresh feeds on upload success
         actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.store.dispatch(datasetsAction.feedsGet(this.getFeedsParams())));
+        this.subscribeActions();
     }
 
+    protected subscribeActions(){
+      this.feeds$ = this.store.select('datasets').map(<DatasetsState>(datasets) => datasets.feeds);
+      this.feeds$.subscribe(
+          feeds => {
+              if (feeds) {
+                  console.log('FEEDS:', feeds.length);
+                  this.feeds = feeds.map(feed => <IFeedRow>feed);
+              }
+          }
+      );
+
+    }
     protected initDatasets(isSecure: boolean) {
         this.isSecure = isSecure;
     }

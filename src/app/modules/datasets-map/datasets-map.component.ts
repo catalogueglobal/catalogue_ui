@@ -34,6 +34,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     map: leaflet.Map;
     markerClusterGroup;
     markers: Array<leaflet.Marker>;
+    markersGroup;
     initialPosition = this.config.MAP_DEFAULT_POSITION;
     _position;
     initialZoom: number = this.config.MAP_ZOOM_UNKNOWN;
@@ -97,7 +98,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.map = this.computeMap(this.mapId);
+        this.computeMap(this.mapId);
         this.populateMap();
     }
 
@@ -115,7 +116,7 @@ export class DatasetsMapComponent implements AfterViewInit {
         }
     }
 
-    private computeMap(cssId): leaflet.Map {
+    private computeMap(cssId) {
         this.markerClusterGroup = new (leaflet as any).MarkerClusterGroup(
             {
                 //disableClusteringAtZoom: 16,
@@ -135,7 +136,10 @@ export class DatasetsMapComponent implements AfterViewInit {
             layers: [tiles]
         }
         let map = leaflet.map(cssId, options);
+        this.map = map;
+        this.markersGroup = leaflet.featureGroup();
         map.addLayer(this.markerClusterGroup);
+        map.addLayer(this.markersGroup);
         this.mapUtils.clusterAreaOver(this.markerClusterGroup, map);
         let that = this;
         map.on(
@@ -151,18 +155,12 @@ export class DatasetsMapComponent implements AfterViewInit {
         if (this._position) {
             this.goTo(map, this._position, false);
         }
-        return map;
     }
 
     // remove all marker from the map when refresh
     private clearMap() {
         this.markerClusterGroup.clearLayers();
-        if (this.router.url === "/my-datasets") {
-            for (var i = 0; i < this.markers.length; i++) {
-                this.map.removeLayer(this.markers[i]);
-                this.markers.splice(i, 1);
-            }
-        }
+        this.markersGroup.clearLayers();
     }
 
     private populateMap() {
@@ -170,16 +168,16 @@ export class DatasetsMapComponent implements AfterViewInit {
             this.clearMap();
             console.log("setFeeds", this._feeds.length);
             this.setFeedsLicenses(this._feeds);
-            this._feeds.map(
-                feed => {
-                    if (feed.latestValidation && feed.latestValidation.bounds) {
-                        this.createMarker(feed);
-                    }
-                    /*else {
-                      console.log('new marker (no bounds)', feed);
-                      }*/
-                }
-            );
+            if (this._feeds.length > 0){
+              this._feeds.map(
+                  feed => {
+                      if (feed.latestValidation && feed.latestValidation.bounds) {
+                          this.createMarker(feed);
+                      }
+                  }
+              );
+            }
+
         }
     }
 
@@ -299,7 +297,7 @@ export class DatasetsMapComponent implements AfterViewInit {
             if (!lng)
                 lng = (bounds[0].lng + bounds[2].lng) / 2;
             let marker = this.computeMarker(feed, [lat, lng], bounds);
-            this.router.url === "/my-datasets" ? this.map.addLayer(marker) : this.markerClusterGroup.addLayer(marker);
+            this.router.url === "/my-datasets" ? this.markersGroup.addLayer(marker) : this.markerClusterGroup.addLayer(marker);
             this.markers.push(marker);
             // area over marker
             this.mapUtils.markerAreaOver(marker, this.map);
