@@ -197,18 +197,20 @@ export class DatatoolComponent {
      *
      */
      protected resetForm(feedsValues:any) {
-         if (this.currentFeed) {
-             this.currentFeed = null;
-             this.getLicenses(feedsValues);
-         }
+         //if (feedsValues) {
+             if (this.currentFeed) {
+                 this.currentFeed = null;
+                 this.getLicenses(feedsValues);
+             }
 
-         this.newLicenseOrMiscData = {
-             type: 'new',
-             name: '',
-             item: null,
-             error: null,
-             itemFile: {}
-         };
+             this.newLicenseOrMiscData = {
+                 type: 'new',
+                 name: '',
+                 item: null,
+                 error: null,
+                 itemFile: {}
+             }
+         //};
      }
 
      protected createLicenseFail(feed, error) {

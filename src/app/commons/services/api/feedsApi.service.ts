@@ -220,7 +220,9 @@ export class FeedsApiService extends AbstractApiService {
             projects.subscribe(
                 data => {
                     if (!data || data.length == 0) {
-                        obs.error(new Error('empty values'));
+                        //obs.error(new Error('empty values'));
+                      obs.next([]);
+                      obs.complete;
                     } else {
                         this.adaptFeedsResponse(projects, params.secure, params.bounds, params.sortOrder).subscribe(
                         response => {
