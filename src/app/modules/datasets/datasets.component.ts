@@ -57,21 +57,24 @@ export class DatasetsComponent implements AfterViewInit {
         this.initDatasets(false); // show public feeds
         // refresh feeds on upload success
         actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.store.dispatch(datasetsAction.feedsGet(this.getFeedsParams())));
+    }
+
+    protected createStore() {
+        this.feeds$ = this.store.select('datasets').map(<DatasetsState>(datasets) => datasets.feeds);
         this.subscribeActions();
     }
 
-    protected subscribeActions() {
-        this.feeds$ = this.store.select('datasets').map(<DatasetsState>(datasets) => datasets.feeds);
-        this.feeds$.subscribe(
-            feeds => {
-                if (feeds) {
-                    console.log('FEEDS:', feeds.length);
-                    this.feeds = feeds.map(feed => <IFeedRow>feed);
-                } else {
-                    this.feeds = [];
-                }
-            }
-        );
+    protected subscribeActions(){
+      this.feeds$.subscribe(
+          feeds => {
+              if (feeds) {
+                  console.log('FEEDS:', feeds.length);
+                  this.feeds = feeds.map(feed => <IFeedRow>feed);
+              } else {
+                  this.feeds = [];
+              }
+          }
+      );
     }
 
     protected initDatasets(isSecure: boolean) {
@@ -79,6 +82,7 @@ export class DatasetsComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
+        this.createStore();
         this.fetchFeeds();
     }
 

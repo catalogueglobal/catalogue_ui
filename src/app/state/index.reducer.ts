@@ -4,7 +4,8 @@ export interface AppState extends DatasetsState {
 }
 
 export let appReducer = {
-    datasets: datasetsReducer
+    datasets: datasetsReducer,
+    mydatasets: datasetsReducer
 };
 
 export default appReducer;
