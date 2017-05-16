@@ -10,34 +10,49 @@ export type AutocompleteItem = {
 }
 
 @Component({
-    selector:    'app-datasets-autocomplete',
+    selector: 'app-datasets-autocomplete',
     templateUrl: 'datasets-autocomplete.component.html',
-    providers:   [CompleterService]
+    providers: [CompleterService]
 })
 export class DatasetsAutocompleteComponent {
     private dataService: RemoteData;
     private searchInput: string;
     @Output() private selected = new EventEmitter<AutocompleteItem>();
     @Input() private placeholder: string;
+    data = [];
 
     constructor(
         private completerService: CompleterService,
-        private config: Configuration)
-    {
+        private config: Configuration) {
         this.dataService = completerService.remote(null, 'display_name', 'display_name');
-        this.dataService.urlFormater(term => { return this.config.AUTOCOMPLETE_URL(term); })
+        this.dataService.urlFormater(term => {
+            return this.config.AUTOCOMPLETE_URL(term);
+
+        });
+
+        this.dataService.subscribe(data => {
+            this.data = data;
+        }
+        );
     }
 
-    onItemSelected(selected: CompleterItem) {
-        console.log('onItemSelected', selected);
-        let position: AutocompleteItem = {
-            position: {
-                lat: selected.originalObject.lat,
-                lng: selected.originalObject.lon
-            },
-            type: selected.originalObject.type
-        };
-        this.selected.emit(position);
-        this.searchInput = null; // clear the input once the search is done
+    onItemSelected(item: any, caller) {
+        if (item) {
+            let position: AutocompleteItem = {
+                position: {
+                    lat: item.originalObject.lat,
+                    lng: item.originalObject.lon
+                },
+                type: item.originalObject.type
+            };
+            this.selected.emit(position);
+        }
+    }
+
+    keyup(event) {
+        // enter key
+        if ((event.keyCode === 13 || event.code === 'Enter') && this.data && this.data.length > 0) {
+            this.onItemSelected(this.data[0], this);
+        }
     }
 }

@@ -3,8 +3,8 @@
         "menu": {
             "use": "use",
             "upload": "upload",
-            "download": "download",
-            "manage": "manage",
+            "download": "Explore",
+            "manage": "My Data feeds",
             "subscribe": "subscribe",
             "login": "login",
             "logout": "logout"
@@ -64,7 +64,8 @@
         },
         "cancel": "cancel",
         "validate": "validate",
-        "noLicense": "No license"
+        "noLicense": "No license",
+        "detail": "detail"
     },
     "datasets": {
         "title": "Download datasets",
@@ -74,9 +75,9 @@
         "table": {
             "title": "catalogue datasets",
             "intro": "From the list of displayed datasets, click to select those you want to download.",
-            "search": "Search here",
+            "search": "Search area",
             "btn": {
-                "download": "download"
+                "download": "Download"
             },
             "noresult": {
                 "info": "No feed found for your search. Try zooming out or",
@@ -115,15 +116,16 @@
     "datasets-table": {
         "checkall": "Check all",
         "validation": "Validation",
-        "btn":  {
-            "edit": "Edit"    
+        "btn": {
+            "edit": "Edit"
         },
         "column": {
             "feedName": "Feed name",
             "area": "Area",
             "license": "License",
             "miscData": "Misc",
-            "subscribe": "Subscibe / Unsubscribe"
+            "subscribe": "Subscibe / Unsubscribe",
+            "validity": "Validity"
         }
     },
     "mydatasets-table": {
@@ -152,6 +154,7 @@
         "period_to": " to ",
         "routes": "Number of routes:",
         "trips": "Number of trips:",
+        "stops": "Number of stops:",
         "note": {
             "title": "Notes:",
             "author": "Author:",

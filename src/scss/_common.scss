@@ -21,7 +21,12 @@ table th {
 
 #datatable {
 	td {
-		max-width: 100px;
+		width: 100px;
+		text-align: center;
+
+		select {
+			width: 80px;
+		}
 	}
 }
 
@@ -131,4 +136,9 @@ table th {
 
 .dropdown-menu {
 	margin-top: 0;
+}
+
+.completer-input {
+	font-style: italic !important;
+	color: $ct-light-gray !important;
 }

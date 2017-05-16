@@ -3,8 +3,8 @@
         "menu": {
             "use": "use",
             "upload": "importer",
-            "download": "télécharger",
-            "manage": "gérer",
+            "download": "Explorer",
+            "manage": "Mes jeux de Données",
             "subscribe": "souscrire",
             "login": "connexion",
             "logout": "déconnexion"
@@ -64,7 +64,8 @@
             }
         },
         "cancel": "annuler",
-        "validate": "valider"
+        "validate": "valider",
+        "detail": "détail"
     },
     "datasets": {
         "title": "Téléchargement des données",
@@ -72,11 +73,11 @@
             "title": "Choisir les jeux de données sur la carte ou chercher par zone géographique"
         },
         "table": {
-            "title": "catalogue des jeux de données",
+            "title": "Jeux de données dans cette zone",
             "intro": "Depuis la liste des données affichées, cliquez pour sélectionner celles que vous souhaitez télécharger.",
-            "search": "Chercher ici",
+            "search": "Zone de recherche",
             "btn": {
-                "download": "télécharger"
+                "download": "Télécharger"
             },
             "noresult": {
                 "info": "Aucue données disponible. Dézoomer ou",
@@ -115,15 +116,16 @@
     "datasets-table": {
         "checkall": "Vérifier tout",
         "validation": "Validation",
-        "btn":  {
-            "edit": "Edit"    
+        "btn": {
+            "edit": "Edit"
         },
         "column": {
             "feedName": "Nom du lot",
             "area": "Zone",
             "license": "Licence",
             "miscData": "Méta données",
-            "subscribe": "S'abonner / Se désabonner"
+            "subscribe": "S'abonner / Se désabonner",
+            "validity": "Validité"
         }
     },
     "mydatasets-table": {
@@ -152,6 +154,7 @@
         "period_to": " à ",
         "routes": "Nombre de lignes :",
         "trips": "Nombre de courses :",
+        "stops": "Nombre de stops :",
         "note": {
             "title": "Commentaires :",
             "author": "Auteur :",

@@ -38,12 +38,13 @@ export class SessionService {
                 title: "Catalogue"
             },
             auth: {
-                redirectUrl: window.location.origin + '/datasets',
+                redirect: false,
                 responseType: 'token',
                 params: {
                     scope: 'openid'
                 }
-            }
+            },
+            autoclose: true
         };
 
         this.lock = new Auth0Lock(this.config.AUTH_ID, this.config.AUTH_DOMAIN, options);

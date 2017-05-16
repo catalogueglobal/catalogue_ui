@@ -57,6 +57,7 @@ export class DatasetsComponent implements AfterViewInit {
         this.initDatasets(false); // show public feeds
         // refresh feeds on upload success
         actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.store.dispatch(datasetsAction.feedsGet(this.getFeedsParams())));
+        this.createStore();
     }
 
     protected createStore() {
@@ -82,7 +83,6 @@ export class DatasetsComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.createStore();
         this.fetchFeeds();
     }
 

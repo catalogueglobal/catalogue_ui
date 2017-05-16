@@ -312,23 +312,17 @@ export class FeedMapComponent implements AfterViewInit {
         };
 
         var unCheckRoute = function(vm) {
-            for (var i = 0; i < vm.allShapesGeojsonsFeatures[route.id].length; i++) {
+            for (var i = 0; vm.allShapesGeojsonsFeatures[route.id] && i < vm.allShapesGeojsonsFeatures[route.id].length; i++) {
                 if (vm.patternsGroup.hasLayer(vm.allShapesGeojsonsFeatures[route.id][i])) {
                     vm.patternsGroup.removeLayer(vm.allShapesGeojsonsFeatures[route.id][i]);
-                    delete vm.allShapesGeojsonsFeatures[route.id];
                 }
             }
         }
 
         if (event.target.checked) {
-            if (!this.allShapesGeojsonsFeatures[route.id] || this.allShapesGeojsonsFeatures[route.id].length === 0) {
-                checkRoute(this);
-            }
+            checkRoute(this);
         } else {
-            if (this.allShapesGeojsonsFeatures[route.id]) {
-                unCheckRoute(this);
-            }
-
+            unCheckRoute(this);
         }
     }
 
@@ -365,7 +359,7 @@ export class FeedMapComponent implements AfterViewInit {
     }
 
     private createGeoJSONFeature(type: string, pattern: any): leaflet.GeoJSON {
-        if (!pattern || !pattern[type]){
+        if (!pattern || !pattern[type]) {
             return;
         }
         if (type === 'shape') {
