@@ -88,8 +88,8 @@
                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuEdit">
                         <li>
                             <a (click)="displayLicense(feed)">
-                                <span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsLicenses[feed.id]" class="btn btn-success">
-                              <i class="fa fa-plus-square" aria-hidden="true"></i>
+                                <span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsLicenses[feed.id]" class="action-success">
+                              <i class="fa fa-plus" aria-hidden="true"></i>
                             </span>{{'datasets-table.column.license'|translate}}
                                 <span *ngIf="feedsLicenses[feed.id]">
                               {{feedsLicenses[feed.id].name}}
@@ -98,8 +98,8 @@
                         </li>
                         <li>
                             <a (click)="displayMiscData(feed)">
-                                <span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsMiscDatas[feed.id]" class="btn btn-success">
-                              <i class="fa fa-plus-square" aria-hidden="true"></i>
+                                <span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsMiscDatas[feed.id]" class="action-success">
+                              <i class="fa fa-plus" aria-hidden="true"></i>
                             </span>{{'datasets-table.column.miscData'|translate}}
                                 <span *ngIf="feedsMiscDatas[feed.id]">
                               {{feedsMiscDatas[feed.id].name}}

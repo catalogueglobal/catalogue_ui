@@ -9,4 +9,16 @@
         margin: 0;
         padding: 0;
     }
+
+    .btn-delete {
+        color: $ct-red;
+    }
+
+    .btn-edit {
+        color: $ct-orange;
+    }
+
+    .btn-download {
+        color: $ct-green;
+    }
 }

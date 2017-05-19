@@ -21,10 +21,6 @@
                 </th>
 
                 <th>
-                    {{'datasets.table.btn.download'|translate}}
-                </th>
-
-                <th>
                     {{'datasets-table.validation'|translate}}
                 </th>
             </tr>
@@ -32,54 +28,67 @@
         <tbody>
             <tr *ngFor="let feed of feeds | paginate: { itemsPerPage: config.PAGINATION_ITEMS_PER_PAGE, maxSize: config.PAGINATION_LINKS_MAX, currentPage: page }">
                 <td>
-                    <a [routerLink]="['/feeds/', feed.id]">
+                    <div class="">
+                        <a [routerLink]="['/feeds/', feed.id]">
                         {{feed.name}}</a>
-                    <div class="form-group" *ngIf="feed.feedVersionCount > 0">
-                        <select class="form-control" [ngModel]="feed.selectedVersion">
-                  				<option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
-                  			</select>
+                        <div class="form-group" *ngIf="feed.feedVersionCount > 0">
+                            <select class="form-control" [ngModel]="feed.selectedVersion">
+                            <option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
+                          </select>
+                        </div>
                     </div>
                 </td>
 
                 <td>
-                    <a [routerLink]="['/feeds/', feed.id]" *ngIf="feed.selectedVersion.latestValidation">
+                    <div class="date">
+                        <a [routerLink]="['/feeds/', feed.id]" *ngIf="feed.selectedVersion && feed.selectedVersion.latestValidation">
                       {{feed.selectedVersion.latestValidation.endDate | date:'y-MM-dd'}}
                     </a>
+                    </div>
                 </td>
                 <td>
-                    <a *ngIf="feedsLicenses[feed.id]" download="{{feedsLicenses[feed.id].name}}" href="{{feedsLicenses[feed.id].licenseUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
-                        <span>
+                    <div class="other">
+                        <a *ngIf="feedsLicenses[feed.id]" download="{{feedsLicenses[feed.id].name}}" href="{{feedsLicenses[feed.id].licenseUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
+                            <span>
                             {{feedsLicenses[feed.id].name}}
                         </span>
-                    </a>
+                        </a>
+                    </div>
                 </td>
 
                 <td>
-                    <a *ngIf="feedsMiscDatas[feed.id]" download="{{feedsMiscDatas[feed.id].name}}" href="{{feedsMiscDatas[feed.id].miscDataUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
-                        <span>
+                    <div class="other">
+                        <a *ngIf="feedsMiscDatas[feed.id]" download="{{feedsMiscDatas[feed.id].name}}" href="{{feedsMiscDatas[feed.id].miscDataUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
+                            <span>
                             {{feedsMiscDatas[feed.id].name}}
                         </span>
-                    </a>
+                        </a>
+                    </div>
                 </td>
                 <td class="">
-                    <input *ngIf="sessionService.loggedIn" type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)" />
-                    <input *ngIf="!sessionService.loggedIn" type="checkbox" (click)="sessionService.login()" />
+                    <div class="other">
+                        <input *ngIf="sessionService.loggedIn" type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)" />
+                        <input *ngIf="!sessionService.loggedIn" type="checkbox" (click)="sessionService.login()" />
+                    </div>
                 </td>
 
                 <td>
-                    <a (click)="downloadFeed(feed)">
-                        <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="btn btn-success">
+                    <div class="other">
+                        <a (click)="downloadValidation(feed)">
+                             <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="action-success">
+                           <i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                         </span>
+                         </a>
+                    </div>
+                </td>
+                <td>
+                    <div class="actions">
+                        <a (click)="downloadFeed(feed)">
+                            <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="action-success btn-download">
                           <i class="fa fa-download" aria-hidden="true"></i>
                         </span>
-                    </a>
-                </td>
-                <td>
-                    <a download="{{'datasets-table.validation'|translate}}" href="{{this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.latestVersionId + '/validation'}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
-                        <span>
-			  {{'datasets-table.validation'|translate}}
-                        </span>
-                    </a>
-
+                        </a>
+                    </div>
                 </td>
 
             </tr>

@@ -20,18 +20,27 @@ table th {
 }
 
 #datatable {
-	td {
+	td > div {
 		width: 100px;
 		text-align: center;
 
-		select {
-			width: 80px;
+		&.date {
+			width: 70px;
+		}
+
+		&.other {
+			width: 70px;
+		}
+
+		&.actions {
+			width: auto;
 		}
 	}
 }
 
 #datasetmap {
 	margin: 0;
+	height: 700px;
 }
 
 .tools {
@@ -141,4 +150,20 @@ table th {
 .completer-input {
 	font-style: italic !important;
 	color: $ct-light-gray !important;
+}
+
+.action-btn {
+	color: $ct-white;
+	border-radius: 2px;
+	padding: 5px;
+	background-color: $ct-grey;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+}
+
+.action-success {
+	:hover {
+		color: $ct-green;
+	}
 }

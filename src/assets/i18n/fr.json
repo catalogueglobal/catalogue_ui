@@ -2,7 +2,7 @@
     "layout": {
         "menu": {
             "use": "use",
-            "upload": "importer",
+            "upload": "créer un jeu de données",
             "download": "Explorer",
             "manage": "Mes jeux de Données",
             "subscribe": "souscrire",
@@ -84,7 +84,9 @@
                 "reset": "réinitialiser votre recherche"
             },
             "tooltips": {
-                "download": "Cliquez ici pour télécharger le contenu"
+                "download": "Cliquez ici pour télécharger le contenu",
+                "delete": "supprimer l'élément",
+                "edit": "éditer l'élément"
             },
             "miscData": {
                 "title": "changer les méta données",
@@ -100,7 +102,7 @@
             "title": "Choisir les jeux de données sur la carte ou chercher par zone géographique"
         },
         "table": {
-            "title": "catalogue des jeux de données",
+            "title": "Catalogue des jeux de données",
             "intro": "Depuis la liste des données affichées, cliquez pour sélectionner celles que vous souhaitez télécharger.",
             "search": "Chercher ici",
             "btn": {
@@ -125,7 +127,7 @@
             "license": "Licence",
             "miscData": "Méta données",
             "subscribe": "S'abonner / Se désabonner",
-            "validity": "Validité"
+            "validity": "Fin de validité"
         }
     },
     "mydatasets-table": {

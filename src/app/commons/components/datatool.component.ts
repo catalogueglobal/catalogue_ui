@@ -233,6 +233,10 @@ export class DatatoolComponent {
         }
     }
 
+    protected displayDeleteFeed(feed: IFeed) {
+        this.currentFeed = feed;
+    }
+
     //lincense changed between existing licenses in the list (modal popup)
     protected onItemChanged(item) {
         console.log('selectedItem', item);
@@ -353,5 +357,10 @@ export class DatatoolComponent {
 
     protected downloadFeed(feed: any) {
         this.getDownloadUrl(feed);
+    }
+
+    protected downloadValidation(feed){
+      let url = this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.latestVersionId + '/validation';
+      window.open(url);
     }
 }

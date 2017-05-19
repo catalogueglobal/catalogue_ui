@@ -2,7 +2,7 @@
     "layout": {
         "menu": {
             "use": "use",
-            "upload": "upload",
+            "upload": "create a new feed",
             "download": "Explore",
             "manage": "My Data feeds",
             "subscribe": "subscribe",
@@ -84,7 +84,9 @@
                 "reset": "reset your search"
             },
             "tooltips": {
-                "download": "Click here to download the item"
+                "download": "Click here to download the item",
+                "delete": "delete the item",
+                "edit": "edit the item"
             },
             "miscData": {
                 "title": "change misc data",
@@ -100,7 +102,7 @@
             "title": "Select datasets on the map or search by location"
         },
         "table": {
-            "title": "catalogue datasets",
+            "title": "Catalogue datasets",
             "intro": "From the list of displayed datasets, click to select those you want to download.",
             "search": "Search here",
             "btn": {
@@ -125,7 +127,7 @@
             "license": "License",
             "miscData": "Misc",
             "subscribe": "Subscibe / Unsubscribe",
-            "validity": "Validity"
+            "validity": "Valid until"
         }
     },
     "mydatasets-table": {

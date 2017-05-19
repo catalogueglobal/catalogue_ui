@@ -94,29 +94,6 @@ export class DatasetsComponent implements AfterViewInit {
         }
     }
 
-    protected getCheckedFeeds(): any[] {
-        return this.tableComponent.getCheckedFeeds();
-    }
-
-    protected downloadFeeds(event: Event) {
-        let checkedFeeds = this.getCheckedFeeds();
-        checkedFeeds.forEach(
-            feed => {
-                this.feedsApi.getDownloadUrl(feed, feed.selectedVersion ? feed.selectedVersion.id : null).subscribe(
-                    url => {
-                        console.log('getDownloadUrl: ', url, feed);
-                        if (url) {
-                            console.log('getDownloadUrl: ', url);
-                            //window.location.assign(url);
-                            window.open(url);
-                        }
-                    }
-                )
-            }
-        );
-        event.preventDefault();
-    }
-
     protected onAutocompleteSelected(selected: AutocompleteItem) {
         console.log('onAutocompleteSelected', selected);
         this.mapPosition = selected.position;

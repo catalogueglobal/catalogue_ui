@@ -2,105 +2,114 @@
 	<table id="datatable" class="display responsive nowrap" cellspacing="0" width="100%">
 		<thead>
 			<tr>
-				<th class="chkMulti"><i class="fa fa-check-square-o checkAll" aria-hidden="true" (click)="checkAll()" title="{{'mydatasets-table.checkall'|translate}}"></i></th>
-				<th class="togglePublic">
-					<app-sort-link sortValue="isPublic" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
-						{{'mydatasets-table.column.isPublic.label'|translate}} </app-sort-link>
-				</th>
-				<th class="retrievalMethod">
-					<app-sort-link sortValue="retrievalMethod" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
-						{{'mydatasets-table.column.type.label'|translate}} </app-sort-link>
-				</th>
 				<th>
 					<app-sort-link sortValue="name" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="asc">
 						{{'mydatasets-table.column.feedName'|translate}} </app-sort-link>
 				</th>
+				<th>
+					<app-sort-link sortValue="validity" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="asc">
+						{{'datasets-table.column.validity'|translate}}
+					</app-sort-link>
+				</th>
 
+				<th class="togglePublic">
+					<app-sort-link sortValue="isPublic" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
+						{{'mydatasets-table.column.isPublic.label'|translate}} </app-sort-link>
+				</th>
 				<th class="lastUpdated">
 					<app-sort-link sortValue="lastUpdated" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
 						{{'mydatasets-table.column.updated'|translate}} </app-sort-link>
 				</th>
 				<th>{{'datasets-table.column.license'|translate}}</th>
 				<th>{{'datasets-table.column.miscData'|translate}}</th>
-		<!--
-                <th>
-		  {{'datasets-table.validation'|translate}}
-		</th>
-		-->
 			</tr>
 		</thead>
 		<tbody>
 			<tr *ngFor="let feed of feeds | paginate: { itemsPerPage: config.PAGINATION_ITEMS_PER_PAGE, maxSize: config.PAGINATION_LINKS_MAX, currentPage: page }">
-				<td class="chkMulti">
-					<div>
-						<input type="checkbox" [(ngModel)]="checkById[feed.id]">
-					</div>
-				</td>
-				<td class="togglePublic">
-					<a href="#" (click)="togglePublic(feed)">
-						<div *ngIf="feed.isPublic">
-							<i class="fa fa-toggle-on" title="Public"></i> <span class="details">{{'mydatasets-table.column.isPublic.public'|translate}}</span>
-						</div>
-						<div *ngIf="!feed.isPublic">
-							<i class="fa fa-toggle-off" title="Private"></i> <span class="details">{{'mydatasets-table.column.isPublic.private'|translate}}</span>
-						</div>
-					</a>
-				</td>
-				<td class="retrievalMethod">
-					<a *ngIf="feed.retrievalMethod==FEED_RETRIEVAL_METHOD.FETCHED_AUTOMATICALLY" (click)="fetchFeed(feed)" title="Refresh"> <i class="fa fa-refresh" title="Refresh"></i> <span class="details">{{'mydatasets-table.column.type.fetch'|translate}}</span>
-					</a>
-					<app-inline-edit-file *ngIf="feed.retrievalMethod==FEED_RETRIEVAL_METHOD.MANUALLY_UPLOADED" (onSave)="setFile(feed, $event)"> <i class="fa fa-upload"></i> <span class="details">{{'mydatasets-table.column.type.upload'|translate}}</span>
-					</app-inline-edit-file> <span *ngIf="feed.retrievalMethod==FEED_RETRIEVAL_METHOD.PRODUCED_IN_HOUSE" class="details">
-						{{'mydatasets-table.column.type.inhouse'|translate}} </span></td>
 				<td>
-					<app-inline-edit-text [initialValue]="feed.name" (onSave)="setName(feed, $event)">
-						{{feed.name}} </app-inline-edit-text>
-				</td>
-				<!-- <td class="area">
-             <div>{{regionStateCountry(feed)}}</div>
-	</td> -->
-				<td class="lastUpdated">
-					<div *ngIf="feed.feedVersionCount <= 1">
-						{{feed.lastUpdated|date:'y-MM-dd'}}
+					<div>
+						<a [routerLink]="['/feeds/', feed.id]">
+								{{feed.name}}
+						</a>
 					</div>
-					<div *ngIf="feed.feedVersionCount > 1" class="form-group">
+
+				</td>
+				<td>
+					<div class="date">
+						<a [routerLink]="['/feeds/', feed.id]" *ngIf="feed.selectedVersion && feed.selectedVersion.latestValidation">
+							{{feed.selectedVersion.latestValidation.endDate | date:'y-MM-dd'}}
+						</a>
+					</div>
+
+				</td>
+
+				<td class="togglePublic">
+					<div class="other">
+						<a [routerLink]="['/feeds/', feed.id]">
+							<div *ngIf="feed.isPublic">
+								<span class="details">{{'mydatasets-table.column.isPublic.public'|translate}}</span>
+							</div>
+							<div *ngIf="!feed.isPublic">
+								<span class="details">{{'mydatasets-table.column.isPublic.private'|translate}}</span>
+							</div>
+						</a>
+					</div>
+
+				</td>
+				<td class="lastUpdated">
+					<div class="date" *ngIf="feed.feedVersionCount <= 1">
+						<a [routerLink]="['/feeds/', feed.id]">
+							{{feed.lastUpdated|date:'y-MM-dd'}}
+						</a>
+					</div>
+					<div *ngIf="feed.feedVersionCount > 1" class="form-group date">
 						<select class="form-control" [ngModel]="feed.selectedVersion">
 								<option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
 							</select>
 					</div>
 				</td>
 				<td>
-					<a (click)="displayLicense(feed)">
-						<span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsLicenses[feed.id]" class="btn btn-success">
-							<i class="fa fa-plus-square" aria-hidden="true"></i>
-						</span>
-						<span *ngIf="feedsLicenses[feed.id]">
-							{{feedsLicenses[feed.id].name}}
-						</span>
-					</a>
+					<div class="other">
+						<a [routerLink]="['/feeds/', feed.id]">
+							<span tooltip="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsLicenses[feed.id]" class="action-success">
+								<i class="fa fa-plus" aria-hidden="true"></i>
+							</span>
+							<span *ngIf="feedsLicenses[feed.id]">
+								{{feedsLicenses[feed.id].name}}
+							</span>
+						</a>
+					</div>
+
 				</td>
 
 				<td>
-					<a (click)="displayMiscData(feed)">
-						<span title="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsMiscDatas[feed.id]" class="btn btn-success">
-							<i class="fa fa-plus-square" aria-hidden="true"></i>
-						</span>
-						<span *ngIf="feedsMiscDatas[feed.id]">
-							{{feedsMiscDatas[feed.id].name}}
-						</span>
-					</a>
+					<div class="other">
+						<a [routerLink]="['/feeds/', feed.id]">
+							<span tooltip="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsMiscDatas[feed.id]" class="action-success">
+								<i class="fa fa-plus" aria-hidden="true"></i>
+							</span>
+							<span *ngIf="feedsMiscDatas[feed.id]">
+								{{feedsMiscDatas[feed.id].name}}
+							</span>
+						</a>
+					</div>
+
 				</td>
-				<!--
 
-                <td>
-		  <a download="{{'datasets-table.validation'|translate}}" href="{{this.config.ROOT_API + '/api/manager/secure/feedversion/' + feed.latestVersionId + '/validation'}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
-                        <span>
-			  {{'datasets-table.validation'|translate}}
-                        </span>
-                    </a>
-
-                </td>
-		-->
+				<td>
+					<div class="actions">
+						<a [routerLink]="['/feeds/', feed.id]" class="">
+							<span tooltip="{{'datasets.table.tooltips.edit' | translate}}" class="btn-edit">
+								<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+							</span>
+						</a>
+						<a (click)="displayDeleteFeed(feed)" class="" tooltip="{{'datasets.table.tooltips.delete' | translate}}">
+							<span class="btn-delete">
+								<i class="fa fa-trash-o" aria-hidden="true"></i>
+							</span>
+						</a>
+					</div>
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -136,3 +145,5 @@
 <license-modal [newLicenseOrMiscData]="newLicenseOrMiscData" [onSelectionChange]="onSelectionChangeCallback" [utils]="utils" [items]="licenses" [onItemChanged]="onItemChangedCallback" [onSubmit]="onSubmitLicenseCallback"></license-modal>
 
 <miscdata-modal [newLicenseOrMiscData]="newLicenseOrMiscData" [onSelectionChange]="onSelectionChangeCallback" [utils]="utils" [items]="miscDatas" [onItemChanged]="onItemChangedCallback" [onSubmit]="onSubmitMiscDataCallback"></miscdata-modal>
+
+<delete-feed-modal [feed]="currentFeed" [feedsMiscDatas]="feedsMiscDatas" [feedsLicenses]="feedsLicenses"></delete-feed-modal>

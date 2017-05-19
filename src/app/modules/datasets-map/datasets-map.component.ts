@@ -294,13 +294,6 @@ export class DatasetsMapComponent implements AfterViewInit {
         this.store.dispatch(this.datasetsAction.updateProject(ev.target.data.id, updateProject));
     }
 
-    private openPopup(event){
-      console.log(event);
-      event.target.unbindPopup();
-      event.target.bindPopup(this.computeMarkerPopup(event.target.data.feed));
-      // let data = this.computeMarkerPopup();
-    }
-
     private extractData(data, feed) {
         if (data) {
             let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
