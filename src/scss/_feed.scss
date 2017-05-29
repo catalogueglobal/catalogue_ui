@@ -22,6 +22,10 @@
         font-style: italic;
     }
 
+    .actions-map {
+        padding-bottom: 5px;
+    }
+
     .map-container {
         padding: 15px;
 
@@ -32,7 +36,7 @@
         }
 
         .stop-route-hover {
-            color: red;
+            color: $ct-red;
             width: 30px;
             height: 30px;
             border-radius: 50%;
@@ -41,6 +45,24 @@
         .filter-route-input {
             width: 200px;
             height: 36px;
+            font-style: italic;
+            color: $ct-grey;
+        }
+
+        .legend-item {
+            color: $ct-white;
+            width: 20px;
+            height: 20px;
+            padding: 3px;
+            border-radius: 50%;
+        }
+
+        .legend-station {
+            background-color: $ct-orange;
+        }
+
+        .legend-stop {
+            background-color: $ct-green;
         }
     }
 
@@ -55,5 +77,68 @@
     .viewing {
         font-family: 'karbon-bold', Arial, Helvetica, sans-serif;
         font-size: 25px;
+    }
+
+    select {
+        padding: 0;
+        width: auto;
+        height: 26px;
+    }
+
+    .section-container {
+        padding-right: 3px;
+
+        label {
+            padding-right: 3px;
+        }
+    }
+
+    textarea {
+        border-radius: 2px;
+        height: 100px;
+    }
+
+    .create-feed-version-btn {
+        background-color: $ct-green;
+        border-radius: 5px;
+        /* font-weight: bold; */
+        font-family: 'karbon-semibold', Helvetica, sans-serif;
+    }
+
+    .well {
+        &.host-comment {
+            border-color: $ct-orange;
+        }
+
+        strong {
+            font-family: 'karbon-bold', Arial, Helvetica, sans-serif;
+            font-weight: 100px;
+        }
+    }
+
+    .btn-group {
+        padding-bottom: 5px;
+
+        a {
+            color: $ct-white;
+
+            &:hover {
+                color: $ct-orange;
+                text-decoration: none;
+            }
+        }
+
+        .edit-btn {
+            padding-left: 5px;
+        }
+
+        .feed-action-btn {
+            margin-left: -5px;
+        }
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+        margin-top: 6px;
     }
 }

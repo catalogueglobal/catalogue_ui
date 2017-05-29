@@ -22,7 +22,7 @@ export class FeedMapComponent implements AfterViewInit {
     @Input() mapId: string;
     private _feed;
     private routes = [];
-    private allShapesGeojsonsFeatures;
+    private allPatterns;
     map: leaflet.Map;
     stopsMarkers: Array<leaflet.Marker>;
     stationsMarkers: Array<leaflet.Marker>;
@@ -53,10 +53,20 @@ export class FeedMapComponent implements AfterViewInit {
         this.stationsMarkers = new Array();
         this.NumberedDivIcon = mapUtils.createNumMarker();
         this.ImageDivIcon = mapUtils.createIconMarker();
+        this.afterAuth();
     }
 
     ngAfterViewInit() {
         this.map = this.computeMap(this.mapId);
+    }
+
+    private afterAuth() {
+        let that = this;
+        this.sessionService.loggedIn$.subscribe((loggedIn) => {
+            if (loggedIn) {
+                that.feed = that._feed;
+            }
+        });
     }
 
     @Input() set feed(value: any) {
@@ -65,12 +75,12 @@ export class FeedMapComponent implements AfterViewInit {
             this.populateMap();
         }
         if (this._feed && this._feed.id && this.sessionService.loggedIn) {
-            this.allShapesGeojsonsFeatures = {};
+            this.allPatterns = {};
 
             let that = this;
-            this.feedsApi.getStops(this._feed.id).then(function(response) {
-                that.createStops(response);
-            });
+            // this.feedsApi.getStops(this._feed.id).then(function(response) {
+            //     that.createStops(response);
+            // });
             this.feedsApi.getRoutes(this._feed.id).then(function(response) {
                 that.routes = response;
             })
@@ -87,8 +97,8 @@ export class FeedMapComponent implements AfterViewInit {
         this.stationsMarkersClusterGroup = this.feedMapUtils.createClusterGroup(false);
         this.patternsGroup = leaflet.featureGroup();
         var overlayMaps = {
-            '<i class="fa fa-lg fa-flag-checkered"></i> Stops': this.stopsMarkersClusterGroup,
-            '<i class="fa fa-lg fa-train"></i> Stations': this.stationsMarkersClusterGroup
+            '<span class="legend-item legend-stop"><i class="fa fa-lg fa-flag-checkered"></i></span> Stops': this.stopsMarkersClusterGroup,
+            '<span class="legend-item legend-station"><i class="fa fa-lg fa-train"></i></span> Stations': this.stationsMarkersClusterGroup
         };
         let options = {
             center: <any>this.initialPosition,
@@ -101,7 +111,7 @@ export class FeedMapComponent implements AfterViewInit {
         this.stopsMarkersClusterGroup.addTo(map);
         this.stationsMarkersClusterGroup.addTo(map);
         this.patternsGroup.addTo(map);
-        leaflet.control.layers(null, overlayMaps).addTo(map);
+        // leaflet.control.layers(null, overlayMaps).addTo(map);
         return map;
     }
 
@@ -116,6 +126,9 @@ export class FeedMapComponent implements AfterViewInit {
             if (data) {
                 let lat = data.defaultLocationLat;
                 let lng = data.defaultLocationLon;
+                if (!this._feed.latestValidation){
+                    return;
+                }
                 let bounds = this.utils.computeBoundsToLatLng(this._feed.latestValidation.bounds);
                 if (!lat && !bounds) {
                     return;
@@ -262,22 +275,27 @@ export class FeedMapComponent implements AfterViewInit {
 
     private createPattern(type, pattern) {
         var geojson = this.createGeoJSONFeature(type, pattern);
-        if (geojson) {
+        if (!geojson) {
+            return;
+        }
+        if (type === 'shape') {
             geojson.eachLayer(this.bindTooltipToRoute.bind(this));
             geojson.eachLayer(this.addEventsToRoute.bind(this));
             geojson.setStyle(this.feedMapUtils.getGeoJSONStyle);
-            geojson.addTo(this.patternsGroup);
-            if (!this.allShapesGeojsonsFeatures[pattern.routeId]) {
-                this.allShapesGeojsonsFeatures[pattern.routeId] = [];
-            }
-            this.allShapesGeojsonsFeatures[pattern.routeId].push(geojson);
-            this.map.fitBounds(this.patternsGroup.getBounds());
+        }
+        geojson.addTo(this.patternsGroup);
+        if (!this.allPatterns[pattern.routeId]) {
+            this.allPatterns[pattern.routeId] = [];
+        }
+        this.allPatterns[pattern.routeId].push(geojson);
+        let bounds = this.patternsGroup.getBounds();
+        if (bounds._southWest) {
+            this.map.fitBounds(bounds);
         }
     }
 
     private createTripPatterns(patterns) {
         if (patterns) {
-
             for (var i = 0; i < patterns.length; i++) {
                 this.createPattern('shape', patterns[i]);
                 this.createPattern('stopConnections', patterns[i]);
@@ -295,7 +313,7 @@ export class FeedMapComponent implements AfterViewInit {
             for (var i = 0; i < this.routes.length; i++) {
                 this.routes[i].checked = event.target.checked;
             }
-            this.allShapesGeojsonsFeatures = {};
+            this.allPatterns = {};
             this.patternsGroup.clearLayers();
         }
     }
@@ -306,15 +324,16 @@ export class FeedMapComponent implements AfterViewInit {
             if (data) {
                 let that = vm;
                 vm.feedsApi.getRouteTripPattern(vm._feed.id, data.id).then(function(responseTrip) {
+                    console.log(responseTrip, route);
                     that.createTripPatterns(responseTrip);
                 });
             }
         };
 
         var unCheckRoute = function(vm) {
-            for (var i = 0; vm.allShapesGeojsonsFeatures[route.id] && i < vm.allShapesGeojsonsFeatures[route.id].length; i++) {
-                if (vm.patternsGroup.hasLayer(vm.allShapesGeojsonsFeatures[route.id][i])) {
-                    vm.patternsGroup.removeLayer(vm.allShapesGeojsonsFeatures[route.id][i]);
+            for (var i = 0; vm.allPatterns[route.id] && i < vm.allPatterns[route.id].length; i++) {
+                if (vm.patternsGroup.hasLayer(vm.allPatterns[route.id][i])) {
+                    vm.patternsGroup.removeLayer(vm.allPatterns[route.id][i]);
                 }
             }
         }
@@ -330,10 +349,10 @@ export class FeedMapComponent implements AfterViewInit {
         if (layer.feature.properties.routeData) {
             let color = layer.feature.properties.routeData.routeTextColor ?
                 ('#' + layer.feature.properties.routeData.routeTextColor) : '';
+            color = (color.toLowerCase() === '#fff' || color.toLowerCase() === '#ffffff') ? '#000000' : color;
             let label = '<label style="color:' + color + '">' + layer.feature.properties.routeData.routeLongName +
                 '</label>';
             layer.bindTooltip(label, { direction: 'top' });
-            layer.bindPopup(label);
         }
     }
 
@@ -341,6 +360,7 @@ export class FeedMapComponent implements AfterViewInit {
         if (layer.feature.properties.routeData) {
             let that = this;
             layer.on('mouseover', function(event) {
+                layer.openTooltip(event.latlng);
                 if (event.target.feature.properties.type === 'stop') {
                     event.target.bringToFront();
                 } else {
@@ -349,6 +369,7 @@ export class FeedMapComponent implements AfterViewInit {
                 event.target.setStyle(that.feedMapUtils.getGeoJSONStyleOver())
             })
             layer.on('mouseout', function(event) {
+                layer.closeTooltip();
                 event.target.setStyle(that.feedMapUtils.getGeoJSONStyle(event.target.feature))
             })
             layer.on('click', function(event) {
@@ -376,23 +397,52 @@ export class FeedMapComponent implements AfterViewInit {
             return patternsGeoJSON;
         } else {
             var routeData = this.feedMapUtils.getRouteData(pattern.routeId, this.routes);
-            var patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON();
+            var collectionJson = {
+                type: 'FeatureCollection',
+                features: []
+            };
+
             for (var i = 0; i < pattern[type].length; i++) {
-                var feature = {
-                    type: 'Feature',
-                    properties: {
-                        pattern: pattern[type][i],
-                        routeData: routeData,
-                        type: 'stop'
-                    },
-                    geometry: pattern[type][i]
-                };
-                try {
-                    patternsGeoJSON.addData(feature);
-                } catch (error) {
-                    console.log(error);
+                for (var j = 0; j < 1 && pattern[type][i].coordinates.length; j++) {
+                    var feature = {
+                        type: 'Feature',
+                        properties: {
+                            pattern: pattern[type][i],
+                            routeData: routeData,
+                            type: 'stop'
+                        },
+                        geometry: {
+                            coordinates: pattern[type][i].coordinates[j],
+                            type: 'Point'
+                        }
+                    };
+                    try {
+                        collectionJson.features.push(feature);
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
             }
+
+            var patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON(collectionJson, {
+                pointToLayer: function(feature, latlng) {
+                    let geojsonMarkerOptions = {
+                        radius: 6,
+                        fillColor: "#ff7800",
+                        color: "#d3d3d3",
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    };
+                    let marker = leaflet.circleMarker(latlng, geojsonMarkerOptions);
+
+                    marker.on('mouseover', function(event) {
+                        console.log(event)
+                    });
+                    return marker;
+                }
+            });
+
             return patternsGeoJSON;
         }
     }

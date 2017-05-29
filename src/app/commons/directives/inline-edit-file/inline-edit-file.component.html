@@ -1,10 +1,10 @@
 <div *ngIf="!editing" (click)="startEditing()" class="inline-edit viewing" [class.highlight]="highlight">
-  <ng-content></ng-content>
-  &nbsp;<i class="fa fa-pencil"></i>
+    <ng-content></ng-content>
+    &nbsp;
+    <i class="fa fa-pencil"></i>
 </div>
 
 <form (submit)="doneEditing()" class="inline-edit" [class.editing]="editing" enctype="multipart/form-data">
-  <input #inlineInput type="file" name="editingValueFile" [(ngModel)]="editingValueFile"
-         (change)="clicked($event)">
-  &nbsp;<i class="fa fa-close" (click)="cancelEditing()"></i>
+    <input #inlineInput type="file" name="editingValueFile" [(ngModel)]="editingValueFile" (change)="clicked($event)"> &nbsp;
+    <i class="fa fa-close" (click)="cancelEditing()"></i>
 </form>

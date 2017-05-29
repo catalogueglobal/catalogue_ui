@@ -63,6 +63,12 @@
                 "label": "Etes-vous sûr que vous voulez supprimer?"
             }
         },
+        "feed": {
+            "create": {
+                "title": "Créer une version",
+                "subtitle": "Attention une nouvelle version sera créée. L'actuelle sera figée !"
+            }
+        },
         "cancel": "annuler",
         "validate": "valider",
         "detail": "détail"
@@ -93,7 +99,8 @@
                 "noMiscData": "aucune méta donnée",
                 "select": "Choisir une méta donnée",
                 "new": "Télécharger votre propre fichier"
-            }
+            },
+            "versions": "versions"
         }
     },
     "mydatasets": {
@@ -119,7 +126,7 @@
         "checkall": "Vérifier tout",
         "validation": "Validation",
         "btn": {
-            "edit": "Edit"
+            "edit": "Editer l’archive GTFS"
         },
         "column": {
             "feedName": "Nom du lot",
@@ -136,12 +143,13 @@
             "isPublic": {
                 "label": "Public",
                 "public": "public",
-                "private": "privé"
+                "private": "privé",
+                "title": "Rendre public"
             },
             "type": {
                 "label": "Type",
                 "fetch": "Import auto.",
-                "upload": "Import Manuel",
+                "upload": "creer une version",
                 "inhouse": "Production locale"
             },
             "feedName": "Nom du lot",
@@ -160,12 +168,20 @@
         "note": {
             "title": "Commentaires :",
             "author": "Auteur :",
+            "owner": "Producteur",
             "date": "Date :",
-            "submit": "Soumettre"
+            "submit": "Soumettre",
+            "addNote": "Commenter"
         },
-        "filter": "filtrer",
-        "select_roads": "Choisir un reseau",
-        "check_all": "Tout cocher"
+        "filter": "filtrer sur le nom des lignes",
+        "select_roads": "Choisir une ligne",
+        "check_all": "Tout cocher",
+        "download": {
+            "gtfs": "Fichier GTFS",
+            "miscData": "Fichier méta data",
+            "license": "Fichier license",
+            "validation": "Fichier de validation"
+        }
     },
     "state": {
         "USER_SUBSCRIBE": "Subscribing...",

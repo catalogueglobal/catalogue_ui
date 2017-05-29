@@ -177,15 +177,15 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         this.sortChange.emit(sort);
     }
 
-    setFile(feed, event: InlineEditEvent<File>) {
-        // observer will be notified to close inline form on success
-        this.confirmEditById.set(CONFIRM_EDIT_IDX_SETFILE + feed.id, event.confirm$)
-        // process
-        this.store.dispatch(this.datasetsAction.feedSetFile(toFeedReference(feed), event.value));
-        return false;
-    }
-
-    fetchFeed(feed) {
-        this.store.dispatch(this.datasetsAction.feedFetch(toFeedReference(feed)));
-    }
+    // setFile(feed, event: InlineEditEvent<File>) {
+    //     // observer will be notified to close inline form on success
+    //     this.confirmEditById.set(CONFIRM_EDIT_IDX_SETFILE + feed.id, event.confirm$)
+    //     // process
+    //     this.store.dispatch(this.datasetsAction.feedSetFile(toFeedReference(feed), event.value));
+    //     return false;
+    // }
+    //
+    // fetchFeed(feed) {
+    //     this.store.dispatch(this.datasetsAction.feedFetch(toFeedReference(feed)));
+    // }
 }

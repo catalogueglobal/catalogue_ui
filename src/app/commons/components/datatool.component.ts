@@ -23,6 +23,7 @@ export class DatatoolComponent {
     protected currentFeed: IFeed;
     protected confirmEditById: Map<string, EventEmitter<any>> = new Map();
 
+    protected FEED_RETRIEVAL_METHOD = FEED_RETRIEVAL_METHOD; // used by the template
     //edition
     protected newLicenseOrMiscData;
     protected onSelectionChangeCallback: Function;
@@ -78,6 +79,9 @@ export class DatatoolComponent {
     }
 
     protected getFeedsVersion(values) {
+      for (var i = 0; values && i < values.length; i++) {
+          this.getFeedVersion(values[i]);
+      }
     }
 
     protected getMiscDatas(value: any) {
@@ -362,5 +366,25 @@ export class DatatoolComponent {
     protected downloadValidation(feed){
       let url = this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.latestVersionId + '/validation';
       window.open(url);
+    }
+
+    protected onVersionChanged(feed, version){
+      console.log(feed, version);
+      feed.selectedVersion = version;
+      // this.feedsApiService.getFeedVersions(version.id, feed.isPublic).then(data => {
+      //   console.log(data);
+      // })
+    }
+
+    protected fetchFeed(feed) {
+        this.store.dispatch(this.datasetsAction.feedFetch(toFeedReference(feed)));
+    }
+
+    protected setFile(feed, event: any) {
+        // observer will be notified to close inline form on success
+        this.confirmEditById.set('setFile' + feed.id, event.confirm$)
+        // process
+        this.store.dispatch(this.datasetsAction.feedSetFile(toFeedReference(feed), event.value));
+        return false;
     }
 }

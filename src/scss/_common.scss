@@ -167,3 +167,28 @@ table th {
 		color: $ct-green;
 	}
 }
+
+.no-padding-lr,
+.no-padding-rl {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+.btn-primary {
+	background-color: $ct-blue;
+
+	&:hover {
+		// background-color: $ct-blue;
+	}
+}
+
+.version-component {
+	select {
+		border: none;
+		padding-right: 10px;
+	}
+
+	.caret {
+		margin-left: -5px;
+	}
+}

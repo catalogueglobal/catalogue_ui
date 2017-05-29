@@ -23,7 +23,6 @@ export class DatasetsTableComponent extends DatatoolComponent{
     @Input() protected _feeds: IFeedRow[];
     @Output() protected sortChange = new EventEmitter();
 
-    private FEED_RETRIEVAL_METHOD = FEED_RETRIEVAL_METHOD; // used by the template
     private page: number;
 
     protected currentSort: SortOrder = {
@@ -60,12 +59,6 @@ export class DatasetsTableComponent extends DatatoolComponent{
     // overriden by childs
     get feeds() {
         return this._feeds;
-    }
-
-    protected getFeedsVersion(values: any) {
-        for (var i = 0; values && i < values.length; i++) {
-            this.getFeedVersion(values[i]);
-        }
     }
 
     protected setSort(sort) {

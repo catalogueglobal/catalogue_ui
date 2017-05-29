@@ -2,7 +2,7 @@ import { Component, ViewChild, Input }                           from "@angular/
 import { Router, ActivatedRoute }              from '@angular/router';
 import { Actions }                             from "@ngrx/effects";
 import { Store }                               from "@ngrx/store";
-import { FeedsApiService, IFeed }                     from 'app/commons/services/api/feedsApi.service';
+import { FeedsApiService, FEED_RETRIEVAL_METHOD, IFeed }                     from 'app/commons/services/api/feedsApi.service';
 import { SessionService }                      from "app/commons/services/session.service";
 import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
 import { DatasetsState }                       from "app/state/datasets/datasets.reducer";
@@ -13,6 +13,7 @@ import { SharedService } from "app/commons/services/shared.service";
 import { DatatoolComponent } from "app/commons/components/datatool.component";
 import { LicenseModal } from 'app/commons/directives/modal/license-modal.component';
 import { MiscDataModal } from 'app/commons/directives/modal/miscdata-modal.component';
+import {ConfirmFeedVersionModal} from 'app/commons/directives/modal/confirm-feed-version-modal.component';
 
 @Component({
     selector: 'app-feeds',
@@ -24,13 +25,19 @@ export class FeedsComponent extends DatatoolComponent {
     public notesFeed: Array<any>;
     public feed: any = {};
     private isAuthorised: boolean = false;
+    private file;
+    private selectedFileTarget;
     @ViewChild(LicenseModal)
     public readonly licenseModal: LicenseModal;
-
     @ViewChild(MiscDataModal)
     public readonly miscDataModal: MiscDataModal;
+    @ViewChild(ConfirmFeedVersionModal)
+    public readonly confirmFeedVersionModal: ConfirmFeedVersionModal;
+
     @Input() private mapPosition;
-    private _feeds:any;
+    private _feeds: any;
+    private clickAddNoteToFeed = false;
+    private onSubmitConfirmFeedVersionCallback: Function;
 
     constructor(
         private route: ActivatedRoute,
@@ -59,6 +66,7 @@ export class FeedsComponent extends DatatoolComponent {
         this.onItemChangedCallback = this.onItemChanged.bind(this);
         this.onSubmitLicenseCallback = this.onSubmitLicense.bind(this);
         this.onSubmitMiscDataCallback = this.onSubmitMiscData.bind(this);
+        this.onSubmitConfirmFeedVersionCallback = this.onSubmitConfirmFeedVersion.bind(this);
     }
 
     set feeds(value: any) {
@@ -81,22 +89,25 @@ export class FeedsComponent extends DatatoolComponent {
         this.resetForm(null);
         this.feedsApiService.getPublic(this.feedId).then(function(data) {
             that.feed = data;
-            that.feeds =[that.feed];
+            that.feeds = [that.feed];
             that.getLicenses(that.feeds);
-            that.mapPosition = that.utils.computeLatLng(that.feed.latestValidation.bounds);
+            that.mapPosition =  that.feed.latestValidation ? that.utils.computeLatLng(that.feed.latestValidation.bounds) :
+                that.mapPosition;
             if (that.sessionService.loggedIn === true) {
                 that.checkAuthorisations();
                 that.subscribeActions(that.actions$);
             }
+            console.log(that.feed)
             if (that.sessionService.loggedIn === true) {
                 that.feedsApiService.getNotes(that.feedId).then(function(data) {
                     that.notesFeed = data.reverse();
+                    console.log(that.notesFeed);
                 }).catch(function(err) {
                     console.log(err);
                 });
             }
-        }).catch(function(err){
-          console.log(err);
+        }).catch(function(err) {
+            console.log(err);
         });
     }
 
@@ -187,6 +198,24 @@ export class FeedsComponent extends DatatoolComponent {
                 this.resetForm([this.feed]);
             }
         );
+
+        // close inline edit form on setFile() success
+        actions$.ofType(DatasetsActionType.FEED_SET_FILE_SUCCESS).subscribe(
+            action => {
+                let updatedFeed = action.payload.feed;
+                this.processConfirm('setFile' + updatedFeed.id);
+                this.selectedFileTarget.value = null;
+                this.file = null;
+            }
+        )
+    }
+
+
+    containsOnlySpace() {
+        if (!this.note) {
+            return true;
+        }
+        return this.utils.trim(this.note).length === 0;
     }
 
     addNotesToFeed() {
@@ -195,6 +224,14 @@ export class FeedsComponent extends DatatoolComponent {
             let data = { body: this.note, date: Date.now(), userEmail: this.sessionService.userProfile.email }
             this.store.dispatch(this.datasetsAction.feedAddNotes(this.feedId, data));
             this.notesFeed.unshift(data);
+        }
+    }
+
+    private clickDisplayAddNoteToFeed() {
+        if (!this.sessionService.loggedIn) {
+            this.sessionService.login();
+        } else {
+            this.clickAddNoteToFeed = true;
         }
     }
 
@@ -244,4 +281,26 @@ export class FeedsComponent extends DatatoolComponent {
         super.resetForm(values);
         this.note = "";
     }
+
+    protected onSubmitConfirmFeedVersion(validate) {
+        if (validate) {
+            this.setFile(this.feed, {
+                value: this.selectedFileTarget.files[0]
+            });
+        } else {
+            this.selectedFileTarget.value = null;
+        }
+    }
+
+    protected fileChanged(event) {
+        try {
+            let file = event.target.files[0];
+            this.selectedFileTarget = event.target;
+            this.confirmFeedVersionModal.show();
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+
 }

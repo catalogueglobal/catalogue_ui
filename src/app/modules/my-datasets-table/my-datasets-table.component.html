@@ -22,6 +22,10 @@
 				</th>
 				<th>{{'datasets-table.column.license'|translate}}</th>
 				<th>{{'datasets-table.column.miscData'|translate}}</th>
+				<th class="togglePublic">
+					<app-sort-link sortValue="isPublic" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
+						{{'mydatasets-table.column.isPublic.label'|translate}} </app-sort-link>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -29,7 +33,7 @@
 				<td>
 					<div>
 						<a [routerLink]="['/feeds/', feed.id]">
-								{{feed.name}}
+							{{feed.name}}
 						</a>
 					</div>
 
@@ -57,15 +61,16 @@
 
 				</td>
 				<td class="lastUpdated">
-					<div class="date" *ngIf="feed.feedVersionCount <= 1">
+					<div class="date" *ngIf="feed.feedVersionCount == 1">
 						<a [routerLink]="['/feeds/', feed.id]">
 							{{feed.lastUpdated|date:'y-MM-dd'}}
 						</a>
 					</div>
-					<div *ngIf="feed.feedVersionCount > 1" class="form-group date">
-						<select class="form-control" [ngModel]="feed.selectedVersion">
-								<option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
-							</select>
+					<div class="version-component" *ngIf="feed.feedVersionCount > 1">
+						<select class="" [ngModel]="feed.selectedVersion" (ngModelChange)="onVersionChanged(feed, $event)">
+							<option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
+						</select>
+						<span class="caret"></span>
 					</div>
 				</td>
 				<td>
@@ -96,6 +101,19 @@
 
 				</td>
 
+				<td class="togglePublic">
+					<a href="#" (click)="togglePublic(feed)">
+						<div *ngIf="feed.isPublic">
+							<i class="fa fa-toggle-on" title="Public"></i>
+							<span class="details">{{'mydatasets-table.column.isPublic.public'|translate}}</span>
+						</div>
+						<div *ngIf="!feed.isPublic">
+							<i class="fa fa-toggle-off" title="Private"></i>
+							<span class="details">{{'mydatasets-table.column.isPublic.private'|translate}}</span>
+						</div>
+					</a>
+				</td>
+
 				<td>
 					<div class="actions">
 						<a [routerLink]="['/feeds/', feed.id]" class="">
@@ -118,21 +136,29 @@
 		<pagination-template #p="paginationApi" (pageChange)="page = $event" autoHide="true">
 			<ul class="ng2-pagination custom" *ngIf="p.pages.length > 1">
 				<li class="pagination-previous" [class.disabled]="p.isFirstPage()">
-					<a *ngIf="1 < p.getCurrent()" (click)="p.previous()"><i
-					class="fa fa-arrow-left"></i></a> <span *ngIf="p.isFirstPage()"><i
-					class="fa fa-arrow-left"></i></span>
+					<a *ngIf="1 < p.getCurrent()" (click)="p.previous()">
+						<i class="fa fa-arrow-left"></i>
+					</a>
+					<span *ngIf="p.isFirstPage()">
+						<i class="fa fa-arrow-left"></i>
+					</span>
 				</li>
 				<li [class.current]="p.getCurrent() === page.value" *ngFor="let page of p.pages">
-					<a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value"> <span>{{
-						page.label }}</span>
+					<a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
+						<span>{{ page.label }}</span>
 					</a>
 					<div *ngIf="p.getCurrent() === page.value">
 						<span>{{ page.label }}</span>
 					</div>
 				</li>
-				<li class="pagination-next" [class.disabled]="p.isLastPage()"><a *ngIf="!p.isLastPage()" (click)="p.next()"><i
-					class="fa fa-arrow-right"></i></a> <span *ngIf="p.isLastPage()"><i
-					class="fa fa-arrow-right"></i></span></li>
+				<li class="pagination-next" [class.disabled]="p.isLastPage()">
+					<a *ngIf="!p.isLastPage()" (click)="p.next()">
+						<i class="fa fa-arrow-right"></i>
+					</a>
+					<span *ngIf="p.isLastPage()">
+						<i class="fa fa-arrow-right"></i>
+					</span>
+				</li>
 			</ul>
 		</pagination-template>
 	</div>

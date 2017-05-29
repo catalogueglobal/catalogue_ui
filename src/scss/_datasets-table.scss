@@ -21,4 +21,12 @@
     .btn-download {
         color: $ct-green;
     }
+
+    .version-component {
+        display: flex;
+
+        .caret {
+            margin-top: 13px;
+        }
+    }
 }
