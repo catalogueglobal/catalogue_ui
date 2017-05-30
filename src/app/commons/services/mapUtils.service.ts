@@ -97,11 +97,11 @@ export class MapUtilsService {
         });
     }
 
-    public createIconMarker() {
+    public createIconMarker(anchorX, anchorY) {
         return L.Icon.extend({
             options: {
                 iconSize: new L.Point(30, 30),
-                iconAnchor: new L.Point(15, 0),
+                iconAnchor: new L.Point(anchorX || 15,  anchorY || 0),
                 className: 'leaflet-div-number-icon'
             },
 

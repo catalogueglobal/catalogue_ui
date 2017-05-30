@@ -1,13 +1,12 @@
 <div id="wrapper">
     <header id="header" class="cf">
         <div class="wrap">
-            <a href="{{'/'|institutionalUrl}}" title="Catalogue" id="logo"><img src="images/logo-horizontal-blanc.png" alt="Catalogue"></a>
+            <a href="{{'/'|institutionalUrl}}" title="Catalogue" id="logo">
+                <img src="images/logo-horizontal-blanc.png" alt="Catalogue">
+            </a>
             <nav id="mainmenu">
                 <ul class="cf menu-component">
 
-                    <li>
-                        <a href="#" class="session-item poptrigger" data-rel="createfeed">{{'layout.menu.upload'|translate}}</a>
-                    </li>
                     <li>
                         <a routerLinkActive="active" routerLink="/datasets" class="session-item">{{'layout.menu.download'|translate}}</a>
                     </li>
@@ -17,9 +16,13 @@
                     </li>
 
                     <li class="dropdown" *ngIf="sessionService.loggedIn && sessionService.userProfile">
-                        <a href="#" class="dropdown-toggle session-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{sessionService.userProfile.email}} <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle session-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{sessionService.userProfile.email}}
+                            <span class="caret"></span>
+                        </a>
                         <ul class="dropdown-menu user-dropdown-menu">
-                            <li><a href="#" class="session-item" (click)="sessionService.logout()">{{'layout.menu.logout'|translate}}</a></li>
+                            <li>
+                                <a href="#" class="session-item" (click)="sessionService.logout()">{{'layout.menu.logout'|translate}}</a>
+                            </li>
                         </ul>
                     </li>
                     <li *ngIf="!sessionService.loggedIn">
@@ -41,13 +44,27 @@
             <div class="footer-left">
                 <div class="fmenu">
                     <ul class="cf">
-                        <li><a href="{{'/'|institutionalUrl}}">{{'layout.footer.home'|translate}}</a></li>
-                        <li><a href="{{'/about/'|institutionalUrl}}">{{'layout.footer.about'|translate}}</a></li>
-                        <li><a href="{{'/faq/'|institutionalUrl}}">{{'layout.footer.faq'|translate}}</a></li>
-                        <li><a href="{{'/community/'|institutionalUrl}}">{{'layout.footer.community'|translate}}</a></li>
-                        <li><a href="{{'/tools/'|institutionalUrl}}">{{'layout.footer.tools'|translate}}</a></li>
-                        <li><a href="{{'/blog/'|institutionalUrl}}">{{'layout.footer.blog'|translate}}</a></li>
-                        <li><a href="{{'/contact-us/'|institutionalUrl}}">{{'layout.footer.contact'|translate}}</a></li>
+                        <li>
+                            <a href="{{'/'|institutionalUrl}}">{{'layout.footer.home'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/about/'|institutionalUrl}}">{{'layout.footer.about'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/faq/'|institutionalUrl}}">{{'layout.footer.faq'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/community/'|institutionalUrl}}">{{'layout.footer.community'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/tools/'|institutionalUrl}}">{{'layout.footer.tools'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/blog/'|institutionalUrl}}">{{'layout.footer.blog'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/contact-us/'|institutionalUrl}}">{{'layout.footer.contact'|translate}}</a>
+                        </li>
                     </ul>
                 </div>
                 <!--/.fmenu-->
@@ -58,9 +75,15 @@
                 <a *ngIf="!sessionService.loggedIn" href="#" class="poptrigger button subscribe" data-rel="subscribepopup">{{'layout.footer.subscribe'|translate}}</a>
                 <div class="socials">
                     <ul class="cf">
-                        <li><a href="http://www.facebook.com" class="social fb" title="Facebook">facebook</a></li>
-                        <li><a href="http://www.twitter.com" class="social tw" title="Twitter">twitter</a></li>
-                        <li><a href="http://www.linkedin.com" class="social li" title="Linked in">linked-in</a></li>
+                        <li>
+                            <a href="http://www.facebook.com" class="social fb" title="Facebook">facebook</a>
+                        </li>
+                        <li>
+                            <a href="http://www.twitter.com" class="social tw" title="Twitter">twitter</a>
+                        </li>
+                        <li>
+                            <a href="http://www.linkedin.com" class="social li" title="Linked in">linked-in</a>
+                        </li>
                     </ul>
                 </div>
                 <!--/.social-->
@@ -105,7 +128,8 @@
             <a href="#" class="close-dialogbox"></a>
             <h5 class="title">Upload</h5>
             <div style="text-align:center;margin-top:40px;">
-                Your files are uploading.<br />
+                Your files are uploading.
+                <br />
                 <button class="close-modal" style="text-align:center;">OK</button>
             </div>
         </div>

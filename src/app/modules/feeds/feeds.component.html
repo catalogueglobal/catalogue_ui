@@ -157,11 +157,11 @@
                 <div *ngIf="sessionService.loggedIn && notesFeed && notesFeed.length> 0">
                     <p class="leading-label">{{'feed.note.title'|translate}}</p>
                     <div class="">
-                        <div class="well well-sm" *ngFor="let comment of notesFeed" [ngClass]="{'host-comment': (comment.user == 'auth0|57a1f0c5b8155e90194e5087')}">
+                        <div class="well well-sm" *ngFor="let comment of notesFeed" [ngClass]="{'host-comment': (comment.user == feed.user)}">
                             <div>
                                 <strong>{{'feed.note.author'|translate}} {{comment.userEmail}}
                                 </strong>
-                                <strong *ngIf="(comment.user == 'auth0|57a1f0c5b8155e90194e5087')" class="pull-right">{{'feed.note.owner'|translate}}
+                                <strong *ngIf="(comment.user == feed.user)" class="pull-right">{{'feed.note.owner'|translate}}
                                 </strong>
 
                                 <br/>

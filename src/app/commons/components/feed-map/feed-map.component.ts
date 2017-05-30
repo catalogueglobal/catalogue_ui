@@ -24,6 +24,7 @@ export class FeedMapComponent implements AfterViewInit {
     private routes = [];
     private allPatterns;
     map: leaflet.Map;
+    private stops = [];
     stopsMarkers: Array<leaflet.Marker>;
     stationsMarkers: Array<leaflet.Marker>;
     initialPosition = this.config.MAP_DEFAULT_POSITION;
@@ -52,7 +53,7 @@ export class FeedMapComponent implements AfterViewInit {
         this.stopsMarkers = new Array();
         this.stationsMarkers = new Array();
         this.NumberedDivIcon = mapUtils.createNumMarker();
-        this.ImageDivIcon = mapUtils.createIconMarker();
+        this.ImageDivIcon = mapUtils.createIconMarker(null, null);
         this.afterAuth();
     }
 
@@ -78,9 +79,9 @@ export class FeedMapComponent implements AfterViewInit {
             this.allPatterns = {};
 
             let that = this;
-            // this.feedsApi.getStops(this._feed.id).then(function(response) {
-            //     that.createStops(response);
-            // });
+            this.feedsApi.getStops(this._feed.id).then(function(response) {
+                that.stops = response;
+            });
             this.feedsApi.getRoutes(this._feed.id).then(function(response) {
                 that.routes = response;
             })
@@ -111,13 +112,14 @@ export class FeedMapComponent implements AfterViewInit {
         this.stopsMarkersClusterGroup.addTo(map);
         this.stationsMarkersClusterGroup.addTo(map);
         this.patternsGroup.addTo(map);
-        // leaflet.control.layers(null, overlayMaps).addTo(map);
+        leaflet.control.layers(null, overlayMaps).addTo(map);
         return map;
     }
 
     private clearMap() {
         this.stopsMarkersClusterGroup.clearLayers();
         this.stationsMarkersClusterGroup.clearLayers();
+        this.patternsGroup.clearLayers();
     }
 
     private extractData(data) {
@@ -126,7 +128,7 @@ export class FeedMapComponent implements AfterViewInit {
             if (data) {
                 let lat = data.defaultLocationLat;
                 let lng = data.defaultLocationLon;
-                if (!this._feed.latestValidation){
+                if (!this._feed.latestValidation) {
                     return;
                 }
                 let bounds = this.utils.computeBoundsToLatLng(this._feed.latestValidation.bounds);
@@ -159,18 +161,6 @@ export class FeedMapComponent implements AfterViewInit {
         }
     }
 
-    private fitBounds(stop: boolean) {
-        if (stop) {
-            if (this.stopsMarkers.length > 0) {
-                this.map.fitBounds(this.stopsMarkersClusterGroup.getBounds());
-            }
-        } else {
-            if (this.stationsMarkers.length > 0) {
-                this.map.fitBounds(this.stationsMarkersClusterGroup.getBounds());
-            }
-        }
-    }
-
     protected createMarker(feed, latLng, bounds): leaflet.Marker {
         let isDraggable: boolean = this.isAuthorised;
         let marker: any = leaflet.marker(latLng, {
@@ -181,9 +171,6 @@ export class FeedMapComponent implements AfterViewInit {
             })
         });
         let that = this;
-        marker.on('click', function(event) {
-            that.clickMarker(event);
-        });
         if (isDraggable === true) {
             marker.data = {
                 bounds: bounds,
@@ -205,59 +192,6 @@ export class FeedMapComponent implements AfterViewInit {
             defaultLocationLon: changedPos.lng
         };
         this.store.dispatch(this.datasetsAction.updateProject(ev.target.data.id, updateProject));
-    }
-
-    private clickMarker(event) {
-        this.stopsMarkersClusterGroup.bringToFront();
-        this.fitBounds(true);
-    }
-
-    private clickSSMarker(event) {
-
-    }
-
-    protected createStops(stops) {
-        for (let i = 0; i < stops.length; i++) {
-            let stop = stops[i];
-            let marker: any = leaflet.marker([stop.lat, stop.lon], {
-                title: stop.stopName,
-                draggable: false,
-                icon: new this.ImageDivIcon({
-                    faIcon: (stop.locationType === 'STOP' ? 'fa-flag-checkered' : 'fa-train'),
-                    surClass: (stop.locationType === 'STOP' ? 'stop-marker' : 'station-marker')
-                })
-            });
-            let that = this;
-            marker.model = stop;
-            marker.on('mouseover', function(event) {
-                that.onMouseOverStopMarker(event);
-            });
-            marker.on('mouseout', function(event) {
-                that.onMouseOutStopMarker(event);
-            });
-            if (stop.locationType === 'STOP') {
-                this.stopsMarkersClusterGroup.addLayer(marker);
-                this.stopsMarkers.push(marker);
-            } else {
-                this.stationsMarkersClusterGroup.addLayer(marker);
-                this.stationsMarkers.push(marker);
-            }
-        }
-    }
-
-    private onMouseOverStopMarker(event) {
-        let stop = event.target.model;
-        let tooltip = '<b>' + stop.stopName + '</b>';
-        tooltip += ('<br><b>type:</b> ' + stop.locationType);
-        tooltip += stop.bikeParking ? ('<br>bikeParking: ' + stop.bikeParking) : '';
-        tooltip += stop.carParking ? ('<br>carParking: ' + stop.carParking) : '';
-
-        event.target.bindTooltip(tooltip, { direction: 'top' }).openTooltip();
-        event.target.bindPopup(tooltip);
-    }
-
-    private onMouseOutStopMarker(event) {
-        event.target.bindTooltip('').closeTooltip();
     }
 
     /**
@@ -298,9 +232,82 @@ export class FeedMapComponent implements AfterViewInit {
         if (patterns) {
             for (var i = 0; i < patterns.length; i++) {
                 this.createPattern('shape', patterns[i]);
-                this.createPattern('stopConnections', patterns[i]);
             }
         }
+    }
+
+    private getAllStops(patterns) {
+        if (patterns) {
+            for (var i = 0; i < patterns.length; i++) {
+                this.createStops(this.getStops(patterns[i]));
+            }
+        }
+    }
+
+    protected createStops(stopObj) {
+        if (!stopObj || !stopObj.routeId) {
+            return;
+        }
+        let stops = stopObj.stops;
+        for (let i = 0; i < stops.length; i++) {
+            let stop = stops[i];
+            let marker: any = leaflet.marker([stop.lat, stop.lon], {
+                title: stop.stopName,
+                draggable: false,
+                icon: new this.ImageDivIcon({
+                    faIcon: (stop.locationType === 'STOP' ? 'fa-flag-checkered' : 'fa-train'),
+                    surClass: (stop.locationType === 'STOP' ? 'stop-marker' : 'station-marker')
+                })
+            });
+            let that = this;
+            marker.model = stop;
+            this.addOverStopMarkerTooltip(marker);
+            if (!this.allPatterns[stopObj.routeId]) {
+                this.allPatterns[stopObj.routeId] = [];
+            }
+            this.allPatterns[stopObj.routeId].push(marker);
+            if (stop.locationType === 'STOP') {
+                this.stopsMarkersClusterGroup.addLayer(marker);
+                this.stopsMarkers.push(marker);
+            } else {
+                this.stationsMarkersClusterGroup.addLayer(marker);
+                this.stationsMarkers.push(marker);
+            }
+        }
+    }
+
+    private addOverStopMarkerTooltip(marker) {
+        let stop = marker.model;
+        let tooltip = '<b>' + stop.stopName + '</b>';
+        tooltip += ('<br><b>type:</b> ' + stop.locationType);
+        tooltip += stop.bikeParking ? ('<br>bikeParking: ' + stop.bikeParking) : '';
+        tooltip += stop.carParking ? ('<br>carParking: ' + stop.carParking) : '';
+
+        marker.bindTooltip(tooltip, { direction: 'top' }).openTooltip();
+        marker.bindPopup(tooltip);
+    }
+
+    private getStops(pattern) {
+        let res = [];
+        if (pattern && pattern.patternStops) {
+            let stopsById = [];
+            let i = 0;
+            for (i = 0; i < pattern.patternStops.length; i++) {
+                stopsById.push(pattern.patternStops[i].stopId);
+            }
+            for (i = 0; i < this.stops.length; i++) {
+                if (stopsById.indexOf(this.stops[i].id) > -1) {
+                    res.push(this.stops[i]);
+                }
+            }
+            return {
+                routeId: pattern.routeId,
+                stops: res
+            };
+        } else {
+            return {}
+        }
+
     }
 
     private onRouteCheckAll(event) {
@@ -315,6 +322,8 @@ export class FeedMapComponent implements AfterViewInit {
             }
             this.allPatterns = {};
             this.patternsGroup.clearLayers();
+            this.stopsMarkersClusterGroup.clearLayers();
+            this.stationsMarkersClusterGroup.clearLayers();
         }
     }
 
@@ -326,6 +335,7 @@ export class FeedMapComponent implements AfterViewInit {
                 vm.feedsApi.getRouteTripPattern(vm._feed.id, data.id).then(function(responseTrip) {
                     console.log(responseTrip, route);
                     that.createTripPatterns(responseTrip);
+                    that.getAllStops(responseTrip);
                 });
             }
         };
@@ -334,6 +344,12 @@ export class FeedMapComponent implements AfterViewInit {
             for (var i = 0; vm.allPatterns[route.id] && i < vm.allPatterns[route.id].length; i++) {
                 if (vm.patternsGroup.hasLayer(vm.allPatterns[route.id][i])) {
                     vm.patternsGroup.removeLayer(vm.allPatterns[route.id][i]);
+                }
+                if (vm.stopsMarkersClusterGroup.hasLayer(vm.allPatterns[route.id][i])) {
+                    vm.stopsMarkersClusterGroup.removeLayer(vm.allPatterns[route.id][i]);
+                }
+                if (vm.stationsMarkersClusterGroup.hasLayer(vm.allPatterns[route.id][i])) {
+                    vm.stationsMarkersClusterGroup.removeLayer(vm.allPatterns[route.id][i]);
                 }
             }
         }
@@ -383,67 +399,16 @@ export class FeedMapComponent implements AfterViewInit {
         if (!pattern || !pattern[type]) {
             return;
         }
-        if (type === 'shape') {
-            var patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON();
-            var geojsonFeature = {
-                type: 'Feature',
-                properties: {
-                    pattern: pattern,
-                    routeData: this.feedMapUtils.getRouteData(pattern.routeId, this.routes)
-                },
-                geometry: pattern[type]
-            };
-            patternsGeoJSON.addData(geojsonFeature);
-            return patternsGeoJSON;
-        } else {
-            var routeData = this.feedMapUtils.getRouteData(pattern.routeId, this.routes);
-            var collectionJson = {
-                type: 'FeatureCollection',
-                features: []
-            };
-
-            for (var i = 0; i < pattern[type].length; i++) {
-                for (var j = 0; j < 1 && pattern[type][i].coordinates.length; j++) {
-                    var feature = {
-                        type: 'Feature',
-                        properties: {
-                            pattern: pattern[type][i],
-                            routeData: routeData,
-                            type: 'stop'
-                        },
-                        geometry: {
-                            coordinates: pattern[type][i].coordinates[j],
-                            type: 'Point'
-                        }
-                    };
-                    try {
-                        collectionJson.features.push(feature);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-            }
-
-            var patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON(collectionJson, {
-                pointToLayer: function(feature, latlng) {
-                    let geojsonMarkerOptions = {
-                        radius: 6,
-                        fillColor: "#ff7800",
-                        color: "#d3d3d3",
-                        weight: 1,
-                        opacity: 1,
-                        fillOpacity: 0.8
-                    };
-                    let marker = leaflet.circleMarker(latlng, geojsonMarkerOptions);
-
-                    marker.on('mouseover', function(event) {
-                        console.log(event)
-                    });
-                    return marker;
-                }
-            });
-
-            return patternsGeoJSON;
-        }
+        var patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON();
+        var geojsonFeature = {
+            type: 'Feature',
+            properties: {
+                pattern: pattern,
+                routeData: this.feedMapUtils.getRouteData(pattern.routeId, this.routes)
+            },
+            geometry: pattern[type]
+        };
+        patternsGeoJSON.addData(geojsonFeature);
+        return patternsGeoJSON;
     }
 }

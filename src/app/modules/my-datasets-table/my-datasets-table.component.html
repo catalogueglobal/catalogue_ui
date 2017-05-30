@@ -12,10 +12,6 @@
 					</app-sort-link>
 				</th>
 
-				<th class="togglePublic">
-					<app-sort-link sortValue="isPublic" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
-						{{'mydatasets-table.column.isPublic.label'|translate}} </app-sort-link>
-				</th>
 				<th class="lastUpdated">
 					<app-sort-link sortValue="lastUpdated" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
 						{{'mydatasets-table.column.updated'|translate}} </app-sort-link>
@@ -47,26 +43,13 @@
 
 				</td>
 
-				<td class="togglePublic">
-					<div class="other">
-						<a [routerLink]="['/feeds/', feed.id]">
-							<div *ngIf="feed.isPublic">
-								<span class="details">{{'mydatasets-table.column.isPublic.public'|translate}}</span>
-							</div>
-							<div *ngIf="!feed.isPublic">
-								<span class="details">{{'mydatasets-table.column.isPublic.private'|translate}}</span>
-							</div>
-						</a>
-					</div>
-
-				</td>
 				<td class="lastUpdated">
 					<div class="date" *ngIf="feed.feedVersionCount == 1">
 						<a [routerLink]="['/feeds/', feed.id]">
 							{{feed.lastUpdated|date:'y-MM-dd'}}
 						</a>
 					</div>
-					<div class="version-component" *ngIf="feed.feedVersionCount > 1">
+					<div class="dropdown-select version-component" *ngIf="feed.feedVersionCount > 1">
 						<select class="" [ngModel]="feed.selectedVersion" (ngModelChange)="onVersionChanged(feed, $event)">
 							<option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
 						</select>

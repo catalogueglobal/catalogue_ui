@@ -310,8 +310,8 @@ export class FeedsApiService extends AbstractApiService {
         return this.authHttp.get(this.FEED_STOPS_URL + '?feedId=' + feedId).map(response => response.json()).toPromise();
     }
 
-    public getStop(feedId: string, stopId: string): Promise<any> {
-        return this.authHttp.get(this.FEED_STOPS_URL + '/' + stopId + '?feedId=' + feedId).map(response => response.json()).toPromise();
+    public getStop(stopId: string): Promise<any> {
+        return this.authHttp.get(this.FEED_STOPS_URL + '/' + stopId + '/').map(response => response.json()).toPromise();
     }
 
     public getRoutes(feedId: string): Promise<any> {

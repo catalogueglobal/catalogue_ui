@@ -23,6 +23,9 @@
                 <th>
                     {{'datasets-table.validation'|translate}}
                 </th>
+                <th>
+                    {{'datasets.table.versions'|translate}}
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -30,28 +33,23 @@
                 <td>
                     <div class="">
                         <a [routerLink]="['/feeds/', feed.id]">
-                        {{feed.name}}</a>
-                        <div class="form-group" *ngIf="feed.feedVersionCount > 0">
-                            <select class="form-control" [ngModel]="feed.selectedVersion">
-                            <option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
-                          </select>
-                        </div>
+                            {{feed.name}}</a>
                     </div>
                 </td>
 
                 <td>
                     <div class="date">
                         <a [routerLink]="['/feeds/', feed.id]" *ngIf="feed.selectedVersion && feed.selectedVersion.latestValidation">
-                      {{feed.selectedVersion.latestValidation.endDate | date:'y-MM-dd'}}
-                    </a>
+                            {{feed.selectedVersion.latestValidation.endDate | date:'y-MM-dd'}}
+                        </a>
                     </div>
                 </td>
                 <td>
                     <div class="other">
                         <a *ngIf="feedsLicenses[feed.id]" download="{{feedsLicenses[feed.id].name}}" href="{{feedsLicenses[feed.id].licenseUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
                             <span>
-                            {{feedsLicenses[feed.id].name}}
-                        </span>
+                                {{feedsLicenses[feed.id].name}}
+                            </span>
                         </a>
                     </div>
                 </td>
@@ -60,8 +58,8 @@
                     <div class="other">
                         <a *ngIf="feedsMiscDatas[feed.id]" download="{{feedsMiscDatas[feed.id].name}}" href="{{feedsMiscDatas[feed.id].miscDataUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
                             <span>
-                            {{feedsMiscDatas[feed.id].name}}
-                        </span>
+                                {{feedsMiscDatas[feed.id].name}}
+                            </span>
                         </a>
                     </div>
                 </td>
@@ -75,18 +73,31 @@
                 <td>
                     <div class="other">
                         <a (click)="downloadValidation(feed)">
-                             <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="action-success">
-                           <i class="fa fa-flag-checkered" aria-hidden="true"></i>
-                         </span>
-                         </a>
+                            <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="action-success">
+                                <i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div class="date" *ngIf="feed.feedVersionCount == 1">
+                        <a [routerLink]="['/feeds/', feed.id]">
+                            {{feed.lastUpdated|date:'y-MM-dd'}}
+                        </a>
+                    </div>
+                    <div class="dropdown-select version-component" *ngIf="feed.feedVersionCount > 1">
+                        <select class="" [ngModel]="feed.selectedVersion" (ngModelChange)="onVersionChanged(feed, $event)">
+                            <option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
+                        </select>
+                        <span class="caret"></span>
                     </div>
                 </td>
                 <td>
                     <div class="actions">
                         <a (click)="downloadFeed(feed)">
                             <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="action-success btn-download">
-                          <i class="fa fa-download" aria-hidden="true"></i>
-                        </span>
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                            </span>
                         </a>
                     </div>
                 </td>
