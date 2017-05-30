@@ -19,12 +19,11 @@
                 <th>
                     {{'datasets-table.column.subscribe'|translate}}
                 </th>
-
-                <th>
-                    {{'datasets-table.validation'|translate}}
-                </th>
                 <th>
                     {{'datasets.table.versions'|translate}}
+                </th>
+                <th>
+                    {{'datasets-table.validation'|translate}}
                 </th>
             </tr>
         </thead>
@@ -69,16 +68,6 @@
                         <input *ngIf="!sessionService.loggedIn" type="checkbox" (click)="sessionService.login()" />
                     </div>
                 </td>
-
-                <td>
-                    <div class="other">
-                        <a (click)="downloadValidation(feed)">
-                            <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="action-success">
-                                <i class="fa fa-flag-checkered" aria-hidden="true"></i>
-                            </span>
-                        </a>
-                    </div>
-                </td>
                 <td>
                     <div class="date" *ngIf="feed.feedVersionCount == 1">
                         <a [routerLink]="['/feeds/', feed.id]">
@@ -90,6 +79,15 @@
                             <option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
                         </select>
                         <span class="caret"></span>
+                    </div>
+                </td>
+                <td>
+                    <div class="other">
+                        <a (click)="downloadValidation(feed)">
+                            <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="action-success">
+                                <i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                            </span>
+                        </a>
                     </div>
                 </td>
                 <td>
