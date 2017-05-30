@@ -4,15 +4,6 @@
 <!--/.banner-->
 
 <div class="container-fluid">
-	<div class="col-md-12">
-		<div class="col-md-6">
-			<h4>{{'datasets.map.title'|translate | uppercase}}</h4>
-		</div>
-		<div class="col-md-6 feed-registry">
-			<h4>{{'datasets.table.title'|translate}}</h4>
-			<p>{{'datasets.table.intro'|translate}}</p>
-		</div>
-	</div>
 	<div class="col-md-12 no-padding">
 		<div class="col-md-6 map-section">
 			<div id="map-wrapper">
@@ -27,11 +18,11 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<app-datasets-table [feeds]="feeds$|async" (sortChange)="onSortChange($event)"></app-datasets-table>
-			<div class="tools" *ngIf="feeds && feeds.length>0">
-				<a href="#" class="generic-btn" [class.disabled]="!getCheckedFeeds().length" (click)="downloadFeeds($event)"> <i class="fa fa-download" aria-hidden="true"></i> {{'datasets.table.btn.download'|translate}}
-				</a>
+			<div class="col-md-12">
+				<h4>{{'datasets.table.title'|translate}}</h4>
+				<p>{{'datasets.table.intro'|translate}}</p>
 			</div>
+			<app-datasets-table [feeds]="feeds$|async" (sortChange)="onSortChange($event)"></app-datasets-table>
 			<div class="noresult" *ngIf="feeds && feeds.length==0">
 				{{'datasets.table.noresult.info'|translate}} <a (click)="resetSearch()">{{'datasets.table.noresult.reset'|translate}}</a>.
 			</div>

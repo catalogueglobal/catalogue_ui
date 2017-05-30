@@ -1,0 +1,18 @@
+.menu-component {
+    .user-dropdown-menu {
+        // background-color: transparent;
+        // height: 30px;
+        // margin-top: -5px;
+        width: 100%;
+
+        a:hover {
+            color: $ct-orange !important;
+            background-color: inherit;
+        }
+
+        a {
+            color: $ct-orange !important;
+            text-transform: uppercase;
+        }
+    }
+}

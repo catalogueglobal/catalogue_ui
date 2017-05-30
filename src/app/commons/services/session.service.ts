@@ -2,6 +2,7 @@ import { Injectable }      from "@angular/core";
 import { tokenNotExpired } from "angular2-jwt/angular2-jwt";
 import { LocalStorage }    from "ng2-webstorage";
 import { Configuration }   from "app/commons/configuration";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export type Session = {
     user: any,
@@ -22,6 +23,7 @@ export class SessionService {
     userProfile: any;
     tokenName = 'id_token';
     userIdTokenName = 'Catalogue.userId';
+    public loggedIn$ = new BehaviorSubject(false);
 
     constructor(private config: Configuration) {
         let options = {
@@ -38,22 +40,28 @@ export class SessionService {
                 title: "Catalogue"
             },
             auth: {
-                redirectUrl: window.location.origin + '/datasets',
+                redirect: false,
                 responseType: 'token',
                 params: {
                     scope: 'openid'
                 }
-            }
+            },
+            autoclose: true
         };
 
         this.lock = new Auth0Lock(this.config.AUTH_ID, this.config.AUTH_DOMAIN, options);
         if (this.loggedIn) {
             this.setProfile();
         }
+        this.authenticate();
+    }
 
+    private authenticate() {
         this.lock.on('authenticated', (authResult) => {
             localStorage.setItem(this.tokenName, authResult.idToken);
             this.setProfile();
+            this.loggedIn$.next(this.loggedIn);
+            console.log('authenticated')
         });
     }
 

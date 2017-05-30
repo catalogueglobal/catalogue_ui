@@ -181,4 +181,9 @@ export class UtilsService {
         }
         return false;
     }
+
+
+    public trim(str){
+        return str.replace(/^\s+|\s+$/g,'');
+    }
 }

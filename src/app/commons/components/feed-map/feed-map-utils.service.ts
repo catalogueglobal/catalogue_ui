@@ -22,7 +22,7 @@ export class FeedMapUtilsService {
 
     getGeoJSONStyle(feature) {
         return {
-            weight: feature.properties.type === 'stop' ? 8 : 5,
+            weight: feature.properties.type === 'stop' ? 10 : 5,
             opacity: 1,
             color: feature.properties.type === 'stop' ? 'red' : (feature.properties.routeData.routeColor ?
                 ('#' + feature.properties.routeData.routeColor) : '#808080'),

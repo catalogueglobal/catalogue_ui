@@ -19,7 +19,6 @@ import { AppComponent }                                             from "./app.
 import { routing }                                                  from "./app.routes";
 import { Configuration }                                            from "./commons/configuration";
 import { CustomFileinputDirective }                                 from "./commons/directives/customFileinput.directive";
-import { DeleteFeedConfirmationComponent }                          from "./commons/directives/delete-feed-confirmation/delete-feed-confirmation.component";
 import { FeedCreateFormComponent }                                  from "./commons/directives/feed-create-form/feed-create-form.component";
 import { InlineEditFileComponent }                                  from "./commons/directives/inline-edit-file/inline-edit-file.component";
 import { InlineEditTextComponent }                                  from "./commons/directives/inline-edit-text/inline-edit-text.component";
@@ -55,10 +54,13 @@ import { TooltipModule } from 'ng2-bootstrap';
 import {CommonComponent} from './commons/directives/modal/common-modal.component';
 import { MiscDataModal } from './commons/directives/modal/miscdata-modal.component';
 import { LicenseModal } from './commons/directives/modal/license-modal.component';
+import { DeleteFeedModal } from './commons/directives/modal/delete-feed-modal.component';
+import {ConfirmFeedVersionModal} from './commons/directives/modal/confirm-feed-version-modal.component';
 import { DatatoolComponent }                                            from "./commons/components/datatool.component";
 import { FeedMapComponent }                                            from "./commons/components/feed-map/feed-map.component";
 import {FeedMapUtilsService} from "./commons/components/feed-map/feed-map-utils.service";
 import {RouteFilter} from  "./commons/components/feed-map/route.filter";
+import {TruncatePipe} from "./commons/pipes/truncate.pipe";
 
 export function httpFactory(http: Http) {
     return new TranslateStaticLoader(http, '/assets/i18n', '.json');
@@ -111,13 +113,15 @@ export function composeProvider(state: any, action: any) {
         InlineEditTextComponent,
         InlineEditFileComponent,
         SubscribeFormComponent,
-        DeleteFeedConfirmationComponent,
         CommonComponent,
         ModalComponent,
         LicenseModal,
         MiscDataModal,
+        DeleteFeedModal,
+        ConfirmFeedVersionModal,
         DatatoolComponent,
-        FeedMapComponent
+        FeedMapComponent,
+        TruncatePipe
     ],
 
     imports: [

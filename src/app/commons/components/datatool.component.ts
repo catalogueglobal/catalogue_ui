@@ -12,7 +12,7 @@ import { SharedService } from "app/commons/services/shared.service";
 import { InlineEditEvent } from "app/commons/directives/inline-edit-text/inline-edit-generic.component";
 
 @Component({
-  template: ''
+    template: ''
 })
 export class DatatoolComponent {
 
@@ -23,6 +23,7 @@ export class DatatoolComponent {
     protected currentFeed: IFeed;
     protected confirmEditById: Map<string, EventEmitter<any>> = new Map();
 
+    protected FEED_RETRIEVAL_METHOD = FEED_RETRIEVAL_METHOD; // used by the template
     //edition
     protected newLicenseOrMiscData;
     protected onSelectionChangeCallback: Function;
@@ -33,20 +34,20 @@ export class DatatoolComponent {
 
 
     constructor(
-      protected config: Configuration,
-      protected utils: UtilsService,
-      protected sessionService: SessionService,
-      protected feedsApiService: FeedsApiService,
-      protected usersApiService: UsersApiService,
-      protected store: Store<DatasetsState>,
-      protected actions$: Actions,
-      protected datasetsAction: DatasetsActions,
-      protected shared: SharedService
+        protected config: Configuration,
+        protected utils: UtilsService,
+        protected sessionService: SessionService,
+        protected feedsApiService: FeedsApiService,
+        protected usersApiService: UsersApiService,
+        protected store: Store<DatasetsState>,
+        protected actions$: Actions,
+        protected datasetsAction: DatasetsActions,
+        protected shared: SharedService
     ) {
 
     }
 
-    protected subscribeActions(actions){
+    protected subscribeActions(actions) {
 
     }
 
@@ -77,69 +78,61 @@ export class DatatoolComponent {
         });
     }
 
-    protected getFeedsVersion(values){
+    protected getFeedsVersion(values) {
+      for (var i = 0; values && i < values.length; i++) {
+          this.getFeedVersion(values[i]);
+      }
     }
 
     protected getMiscDatas(value: any) {
         let that = this;
         this.feedsApiService.getMiscDatas()
-        .then(miscDatas => {
-            that.miscDatas = miscDatas;
-            this.shared.setMiscDatas(miscDatas);
-            that.feedsMiscDatas = {};
-            that.setFeedsItemsObj(value, false);
-        }).catch(error=>{
-          console.log(error);
-        })
-    }
-
-    protected getDownloadUrl(feed: any){
-      this.feedsApiService.getDownloadUrl(feed, feed.selectedVersion ? feed.selectedVersion.id : null).subscribe(
-          url => {
-            console.log('getDownloadUrl: ', url, feed);
-              if (url) {
-                  window.open(url);
-              }
-          }
-      );
+            .then(miscDatas => {
+                that.miscDatas = miscDatas;
+                this.shared.setMiscDatas(miscDatas);
+                that.feedsMiscDatas = {};
+                that.setFeedsItemsObj(value, false);
+            }).catch(error => {
+                console.log(error);
+            })
     }
 
     protected setFeedItemsObj(feed: any, license: boolean) {
-      let itemsObj = this.feedsLicenses;
-      let apiUrl = this.feedsApiService.FEED_LICENSE;
-      let itemsList = this.licenses;
-      let downloadUrl = 'licenseUrl';
-      if (!license) {
-          itemsObj = this.feedsMiscDatas;
-          apiUrl = this.feedsApiService.FEED_MISC_DATA;
-          itemsList = this.miscDatas;
-          downloadUrl = 'miscDataUrl';
-      }
+        let itemsObj = this.feedsLicenses;
+        let apiUrl = this.feedsApiService.FEED_LICENSE;
+        let itemsList = this.licenses;
+        let downloadUrl = 'licenseUrl';
+        if (!license) {
+            itemsObj = this.feedsMiscDatas;
+            apiUrl = this.feedsApiService.FEED_MISC_DATA;
+            itemsList = this.miscDatas;
+            downloadUrl = 'miscDataUrl';
+        }
 
-      for (let i = 0; itemsList && i < itemsList.length; i++) {
-          if (itemsList[i].feedIds) {
-              for (let j = 0; itemsList[i].feedIds && j < itemsList[i].feedIds.length; j++) {
-                  if (feed.id === itemsList[i].feedIds[j]) {
-                      itemsObj[feed.id] = itemsList[i];
-                      itemsObj[feed.id][downloadUrl] = apiUrl + '/' + itemsList[i].id;
-                  }
-              }
-          }
-      }
+        for (let i = 0; itemsList && i < itemsList.length; i++) {
+            if (itemsList[i].feedIds) {
+                for (let j = 0; itemsList[i].feedIds && j < itemsList[i].feedIds.length; j++) {
+                    if (feed.id === itemsList[i].feedIds[j]) {
+                        itemsObj[feed.id] = itemsList[i];
+                        itemsObj[feed.id][downloadUrl] = apiUrl + '/' + itemsList[i].id;
+                    }
+                }
+            }
+        }
     }
 
     protected setFeedsItemsObj(value: any, license: boolean) {
-      let itemsList = license ? this.licenses : this.miscDatas;
-      if (itemsList && value) {
-          for (let k = 0; k < value.length; k++) {
-            this.setFeedItemsObj(value[k], license);
-          }
-      }
+        let itemsList = license ? this.licenses : this.miscDatas;
+        if (itemsList && value) {
+            for (let k = 0; k < value.length; k++) {
+                this.setFeedItemsObj(value[k], license);
+            }
+        }
     }
 
     // Return true or false if the user is subscribe
     // or not to the feed
-    protected isSubscribe(userInfos, feed_id):number {
+    protected isSubscribe(userInfos, feed_id): number {
         if (!userInfos.app_metadata || userInfos.app_metadata.datatools[0].subscriptions == null) {
             return -1;
         } else {
@@ -153,7 +146,7 @@ export class DatatoolComponent {
     }
 
     protected checkSubscribed(feed_id) {
-        var index =  -1;
+        var index = -1;
         if (this.sessionService.userProfile &&
             this.sessionService.userProfile.app_metadata &&
             this.sessionService.userProfile.app_metadata.datatools &&
@@ -161,8 +154,8 @@ export class DatatoolComponent {
             this.sessionService.userProfile.app_metadata.datatools[0].subscriptions &&
             this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0] &&
             this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target &&
-            this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.length > 0){
-              index = this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id);
+            this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.length > 0) {
+            index = this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id);
         }
         if (index == -1) {
             return false
@@ -196,52 +189,56 @@ export class DatatoolComponent {
      *EDITION
      *
      */
-     protected resetForm(feedsValues:any) {
-         //if (feedsValues) {
-             if (this.currentFeed) {
-                 this.currentFeed = null;
-                 this.getLicenses(feedsValues);
-             }
+    protected resetForm(feedsValues: any) {
+        //if (feedsValues) {
+        if (this.currentFeed) {
+            this.currentFeed = null;
+            this.getLicenses(feedsValues);
+        }
 
-             this.newLicenseOrMiscData = {
-                 type: 'new',
-                 name: '',
-                 item: null,
-                 error: null,
-                 itemFile: {}
-             }
-         //};
-     }
+        this.newLicenseOrMiscData = {
+            type: 'new',
+            name: '',
+            item: null,
+            error: null,
+            itemFile: {}
+        }
+        //};
+    }
 
-     protected createLicenseFail(feed, error) {
-         this.newLicenseOrMiscData.error = error.message;
-     }
+    protected createLicenseFail(feed, error) {
+        this.newLicenseOrMiscData.error = error.message;
+    }
 
-     protected displayLicense(feed: IFeed) {
-         this.currentFeed = feed;
-         for (let i = 0; this.licenses && i < this.licenses.length; i++) {
-             if (this.feedsLicenses[this.currentFeed.id] && this.licenses[i].id === this.feedsLicenses[this.currentFeed.id].id) {
-                 this.newLicenseOrMiscData.item = this.licenses[i];
-             }
-             if (!this.newLicenseOrMiscData.item && this.licenses[i].id === this.defaultLicenseId) {
-                 this.newLicenseOrMiscData.item = this.licenses[i];
-             }
-         }
-         if (!this.newLicenseOrMiscData.item){
-             this.newLicenseOrMiscData.item = (this.licenses && this.licenses.length > 0) ? this.licenses[0] : null;
-         }
-     }
+    protected displayLicense(feed: IFeed) {
+        this.currentFeed = feed;
+        for (let i = 0; this.licenses && i < this.licenses.length; i++) {
+            if (this.feedsLicenses[this.currentFeed.id] && this.licenses[i].id === this.feedsLicenses[this.currentFeed.id].id) {
+                this.newLicenseOrMiscData.item = this.licenses[i];
+            }
+            if (!this.newLicenseOrMiscData.item && this.licenses[i].id === this.defaultLicenseId) {
+                this.newLicenseOrMiscData.item = this.licenses[i];
+            }
+        }
+        if (!this.newLicenseOrMiscData.item) {
+            this.newLicenseOrMiscData.item = (this.licenses && this.licenses.length > 0) ? this.licenses[0] : null;
+        }
+    }
 
-     protected displayMiscData(feed: IFeed) {
-         this.currentFeed = feed;
-         this.newLicenseOrMiscData.item = (this.miscDatas && this.miscDatas.length > 0) ? this.miscDatas[0] : null;
-         if (this.feedsLicenses[this.currentFeed.id] && this.miscDatas) {
-             for (let i = 0; i < this.miscDatas.length; i++) {
-                 if (this.miscDatas[i].id === this.feedsLicenses[this.currentFeed.id].id) {
-                     this.newLicenseOrMiscData.item = this.miscDatas[i];
-                 }
-             }
-         }
+    protected displayMiscData(feed: IFeed) {
+        this.currentFeed = feed;
+        this.newLicenseOrMiscData.item = (this.miscDatas && this.miscDatas.length > 0) ? this.miscDatas[0] : null;
+        if (this.feedsLicenses[this.currentFeed.id] && this.miscDatas) {
+            for (let i = 0; i < this.miscDatas.length; i++) {
+                if (this.miscDatas[i].id === this.feedsLicenses[this.currentFeed.id].id) {
+                    this.newLicenseOrMiscData.item = this.miscDatas[i];
+                }
+            }
+        }
+    }
+
+    protected displayDeleteFeed(feed: IFeed) {
+        this.currentFeed = feed;
     }
 
     //lincense changed between existing licenses in the list (modal popup)
@@ -256,7 +253,7 @@ export class DatatoolComponent {
         this.newLicenseOrMiscData.type = type;
     }
 
-    protected setLicense():boolean {
+    protected setLicense(): boolean {
         if (this.newLicenseOrMiscData.item.id) {
             this.store.dispatch(this.datasetsAction.feedSetLicense(toFeedReference(this.currentFeed), this.newLicenseOrMiscData.item.id));
             return true;
@@ -265,7 +262,7 @@ export class DatatoolComponent {
         }
     }
 
-    protected unsetLicense():boolean {
+    protected unsetLicense(): boolean {
         if (this.feedsLicenses[this.currentFeed.id]) {
             this.store.dispatch(this.datasetsAction.feedUnsetLicense(toFeedReference(this.currentFeed), this.feedsLicenses[this.currentFeed.id].id));
             return true;
@@ -278,7 +275,7 @@ export class DatatoolComponent {
         this.store.dispatch(this.datasetsAction.feedCreateLicense(toFeedReference(this.currentFeed), this.newLicenseOrMiscData.name, this.newLicenseOrMiscData.itemFile.file));
     }
 
-    protected setMiscData():boolean {
+    protected setMiscData(): boolean {
         if (this.newLicenseOrMiscData.item.id) {
             this.store.dispatch(this.datasetsAction.feedSetMiscData(toFeedReference(this.currentFeed), this.newLicenseOrMiscData.item.id));
             return true;
@@ -351,4 +348,43 @@ export class DatatoolComponent {
         }
     }
 
+    protected getDownloadUrl(feed: any) {
+        this.feedsApiService.getDownloadUrl(feed, feed.selectedVersion ? feed.selectedVersion.id : null).subscribe(
+            url => {
+                console.log('getDownloadUrl: ', url, feed);
+                if (url) {
+                    window.open(url);
+                }
+            }
+        );
+    }
+
+    protected downloadFeed(feed: any) {
+        this.getDownloadUrl(feed);
+    }
+
+    protected downloadValidation(feed){
+      let url = this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.latestVersionId + '/validation';
+      window.open(url);
+    }
+
+    protected onVersionChanged(feed, version){
+      console.log(feed, version);
+      feed.selectedVersion = version;
+      // this.feedsApiService.getFeedVersions(version.id, feed.isPublic).then(data => {
+      //   console.log(data);
+      // })
+    }
+
+    protected fetchFeed(feed) {
+        this.store.dispatch(this.datasetsAction.feedFetch(toFeedReference(feed)));
+    }
+
+    protected setFile(feed, event: any) {
+        // observer will be notified to close inline form on success
+        this.confirmEditById.set('setFile' + feed.id, event.confirm$)
+        // process
+        this.store.dispatch(this.datasetsAction.feedSetFile(toFeedReference(feed), event.value));
+        return false;
+    }
 }

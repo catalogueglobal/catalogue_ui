@@ -2,9 +2,9 @@
     "layout": {
         "menu": {
             "use": "use",
-            "upload": "importer",
-            "download": "télécharger",
-            "manage": "gérer",
+            "upload": "créer un jeu de données",
+            "download": "Explorer",
+            "manage": "Mes jeux de Données",
             "subscribe": "souscrire",
             "login": "connexion",
             "logout": "déconnexion"
@@ -63,8 +63,15 @@
                 "label": "Etes-vous sûr que vous voulez supprimer?"
             }
         },
+        "feed": {
+            "create": {
+                "title": "Créer une version",
+                "subtitle": "Attention une nouvelle version sera créée. L'actuelle sera figée !"
+            }
+        },
         "cancel": "annuler",
-        "validate": "valider"
+        "validate": "valider",
+        "detail": "détail"
     },
     "datasets": {
         "title": "Téléchargement des données",
@@ -72,25 +79,28 @@
             "title": "Choisir les jeux de données sur la carte ou chercher par zone géographique"
         },
         "table": {
-            "title": "catalogue des jeux de données",
+            "title": "Jeux de données dans cette zone",
             "intro": "Depuis la liste des données affichées, cliquez pour sélectionner celles que vous souhaitez télécharger.",
-            "search": "Chercher ici",
+            "search": "Zone de recherche",
             "btn": {
-                "download": "télécharger"
+                "download": "Télécharger"
             },
             "noresult": {
                 "info": "Aucue données disponible. Dézoomer ou",
                 "reset": "réinitialiser votre recherche"
             },
             "tooltips": {
-                "download": "Cliquez ici pour télécharger le contenu"
+                "download": "Cliquez ici pour télécharger le contenu",
+                "delete": "supprimer l'élément",
+                "edit": "éditer l'élément"
             },
             "miscData": {
                 "title": "changer les méta données",
                 "noMiscData": "aucune méta donnée",
                 "select": "Choisir une méta donnée",
                 "new": "Télécharger votre propre fichier"
-            }
+            },
+            "versions": "Versions"
         }
     },
     "mydatasets": {
@@ -99,7 +109,7 @@
             "title": "Choisir les jeux de données sur la carte ou chercher par zone géographique"
         },
         "table": {
-            "title": "catalogue des jeux de données",
+            "title": "Catalogue des jeux de données",
             "intro": "Depuis la liste des données affichées, cliquez pour sélectionner celles que vous souhaitez télécharger.",
             "search": "Chercher ici",
             "btn": {
@@ -115,15 +125,16 @@
     "datasets-table": {
         "checkall": "Vérifier tout",
         "validation": "Validation",
-        "btn":  {
-            "edit": "Edit"    
+        "btn": {
+            "edit": "Editer l’archive GTFS"
         },
         "column": {
             "feedName": "Nom du lot",
             "area": "Zone",
             "license": "Licence",
             "miscData": "Méta données",
-            "subscribe": "S'abonner / Se désabonner"
+            "subscribe": "S'abonner / Se désabonner",
+            "validity": "Fin de validité"
         }
     },
     "mydatasets-table": {
@@ -132,12 +143,13 @@
             "isPublic": {
                 "label": "Public",
                 "public": "public",
-                "private": "privé"
+                "private": "privé",
+                "title": "Rendre public"
             },
             "type": {
                 "label": "Type",
                 "fetch": "Import auto.",
-                "upload": "Import Manuel",
+                "upload": "creer une version",
                 "inhouse": "Production locale"
             },
             "feedName": "Nom du lot",
@@ -152,15 +164,24 @@
         "period_to": " à ",
         "routes": "Nombre de lignes :",
         "trips": "Nombre de courses :",
+        "stops": "Nombre de stops :",
         "note": {
             "title": "Commentaires :",
             "author": "Auteur :",
+            "owner": "Producteur",
             "date": "Date :",
-            "submit": "Soumettre"
+            "submit": "Soumettre",
+            "addNote": "Commenter"
         },
-        "filter": "filtrer",
-        "select_roads": "Choisir un reseau",
-        "check_all": "Tout cocher"
+        "filter": "filtrer sur le nom des lignes",
+        "select_roads": "Choisir une ligne",
+        "check_all": "Tout cocher",
+        "download": {
+            "gtfs": "Fichier GTFS",
+            "miscData": "Fichier méta data",
+            "license": "Fichier license",
+            "validation": "Fichier de validation"
+        }
     },
     "state": {
         "USER_SUBSCRIBE": "Subscribing...",

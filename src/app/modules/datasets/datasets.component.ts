@@ -57,6 +57,7 @@ export class DatasetsComponent implements AfterViewInit {
         this.initDatasets(false); // show public feeds
         // refresh feeds on upload success
         actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.store.dispatch(datasetsAction.feedsGet(this.getFeedsParams())));
+        this.createStore();
     }
 
     protected createStore() {
@@ -82,7 +83,6 @@ export class DatasetsComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.createStore();
         this.fetchFeeds();
     }
 
@@ -92,29 +92,6 @@ export class DatasetsComponent implements AfterViewInit {
             bounds: this.currentBounds,
             secure: this.isSecure
         }
-    }
-
-    protected getCheckedFeeds(): any[] {
-        return this.tableComponent.getCheckedFeeds();
-    }
-
-    protected downloadFeeds(event: Event) {
-        let checkedFeeds = this.getCheckedFeeds();
-        checkedFeeds.forEach(
-            feed => {
-                this.feedsApi.getDownloadUrl(feed, feed.selectedVersion ? feed.selectedVersion.id : null).subscribe(
-                    url => {
-                        console.log('getDownloadUrl: ', url, feed);
-                        if (url) {
-                            console.log('getDownloadUrl: ', url);
-                            //window.location.assign(url);
-                            window.open(url);
-                        }
-                    }
-                )
-            }
-        );
-        event.preventDefault();
     }
 
     protected onAutocompleteSelected(selected: AutocompleteItem) {

@@ -1,0 +1,18 @@
+<app-modal>
+    <div class="app-modal-header">
+        <label class="title">{{'popup.delete.confirm.title'|translate}}</label>
+    </div>
+
+    <div class="app-modal-body">
+
+        <div>
+            <label>{{'popup.delete.confirm.label'|translate}}</label>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <button type="button" class="btn btn-cancel" (click)="hide()">{{'popup.cancel'|translate}}</button>
+        <button type="button" class="btn btn-validate" (click)="validate()">{{'popup.validate'|translate}}
+        </button>
+        <i class="fa fa-spinner fa-spin" aria-hidden="true" *ngIf="deletedFeed.clicked"></i>
+    </div>
+</app-modal>

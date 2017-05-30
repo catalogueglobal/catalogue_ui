@@ -2,102 +2,102 @@
     <table id="datatable" class="display responsive nowrap" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th class="chkMulti">
-                    <i class="fa fa-check-square-o checkAll" aria-hidden="true" (click)="checkAll()" title="{{'datasets-table.checkall'|translate}}"></i>
-                </th>
                 <th>
                     <app-sort-link sortValue="name" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="asc">
                         {{'datasets-table.column.feedName'|translate}}
                     </app-sort-link>
                 </th>
-                <!--
-	<th>
-          <app-sort-link sortValue="regionStateCountry" [(value)]="currentSort" (valueChange)="setSort($event)"
-			 defaultOrder="asc">
-            {{'datasets-table.column.area'|translate}}
-          </app-sort-link>
-	</th>
-	-->
+                <th>
+                    {{'datasets-table.column.validity'|translate}}
+                </th>
                 <th>
                     {{'datasets-table.column.license'|translate}}
                 </th>
                 <th>
                     {{'datasets-table.column.miscData'|translate}}
                 </th>
-                <!--
-	<th>
-	  License Details<a href="#" class="question-circle"></a>
-	</th>
-	-->
-                <th *ngIf="sessionService.loggedIn">
+                <th>
                     {{'datasets-table.column.subscribe'|translate}}
                 </th>
-
-		<th>
-		  {{'datasets-table.validation'|translate}}
-		</th>
+                <th>
+                    {{'datasets.table.versions'|translate}}
+                </th>
+                <th>
+                    {{'datasets-table.validation'|translate}}
+                </th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let feed of feeds | paginate: { itemsPerPage: config.PAGINATION_ITEMS_PER_PAGE, maxSize: config.PAGINATION_LINKS_MAX, currentPage: page }">
-                <td class="chkMulti">
-                    <div><input type="checkbox" [(ngModel)]="checkById[feed.id]"></div>
-                </td>
                 <td>
-                    <a [routerLink]="['/feeds/', feed.id]">
-                        {{feed.name}}</a>
-                    <div class="form-group" *ngIf="feed.feedVersionCount > 0">
-                        <select class="form-control" [ngModel]="feed.selectedVersion">
-                  				<option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
-                  			</select>
+                    <div class="">
+                        <a [routerLink]="['/feeds/', feed.id]">
+                            {{feed.name}}</a>
                     </div>
                 </td>
-                <!--
-	<td class="area">
-          <div>{{regionStateCountry(feed)}}</div>
-	</td>
-	-->
+
                 <td>
-                    <a *ngIf="feedsLicenses[feed.id]" download="{{feedsLicenses[feed.id].name}}" href="{{feedsLicenses[feed.id].licenseUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
-                        <span>
-                            {{feedsLicenses[feed.id].name}}
-                        </span>
-                    </a>
+                    <div class="date">
+                        <a [routerLink]="['/feeds/', feed.id]" *ngIf="feed.selectedVersion && feed.selectedVersion.latestValidation">
+                            {{feed.selectedVersion.latestValidation.endDate | date:'y-MM-dd'}}
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div class="other">
+                        <a *ngIf="feedsLicenses[feed.id]" download="{{feedsLicenses[feed.id].name}}" href="{{feedsLicenses[feed.id].licenseUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
+                            <span>
+                                {{feedsLicenses[feed.id].name}}
+                            </span>
+                        </a>
+                    </div>
                 </td>
 
                 <td>
-                    <a *ngIf="feedsMiscDatas[feed.id]" download="{{feedsMiscDatas[feed.id].name}}" href="{{feedsMiscDatas[feed.id].miscDataUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
-                        <span>
-                            {{feedsMiscDatas[feed.id].name}}
-                        </span>
-                    </a>
+                    <div class="other">
+                        <a *ngIf="feedsMiscDatas[feed.id]" download="{{feedsMiscDatas[feed.id].name}}" href="{{feedsMiscDatas[feed.id].miscDataUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
+                            <span>
+                                {{feedsMiscDatas[feed.id].name}}
+                            </span>
+                        </a>
+                    </div>
                 </td>
-                <!--
-	<td>
-          <div class="license-attr">
-	    <span class="unknown-attr requires disabled">
-	      <span class="tool-tip-info">Unknown whether agency requires attribution.</span>
-	    </span>
-	    <span class="unknown-attr allow-derivation disabled">
-	      <span class="tool-tip-info">You may create a derived data product from this feed.</span>
-	    </span>
-	    <span class="unknown-attr allow-redistribution disabled">
-	      <span class="tool-tip-info">You may redistribute this feed.</span>
-	    </span>
-          </div>
-	</td>
-	-->
-                <td class="" *ngIf="sessionService.loggedIn">
-                    <input type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)">
+                <td class="">
+                    <div class="other">
+                        <input *ngIf="sessionService.loggedIn" type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)" />
+                        <input *ngIf="!sessionService.loggedIn" type="checkbox" (click)="sessionService.login()" />
+                    </div>
                 </td>
-
                 <td>
-		  <a download="{{'datasets-table.validation'|translate}}" href="{{this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.latestVersionId + '/validation'}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
-                        <span>
-			  {{'datasets-table.validation'|translate}}
-                        </span>
-                    </a>
-
+                    <div class="date" *ngIf="feed.feedVersionCount == 1">
+                        <a [routerLink]="['/feeds/', feed.id]">
+                            {{feed.lastUpdated|date:'y-MM-dd'}}
+                        </a>
+                    </div>
+                    <div class="dropdown-select version-component" *ngIf="feed.feedVersionCount > 1">
+                        <select class="" [ngModel]="feed.selectedVersion" (ngModelChange)="onVersionChanged(feed, $event)">
+                            <option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
+                        </select>
+                        <span class="caret"></span>
+                    </div>
+                </td>
+                <td>
+                    <div class="other">
+                        <a (click)="downloadValidation(feed)">
+                            <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="action-success">
+                                <i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div class="actions">
+                        <a (click)="downloadFeed(feed)">
+                            <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="action-success btn-download">
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </div>
                 </td>
 
             </tr>

@@ -17,7 +17,7 @@ export class InlineEditFileComponent extends InlineEditGenericComponent<File> {
         private utils: UtilsService)
     {
         super(renderer, config)
-        this.initialValue = null
+        this.initialValue = null;
     }
 
     clicked(event) {

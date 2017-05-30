@@ -126,7 +126,6 @@ export class DatasetsMapComponent implements AfterViewInit {
                 iconCreateFunction: this.mapUtils.computeRedIcon
             }
         )
-        //leaflet.IconOptions.imagePath = 'vendor/leaflet/dist/images/';
         let tiles = leaflet.tileLayer(this.config.MAP_TILE_LAYER_URL, this.config.MAP_TILE_LAYER_OPTIONS);
         let options = {
             center: <any>this.initialPosition,
@@ -140,7 +139,6 @@ export class DatasetsMapComponent implements AfterViewInit {
         this.markersGroup = leaflet.featureGroup();
         map.addLayer(this.markerClusterGroup);
         map.addLayer(this.markersGroup);
-        this.mapUtils.clusterAreaOver(this.markerClusterGroup, map);
         let that = this;
         map.on(
             'moveend', function(e) {
@@ -167,14 +165,14 @@ export class DatasetsMapComponent implements AfterViewInit {
         if (this._feeds && this.map) {
             this.clearMap();
             this.setFeedsLicenses(this._feeds);
-            if (this._feeds.length > 0){
-              this._feeds.map(
-                  feed => {
-                      if (feed.latestValidation && feed.latestValidation.bounds) {
-                          this.createMarker(feed);
-                      }
-                  }
-              );
+            if (this._feeds.length > 0) {
+                this._feeds.map(
+                    feed => {
+                        if (feed.latestValidation && feed.latestValidation.bounds) {
+                            this.createMarker(feed);
+                        }
+                    }
+                );
             }
 
         }
@@ -213,14 +211,17 @@ export class DatasetsMapComponent implements AfterViewInit {
         });
         marker.data = {
             bounds: bounds,
-            id: feed.projectId
+            id: feed.projectId,
+            feed: feed
         }
         if (isDraggable === true) {
             marker.on("dragend", this.updateProject);
         }
-        let tooltipData = this.computeMarkerPopup(feed);
-        marker.bindTooltip(tooltipData, {
-            direction: 'top'
+
+        let tooltipData = '';
+        let that = this;
+        marker.on('click', event =>{
+          event.target.setPopupContent(that.computeMarkerPopup(event.target.data.feed));
         });
         marker.bindPopup(tooltipData, {
             direction: 'top'
@@ -247,17 +248,25 @@ export class DatasetsMapComponent implements AfterViewInit {
         }
     }
 
+    private getPopupName(feed: any) {
+        let res = '';
+        if (this.router.url === "/my-datasets") {
+            if (feed.isPublic) {
+                res += '<a href="/feeds/' + feed.id + '">' + feed.name + "</a></b> (" + this.translate.instant('mydatasets-table.column.isPublic.label') + ')';
+            } else {
+                res += feed.name + '</b> (' + this.translate.instant('mydatasets-table.column.isPublic.private') + ')';
+            }
+        } else {
+            res += '<a href="/feeds/' + feed.id + '">' + feed.name + "</a></b>";
+        }
+        res += '<a href="/feeds/' + feed.id + '" class="pull-right">' + this.translate.instant('popup.detail') + '</a>';
+        return res;
+    }
+
     private computeMarkerPopup(feed: any): string {
         let license = this.feedsLicenses[feed.id];
         let popupHtml = '<b>';
-        if (feed.isPublic) {
-            popupHtml += '<a href="/feeds/' + feed.id + '">' + feed.name + "</a></b> (" + this.translate.instant('mydatasets-table.column.isPublic.label') + ')';
-        } else {
-            popupHtml += feed.name + '</b> (' + this.translate.instant('mydatasets-table.column.isPublic.private') + ')';
-        }
-        if (feed.url) {
-            popupHtml += "<br><button onclick=\"document.location.href='" + feed.url + "'\">Download feed</button>";
-        }
+        popupHtml += this.getPopupName(feed);
         if (license && license.id) {
             popupHtml += '<br/><b>License</b>: ' + license.name;
         }
@@ -265,12 +274,11 @@ export class DatasetsMapComponent implements AfterViewInit {
         popupHtml += '<b>' + this.translate.instant('feed.period') + '</b> ' + this.datePipe.transform(feed.latestValidation.startDate, 'y-MM-dd');
         popupHtml += '<b>' + this.translate.instant('feed.period_to') + '</b> ' + this.datePipe.transform(feed.latestValidation.endDate, 'y-MM-dd');
         popupHtml += '<br/><b>' + this.translate.instant('feed.routes') + '</b> ' + feed.latestValidation.routeCount;
-        popupHtml += '<br/><b>' + this.translate.instant('feed.trips') + '</b> ' + feed.latestValidation.tripCount;
+        popupHtml += '<br/><b>' + this.translate.instant('feed.stops') + '</b> ' + feed.latestValidation.stopTimesCount;
         if (feed.lastUpdated) {
             let date = this.datePipe.transform(feed.lastUpdated, 'y-MM-dd');
             popupHtml += '<br/><b>' + this.translate.instant('mydatasets-table.column.updated') + '</b> : ' + date;
         }
-
         return popupHtml;
     }
 

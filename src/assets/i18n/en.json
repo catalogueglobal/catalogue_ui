@@ -2,9 +2,9 @@
     "layout": {
         "menu": {
             "use": "use",
-            "upload": "upload",
-            "download": "download",
-            "manage": "manage",
+            "upload": "create a new feed",
+            "download": "Explore",
+            "manage": "My Data feeds",
             "subscribe": "subscribe",
             "login": "login",
             "logout": "logout"
@@ -62,9 +62,16 @@
                 "label": "Are you sure you want to delete ?"
             }
         },
+        "feed": {
+            "create": {
+                "title": "Create new version",
+                "subtitle": "Warning, a new version will be created. Current one will be frozen !"
+            }
+        },
         "cancel": "cancel",
         "validate": "validate",
-        "noLicense": "No license"
+        "noLicense": "No license",
+        "detail": "detail"
     },
     "datasets": {
         "title": "Download datasets",
@@ -74,23 +81,26 @@
         "table": {
             "title": "catalogue datasets",
             "intro": "From the list of displayed datasets, click to select those you want to download.",
-            "search": "Search here",
+            "search": "Search area",
             "btn": {
-                "download": "download"
+                "download": "Download"
             },
             "noresult": {
                 "info": "No feed found for your search. Try zooming out or",
                 "reset": "reset your search"
             },
             "tooltips": {
-                "download": "Click here to download the item"
+                "download": "Click here to download the item",
+                "delete": "delete the item",
+                "edit": "edit the item"
             },
             "miscData": {
                 "title": "change misc data",
                 "noMiscData": "none",
                 "select": "Choose a misc",
                 "new": "upload you file"
-            }
+            },
+            "versions": "Versions"
         }
     },
     "mydatasets": {
@@ -99,7 +109,7 @@
             "title": "Select datasets on the map or search by location"
         },
         "table": {
-            "title": "catalogue datasets",
+            "title": "Catalogue datasets",
             "intro": "From the list of displayed datasets, click to select those you want to download.",
             "search": "Search here",
             "btn": {
@@ -115,15 +125,16 @@
     "datasets-table": {
         "checkall": "Check all",
         "validation": "Validation",
-        "btn":  {
-            "edit": "Edit"    
+        "btn": {
+            "edit": "Edit the GTFS Archive"
         },
         "column": {
             "feedName": "Feed name",
             "area": "Area",
             "license": "License",
             "miscData": "Misc",
-            "subscribe": "Subscibe / Unsubscribe"
+            "subscribe": "Subscibe / Unsubscribe",
+            "validity": "Valid until"
         }
     },
     "mydatasets-table": {
@@ -132,12 +143,13 @@
             "isPublic": {
                 "label": "Public",
                 "public": "public",
-                "private": "private"
+                "private": "private",
+                "title": "Make it public"
             },
             "type": {
                 "label": "Type",
                 "fetch": "Fetch auto.",
-                "upload": "Manual upload",
+                "upload": "Create new version",
                 "inhouse": "In house prod."
             },
             "feedName": "Feed name",
@@ -152,15 +164,24 @@
         "period_to": " to ",
         "routes": "Number of routes:",
         "trips": "Number of trips:",
+        "stops": "Number of stops:",
         "note": {
             "title": "Notes:",
             "author": "Author:",
+            "owner": "Productor",
             "date": "Date:",
-            "submit": "Submit"
+            "submit": "Submit",
+            "addNote": "Add comment"
         },
-        "filter": "filter",
-        "select_roads": "Choose path",
-        "check_all": "Check all"
+        "filter": "filter on line's name",
+        "select_roads": "Choose line",
+        "check_all": "Check all",
+        "download": {
+            "gtfs": "GTFS file",
+            "miscData": "misc file",
+            "license": "license",
+            "validation": "validation file"
+        }
     },
     "state": {
         "USER_SUBSCRIBE": "Subscribing...",

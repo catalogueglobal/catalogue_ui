@@ -21,11 +21,8 @@ import { DatatoolComponent } from "app/commons/components/datatool.component";
 })
 export class DatasetsTableComponent extends DatatoolComponent{
     @Input() protected _feeds: IFeedRow[];
-    @Input() protected chkAll: boolean = false;
     @Output() protected sortChange = new EventEmitter();
-    
-    private FEED_RETRIEVAL_METHOD = FEED_RETRIEVAL_METHOD; // used by the template
-    private checkById: Map<string, boolean> = new Map<string, boolean>();
+
     private page: number;
 
     protected currentSort: SortOrder = {
@@ -64,32 +61,12 @@ export class DatasetsTableComponent extends DatatoolComponent{
         return this._feeds;
     }
 
-    protected getFeedsVersion(values: any) {
-        for (var i = 0; values && i < values.length; i++) {
-            this.getFeedVersion(values[i]);
-        }
-    }
-
     protected setSort(sort) {
         this.sortChange.emit(sort);
     }
 
-    protected checkAll() {
-        let newValue = !this.chkAll;
-        this.feeds.forEach(feed => { this.checkById[feed.id] = newValue; });
-        this.chkAll = newValue;
-    }
-
     protected regionStateCountry(feed) {
         return this.utils.regionStateCountry(feed);
-    }
-
-    public getCheckedFeeds(): IFeedRow[] {
-        if (!this.feeds) {
-            // component not initialized yet
-            return [];
-        }
-        return this.feeds.filter(feed => this.checkById[feed.id]);
     }
 
     protected subscribeActions(actions$) {

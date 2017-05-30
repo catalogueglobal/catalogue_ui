@@ -15,7 +15,7 @@ import { IFeedRow } from "app/modules/datasets/datasets.component";
 import { SharedService } from "app/commons/services/shared.service";
 import { LicenseModal } from 'app/commons/directives/modal/license-modal.component';
 import { MiscDataModal } from 'app/commons/directives/modal/miscdata-modal.component';
-
+import { DeleteFeedModal } from 'app/commons/directives/modal/delete-feed-modal.component';
 
 const CONFIRM_EDIT_IDX_SETFILE = "setFile"
 
@@ -32,6 +32,9 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
 
     @ViewChild(MiscDataModal)
     public readonly miscDataModal: MiscDataModal;
+
+    @ViewChild(DeleteFeedModal)
+    public readonly deleteFeedModal: DeleteFeedModal;
 
     constructor(
         protected config: Configuration,
@@ -121,9 +124,6 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
                 this.resetForm(this._feeds);
             }
         );
-
-        actions$.ofType(DatasetsActionType.CONFIRM_DELETE_FEED_SUCCESS).subscribe(
-          action => this.deleteFeeds());
     }
 
     protected displayLicense(feed: IFeed) {
@@ -134,6 +134,11 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
     protected displayMiscData(feed: IFeed) {
         super.displayMiscData(feed);
         this.miscDataModal.show();
+    }
+
+    protected displayDeleteFeed(feed: IFeed) {
+        super.displayDeleteFeed(feed);
+        this.deleteFeedModal.show();
     }
 
     protected setLicense():boolean {
@@ -168,46 +173,19 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         return res;
     }
 
-    protected deleteFeeds() {
-        let feedRefsToDelete: IFeedReference[] = this.getCheckedFeeds().map((feed: IFeed) => toFeedReference(feed));
-        if (feedRefsToDelete.length > 0) {
-            var licenses = {};
-            var miscs = {};
-            for (var i = 0; i < feedRefsToDelete.length; i++){
-              if (this.feedsLicenses[feedRefsToDelete[i].feedsourceId]){
-                if (!licenses[this.feedsLicenses[feedRefsToDelete[i].feedsourceId].id]){
-                  licenses[this.feedsLicenses[feedRefsToDelete[i].feedsourceId].id] = [];
-                }
-                licenses[this.feedsLicenses[feedRefsToDelete[i].feedsourceId].id].push(feedRefsToDelete[i].feedsourceId);
-              }
-              if (this.feedsMiscDatas[feedRefsToDelete[i].feedsourceId]){
-                if (!miscs[this.feedsMiscDatas[feedRefsToDelete[i].feedsourceId].id]){
-                  miscs[this.feedsMiscDatas[feedRefsToDelete[i].feedsourceId].id] = [];
-                }
-                miscs[this.feedsMiscDatas[feedRefsToDelete[i].feedsourceId].id].push(feedRefsToDelete[i].feedsourceId);
-              }
-            }
-            this.store.dispatch(this.datasetsAction.feedDeleteLicenses(licenses));
-            this.store.dispatch(this.datasetsAction.feedDeleteMiscs(miscs));
-            this.store.dispatch(this.datasetsAction.feedDelete(feedRefsToDelete));
-
-        }
-        return false;
-    }
-
     setSort(sort) {
         this.sortChange.emit(sort);
     }
 
-    setFile(feed, event: InlineEditEvent<File>) {
-        // observer will be notified to close inline form on success
-        this.confirmEditById.set(CONFIRM_EDIT_IDX_SETFILE + feed.id, event.confirm$)
-        // process
-        this.store.dispatch(this.datasetsAction.feedSetFile(toFeedReference(feed), event.value));
-        return false;
-    }
-
-    fetchFeed(feed) {
-        this.store.dispatch(this.datasetsAction.feedFetch(toFeedReference(feed)));
-    }
+    // setFile(feed, event: InlineEditEvent<File>) {
+    //     // observer will be notified to close inline form on success
+    //     this.confirmEditById.set(CONFIRM_EDIT_IDX_SETFILE + feed.id, event.confirm$)
+    //     // process
+    //     this.store.dispatch(this.datasetsAction.feedSetFile(toFeedReference(feed), event.value));
+    //     return false;
+    // }
+    //
+    // fetchFeed(feed) {
+    //     this.store.dispatch(this.datasetsAction.feedFetch(toFeedReference(feed)));
+    // }
 }
