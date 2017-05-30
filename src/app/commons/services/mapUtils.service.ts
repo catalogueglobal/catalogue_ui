@@ -97,10 +97,10 @@ export class MapUtilsService {
         });
     }
 
-    public createIconMarker(anchorX, anchorY) {
+    public createIconMarker(anchorX, anchorY, iconWidth, iconHeight) {
         return L.Icon.extend({
             options: {
-                iconSize: new L.Point(30, 30),
+                iconSize: new L.Point(iconWidth || 30, iconHeight || 30),
                 iconAnchor: new L.Point(anchorX || 15,  anchorY || 0),
                 className: 'leaflet-div-number-icon'
             },
@@ -110,7 +110,7 @@ export class MapUtilsService {
                 this.options.className += ' ' + this.options.surClass;
 
                 let icondiv = document.createElement('i');
-                icondiv.setAttribute("class", 'img-icon fa fa-lg ' + this.options['faIcon'] || '');
+                icondiv.setAttribute("class", 'img-icon fa ' + this.options['faIcon'] || '');
                 div.appendChild(icondiv);
                 this._setIconStyles(div, 'icon');
                 return div;

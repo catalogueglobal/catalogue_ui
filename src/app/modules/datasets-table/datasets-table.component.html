@@ -70,9 +70,7 @@
                 </td>
                 <td>
                     <div class="date" *ngIf="feed.feedVersionCount == 1">
-                        <a [routerLink]="['/feeds/', feed.id]">
-                            {{feed.lastUpdated|date:'y-MM-dd'}}
-                        </a>
+                        {{feed.lastUpdated|date:'y-MM-dd'}}
                     </div>
                     <div class="dropdown-select version-component" *ngIf="feed.feedVersionCount > 1">
                         <select class="" [ngModel]="feed.selectedVersion" (ngModelChange)="onVersionChanged(feed, $event)">

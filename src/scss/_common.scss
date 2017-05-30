@@ -25,7 +25,7 @@ table th {
 		text-align: center;
 
 		&.date {
-			width: 70px;
+			width: 80px;
 		}
 
 		&.dropdown-select {
@@ -123,7 +123,7 @@ table th {
 	}
 
 	> .img-icon {
-		margin-top: 8px;
+		margin-top: 4px;
 	}
 
 	&.stop-marker {
@@ -188,6 +188,7 @@ table th {
 
 .version-component {
 	select {
+		font-family: 'karbon-bold', Arial, Helvetica, sans-serif;
 		border: none;
 		padding-right: 10px;
 	}

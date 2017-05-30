@@ -221,7 +221,8 @@ export class FeedsComponent extends DatatoolComponent {
     addNotesToFeed() {
         // add note to feed if not empty
         if (this.note != null && this.sessionService.userProfile) {
-            let data = { body: this.note, date: Date.now(), userEmail: this.sessionService.userProfile.email }
+            let data = { body: this.note, date: Date.now(), userEmail: this.sessionService.userProfile.email,
+            user: this.sessionService.userProfile.user_id };
             this.store.dispatch(this.datasetsAction.feedAddNotes(this.feedId, data));
             this.notesFeed.unshift(data);
         }

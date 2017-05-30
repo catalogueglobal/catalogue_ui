@@ -53,7 +53,7 @@ export class FeedMapComponent implements AfterViewInit {
         this.stopsMarkers = new Array();
         this.stationsMarkers = new Array();
         this.NumberedDivIcon = mapUtils.createNumMarker();
-        this.ImageDivIcon = mapUtils.createIconMarker(null, null);
+        this.ImageDivIcon = mapUtils.createIconMarker(10, null, 20, 20);
         this.afterAuth();
     }
 
