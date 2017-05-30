@@ -28,7 +28,7 @@
 			<tr *ngFor="let feed of feeds | paginate: { itemsPerPage: config.PAGINATION_ITEMS_PER_PAGE, maxSize: config.PAGINATION_LINKS_MAX, currentPage: page }">
 				<td>
 					<div>
-						<a [routerLink]="['/feeds/', feed.id]">
+						<a [routerLink]="['/feeds/', feed.id, feed.isPublic]">
 							{{feed.name}}
 						</a>
 					</div>
@@ -36,7 +36,7 @@
 				</td>
 				<td>
 					<div class="date">
-						<a [routerLink]="['/feeds/', feed.id]" *ngIf="feed.selectedVersion && feed.selectedVersion.latestValidation">
+						<a [routerLink]="['/feeds/', feed.id, feed.isPublic]" *ngIf="feed.selectedVersion && feed.selectedVersion.latestValidation">
 							{{feed.selectedVersion.latestValidation.endDate | date:'y-MM-dd'}}
 						</a>
 					</div>
@@ -56,7 +56,7 @@
 				</td>
 				<td>
 					<div class="other">
-						<a [routerLink]="['/feeds/', feed.id]">
+						<a [routerLink]="['/feeds/', feed.id, feed.isPublic]">
 							<span tooltip="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsLicenses[feed.id]" class="action-success">
 								<i class="fa fa-plus" aria-hidden="true"></i>
 							</span>
@@ -70,7 +70,7 @@
 
 				<td>
 					<div class="other">
-						<a [routerLink]="['/feeds/', feed.id]">
+						<a [routerLink]="['/feeds/', feed.id, feed.isPublic]">
 							<span tooltip="{{'mydatasets-table.add' | translate}}" *ngIf="!feedsMiscDatas[feed.id]" class="action-success">
 								<i class="fa fa-plus" aria-hidden="true"></i>
 							</span>
@@ -97,7 +97,7 @@
 
 				<td>
 					<div class="actions">
-						<a [routerLink]="['/feeds/', feed.id]" class="">
+						<a [routerLink]="['/feeds/', feed.id, feed.isPublic]" class="">
 							<span tooltip="{{'datasets.table.tooltips.edit' | translate}}" class="btn-edit">
 								<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 							</span>

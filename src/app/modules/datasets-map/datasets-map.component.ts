@@ -252,14 +252,14 @@ export class DatasetsMapComponent implements AfterViewInit {
         let res = '';
         if (this.router.url === "/my-datasets") {
             if (feed.isPublic) {
-                res += '<a href="/feeds/' + feed.id + '">' + feed.name + "</a></b> (" + this.translate.instant('mydatasets-table.column.isPublic.label') + ')';
+                res += '<a href="/feeds/' + feed.id + '/' + feed.isPublic + '">' + feed.name + "</a></b> (" + this.translate.instant('mydatasets-table.column.isPublic.label') + ')';
             } else {
                 res += feed.name + '</b> (' + this.translate.instant('mydatasets-table.column.isPublic.private') + ')';
             }
         } else {
-            res += '<a href="/feeds/' + feed.id + '">' + feed.name + "</a></b>";
+            res += '<a href="/feeds/' + feed.id +  '/' + feed.isPublic + '">' + feed.name + "</a></b>";
         }
-        res += '<a href="/feeds/' + feed.id + '" class="pull-right">' + this.translate.instant('popup.detail') + '</a>';
+        res += '<a href="/feeds/' + feed.id +  '/' + feed.isPublic + '" class="pull-right">' + this.translate.instant('popup.detail') + '</a>';
         return res;
     }
 

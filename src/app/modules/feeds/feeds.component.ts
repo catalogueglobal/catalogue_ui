@@ -38,6 +38,7 @@ export class FeedsComponent extends DatatoolComponent {
     private _feeds: any;
     private clickAddNoteToFeed = false;
     private onSubmitConfirmFeedVersionCallback: Function;
+    private getPublicFeed = true;
 
     constructor(
         private route: ActivatedRoute,
@@ -55,7 +56,10 @@ export class FeedsComponent extends DatatoolComponent {
         super(config, utils, sessionService, feedsApiService, usersApiService, store,
             actions$, datasetsAction, shared);
         // Get the id of the feed
-        this.route.params.subscribe(params => { this.feedId = params["id"]; });
+        this.route.params.subscribe(params => {
+          this.feedId = params["id"];
+          this.getPublicFeed = params["public"] ? (params["public"].toString() === 'false' ? false : true) : true;
+        });
         // Get the info from the feed id
         this.notesFeed = [];
         this.getFeed();
@@ -87,7 +91,7 @@ export class FeedsComponent extends DatatoolComponent {
     private getFeed() {
         let that = this;
         this.resetForm(null);
-        this.feedsApiService.getPublic(this.feedId).then(function(data) {
+        this.feedsApiService.getFeed(this.feedId, this.getPublicFeed).then(function(data) {
             that.feed = data;
             that.feeds = [that.feed];
             that.getLicenses(that.feeds);
