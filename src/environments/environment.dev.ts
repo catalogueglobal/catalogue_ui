@@ -4,6 +4,6 @@ export const environment = {
     institutionalUrl: "http://www.catalogue.global",
     authId: "URvcRYyeNMGRFJLRQW9Kp62DHAv7YGBH",
     authDomain: "cataloguetest.eu.auth0.com",
-    licenseApi: "http://catalogue.tdvdigitalfactory.ovh:4002",
+    licenseApi: "http://catalogue.tdvdigitalfactory.ovh",
     licenseApiVersion: "1.0"
 };
