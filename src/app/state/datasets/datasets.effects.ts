@@ -14,10 +14,12 @@ export type ICreateFeed = {
     feedName: string,
     isPublic: boolean,
     file: any,
+    feedUrl: any,
     licenseName: string,
     licenseId: string;
     metadataFile: any,
-    licenseFile: any
+    licenseFile: any,
+    feedDesc: any
 }
 
 @Injectable()
@@ -390,7 +392,11 @@ export class DatasetsEffects {
                 progress => {
                     console.log(type + ' progress', progress)
                     if (onProgress) {
-                        onProgress(type + ' uploading... ' + progress + '%');
+                        if (!isNaN(progress)) {
+                            onProgress(type + ' uploading... ' + progress + '%');
+                        } else {
+                            onProgress(type + ' uploading... ');
+                        }
                     }
                 },
                 err => {
@@ -422,7 +428,7 @@ export class DatasetsEffects {
                             var allObs = [];
 
                             let setFile$ = this.feedsApi.setFile(feed.id, createFeed.file);
-                            allObs.push(setFile$, 'setFile', onProgress);
+                            allObs.push(setFile$);
 
                             if (createFeed.licenseFile) {
                                 let createLicense = this.feedsApi.createLicense(createFeed.licenseName, createFeed.licenseFile, [feed.id]);
@@ -435,9 +441,17 @@ export class DatasetsEffects {
                                 allObs.push(this.createObservable(createMetadata, 'createMetadata', onProgress, feed));
                             }
                             return (Observable.forkJoin(allObs).subscribe(
+                                data =>{
+                                  obs$.next(feed);
+                                  obs$.complete();
+                                },
+                                error =>{
+                                  console.log(error);
+                                  return obs$.error(error);
+                                },
                                 () => {
                                     obs$.next(feed);
-                                    obs$.complete;
+                                    obs$.complete();
                                 }
                             ));
                         },

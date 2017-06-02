@@ -61,6 +61,8 @@ import { FeedMapComponent }                                            from "./c
 import {FeedMapUtilsService} from "./commons/components/feed-map/feed-map-utils.service";
 import {RouteFilter} from  "./commons/components/feed-map/route.filter";
 import {TruncatePipe} from "./commons/pipes/truncate.pipe";
+import {FilterByVisibilityPipe} from "./commons/pipes/filter-by-visibility.pipe";
+
 
 export function httpFactory(http: Http) {
     return new TranslateStaticLoader(http, '/assets/i18n', '.json');
@@ -107,6 +109,7 @@ export function composeProvider(state: any, action: any) {
         InstitutionalUrlPipe,
         RouteFilter,
         OrderByPipe,
+        FilterByVisibilityPipe,
         SpinnerComponent,
         StatusComponent,
         FeedCreateFormComponent,

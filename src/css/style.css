@@ -584,7 +584,7 @@ p.drop-caps.secundary:first-child:first-letter {
 
 #mainmenu>ul>li {
     float: left;
-    margin: 0 15px;
+    margin: 0 0 0 15px;
 }
 
 #mainmenu>ul>li>a {

@@ -39,4 +39,5 @@ export class Configuration {
     public NOTIFY_ERROR_TIMEOUT = 10000; // duration (ms) before hiding errors
     public HIGHLIGHT_TIME = 5000
     public USER_SUBSCRIBE_URL = this.INSTITUTIONAL_URL;
+    public EDITION_URL = 'http://data.catalogue.global:4200';
 }

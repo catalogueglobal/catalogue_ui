@@ -2,7 +2,7 @@
     "layout": {
         "menu": {
             "use": "use",
-            "upload": "create a new feed",
+            "upload": "import a new feed",
             "download": "Explore",
             "manage": "My Data feeds",
             "subscribe": "subscribe",
@@ -54,7 +54,11 @@
             "feedName": "Feed name",
             "isPublic": "Public dataset",
             "submit": "Proceed to upload",
-            "changeLicense": "Change license"
+            "changeLicense": "Change license",
+            "feedDescription": "Comments",
+            "url": "Import from url",
+            "zip": "Import from zip",
+            "createFeed": "Create feed"
         },
         "delete": {
             "confirm": {
@@ -92,7 +96,9 @@
             "tooltips": {
                 "download": "Click here to download the item",
                 "delete": "delete the item",
-                "edit": "edit the item"
+                "edit": "edit the item",
+                "downloadValidation": "Download validation file",
+                "downloadFeed": "download GTFS file"
             },
             "miscData": {
                 "title": "change misc data",
@@ -133,7 +139,7 @@
             "area": "Area",
             "license": "License",
             "miscData": "Misc",
-            "subscribe": "Subscibe / Unsubscribe",
+            "subscribe": "Subscibe",
             "validity": "Valid until"
         }
     },

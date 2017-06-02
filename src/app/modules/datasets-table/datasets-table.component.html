@@ -17,13 +17,10 @@
                     {{'datasets-table.column.miscData'|translate}}
                 </th>
                 <th>
-                    {{'datasets-table.column.subscribe'|translate}}
-                </th>
-                <th>
                     {{'datasets.table.versions'|translate}}
                 </th>
                 <th>
-                    {{'datasets-table.validation'|translate}}
+
                 </th>
             </tr>
         </thead>
@@ -62,14 +59,8 @@
                         </a>
                     </div>
                 </td>
-                <td class="">
-                    <div class="other">
-                        <input *ngIf="sessionService.loggedIn" type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)" />
-                        <input *ngIf="!sessionService.loggedIn" type="checkbox" (click)="sessionService.login()" />
-                    </div>
-                </td>
                 <td>
-                    <div class="date" *ngIf="feed.feedVersionCount == 1">
+                    <div class="" *ngIf="feed.feedVersionCount == 1">
                         {{feed.lastUpdated|date:'y-MM-dd'}}
                     </div>
                     <div class="dropdown-select version-component" *ngIf="feed.feedVersionCount > 1">
@@ -79,19 +70,25 @@
                         <span class="caret"></span>
                     </div>
                 </td>
-                <td>
-                    <div class="other">
+                <td class="actions">
+                    <div class="">
+                        <label>
+                            <input *ngIf="sessionService.loggedIn" type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)" />
+                            <input *ngIf="!sessionService.loggedIn" type="checkbox" (click)="sessionService.login()" /> {{'datasets-table.column.subscribe'|translate}}
+                        </label>
+                    </div>
+                    <hr />
+                    <div class="download">
                         <a (click)="downloadValidation(feed)">
-                            <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="action-success">
+                            <span tooltip="{{'datasets.table.tooltips.downloadValidation' | translate}}" class="action-success">
                                 <i class="fa fa-flag-checkered" aria-hidden="true"></i>
                             </span>
                         </a>
                     </div>
-                </td>
-                <td>
-                    <div class="actions">
+                    <hr />
+                    <div class="download">
                         <a (click)="downloadFeed(feed)">
-                            <span tooltip="{{'datasets.table.tooltips.download' | translate}}" class="action-success btn-download">
+                            <span tooltip="{{'datasets.table.tooltips.downloadFeed' | translate}}" class="action-success btn-download">
                                 <i class="fa fa-download" aria-hidden="true"></i>
                             </span>
                         </a>

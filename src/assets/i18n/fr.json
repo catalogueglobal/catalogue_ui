@@ -2,7 +2,7 @@
     "layout": {
         "menu": {
             "use": "use",
-            "upload": "créer un jeu de données",
+            "upload": "Importer un jeu de données",
             "download": "Explorer",
             "manage": "Mes jeux de Données",
             "subscribe": "souscrire",
@@ -55,7 +55,11 @@
             "isPublic": "Jeu de données public (Cocher pour rendre ces données disponibles au téléchargement)",
             "submit": "Importer",
             "noLicense": "Sans license",
-            "changeLicense": "Changer de license"
+            "changeLicense": "Changer de license",
+            "url": "Importer à partir d'une url",
+            "zip": "Importer à partir d'un zip",
+            "feedDescription": "Commentaires",
+            "createFeed": "Créer un feed"
         },
         "delete": {
             "confirm": {
@@ -92,7 +96,9 @@
             "tooltips": {
                 "download": "Cliquez ici pour télécharger le contenu",
                 "delete": "supprimer l'élément",
-                "edit": "éditer l'élément"
+                "edit": "éditer l'élément",
+                "downloadValidation": "Télécharger le fichier de validation",
+                "downloadFeed": "Télécharger le fichier GTFS"
             },
             "miscData": {
                 "title": "changer les méta données",
@@ -133,7 +139,7 @@
             "area": "Zone",
             "license": "Licence",
             "miscData": "Méta données",
-            "subscribe": "S'abonner / Se désabonner",
+            "subscribe": "S'abonner",
             "validity": "Fin de validité"
         }
     },

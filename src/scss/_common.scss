@@ -8,36 +8,47 @@
 	width: 50%;
 }
 
-table td,
-table th {
-	vertical-align: middle;
-	padding: 5px;
-	word-wrap: break-word;
+.input-group {
+	margin-top: 5px;
+
+	input {
+		height: 35px;
+	}
 }
 
-.dataset-table td.area div {
-	width: 100px;
-}
+table {
+	table-layout: fixed;
 
-#datatable {
-	td > div {
+	td,
+	th {
 		width: 100px;
+		vertical-align: middle;
+		word-wrap: break-word;
 		text-align: center;
-
-		&.date {
-			width: 80px;
-		}
-
-		&.dropdown-select {
-			width: 85px;
-		}
-
-		&.other {
-			width: 70px;
-		}
+		line-height: 1;
+		padding: 5px;
 
 		&.actions {
-			width: auto;
+			padding: 5px 0;
+
+			.download {
+				padding-bottom: 5px;
+			}
+
+			label {
+				text-align: left;
+				font-size: 14px;
+				width: 100%;
+				padding-bottom: 0;
+			}
+
+			hr {
+				margin: 0 0 3px;
+			}
+
+			input[type="checkbox"] {
+				margin: 3px;
+			}
 		}
 	}
 }
@@ -59,6 +70,10 @@ table th {
 .btn {
 	color: $ct-white;
 	text-transform: uppercase;
+
+	&:hover {
+		color: $ct-orange;
+	}
 }
 
 .btn-validate {
@@ -91,11 +106,18 @@ table th {
 	}
 
 	.customfile {
-		height: 50px;
+		height: 35px;
 		line-height: 50px;
 
 		.cust-btn {
-			line-height: inherit;
+			height: 50px;
+			padding-top: 5px;
+			margin-left: -1px;
+			font-family: inherit;
+			font-size: 16px;
+			line-height: normal;
+			color: $ct-dark-gray;
+			background-color: $ct-light-gray;
 		}
 	}
 }
@@ -151,9 +173,36 @@ table th {
 	margin-top: 0;
 }
 
-.completer-input {
-	font-style: italic !important;
-	color: $ct-light-gray !important;
+.completer-holder {
+	::-webkit-input-placeholder {
+		/* WebKit, Blink, Edge */
+		color: $ct-light-gray;
+		font-style: italic;
+	}
+
+	:-moz-placeholder {
+		/* Mozilla Firefox 4 to 18 */
+		color: $ct-light-gray;
+		font-style: italic;
+	}
+
+	::-moz-placeholder {
+		/* Mozilla Firefox 19+ */
+		color: $ct-light-gray;
+		font-style: italic;
+	}
+
+	:-ms-input-placeholder {
+		/* Internet Explorer 10-11 */
+		color: $ct-light-gray;
+		font-style: italic;
+	}
+
+	::-ms-input-placeholder {
+		/* Microsoft Edge */
+		color: $ct-light-gray;
+		font-style: italic;
+	}
 }
 
 .action-btn {
@@ -180,10 +229,6 @@ table th {
 
 .btn-primary {
 	background-color: $ct-blue;
-
-	&:hover {
-		// background-color: $ct-blue;
-	}
 }
 
 .version-component {
@@ -196,4 +241,13 @@ table th {
 	.caret {
 		margin-left: -5px;
 	}
+}
+
+.wrap {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#mainmenu > ul {
+	margin-right: 0;
 }
