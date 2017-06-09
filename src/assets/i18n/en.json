@@ -58,7 +58,8 @@
             "feedDescription": "Comments",
             "url": "Import from url",
             "zip": "Import from zip",
-            "createFeed": "Create feed"
+            "createFeed": "Create feed",
+            "autoFetchFeeds": "Automatic fetch"
         },
         "delete": {
             "confirm": {

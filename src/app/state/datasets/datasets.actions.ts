@@ -260,7 +260,19 @@ export class DatasetsActions {
 
     feedCreate(createFeed: ICreateFeed): Action {
         // use filename as default project/feed name
-        let defaultName = createFeed.file.name;
+        let defaultName;
+        switch(createFeed.retrievalMethod){
+          case 'PRODUCED_IN_HOUSE':
+            defaultName = 'PRODUCED_IN_HOUSE';
+          break;
+          case 'MANUALLY_UPLOADED':
+            defaultName = createFeed.file.name;
+          break;
+          default:
+            defaultName = createFeed.feedName;
+          break;
+        }
+
         if (!createFeed.projectName || !createFeed.projectName.trim().length) {
             createFeed.projectName = defaultName;
         }

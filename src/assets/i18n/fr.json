@@ -59,7 +59,8 @@
             "url": "Importer à partir d'une url",
             "zip": "Importer à partir d'un zip",
             "feedDescription": "Commentaires",
-            "createFeed": "Créer un feed"
+            "createFeed": "Créer un feed",
+            "autoFetchFeeds": "Récupération automatique"
         },
         "delete": {
             "confirm": {

@@ -10,6 +10,7 @@ import { SessionService } from "app/commons/services/session.service";
 import { UtilsService } from "app/commons/services/utils.service";
 import { Configuration } from "app/commons/configuration";
 
+
 @Component({
     selector: 'app-feed-create-form',
     templateUrl: 'feed-create-form.component.html'
@@ -20,7 +21,13 @@ export class FeedCreateFormComponent {
     public addToProject: boolean;
     public projectsName = [];
     public licenses = [];
-    private newFeed: any = {};
+
+    private RETRIEVAL_METHODS = {
+        MANUAL: 'MANUALLY_UPLOADED',
+        AUTO: 'FETCHED_AUTOMATICALLY',
+        CREATE: 'PRODUCED_IN_HOUSE'
+    };
+
     private submitIsEnabled;
 
     constructor(
@@ -51,15 +58,18 @@ export class FeedCreateFormComponent {
     }
 
     private submit(): void {
-        if (!this.simpleUpload.file && this.newFeed.type === 'zip') {
+        if (this.simpleUpload.retrievalMethod === this.RETRIEVAL_METHODS.MANUAL &&
+           !this.simpleUpload.file) {
             return;
         }
         let createFeed: ICreateFeed = {
+            retrievalMethod: this.simpleUpload.retrievalMethod,
             projectName: this.simpleUpload.projectName,
             feedName: this.simpleUpload.feedName,
             isPublic: this.simpleUpload.isPrivate,
             file: this.simpleUpload.file,
-            feedUrl: this.newFeed.type === 'url' ? this.simpleUpload.feedUrl : null,
+            feedUrl: this.simpleUpload.feedUrl,
+            autoFetchFeeds: this.simpleUpload.autoFetchFeeds || false,
             licenseName: this.simpleUpload.licenseName,
             licenseId: this.simpleUpload.license.id,
             metadataFile: this.simpleUpload.metadataFile,
@@ -70,9 +80,11 @@ export class FeedCreateFormComponent {
     }
 
     private createSuccess(feed) {
-        this.resetForm();
-        if (this.newFeed.type === 'create') {
+        if (this.simpleUpload.retrievalMethod === this.RETRIEVAL_METHODS.CREATE) {
             window.location.href = this.config.EDITION_URL + '/feed/' + feed.id;
+        }else{
+          this.resetForm();
+
         }
     }
 
@@ -108,16 +120,17 @@ export class FeedCreateFormComponent {
         this.simpleUpload = {
             feedName: "",
             file: null,
-            license: null,
+            license: {},
             newLicense: false,
             metadataFile: null,
             licenseFile: null,
-            isPrivate: false
+            isPrivate: false,
+            autoFetchFeeds: false
         };
-        this.onSelectionChange('zip');
+        this.onSelectionChange(this.RETRIEVAL_METHODS.MANUAL);
     }
 
     private onSelectionChange(type) {
-        this.newFeed.type = type;
+        this.simpleUpload.retrievalMethod = type;
     }
 }

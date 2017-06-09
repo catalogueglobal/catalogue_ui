@@ -95,12 +95,21 @@ export class FeedsApiService extends AbstractApiService {
         this.FEED_STOPS_URL = this.config.ROOT_API + '/api/manager/secure/stop';
     }
 
-    public create(name: string, projectId: string, isPublic: boolean): Observable<IFeedApi> {
-        let data = JSON.stringify({
-            name: name,
+    public create(createFeed: any, projectId:string):Observable<IFeedApi>{
+
+        let data: any = {
+            name: createFeed.feedName,
             projectId: projectId,
-            isPublic: isPublic
-        });
+            isPublic: createFeed.isPublic,
+            comments: createFeed.feedDesc,
+            retrievalMethod: createFeed.retrievalMethod || 'MANUALLY_UPLOADED'
+        };
+        if (createFeed.retrievalMethod === 'FETCHED_AUTOMATICALLY') {
+            data.autoFetchHour = 0;
+            data.autoFetchMinute = 0;
+            data.autoFetchFeeds = createFeed.autoFetchFeeds;
+        }
+        data = JSON.stringify(data);
         return this.authHttp.post(this.FEED_SECURE_URL, data).map(response => response.json());
     }
 
@@ -220,15 +229,15 @@ export class FeedsApiService extends AbstractApiService {
             projects.subscribe(
                 data => {
                     if (!data || data.length == 0) {
-                      obs.next([]);
-                      obs.complete;
+                        obs.next([]);
+                        obs.complete;
                     } else {
                         this.adaptFeedsResponse(projects, params.secure, params.bounds, params.sortOrder).subscribe(
-                        response => {
-                            obs.next(response);
-                            obs.complete;
-                        });
-                   }
+                            response => {
+                                obs.next(response);
+                                obs.complete;
+                            });
+                    }
                 },
             )
         });

@@ -19,7 +19,9 @@ export type ICreateFeed = {
     licenseId: string;
     metadataFile: any,
     licenseFile: any,
-    feedDesc: any
+    feedDesc: any,
+    autoFetchFeeds: boolean,
+    retrievalMethod: string
 }
 
 @Injectable()
@@ -421,14 +423,15 @@ export class DatasetsEffects {
                 project => {
                     console.log("created project:", project);
                     onProgress("creating feed")
-                    this.feedsApi.create(createFeed.feedName, project.id, createFeed.isPublic).subscribe(
+                    this.feedsApi.create(createFeed, project.id).subscribe(
                         feed => {
                             console.log("created feed:", feed);
                             onProgress("uploading...")
                             var allObs = [];
 
-                            let setFile$ = this.feedsApi.setFile(feed.id, createFeed.file);
-                            allObs.push(setFile$);
+                            if (createFeed.retrievalMethod === 'MANUALLY_UPLOADED'){
+                              allObs.push(this.feedsApi.setFile(feed.id, createFeed.file));
+                            }
 
                             if (createFeed.licenseFile) {
                                 let createLicense = this.feedsApi.createLicense(createFeed.licenseName, createFeed.licenseFile, [feed.id]);

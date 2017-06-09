@@ -6,27 +6,35 @@
 
     <div>
         <label>
-            <input type="radio" name="radiogroupCreateFeed" [checked]="newFeed.type === 'zip'" [value]="newFeed.type" (change)="onSelectionChange('zip')" />{{'popup.upload.zip'|translate}}
+            <input type="radio" name="radiogroupCreateFeed" [checked]="simpleUpload.retrievalMethod === RETRIEVAL_METHODS.MANUAL" [value]="simpleUpload.retrievalMethod" (change)="onSelectionChange(RETRIEVAL_METHODS.MANUAL)" />{{'popup.upload.zip'|translate}}
         </label>
     </div>
 
     <div>
         <label>
-            <input type="radio" name="radiogroupCreateFeed" [checked]="newFeed.type === 'url'" [value]="newFeed.type" (change)="onSelectionChange('url')" /> {{'popup.upload.url'|translate}}
+            <input type="radio" name="radiogroupCreateFeed" [checked]="simpleUpload.retrievalMethod === RETRIEVAL_METHODS.AUTO" [value]="simpleUpload.retrievalMethod" (change)="onSelectionChange(RETRIEVAL_METHODS.AUTO)" /> {{'popup.upload.url'|translate}}
         </label>
     </div>
     <div>
         <label>
-            <input type="radio" name="radiogroupCreateFeed" [checked]="newFeed.type === 'create'" [value]="newFeed.type" (change)="onSelectionChange('create')" /> {{'popup.upload.createFeed'|translate}}
+            <input type="radio" name="radiogroupCreateFeed" [checked]="simpleUpload.retrievalMethod === RETRIEVAL_METHODS.CREATE" [value]="simpleUpload.retrievalMethod" (change)="onSelectionChange(RETRIEVAL_METHODS.CREATE)" /> {{'popup.upload.createFeed'|translate}}
         </label>
     </div>
 
-    <div class="input-group" *ngIf="newFeed.type === 'url'">
-        <span class="input-group-addon" id="basic-addon-url">URL</span>
-        <input type="text" class="form-control" [(ngModel)]="simpleUpload.feedUrl" name="feedUrl" id="basic-url" aria-describedby="basic-addon-url">
+    <div *ngIf="simpleUpload.retrievalMethod === RETRIEVAL_METHODS.AUTO">
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon-url">URL</span>
+            <input type="text" class="form-control" [(ngModel)]="simpleUpload.feedUrl" name="feedUrl" id="basic-url" aria-describedby="basic-addon-url">
+
+        </div>
+
+        <div class="">
+            <input type="checkbox" id="chk-autofeed" [(ngModel)]="simpleUpload.autoFetchFeeds" name="autoFetchFeeds">
+            <label for="chk-autofeed">{{'popup.upload.autoFetchFeeds'|translate}}</label>
+        </div>
     </div>
 
-    <div *ngIf="newFeed.type === 'zip'">
+    <div *ngIf="simpleUpload.retrievalMethod === RETRIEVAL_METHODS.MANUAL">
         <div class="form-group form-group-file">
             <label>{{'popup.upload.file'|translate}}</label>
             <input type="file" (change)="utils.setFileModelOnChange(simpleUpload, 'file', $event)" name="file" required>
@@ -38,7 +46,7 @@
         <input type="text" class="form-control" [(ngModel)]="simpleUpload.feedName" name="feedName" id="basic-feedName" aria-describedby="basic-addon-Name">
     </div>
 
-    <div *ngIf="newFeed.type === 'url' || newFeed.type === 'zip'">
+    <div *ngIf="simpleUpload.retrievalMethod === RETRIEVAL_METHODS.AUTO || simpleUpload.retrievalMethod === RETRIEVAL_METHODS.MANUAL">
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon-feedDesc">{{'popup.upload.feedDescription'|translate}}</span>
             <input type="text" class="form-control" [(ngModel)]="simpleUpload.feedDesc" name="feedDesc" id="basic-feedDesc" aria-describedby="basic-addon-feedDesc">
@@ -80,9 +88,9 @@
     <!--/.form-group-->
     <!--</div>-->
     <div class="form-group form-group-submit">
-        <button *ngIf="newFeed.type === 'zip'" type="submit" [class.disabled]="simpleUpload.file == null" class="btn pull-right"> {{'popup.validate'|translate}}</button>
-        <button *ngIf="newFeed.type === 'url'" type="submit" [class.disabled]="simpleUpload.feedUrl == null" class="btn pull-right"> {{'popup.validate'|translate}}</button>
-        <button *ngIf="newFeed.type === 'create'" type="submit" [class.disabled]="simpleUpload.feedName.length === 0" class="btn pull-right"> {{'popup.validate'|translate}}</button>
+        <button *ngIf="simpleUpload.retrievalMethod === RETRIEVAL_METHODS.MANUAL" type="submit" [class.disabled]="simpleUpload.file == null" class="btn pull-right"> {{'popup.validate'|translate}}</button>
+        <button *ngIf="simpleUpload.retrievalMethod === RETRIEVAL_METHODS.AUTO" type="submit" [class.disabled]="simpleUpload.feedUrl == null" class="btn pull-right"> {{'popup.validate'|translate}}</button>
+        <button *ngIf="simpleUpload.retrievalMethod === RETRIEVAL_METHODS.CREATE" type="submit" [class.disabled]="simpleUpload.feedName.length === 0" class="btn pull-right"> {{'popup.validate'|translate}}</button>
     </div>
 
 
