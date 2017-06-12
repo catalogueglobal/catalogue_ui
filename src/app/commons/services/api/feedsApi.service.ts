@@ -95,7 +95,7 @@ export class FeedsApiService extends AbstractApiService {
         this.FEED_STOPS_URL = this.config.ROOT_API + '/api/manager/secure/stop';
     }
 
-    public create(createFeed: any, projectId:string):Observable<IFeedApi>{
+    public create(createFeed: any, projectId: string): Observable<IFeedApi> {
 
         let data: any = {
             name: createFeed.feedName,
@@ -139,24 +139,20 @@ export class FeedsApiService extends AbstractApiService {
             return Observable.of(feed.url);
         }
         // download with a token
-        return this.http.get(this.FEED_PUBLIC_VERSION_URL + '/' + (versionId ? versionId : feed.latestVersionId) + '/downloadtoken')
+        return this.http.get(this.FEED_PUBLIC_VERSION_URL + '/' + (versionId ? versionId : feed.latestVersionId) + '/downloadtoken', { headers: this.getHeader() })
             .map(response => response.json())
             .map(result => this.FEED_DOWNLOAD_URL + '/' + result.id)
     }
 
     public fetch(feedSourceId: string): Observable<any> {
-        return this.authHttp.post(this.FEED_SECURE_URL + '/' + feedSourceId + '/fetch', "")
+        return this.authHttp.post(this.FEED_SECURE_URL + '/' + feedSourceId + '/fetch', "",
+            { headers: this.getHeader() })
             .map(response => response.json())
     }
 
     public getFeed(feedSourceId: string, getPublic: boolean): Promise<any> {
-        return getPublic ? this.http.get(this.FEED_PUBLIC_URL + '/' + feedSourceId).map(response => response.json()).toPromise() :
-            this.authHttp.get(this.FEED_SECURE_URL + '/' + feedSourceId).map(response => response.json()).toPromise();
-    }
-
-    public get(feedSourceId: string): Observable<IFeedApi> {
-        return this.authHttp.get(this.FEED_SECURE_URL + '/' + feedSourceId)
-            .map(response => response.json())
+        return getPublic ? this.http.get(this.FEED_PUBLIC_URL + '/' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise() :
+            this.authHttp.get(this.FEED_SECURE_URL + '/' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
     public getNotes(feedSourceId: string): Promise<any> {
@@ -168,11 +164,11 @@ export class FeedsApiService extends AbstractApiService {
     }
 
     public getLicenses(): Promise<any> {
-        return this.http.get(this.FEED_LICENSE).map(response => response.json()).toPromise();
+        return this.http.get(this.FEED_LICENSE, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
     public getMiscDatas(): Promise<any> {
-        return this.http.get(this.FEED_MISC_DATA).map(response => response.json()).toPromise();
+        return this.http.get(this.FEED_MISC_DATA, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
     public createLicense(name: string, file: File, feedIds: string[]): Observable<ILicense> {
@@ -187,30 +183,33 @@ export class FeedsApiService extends AbstractApiService {
         return this.uploadService.upload(this.FEED_MISC_DATA + '?name=' + name + '&feeds=' + feedIds, formData, this.computeAuthHeaders());
     }
 
-    private getMultipartHeader() {
+    private getHeader(multi?: boolean) {
         let myHeader = new Headers();
-        myHeader.append('Content-Type', 'multipart/form-data');
+        // myHeader.append('Cache-Control', 'public, max-age=300');
+        if (multi) {
+            myHeader.append('Content-Type', 'multipart/form-data');
+        }
         return myHeader;
     }
 
     public setLicense(feedIds: string[], licenseId: string): Observable<ILicense> {
         let params = '?feeds=' + feedIds.toString();
-        return this.authHttp.put(this.FEED_LICENSE + '/' + licenseId + params, null, { headers: this.getMultipartHeader() }).map(response => response.json());
+        return this.authHttp.put(this.FEED_LICENSE + '/' + licenseId + params, null, { headers: this.getHeader(true) }).map(response => response.json());
     }
 
     public unsetLicense(feedIds: string[], licenseId: string): Observable<ILicense> {
         let params = '?feeds=' + feedIds.toString() + '&action=remove';
-        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId + params, null, { headers: this.getMultipartHeader() }).map(response => response.json());
+        return this.authHttp.put(this.FEED_LICENSE + "/" + licenseId + params, null, { headers: this.getHeader(true) }).map(response => response.json());
     }
 
     public setMiscData(feedIds: string[], licenseId: string): Observable<ILicense> {
         let params = '?feeds=' + feedIds.toString();
-        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId + params, null, { headers: this.getMultipartHeader() }).map(response => response.json());
+        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId + params, null, { headers: this.getHeader(true) }).map(response => response.json());
     }
 
     public unsetMiscData(feedIds: string[], licenseId: string): Observable<ILicense> {
         let params = '?feeds=' + feedIds.toString() + '&action=remove';
-        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId + params, null, { headers: this.getMultipartHeader() }).map(response => response.json());
+        return this.authHttp.put(this.FEED_MISC_DATA + "/" + licenseId + params, null, { headers: this.getHeader(true) }).map(response => response.json());
     }
 
     public deletMiscData(licenseId: string): Observable<ILicense> {
@@ -304,34 +303,35 @@ export class FeedsApiService extends AbstractApiService {
     }
 
     getSecureFeeds(projectId: string): Observable<IFeedApi[]> {
-        return this.authHttp.get(this.FEED_SECURE_URL + "?projectId=" + projectId)
+        return this.authHttp.get(this.FEED_SECURE_URL + "?projectId=" + projectId,
+            { headers: this.getHeader() })
             .map(response => response.json());
     }
 
     public getFeedVersions(feedSourceId: string, isPublic: boolean): Promise<any> {
         if (isPublic) {
-            return this.http.get(this.FEED_PUBLIC_VERSION_URL + '?feedSourceId=' + feedSourceId).map(response => response.json()).toPromise();
+            return this.http.get(this.FEED_PUBLIC_VERSION_URL + '?feedSourceId=' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
         } else {
-            return this.authHttp.get(this.FEED_SECURE_VERSION_URL + '?feedSourceId=' + feedSourceId).map(response => response.json()).toPromise();
+            return this.authHttp.get(this.FEED_SECURE_VERSION_URL + '?feedSourceId=' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
         }
     }
 
     public getStops(feedId: string): Promise<any> {
-        return this.authHttp.get(this.FEED_STOPS_URL + '?feedId=' + feedId).map(response => response.json()).toPromise();
+        return this.authHttp.get(this.FEED_STOPS_URL + '?feedId=' + feedId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
     public getStop(stopId: string): Promise<any> {
-        return this.authHttp.get(this.FEED_STOPS_URL + '/' + stopId + '/').map(response => response.json()).toPromise();
+        return this.authHttp.get(this.FEED_STOPS_URL + '/' + stopId + '/', { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
     public getRoutes(feedId: string): Promise<any> {
         var url = this.SECURE_URL + '/route'
-        return this.authHttp.get(url + '?feedId=' + feedId).map(response => response.json()).toPromise();
+        return this.authHttp.get(url + '?feedId=' + feedId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
     public getRouteTripPattern(feedId: string, routeId: string): Promise<any> {
         var url = this.SECURE_URL + '/trippattern'
-        return this.authHttp.get(url + '?feedId=' + feedId + '&routeId=' + routeId).map(response => response.json()).toPromise();
+        return this.authHttp.get(url + '?feedId=' + feedId + '&routeId=' + routeId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
 
