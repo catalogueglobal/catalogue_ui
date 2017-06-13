@@ -150,7 +150,7 @@ export class FeedsApiService extends AbstractApiService {
             .map(response => response.json())
     }
 
-    public getFeed(feedSourceId: string, getPublic: boolean): Promise<any> {
+    public getFeed(feedSourceId: string, getPublic?: boolean): Promise<any> {
         return getPublic ? this.http.get(this.FEED_PUBLIC_URL + '/' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise() :
             this.authHttp.get(this.FEED_SECURE_URL + '/' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }

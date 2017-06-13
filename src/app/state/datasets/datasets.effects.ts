@@ -154,7 +154,7 @@ export class DatasetsEffects {
             })
             return setFile$
                 // refresh
-                .switchMap(() => this.feedsApi.get(feedRef.feedsourceId))
+                .switchMap(() => this.feedsApi.getFeed(feedRef.feedsourceId, false))
                 .map(feed => this.action.feedSetFileSuccess(feed))
                 .catch(e => Observable.of(this.action.feedSetFileFail(feedRef, e)))
         }
@@ -190,7 +190,7 @@ export class DatasetsEffects {
             const feedRef = payload.feedRef;
             return this.feedsApi.fetch(feedRef.feedsourceId)
                 // refresh
-                .switchMap(() => this.feedsApi.get(feedRef.feedsourceId))
+                .switchMap(() => this.feedsApi.getFeed(feedRef.feedsourceId))
                 .map(feedApi => this.action.feedFetchSuccess(feedApi))
                 .catch(e => {
                     return Observable.of(this.action.feedFetchFail(feedRef, e))

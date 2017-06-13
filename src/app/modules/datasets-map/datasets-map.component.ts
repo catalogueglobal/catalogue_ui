@@ -40,6 +40,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     initialZoom: number = this.config.MAP_ZOOM_UNKNOWN;
     _zoom: number;
     private moveTimeoutId;
+    private oldBounds;
     NumberedDivIcon;
 
 
@@ -155,47 +156,28 @@ export class DatasetsMapComponent implements AfterViewInit {
                 }, 1000);
             }
         );
+        map.on(
+            'movestart', function(e) {
+              that.moveStart(e);
+            }
+        );
         if (this._position) {
             this.goTo(map, this._position, false);
         }
     }
 
-    private showHideMarker(marker, show) {
-        var noMarkerStyle = {
-            fill: false,
-            stroke: false
-        };
-
-        var markerStyle = {
-            fill: true,
-            stroke: true
-        };
-
-        if (show) {
-            marker.isDisplayed = true;
-            marker.setStyle(markerStyle);
-        } else {
-            marker.isDisplayed = false;
-            marker.setStyle(noMarkerStyle);
-        }
-        marker.data.feed.isDisplayed = marker.isDisplayed;
+    private moveStart(event){
+      this.oldBounds = this.map.getBounds();
     }
 
     private filterFeedsInArea(event) {
         let mapBounds = this.map.getBounds();
-        // for (let key in this.markers) {
-        //     if (this.map.getBounds().contains(this.markers[key].getLatLng())){
-        //         console.log('true', key, this.markers[key].data)
-        //         this.showHideMarker(this.markers[key], true);
-        //     }else{
-        //         console.log('false', key, this.markers[key].data)
-        //         this.showHideMarker(this.markers[key], false);
-        //     }
-        // }
         let newCenter = this.map.getCenter();
-        this.shared.setNewCenter(newCenter, event.target._zoom);
-        let areaBounds = this.utils.computeLatLngToBounds([mapBounds.getNorthEast(), mapBounds.getSouthWest()]);
-        this.boundsChange.emit(areaBounds);
+        if (!this.oldBounds.contains(mapBounds)){
+            this.shared.setNewCenter(newCenter, event.target._zoom);
+            let areaBounds = this.utils.computeLatLngToBounds([mapBounds.getNorthEast(), mapBounds.getSouthWest()]);
+            this.boundsChange.emit(areaBounds);
+        }
     }
 
     // remove all marker from the map when refresh
