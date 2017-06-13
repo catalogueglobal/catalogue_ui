@@ -333,7 +333,6 @@ export class FeedMapComponent implements AfterViewInit {
             if (data) {
                 let that = vm;
                 vm.feedsApi.getRouteTripPattern(vm._feed.id, data.id).then(function(responseTrip) {
-                    console.log(responseTrip, route);
                     that.createTripPatterns(responseTrip);
                     that.getAllStops(responseTrip);
                 });
