@@ -68,7 +68,8 @@ export class FeedsApiService extends AbstractApiService {
     private FEED_PUBLIC_VERSION_URL: string;
     private FEED_SECURE_VERSION_URL: string;
     private FEED_DOWNLOAD_URL: string;
-    private FEED_NOTES: string;
+    private FEED_PUBLIC_NOTES: string;
+    private FEED_SECURE_NOTES: string;
     public FEED_LICENSE: string;
     public FEED_MISC_DATA: string;
     private FEED_STOPS_URL: string;
@@ -89,7 +90,9 @@ export class FeedsApiService extends AbstractApiService {
         this.FEED_PUBLIC_VERSION_URL = this.config.ROOT_API + "/api/manager/public/feedversion";
         this.FEED_SECURE_VERSION_URL = this.config.ROOT_API + "/api/manager/secure/feedversion";
         this.FEED_DOWNLOAD_URL = this.config.ROOT_API + "/api/manager/downloadfeed";
-        this.FEED_NOTES = this.config.ROOT_API + "/api/manager/secure/note?type=FEED_SOURCE&objectId="
+        this.FEED_PUBLIC_NOTES = this.config.ROOT_API + "/api/manager/public/note?type=FEED_SOURCE&objectId=";
+        this.FEED_SECURE_NOTES = this.config.ROOT_API + "/api/manager/secure/note?type=FEED_SOURCE&objectId=";
+
         this.FEED_LICENSE = this.config.LICENSE_API + "/api/metadata/" + this.config.LICENSE_API_VERSION + "/secure/license";
         this.FEED_MISC_DATA = this.config.LICENSE_API + "/api/metadata/" + this.config.LICENSE_API_VERSION + "/secure/miscdata";
         this.FEED_STOPS_URL = this.config.ROOT_API + '/api/manager/secure/stop';
@@ -129,7 +132,10 @@ export class FeedsApiService extends AbstractApiService {
         return this.uploadService.upload(this.FEED_SECURE_VERSION_URL + "?feedSourceId=" + feedSourceId + "&lastModified=" + file.lastModifiedDate.getTime(), formData, this.computeAuthHeaders());
     }
 
-    public delete(feedSourceId: string): Observable<any> {
+    public delete(feedSourceId: string, versionId?: string): Observable<any> {
+        if (versionId) {
+            return this.authHttp.delete(this.FEED_SECURE_VERSION_URL + '/' + versionId);
+        }
         return this.authHttp.delete(this.FEED_SECURE_URL + "/" + feedSourceId);
     }
 
@@ -155,12 +161,15 @@ export class FeedsApiService extends AbstractApiService {
             this.authHttp.get(this.FEED_SECURE_URL + '/' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
-    public getNotes(feedSourceId: string): Promise<any> {
-        return this.authHttp.get(this.FEED_NOTES + feedSourceId).map(response => response.json()).toPromise();
+    public getNotes(feedSourceId: string, isPublic?: boolean): Promise<any> {
+        if (isPublic){
+            return this.http.get(this.FEED_PUBLIC_NOTES + feedSourceId).map(response => response.json()).toPromise();
+        }
+        return this.authHttp.get(this.FEED_SECURE_NOTES + feedSourceId).map(response => response.json()).toPromise();
     }
 
     public addNotes(feedSourceId: string, note: string): Observable<any> {
-        return this.authHttp.post(this.FEED_NOTES + feedSourceId, note).map(response => response.json())
+        return this.authHttp.post(this.FEED_SECURE_NOTES + feedSourceId, note).map(response => response.json())
     }
 
     public getLicenses(): Promise<any> {
@@ -333,6 +342,13 @@ export class FeedsApiService extends AbstractApiService {
         var url = this.SECURE_URL + '/trippattern'
         return this.authHttp.get(url + '?feedId=' + feedId + '&routeId=' + routeId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
-
-
+    public getFeedByVersion(versionId: string, isPublic?: boolean): Promise<any> {
+        let url;
+        if (isPublic) {
+            url = this.FEED_PUBLIC_VERSION_URL + '/' + versionId;
+        } else {
+            url = this.FEED_SECURE_VERSION_URL + '/' + versionId;
+        }
+        return this.authHttp.get(url, { headers: this.getHeader() }).map(response => response.json()).toPromise();
+    }
 }

@@ -168,8 +168,9 @@ export class DatasetsEffects {
             let nbSuccess = 0;
             feedRefs.forEach(feedRef => {
                 console.log('deleting ' + nbSuccess + '/' + feedRefs.length, feedRef);
-                this.feedsApi.delete(feedRef.feedsourceId).subscribe(() => {
+                this.feedsApi.delete(feedRef.feedsourceId, feedRef.versionId).subscribe(() => {
                     console.log('delete success');
+                    feedRef.feedVersionCount -= 1;
                     nbSuccess++;
                 }, e => {
                     console.log('delete failed', e);

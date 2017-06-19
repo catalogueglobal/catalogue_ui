@@ -173,7 +173,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     private filterFeedsInArea(event) {
         let mapBounds = this.map.getBounds();
         let newCenter = this.map.getCenter();
-        if (!this.oldBounds.contains(mapBounds)){
+        if (this.oldBounds && !this.oldBounds.contains(mapBounds)){
             this.shared.setNewCenter(newCenter, event.target._zoom);
             let areaBounds = this.utils.computeLatLngToBounds([mapBounds.getNorthEast(), mapBounds.getSouthWest()]);
             this.boundsChange.emit(areaBounds);

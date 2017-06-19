@@ -108,6 +108,8 @@ export const DatasetsActionType = {
 
 export type IFeedReference = {
     feedsourceId: string,
+    versionId?: string,
+    feedVersionCount?: number,
     feedLabel: string
 }
 

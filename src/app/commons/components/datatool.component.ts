@@ -56,6 +56,7 @@ export class DatatoolComponent {
             this.feedsApiService.getFeedVersions(feed.id, feed.isPublic).then(versions => {
                 feed.allVersions = versions;
                 feed.selectedVersion = feed.allVersions[0];
+                feed.latestValidation = feed.selectedVersion.validationSummary || feed.latestValidation;
             });
         } else {
             var copy = Object.assign({}, feed);
@@ -364,14 +365,15 @@ export class DatatoolComponent {
     }
 
     protected downloadValidation(feed){
-      let url = this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.latestVersionId + '/validation';
+      let url = this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.selectedVersion.id + '/validation';
       window.open(url);
     }
 
     protected onVersionChanged(feed, version){
       console.log(feed, version);
       feed.selectedVersion = version;
-      // this.feedsApiService.getFeedVersions(version.id, feed.isPublic).then(data => {
+      feed.latestValidation = feed.selectedVersion.validationSummary;
+      // this.feedsApiService.getFeedByVersion(version.id, feed.isPublic).then(data => {
       //   console.log(data);
       // })
     }

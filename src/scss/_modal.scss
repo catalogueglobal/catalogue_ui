@@ -3,11 +3,6 @@
 
 	.customfile {
 		width: 100% !important;
-		height: 45px;
-
-		.cust-btn {
-			top: -6px !important;
-		}
 	}
 
 	.alert {
@@ -53,5 +48,14 @@
 		cursor: pointer;
 		color: white;
 		text-transform: uppercase;
+	}
+
+	select {
+		padding: 0 10px;
+		height: 35px;
+	}
+
+	input[type="text"] {
+		height: 35px;
 	}
 }

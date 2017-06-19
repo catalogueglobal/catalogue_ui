@@ -103,7 +103,7 @@ export class FeedsComponent extends DatatoolComponent {
             }
             console.log(that.feed)
             if (that.sessionService.loggedIn === true) {
-                that.feedsApiService.getNotes(that.feedId).then(function(data) {
+                that.feedsApiService.getNotes(that.feedId, that.feed.isPublic).then(function(data) {
                     that.notesFeed = data.reverse();
                     console.log(that.notesFeed);
                 }).catch(function(err) {
@@ -208,10 +208,13 @@ export class FeedsComponent extends DatatoolComponent {
             action => {
                 let updatedFeed = action.payload.feed;
                 this.processConfirm('setFile' + updatedFeed.id);
-                this.selectedFileTarget.value = null;
+                this.selectedFileTarget = null;
                 this.file = null;
             }
         )
+
+        actions$.ofType(DatasetsActionType.FEED_DELETE_SUCCESS).subscribe(action => this.feedChanged());
+        actions$.ofType(DatasetsActionType.FEED_SET_FILE_SUCCESS).subscribe(() => this.feedChanged());
     }
 
 
@@ -293,7 +296,7 @@ export class FeedsComponent extends DatatoolComponent {
                 value: this.selectedFileTarget.files[0]
             });
         } else {
-            this.selectedFileTarget.value = null;
+            this.selectedFileTarget = null;
         }
     }
 
@@ -306,6 +309,11 @@ export class FeedsComponent extends DatatoolComponent {
         catch (e) {
             console.log(e);
         }
+    }
+
+    private feedChanged(){
+      console.log('getting versions');
+      this.getFeedVersion(this.feed);
     }
 
 }

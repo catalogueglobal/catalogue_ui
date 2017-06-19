@@ -9,8 +9,12 @@
                     <app-inline-edit-text [initialValue]="feed.name" (onSave)="setName(feed, $event)">
                         {{feed.name | truncate}} </app-inline-edit-text>
                 </div>
-                <div class="version-component" *ngIf="feed.feedVersionCount > 1">
-                    <label>{{'datasets.table.versions'| translate}}
+                <div class="version-component" *ngIf="feed.lastUpdated">
+                    <div class="date" *ngIf="feed.feedVersionCount <= 1">
+                        {{'datasets.table.versions'| translate}} {{feed.lastUpdated|date:'y-MM-dd'}}
+                    </div>
+
+                    <label *ngIf="feed.feedVersionCount > 1">{{'datasets.table.versions'| translate}}
                         <select class="" [ngModel]="feed.selectedVersion" (ngModelChange)="onVersionChanged(feed, $event)">
                             <option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
                         </select>
@@ -48,7 +52,7 @@
                             <i class="fa fa-download" aria-hidden="true"></i>
                         </button>
                         <button type="button" class="btn btn-primary">
-                            <a href="http://data.catalogue.global:4200/feed/{{feed.id}}/edit">
+                            <a href="{{config.EDITION_URL + '/feed/' + feed.id}}/edit">
                                 {{'datasets-table.btn.edit'|translate}}
                                 <i class="fa fa-edit" aria-hidden="true"></i>
                             </a>
