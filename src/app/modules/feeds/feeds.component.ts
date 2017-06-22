@@ -302,7 +302,6 @@ export class FeedsComponent extends DatatoolComponent {
 
     protected fileChanged(event) {
         try {
-            let file = event.target.files[0];
             this.selectedFileTarget = event.target;
             this.confirmFeedVersionModal.show();
         }

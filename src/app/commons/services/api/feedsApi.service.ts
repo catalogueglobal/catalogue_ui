@@ -63,17 +63,14 @@ export type FeedsGetParams = {
 
 @Injectable()
 export class FeedsApiService extends AbstractApiService {
-    private FEED_PUBLIC_URL: string;
-    private FEED_SECURE_URL: string;
-    private FEED_PUBLIC_VERSION_URL: string;
-    private FEED_SECURE_VERSION_URL: string;
+    private ROOT_URL:string;
+    private FEED_URL: string;
+    private FEED_VERSION_URL: string;
     private FEED_DOWNLOAD_URL: string;
-    private FEED_PUBLIC_NOTES: string;
-    private FEED_SECURE_NOTES: string;
+    private FEED_NOTES: string;
     public FEED_LICENSE: string;
     public FEED_MISC_DATA: string;
     private FEED_STOPS_URL: string;
-    private SECURE_URL: string;
 
     constructor(
         protected http: Http,
@@ -84,18 +81,20 @@ export class FeedsApiService extends AbstractApiService {
         protected uploadService: UploadService,
         protected localFilters: LocalFiltersService) {
         super(http, authHttp, authConfig, config);
-        this.SECURE_URL = this.config.ROOT_API + '/api/manager/secure';
-        this.FEED_PUBLIC_URL = this.config.ROOT_API + "/api/manager/public/feedsource";
-        this.FEED_SECURE_URL = this.config.ROOT_API + "/api/manager/secure/feedsource";
-        this.FEED_PUBLIC_VERSION_URL = this.config.ROOT_API + "/api/manager/public/feedversion";
-        this.FEED_SECURE_VERSION_URL = this.config.ROOT_API + "/api/manager/secure/feedversion";
+        this.ROOT_URL = this.config.ROOT_API + '/api/manager/public';
+        this.FEED_URL = this.config.ROOT_API + "/api/manager/public/feedsource";
+        this.FEED_VERSION_URL = this.config.ROOT_API + "/api/manager/public/feedversion";
         this.FEED_DOWNLOAD_URL = this.config.ROOT_API + "/api/manager/downloadfeed";
-        this.FEED_PUBLIC_NOTES = this.config.ROOT_API + "/api/manager/public/note?type=FEED_SOURCE&objectId=";
-        this.FEED_SECURE_NOTES = this.config.ROOT_API + "/api/manager/secure/note?type=FEED_SOURCE&objectId=";
+        this.FEED_NOTES = this.config.ROOT_API + "/api/manager/public/note?type=FEED_SOURCE&objectId=";
 
         this.FEED_LICENSE = this.config.LICENSE_API + "/api/metadata/" + this.config.LICENSE_API_VERSION + "/secure/license";
         this.FEED_MISC_DATA = this.config.LICENSE_API + "/api/metadata/" + this.config.LICENSE_API_VERSION + "/secure/miscdata";
-        this.FEED_STOPS_URL = this.config.ROOT_API + '/api/manager/secure/stop';
+        this.FEED_STOPS_URL = this.config.ROOT_API + '/api/manager/public/stop';
+    }
+
+    private getSecureUrl (url: string):string{
+      let res = url.replace('/public', '/secure');
+      return res;
     }
 
     public create(createFeed: any, projectId: string): Observable<IFeedApi> {
@@ -113,63 +112,72 @@ export class FeedsApiService extends AbstractApiService {
             data.autoFetchFeeds = createFeed.autoFetchFeeds;
         }
         data = JSON.stringify(data);
-        return this.authHttp.post(this.FEED_SECURE_URL, data).map(response => response.json());
+        return this.authHttp.post(this.getSecureUrl(this.FEED_URL), data).map(response => response.json());
     }
 
     public setPublic(feedSourceId: string, value: boolean): Observable<IFeedApi> {
-        return this.authHttp.put(this.FEED_SECURE_URL + "/" + feedSourceId, JSON.stringify({ isPublic: value }))
+        return this.authHttp.put(this.getSecureUrl(this.FEED_URL) + "/" + feedSourceId, JSON.stringify({ isPublic: value }))
             .map(response => response.json());
     }
 
     public setName(feedSourceId: string, value: string): Observable<IFeedApi> {
-        return this.authHttp.put(this.FEED_SECURE_URL + "/" + feedSourceId, JSON.stringify({ name: value }))
+        return this.authHttp.put(this.getSecureUrl(this.FEED_URL) + "/" + feedSourceId, JSON.stringify({ name: value }))
             .map(response => response.json());
     }
 
     public setFile(feedSourceId: string, file: File): Observable<any> {
         let formData: FormData = new FormData();
         formData.append("file", file, file.name);
-        return this.uploadService.upload(this.FEED_SECURE_VERSION_URL + "?feedSourceId=" + feedSourceId + "&lastModified=" + file.lastModifiedDate.getTime(), formData, this.computeAuthHeaders());
+        return this.uploadService.upload(this.getSecureUrl(this.FEED_VERSION_URL) + "?feedSourceId=" + feedSourceId + "&lastModified=" + file.lastModifiedDate.getTime(), formData, this.computeAuthHeaders());
     }
 
     public delete(feedSourceId: string, versionId?: string): Observable<any> {
         if (versionId) {
-            return this.authHttp.delete(this.FEED_SECURE_VERSION_URL + '/' + versionId);
+            return this.authHttp.delete(this.getSecureUrl(this.FEED_VERSION_URL) + '/' + versionId);
         }
-        return this.authHttp.delete(this.FEED_SECURE_URL + "/" + feedSourceId);
+        return this.authHttp.delete(this.getSecureUrl(this.FEED_URL) + "/" + feedSourceId);
     }
 
-    public getDownloadUrl(feed: IFeedApi, versionId: string): Observable<string> {
+    public getDownloadUrl(feed: IFeedApi, versionId: string, isPublic: boolean): Observable<string> {
         if (feed.url && !versionId) {
             // direct download from the source
             return Observable.of(feed.url);
         }
+        let url;
+        let callback;
+        if (isPublic){
+          url = this.FEED_VERSION_URL;
+          callback = this.http;
+        }else{
+          url = this.getSecureUrl(this.FEED_VERSION_URL);
+          callback = this.authHttp;
+        }
         // download with a token
-        return this.http.get(this.FEED_PUBLIC_VERSION_URL + '/' + (versionId ? versionId : feed.latestVersionId) + '/downloadtoken', { headers: this.getHeader() })
+        return callback.get(url + '/' + (versionId ? versionId : feed.latestVersionId) + '/downloadtoken', { headers: this.getHeader() })
             .map(response => response.json())
             .map(result => this.FEED_DOWNLOAD_URL + '/' + result.id)
     }
 
     public fetch(feedSourceId: string): Observable<any> {
-        return this.authHttp.post(this.FEED_SECURE_URL + '/' + feedSourceId + '/fetch', "",
+        return this.authHttp.post(this.getSecureUrl(this.FEED_URL) + '/' + feedSourceId + '/fetch', "",
             { headers: this.getHeader() })
             .map(response => response.json())
     }
 
     public getFeed(feedSourceId: string, getPublic?: boolean): Promise<any> {
-        return getPublic ? this.http.get(this.FEED_PUBLIC_URL + '/' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise() :
-            this.authHttp.get(this.FEED_SECURE_URL + '/' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
+        return getPublic ? this.http.get(this.FEED_URL + '/' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise() :
+            this.authHttp.get(this.getSecureUrl(this.FEED_URL) + '/' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
     public getNotes(feedSourceId: string, isPublic?: boolean): Promise<any> {
         if (isPublic){
-            return this.http.get(this.FEED_PUBLIC_NOTES + feedSourceId).map(response => response.json()).toPromise();
+            return this.http.get(this.FEED_NOTES + feedSourceId).map(response => response.json()).toPromise();
         }
-        return this.authHttp.get(this.FEED_SECURE_NOTES + feedSourceId).map(response => response.json()).toPromise();
+        return this.authHttp.get(this.getSecureUrl(this.FEED_NOTES) + feedSourceId).map(response => response.json()).toPromise();
     }
 
     public addNotes(feedSourceId: string, note: string): Observable<any> {
-        return this.authHttp.post(this.FEED_SECURE_NOTES + feedSourceId, note).map(response => response.json())
+        return this.authHttp.post(this.getSecureUrl(this.FEED_NOTES) + feedSourceId, note).map(response => response.json())
     }
 
     public getLicenses(): Promise<any> {
@@ -312,43 +320,48 @@ export class FeedsApiService extends AbstractApiService {
     }
 
     getSecureFeeds(projectId: string): Observable<IFeedApi[]> {
-        return this.authHttp.get(this.FEED_SECURE_URL + "?projectId=" + projectId,
+        return this.authHttp.get(this.getSecureUrl(this.FEED_URL) + "?projectId=" + projectId,
             { headers: this.getHeader() })
             .map(response => response.json());
     }
 
     public getFeedVersions(feedSourceId: string, isPublic: boolean): Promise<any> {
         if (isPublic) {
-            return this.http.get(this.FEED_PUBLIC_VERSION_URL + '?feedSourceId=' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
+            return this.http.get(this.FEED_VERSION_URL + '?feedSourceId=' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
         } else {
-            return this.authHttp.get(this.FEED_SECURE_VERSION_URL + '?feedSourceId=' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
+            return this.authHttp.get(this.getSecureUrl(this.FEED_VERSION_URL) + '?feedSourceId=' + feedSourceId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
         }
     }
 
-    public getStops(feedId: string): Promise<any> {
-        return this.authHttp.get(this.FEED_STOPS_URL + '?feedId=' + feedId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
+    public getStops(feedId: string, feedVersion:string, isPublic: boolean): Promise<any> {
+        if (isPublic){
+            return this.http.get(this.FEED_STOPS_URL + '?feedId=' + feedId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
+        }
+        return this.authHttp.get(this.getSecureUrl(this.FEED_STOPS_URL) + '?feedId=' + feedId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
     public getStop(stopId: string): Promise<any> {
         return this.authHttp.get(this.FEED_STOPS_URL + '/' + stopId + '/', { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
-    public getRoutes(feedId: string): Promise<any> {
-        var url = this.SECURE_URL + '/route'
-        return this.authHttp.get(url + '?feedId=' + feedId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
+    public getRoutes(feedId: string, feedVersion: string, isPublic: boolean): Promise<any> {
+        if (isPublic){
+            return this.http.get(this.ROOT_URL + '/route?feedId=' + feedId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
+        }
+        return this.authHttp.get(this.getSecureUrl(this.ROOT_URL) + '/route?feedId=' + feedId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 
-    public getRouteTripPattern(feedId: string, routeId: string): Promise<any> {
-        var url = this.SECURE_URL + '/trippattern'
-        return this.authHttp.get(url + '?feedId=' + feedId + '&routeId=' + routeId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
+    public getRouteTripPattern(feedId: string, feedVersion:string, routeId: string, isPublic: boolean): Promise<any> {
+        if (isPublic){
+            return this.http.get(this.ROOT_URL + '/trippattern?feedId=' + feedId + '&routeId=' + routeId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
+        }
+        return this.authHttp.get(this.getSecureUrl(this.ROOT_URL) + '/trippattern?feedId=' + feedId + '&routeId=' + routeId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
     public getFeedByVersion(versionId: string, isPublic?: boolean): Promise<any> {
         let url;
         if (isPublic) {
-            url = this.FEED_PUBLIC_VERSION_URL + '/' + versionId;
-        } else {
-            url = this.FEED_SECURE_VERSION_URL + '/' + versionId;
+          return this.http.get(this.FEED_VERSION_URL + '/' + versionId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
         }
-        return this.authHttp.get(url, { headers: this.getHeader() }).map(response => response.json()).toPromise();
+        return this.authHttp.get(this.getSecureUrl(this.FEED_VERSION_URL) + '/' + versionId, { headers: this.getHeader() }).map(response => response.json()).toPromise();
     }
 }

@@ -350,7 +350,7 @@ export class DatatoolComponent {
     }
 
     protected getDownloadUrl(feed: any) {
-        this.feedsApiService.getDownloadUrl(feed, feed.selectedVersion ? feed.selectedVersion.id : null).subscribe(
+        this.feedsApiService.getDownloadUrl(feed, feed.selectedVersion ? feed.selectedVersion.id : null, feed.isPublic).subscribe(
             url => {
                 console.log('getDownloadUrl: ', url, feed);
                 if (url) {

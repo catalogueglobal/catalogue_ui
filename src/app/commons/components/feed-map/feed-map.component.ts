@@ -38,6 +38,7 @@ export class FeedMapComponent implements AfterViewInit {
     patternsGroup;
     feedMarker;
     isAuthorised;
+    private _latestValidation;
 
     constructor(private utils: UtilsService,
         private config: Configuration,
@@ -70,6 +71,30 @@ export class FeedMapComponent implements AfterViewInit {
         });
     }
 
+    @Input() set latestValidation (value: any){
+
+      if (value && value !== this._latestValidation){
+        console.log('latestValidation', value, this._feed);
+
+        // if (this.map) {
+        //     this.populateMap();
+        // }
+        // if (this._feed && this._feed.id && this.sessionService.loggedIn) {
+        //     this.allPatterns = {};
+        //
+        //     let that = this;
+        //     this.feedsApi.getStops(this._feed.id, this._feed.selectedVersion.id, this._feed.isPublic).then(function(response) {
+        //         that.stops = response;
+        //     });
+        //     this.feedsApi.getRoutes(this._feed.id, this._feed.selectedVersion.id, this._feed.isPublic).then(function(response) {
+        //         that.routes = response;
+        //     })
+        // }
+      }
+
+    }
+
+
     @Input() set feed(value: any) {
         this._feed = value;
         if (this.map) {
@@ -79,10 +104,10 @@ export class FeedMapComponent implements AfterViewInit {
             this.allPatterns = {};
 
             let that = this;
-            this.feedsApi.getStops(this._feed.id).then(function(response) {
+            this.feedsApi.getStops(this._feed.id, this._feed.id, this._feed.isPublic).then(function(response) {
                 that.stops = response;
             });
-            this.feedsApi.getRoutes(this._feed.id).then(function(response) {
+            this.feedsApi.getRoutes(this._feed.id, this._feed.id, this._feed.isPublic).then(function(response) {
                 that.routes = response;
             })
         }
@@ -332,7 +357,7 @@ export class FeedMapComponent implements AfterViewInit {
             var data = vm.feedMapUtils.getRouteData(route.id, vm.routes);
             if (data) {
                 let that = vm;
-                vm.feedsApi.getRouteTripPattern(vm._feed.id, data.id).then(function(responseTrip) {
+                vm.feedsApi.getRouteTripPattern(vm._feed.id, vm._feed.id, data.id, vm._feed.isPublic).then(function(responseTrip) {
                     that.createTripPatterns(responseTrip);
                     that.getAllStops(responseTrip);
                 });
