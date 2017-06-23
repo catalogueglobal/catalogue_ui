@@ -1,4 +1,4 @@
-import {  Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+import {  Component, AfterViewInit, Input, OnInit, OnDestroy } from '@angular/core';
 import * as leaflet                                              from "leaflet";
 import { Store }                                                 from "@ngrx/store";
 require('leaflet.markercluster');
@@ -11,6 +11,8 @@ import { Configuration }                                         from "app/commo
 import { ProjectsApiService }                                    from "app/commons/services/api/projectsApi.service";
 import { SessionService }                      from "app/commons/services/session.service";
 import {FeedMapUtilsService} from "app/commons/components/feed-map/feed-map-utils.service";
+import { SharedService } from "app/commons/services/shared.service";
+import { Subscription } from 'rxjs/Subscription';
 
 const NB_ROUTE_MAX = 100;
 
@@ -18,7 +20,7 @@ const NB_ROUTE_MAX = 100;
     selector: 'ct-feed-map',
     templateUrl: 'feed-map.html'
 })
-export class FeedMapComponent implements AfterViewInit {
+export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
     @Input() mapId: string;
     private _feed;
     private routes = [];
@@ -38,7 +40,7 @@ export class FeedMapComponent implements AfterViewInit {
     patternsGroup;
     feedMarker;
     isAuthorised;
-    private _latestValidation;
+    private subscription: Subscription;
 
     constructor(private utils: UtilsService,
         private config: Configuration,
@@ -48,11 +50,10 @@ export class FeedMapComponent implements AfterViewInit {
         private store: Store<DatasetsState>,
         private sessionService: SessionService,
         private projectsApi: ProjectsApiService,
-        private feedMapUtils: FeedMapUtilsService
+        private feedMapUtils: FeedMapUtilsService,
+        private shared: SharedService
 
     ) {
-        this.stopsMarkers = new Array();
-        this.stationsMarkers = new Array();
         this.NumberedDivIcon = mapUtils.createNumMarker();
         this.ImageDivIcon = mapUtils.createIconMarker(10, null, 20, 20);
         this.afterAuth();
@@ -60,6 +61,18 @@ export class FeedMapComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.map = this.computeMap(this.mapId);
+    }
+
+    ngOnInit() {
+        this.subscription = this.shared.notifyObservable$.subscribe((res) => {
+            if (res.hasOwnProperty('event') && res.event === 'onVersionChanged') {
+              this.feed = res.value;
+            }
+        });
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
     private afterAuth() {
@@ -71,30 +84,6 @@ export class FeedMapComponent implements AfterViewInit {
         });
     }
 
-    @Input() set latestValidation (value: any){
-
-      if (value && value !== this._latestValidation){
-        console.log('latestValidation', value, this._feed);
-
-        // if (this.map) {
-        //     this.populateMap();
-        // }
-        // if (this._feed && this._feed.id && this.sessionService.loggedIn) {
-        //     this.allPatterns = {};
-        //
-        //     let that = this;
-        //     this.feedsApi.getStops(this._feed.id, this._feed.selectedVersion.id, this._feed.isPublic).then(function(response) {
-        //         that.stops = response;
-        //     });
-        //     this.feedsApi.getRoutes(this._feed.id, this._feed.selectedVersion.id, this._feed.isPublic).then(function(response) {
-        //         that.routes = response;
-        //     })
-        // }
-      }
-
-    }
-
-
     @Input() set feed(value: any) {
         this._feed = value;
         if (this.map) {
@@ -102,12 +91,16 @@ export class FeedMapComponent implements AfterViewInit {
         }
         if (this._feed && this._feed.id && this.sessionService.loggedIn) {
             this.allPatterns = {};
+            this.stopsMarkers = new Array();
+            this.stationsMarkers = new Array();
 
             let that = this;
-            this.feedsApi.getStops(this._feed.id, this._feed.id, this._feed.isPublic).then(function(response) {
+            this.feedsApi.getStops(this._feed.id, this._feed.selectedVersion ?
+                this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
                 that.stops = response;
             });
-            this.feedsApi.getRoutes(this._feed.id, this._feed.id, this._feed.isPublic).then(function(response) {
+            this.feedsApi.getRoutes(this._feed.id, this._feed.selectedVersion ?
+                this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
                 that.routes = response;
             })
         }
@@ -357,7 +350,9 @@ export class FeedMapComponent implements AfterViewInit {
             var data = vm.feedMapUtils.getRouteData(route.id, vm.routes);
             if (data) {
                 let that = vm;
-                vm.feedsApi.getRouteTripPattern(vm._feed.id, vm._feed.id, data.id, vm._feed.isPublic).then(function(responseTrip) {
+                vm.feedsApi.getRouteTripPattern(vm._feed.id,
+                  vm._feed.selectedVersion ? vm._feed.selectedVersion.id : vm._feed.id,
+                  data.id, vm._feed.isPublic).then(function(responseTrip) {
                     that.createTripPatterns(responseTrip);
                     that.getAllStops(responseTrip);
                 });

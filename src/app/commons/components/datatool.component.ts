@@ -1,4 +1,4 @@
-import {Component, ViewChild, Input, EventEmitter, Output} from '@angular/core';
+import {Component, ViewChild, Input, EventEmitter} from '@angular/core';
 import { Store } from "@ngrx/store";
 import { Actions } from "@ngrx/effects";
 import { FeedsApiService, FEED_RETRIEVAL_METHOD, ILicense, IFeed } from 'app/commons/services/api/feedsApi.service';
@@ -10,6 +10,7 @@ import { DatasetsState } from "app/state/datasets/datasets.reducer";
 import { DatasetsActions, toFeedReference, DatasetsActionType } from "app/state/datasets/datasets.actions";
 import { SharedService } from "app/commons/services/shared.service";
 import { InlineEditEvent } from "app/commons/directives/inline-edit-text/inline-edit-generic.component";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     template: ''
@@ -370,9 +371,12 @@ export class DatatoolComponent {
     }
 
     protected onVersionChanged(feed, version){
-      console.log(feed, version);
       feed.selectedVersion = version;
       feed.latestValidation = feed.selectedVersion.validationSummary;
+      this.shared.notifyOther({
+        event: 'onVersionChanged',
+        value: feed
+      });
       // this.feedsApiService.getFeedByVersion(version.id, feed.isPublic).then(data => {
       //   console.log(data);
       // })
