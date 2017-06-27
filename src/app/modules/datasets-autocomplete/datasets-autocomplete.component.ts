@@ -16,7 +16,6 @@ export type AutocompleteItem = {
 })
 export class DatasetsAutocompleteComponent {
     private dataService: RemoteData;
-    private searchInput: string;
     @Output() private selected = new EventEmitter<AutocompleteItem>();
     @Input() private placeholder: string;
     data = [];

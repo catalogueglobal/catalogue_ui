@@ -27,8 +27,8 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
     private allPatterns;
     map: leaflet.Map;
     private stops = [];
-    stopsMarkers: Array<leaflet.Marker>;
-    stationsMarkers: Array<leaflet.Marker>;
+    stopsMarkers: Array<leaflet.Marker> = new Array();
+    stationsMarkers: Array<leaflet.Marker> = new Array();
     initialPosition = this.config.MAP_DEFAULT_POSITION;
     _position;
     initialZoom: number = this.config.MAP_ZOOM_UNKNOWN;
@@ -40,6 +40,8 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
     patternsGroup;
     feedMarker;
     isAuthorised;
+    loading = false;
+
     private subscription: Subscription;
 
     constructor(private utils: UtilsService,
@@ -89,21 +91,28 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
         if (this.map) {
             this.populateMap();
         }
-        if (this._feed && this._feed.id && this.sessionService.loggedIn) {
-            this.allPatterns = {};
-            this.stopsMarkers = new Array();
-            this.stationsMarkers = new Array();
+    }
 
-            let that = this;
-            this.feedsApi.getStops(this._feed.id, this._feed.selectedVersion ?
-                this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
-                that.stops = response;
-            });
-            this.feedsApi.getRoutes(this._feed.id, this._feed.selectedVersion ?
-                this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
-                that.routes = response;
-            })
-        }
+    private laodRoutes(){
+      if (this._feed && this._feed.id && this.sessionService.loggedIn) {
+          this.allPatterns = {};
+          this.stopsMarkers.length = 0;;
+          this.stationsMarkers.length = 0;
+
+          let that = this;
+          this.loading = true;
+          this.feedsApi.getStops(this._feed.id, this._feed.selectedVersion ?
+              this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
+              that.stops = response;
+              that.loading = false;
+          });
+          this.loading = true;
+          this.feedsApi.getRoutes(this._feed.id, this._feed.selectedVersion ?
+              this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
+              that.routes = response;
+              that.loading = false;
+          });
+      }
     }
 
     private checkAuthorisations() {
@@ -171,10 +180,12 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
         if (this.isAuthorised) {
             this.projectsApi.getPrivateProject(this._feed.projectId).then(function success(data) {
                 that.extractData(data);
+                that.laodRoutes();
             });
         } else {
             this.projectsApi.getPublicProject(this._feed.projectId).then(function success(data) {
                 that.extractData(data);
+                that.laodRoutes();
             });
         }
     }
@@ -350,11 +361,13 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
             var data = vm.feedMapUtils.getRouteData(route.id, vm.routes);
             if (data) {
                 let that = vm;
+                vm.loading = true;
                 vm.feedsApi.getRouteTripPattern(vm._feed.id,
                   vm._feed.selectedVersion ? vm._feed.selectedVersion.id : vm._feed.id,
                   data.id, vm._feed.isPublic).then(function(responseTrip) {
                     that.createTripPatterns(responseTrip);
                     that.getAllStops(responseTrip);
+                    that.loading = false;
                 });
             }
         };
