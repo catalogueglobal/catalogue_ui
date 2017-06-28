@@ -81,6 +81,7 @@ table {
 
 	&:hover {
 		background-color: $ct-orange;
+		color: $ct-grey;
 	}
 }
 
@@ -89,6 +90,7 @@ table {
 
 	&:hover {
 		background-color: $ct-grey;
+		color: $ct-orange;
 	}
 }
 
@@ -252,4 +254,14 @@ table {
 
 #mainmenu > ul {
 	margin-right: 0;
+}
+
+.small-padding {
+	padding: 5px;
+}
+
+.big-modal {
+	.modal-dialog {
+		width: 90%;
+	}
 }

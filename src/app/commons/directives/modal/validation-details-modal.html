@@ -1,0 +1,68 @@
+<app-modal class="big-modal">
+    <div class="app-modal-header">
+        <label class="title">{{'popup.feed.validation.title'|translate}}</label>
+    </div>
+
+    <div class="app-modal-body">
+
+        <div class="list-group" *ngIf="datas.errors.length > 0">
+            <div class="col-md-12">
+                <div class="pull-left">
+                    <label>{{'popup.feed.validation.error.nbErrors' | translate}}
+                        <span class="badge">{{ datas.errors.length }}</span>
+                    </label>
+                </div>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-cancel" (click)="hide()">
+                        {{'popup.cancel' | translate}}
+                    </button>
+                    <button type="button" class="btn btn-validate" (click)="download()">
+                        {{'datasets.table.btn.download' | translate}}
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="col-md-6 list-group">
+                    <div class="list-group-item {{item.priority}}" *ngFor="let item of datas.errors">
+                        <div (click)="displayDetailsType(item, 'itemDetails')">
+                            <h4>{{'popup.feed.validation.error.type' | translate}}: {{ item.errorType }}</h4>
+                            <p class="list-group-item-text">
+                                {{'popup.feed.validation.error.priority' | translate}}: {{ item.priority }}
+                            </p>
+                        </div>
+                        <div class="list-group-dyn-content" *ngIf="item.itemDetails === true" (click)="displayDetailsType(item, 'itemJson')">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    {{ item.message }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{'popup.detail' | translate}}
+                                </div>
+                            </div>
+                            <div *ngIf="item.itemJson === true">
+                                <pre>
+                                {{item | json}}
+                              </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="col-md-12">
+                        {{'feed.trips' | translate}}
+                    </div>
+                    <div *ngIf="zoomChart === true">
+                        <canvas baseChart [datasets]="barChartData" [colors]="barColors" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="barHovered($event)" (chartClick)="barClicked($event)"></canvas>
+                    </div>
+                    <div *ngIf="!zoomChart">
+                        <canvas class="pie-canvas pull-right" baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" [legend]="barChartLegend" (chartHover)="pieHovered($event)" (chartClick)="pieClicked($event)"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-modal>

@@ -366,8 +366,15 @@ export class DatatoolComponent {
     }
 
     protected downloadValidation(feed){
-      let url = this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.selectedVersion.id + '/validation';
-      window.open(url);
+      window.open(this.getValidationUrl(feed));
+    }
+
+    protected getValidationUrl(feed){
+      return this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.selectedVersion.id + '/validation';
+    }
+
+    protected openValidation(feed){
+      
     }
 
     protected onVersionChanged(feed, version){

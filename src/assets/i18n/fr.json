@@ -72,6 +72,15 @@
             "create": {
                 "title": "Créer une version",
                 "subtitle": "Attention une nouvelle version sera créée. L'actuelle sera figée !"
+            },
+            "validation": {
+                "title": "Rapport de validation",
+                "error": {
+                    "type": "Type d'erreur",
+                    "priority": "Priorité d'erreur",
+                    "nbErrors": "Nombre d'erreurs"
+                },
+                "see": "Rapport de validation"
             }
         },
         "cancel": "annuler",

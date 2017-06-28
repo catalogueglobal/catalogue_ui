@@ -14,6 +14,7 @@ import { DatatoolComponent } from "app/commons/components/datatool.component";
 import { LicenseModal } from 'app/commons/directives/modal/license-modal.component';
 import { MiscDataModal } from 'app/commons/directives/modal/miscdata-modal.component';
 import {ConfirmFeedVersionModal} from 'app/commons/directives/modal/confirm-feed-version-modal.component';
+import { ValidationDetailsModal } from 'app/commons/directives/modal/validation-details-modal.component';
 
 @Component({
     selector: 'app-feeds',
@@ -34,11 +35,15 @@ export class FeedsComponent extends DatatoolComponent {
     @ViewChild(ConfirmFeedVersionModal)
     public readonly confirmFeedVersionModal: ConfirmFeedVersionModal;
 
+    @ViewChild(ValidationDetailsModal)
+    public readonly validationDetailsModal: ValidationDetailsModal;
+
     @Input() private mapPosition;
     private _feeds: any;
     private clickAddNoteToFeed = false;
     private onSubmitConfirmFeedVersionCallback: Function;
     private getPublicFeed = true;
+    private validationUrl: string;
 
     constructor(
         private route: ActivatedRoute,
@@ -308,6 +313,13 @@ export class FeedsComponent extends DatatoolComponent {
         catch (e) {
             console.log(e);
         }
+    }
+
+    protected openValidation(feed){
+      this.validationUrl = this.getValidationUrl(feed);
+      if (feed && feed.selectedVersion && feed.selectedVersion.id){
+        this.validationDetailsModal.show();
+      }
     }
 
     private feedChanged(){

@@ -21,6 +21,43 @@
 		.license-text {
 			white-space: pre;
 		}
+
+		h4 {
+			font-size: 18px !important;
+		}
+
+		.list-group {
+			max-height: 750px;
+			overflow-y: auto;
+		}
+
+		.list-group-item {
+			cursor: pointer;
+
+			&.LOW {
+				color: #8a6d3b;
+				background-color: #fcf8e3;
+			}
+
+			&.HIGHT {
+				color: #a94442;
+				background-color: #f2dede;
+			}
+		}
+
+		pre {
+			display: block;
+			line-height: 1;
+			font-size: 11px;
+			text-align: left;
+			margin: 0;
+			padding: 0;
+		}
+
+		.list-group-dyn-content {
+			background-color: $ct-light-gray;
+			padding: 5px;
+		}
 	}
 
 	.modal-header {
@@ -57,5 +94,10 @@
 
 	input[type="text"] {
 		height: 35px;
+	}
+
+	.pie-canvas {
+		height: 350px !important;
+		width: 350px !important;
 	}
 }

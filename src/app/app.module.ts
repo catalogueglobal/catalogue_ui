@@ -15,6 +15,9 @@ import { TranslateModule }                                          from "ng2-tr
 import { TranslateService, TranslateLoader, TranslateStaticLoader } from "ng2-translate/src/translate.service";
 import { storeLogger }                                              from "ngrx-store-logger";
 import { Ng2PaginationModule }                                      from "ng2-pagination";
+import { TooltipModule } from 'ng2-bootstrap';
+import { ChartsModule } from 'ng2-charts';
+
 import { AppComponent }                                             from "./app.component";
 import { routing }                                                  from "./app.routes";
 import { Configuration }                                            from "./commons/configuration";
@@ -50,7 +53,7 @@ import { MyDatasetsTableComponent }                                 from "./modu
 import { DatasetsActions }                                          from "./state/datasets/datasets.actions";
 import { DatasetsEffects }                                          from "./state/datasets/datasets.effects";
 import { appReducer }                                               from "./state/index.reducer";
-import { TooltipModule } from 'ng2-bootstrap';
+
 import {CommonComponent} from './commons/directives/modal/common-modal.component';
 import { MiscDataModal } from './commons/directives/modal/miscdata-modal.component';
 import { LicenseModal } from './commons/directives/modal/license-modal.component';
@@ -62,7 +65,7 @@ import {FeedMapUtilsService} from "./commons/components/feed-map/feed-map-utils.
 import {RouteFilter} from  "./commons/components/feed-map/route.filter";
 import {TruncatePipe} from "./commons/pipes/truncate.pipe";
 import {FilterByVisibilityPipe} from "./commons/pipes/filter-by-visibility.pipe";
-
+import { ValidationDetailsModal } from './commons/directives/modal/validation-details-modal.component';
 
 export function httpFactory(http: Http) {
     return new TranslateStaticLoader(http, '/assets/i18n', '.json');
@@ -122,6 +125,7 @@ export function composeProvider(state: any, action: any) {
         MiscDataModal,
         DeleteFeedModal,
         ConfirmFeedVersionModal,
+        ValidationDetailsModal,
         DatatoolComponent,
         FeedMapComponent,
         TruncatePipe
@@ -136,7 +140,6 @@ export function composeProvider(state: any, action: any) {
         ToasterModule,
         routing,
         Ng2PaginationModule,
-
         ConfirmationPopoverModule.forRoot({
             confirmButtonType: 'danger' // set defaults here
         }),
@@ -150,7 +153,8 @@ export function composeProvider(state: any, action: any) {
             useFactory: httpFactory,
             deps: [Http]
         }),
-        TooltipModule.forRoot()
+        TooltipModule.forRoot(),
+        ChartsModule
     ],
 
     entryComponents: [AppComponent],

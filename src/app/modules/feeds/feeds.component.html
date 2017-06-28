@@ -47,9 +47,9 @@
                             {{'feed.download.gtfs'|translate}}
                             <i class="fa fa-download" aria-hidden="true"></i>
                         </button>
-                        <button type="button" class="btn btn-primary" (click)="downloadValidation(feed)">
-                            {{'feed.download.validation'|translate}}
-                            <i class="fa fa-download" aria-hidden="true"></i>
+                        <button type="button" class="btn btn-primary" (click)="openValidation(feed)">
+                            {{'popup.feed.validation.see'|translate}}
+                            <i class="fa fa-eye" aria-hidden="true"></i>
                         </button>
                         <button type="button" class="btn btn-primary">
                             <a href="{{config.EDITION_URL + '/feed/' + feed.id}}/edit">
@@ -205,3 +205,4 @@
 
 <confirm-feed-version-modal [onSubmit]="onSubmitConfirmFeedVersionCallback">
 </confirm-feed-version-modal>
+<validation-details-modal [fileUrl]="validationUrl"> </validation-details-modal>

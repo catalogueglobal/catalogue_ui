@@ -41,6 +41,7 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
     feedMarker;
     isAuthorised;
     loading = false;
+    extractedData;
 
     private subscription: Subscription;
 
@@ -68,7 +69,9 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
     ngOnInit() {
         this.subscription = this.shared.notifyObservable$.subscribe((res) => {
             if (res.hasOwnProperty('event') && res.event === 'onVersionChanged') {
-              this.feed = res.value;
+                this._feed.selectedVersion = res.value.selectedVersion;
+                this._feed.latestValidation = res.value.latestValidation;
+                this.extractData(this.extractedData, false);
             }
         });
     }
@@ -93,26 +96,26 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
         }
     }
 
-    private laodRoutes(){
-      if (this._feed && this._feed.id && this.sessionService.loggedIn) {
-          this.allPatterns = {};
-          this.stopsMarkers.length = 0;;
-          this.stationsMarkers.length = 0;
+    private laodRoutes() {
+        if (this._feed && this._feed.id && this.sessionService.loggedIn) {
+            this.allPatterns = {};
+            this.stopsMarkers.length = 0;;
+            this.stationsMarkers.length = 0;
 
-          let that = this;
-          this.loading = true;
-          this.feedsApi.getStops(this._feed.id, this._feed.selectedVersion ?
-              this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
-              that.stops = response;
-              that.loading = false;
-          });
-          this.loading = true;
-          this.feedsApi.getRoutes(this._feed.id, this._feed.selectedVersion ?
-              this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
-              that.routes = response;
-              that.loading = false;
-          });
-      }
+            let that = this;
+            this.loading = true;
+            this.feedsApi.getStops(this._feed.id, this._feed.selectedVersion ?
+                this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
+                    that.stops = response;
+                    that.loading = false;
+                }).catch( ()=> that.loading = false);
+            this.loading = true;
+            this.feedsApi.getRoutes(this._feed.id, this._feed.selectedVersion ?
+                this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
+                    that.routes = response;
+                    that.loading = false;
+                }).catch( ()=> that.loading = false);
+        }
     }
 
     private checkAuthorisations() {
@@ -149,9 +152,11 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
         this.patternsGroup.clearLayers();
     }
 
-    private extractData(data) {
+    private extractData(data, clearMap: boolean = true) {
         if (this._feed && this.map) {
-            this.clearMap();
+            if (clearMap) {
+                this.clearMap();
+            }
             if (data) {
                 let lat = data.defaultLocationLat;
                 let lng = data.defaultLocationLon;
@@ -166,8 +171,13 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
                     lat = (bounds[0].lat + bounds[1].lat) / 2;
                 if (!lng)
                     lng = (bounds[0].lng + bounds[2].lng) / 2;
+                if (this.feedMarker && this.map.hasLayer(this.feedMarker)) {
+                    this.map.removeLayer(this.feedMarker);
+                }
+
                 this.feedMarker = this.createMarker(this._feed, [lat, lng], bounds);
                 var coord: leaflet.LatLngExpression = leaflet.latLng(lat, lng);
+                console.log(coord);
                 this.map.setView(coord, 10);
                 this.map.addLayer(this.feedMarker);
             }
@@ -180,11 +190,13 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
         if (this.isAuthorised) {
             this.projectsApi.getPrivateProject(this._feed.projectId).then(function success(data) {
                 that.extractData(data);
+                that.extractedData = data;
                 that.laodRoutes();
             });
         } else {
             this.projectsApi.getPublicProject(this._feed.projectId).then(function success(data) {
                 that.extractData(data);
+                that.extractedData = data;
                 that.laodRoutes();
             });
         }
@@ -363,12 +375,12 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
                 let that = vm;
                 vm.loading = true;
                 vm.feedsApi.getRouteTripPattern(vm._feed.id,
-                  vm._feed.selectedVersion ? vm._feed.selectedVersion.id : vm._feed.id,
-                  data.id, vm._feed.isPublic).then(function(responseTrip) {
-                    that.createTripPatterns(responseTrip);
-                    that.getAllStops(responseTrip);
-                    that.loading = false;
-                });
+                    vm._feed.selectedVersion ? vm._feed.selectedVersion.id : vm._feed.id,
+                    data.id, vm._feed.isPublic).then(function(responseTrip) {
+                        that.createTripPatterns(responseTrip);
+                        that.getAllStops(responseTrip);
+                        that.loading = false;
+                    }).catch( ()=> that.loading = false);
             }
         };
 

@@ -71,6 +71,15 @@
             "create": {
                 "title": "Create new version",
                 "subtitle": "Warning, a new version will be created. Current one will be frozen !"
+            },
+            "validation": {
+                "title": "Validation summary",
+                "error": {
+                    "type": "Error type",
+                    "priority": "Error priority",
+                    "nbErrors": "Number of errors"
+                },
+                "see": "Validation summary"
             }
         },
         "cancel": "cancel",
