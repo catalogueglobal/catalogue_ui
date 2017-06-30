@@ -24,7 +24,7 @@ export class MapUtilsService {
     }
 
     computeConvexHull(markers: any[]) {
-        var points = [], p, i;
+        let points = [], i;
         for (i = markers.length - 1; i >= 0; i--) {
             markers[i].data.bounds.map(
                 p => {
@@ -32,7 +32,7 @@ export class MapUtilsService {
                 }
             );
         }
-        var leafletUntyped: any = leaflet;
+        let leafletUntyped: any = leaflet;
         return leafletUntyped.QuickHull.getConvexHull(points);
     }
 
@@ -59,7 +59,7 @@ export class MapUtilsService {
 
 
     private areaOver(map, source, eventOver, eventOut, computeConvexHull) {
-        var polygon;
+        let polygon;
         function removePolygon() {
             if (polygon) {
                 map.removeLayer(polygon);
