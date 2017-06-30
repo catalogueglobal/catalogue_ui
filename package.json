@@ -65,7 +65,7 @@
     "zone.js": "0.7.6"
   },
   "devDependencies": {
-    "@angular/cli": "^1.0.0-beta.32.3",
+    "@angular/cli": "1.0.0-beta.32.3",
     "@angular/compiler-cli": "2.4.10",
     "@types/geojson": "0.0.31",
     "@types/jasmine": "2.5.38",
