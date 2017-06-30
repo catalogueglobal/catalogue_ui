@@ -127,7 +127,7 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
         this.stopsMarkersClusterGroup = this.feedMapUtils.createClusterGroup(true);
         this.stationsMarkersClusterGroup = this.feedMapUtils.createClusterGroup(false);
         this.patternsGroup = leaflet.featureGroup();
-        var overlayMaps = {
+        let overlayMaps = {
             '<span class="legend-item legend-stop"><i class="fa fa-lg fa-flag-checkered"></i></span> Stops': this.stopsMarkersClusterGroup,
             '<span class="legend-item legend-station"><i class="fa fa-lg fa-train"></i></span> Stations': this.stationsMarkersClusterGroup
         };
@@ -152,7 +152,7 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
         this.patternsGroup.clearLayers();
     }
 
-    private extractData(data, clearMap: boolean = true) {
+    private extractData(data, clearMap = true) {
         if (this._feed && this.map) {
             if (clearMap) {
                 this.clearMap();
@@ -176,8 +176,7 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
 
                 this.feedMarker = this.createMarker(this._feed, [lat, lng], bounds);
-                var coord: leaflet.LatLngExpression = leaflet.latLng(lat, lng);
-                console.log(coord);
+                let coord: leaflet.LatLngExpression = leaflet.latLng(lat, lng);
                 this.map.setView(coord, 10);
                 this.map.addLayer(this.feedMarker);
             }
@@ -226,8 +225,8 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
 
     // Update the Lat and Lng of the project
     private updateProjectProperty(ev) {
-        var updateProject;
-        var changedPos = ev.target.getLatLng();
+        let updateProject;
+        let changedPos = ev.target.getLatLng();
         updateProject = {
             defaultLocationLat: changedPos.lat,
             defaultLocationLon: changedPos.lng
@@ -249,7 +248,7 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
     */
 
     private createPattern(type, pattern) {
-        var geojson = this.createGeoJSONFeature(type, pattern);
+        let geojson = this.createGeoJSONFeature(type, pattern);
         if (!geojson) {
             return;
         }
@@ -271,7 +270,7 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
 
     private createTripPatterns(patterns) {
         if (patterns) {
-            for (var i = 0; i < patterns.length; i++) {
+            for (let i = 0; i < patterns.length; i++) {
                 this.createPattern('shape', patterns[i]);
             }
         }
@@ -279,7 +278,7 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
 
     private getAllStops(patterns) {
         if (patterns) {
-            for (var i = 0; i < patterns.length; i++) {
+            for (let i = 0; i < patterns.length; i++) {
                 this.createStops(this.getStops(patterns[i]));
             }
         }
@@ -353,12 +352,12 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
 
     private onRouteCheckAll(event) {
         if (event.target.checked) {
-            for (var i = 0; i < Math.min(this.routes.length, NB_ROUTE_MAX); i++) {
+            for (let i = 0; i < Math.min(this.routes.length, NB_ROUTE_MAX); i++) {
                 this.routes[i].checked = event.target.checked;
                 this.onRouteChecked(event, this.routes[i]);
             }
         } else {
-            for (var i = 0; i < this.routes.length; i++) {
+            for (let i = 0; i < this.routes.length; i++) {
                 this.routes[i].checked = event.target.checked;
             }
             this.allPatterns = {};
@@ -369,8 +368,8 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     private onRouteChecked(event, route) {
-        var checkRoute = function(vm) {
-            var data = vm.feedMapUtils.getRouteData(route.id, vm.routes);
+        let checkRoute = function(vm) {
+            let data = vm.feedMapUtils.getRouteData(route.id, vm.routes);
             if (data) {
                 let that = vm;
                 vm.loading = true;
@@ -384,8 +383,8 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         };
 
-        var unCheckRoute = function(vm) {
-            for (var i = 0; vm.allPatterns[route.id] && i < vm.allPatterns[route.id].length; i++) {
+        let unCheckRoute = function(vm) {
+            for (let i = 0; vm.allPatterns[route.id] && i < vm.allPatterns[route.id].length; i++) {
                 if (vm.patternsGroup.hasLayer(vm.allPatterns[route.id][i])) {
                     vm.patternsGroup.removeLayer(vm.allPatterns[route.id][i]);
                 }
@@ -443,8 +442,8 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!pattern || !pattern[type]) {
             return;
         }
-        var patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON();
-        var geojsonFeature = {
+        let patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON();
+        let geojsonFeature = {
             type: 'Feature',
             properties: {
                 pattern: pattern,
