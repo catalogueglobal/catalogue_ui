@@ -32,6 +32,9 @@ export class DatatoolComponent {
     protected onSubmitLicenseCallback: Function;
     protected onSubmitMiscDataCallback: Function;
     protected defaultLicenseId;
+    protected validationUrl: string;
+
+    protected latestVersionId;
 
 
     constructor(
@@ -54,18 +57,33 @@ export class DatatoolComponent {
 
     protected getFeedVersion(feed) {
         if (feed.feedVersionCount > 1) {
+            let that = this;
             this.feedsApiService.getFeedVersions(feed.id, feed.isPublic).then(versions => {
-                feed.allVersions = versions;
+                feed.allVersions = versions.sort((a,b) => {
+                  return b.updated - a.updated;
+                });
                 feed.selectedVersion = feed.allVersions[0];
                 feed.latestValidation = feed.selectedVersion.validationSummary || feed.latestValidation;
+                feed.selectedVersion.id = feed.selectedVersion.id || feed.id;
+                that.setLastVersionId(feed);
             });
         } else {
-            var copy = Object.assign({}, feed);
+            let copy = Object.assign({}, feed);
             copy.updated = copy.lastUpdated;
             copy.id = copy.latestVersionId;
             feed.allVersions = [copy];
             feed.selectedVersion = feed.allVersions[0];
+            feed.selectedVersion.id = feed.selectedVersion.id || feed.id;
+            this.setLastVersionId(feed);
         }
+    }
+
+    private setLastVersionId(feed){
+      for (let i = 0; i < feed.allVersions.length; i++){
+        if (!feed.allVersions[i].nextVersionId){
+          this.latestVersionId = feed.allVersions[i].id;
+        }
+      }
     }
 
     protected getLicenses(value: any) {
@@ -81,7 +99,7 @@ export class DatatoolComponent {
     }
 
     protected getFeedsVersion(values) {
-      for (var i = 0; values && i < values.length; i++) {
+      for (let i = 0; values && i < values.length; i++) {
           this.getFeedVersion(values[i]);
       }
     }
@@ -138,8 +156,8 @@ export class DatatoolComponent {
         if (!userInfos.app_metadata || userInfos.app_metadata.datatools[0].subscriptions == null) {
             return -1;
         } else {
-            for (var i = 0; i < userInfos.app_metadata.datatools[0].subscriptions[0].target.length; i++) {
-                if (userInfos.app_metadata.datatools[0].subscriptions[0].target[i] == feed_id) {
+            for (let i = 0; i < userInfos.app_metadata.datatools[0].subscriptions[0].target.length; i++) {
+                if (userInfos.app_metadata.datatools[0].subscriptions[0].target[i] === feed_id) {
                     return i;
                 }
             }
@@ -148,7 +166,7 @@ export class DatatoolComponent {
     }
 
     protected checkSubscribed(feed_id) {
-        var index = -1;
+        let index = -1;
         if (this.sessionService.userProfile &&
             this.sessionService.userProfile.app_metadata &&
             this.sessionService.userProfile.app_metadata.datatools &&
@@ -159,14 +177,14 @@ export class DatatoolComponent {
             this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.length > 0) {
             index = this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id);
         }
-        if (index == -1) {
+        if (index === -1) {
             return false
         }
         return true
     }
 
     protected actionOnFeed(feed_id) {
-        var response = this.usersApiService.getUser(this.sessionService.userId);
+        let response = this.usersApiService.getUser(this.sessionService.userId);
         let that = this;
         response.then(function(data) {
             let isSubscribe = that.isSubscribe(data, feed_id);
@@ -175,7 +193,7 @@ export class DatatoolComponent {
     }
 
     protected subscribeOrUnsubscribeFeed(data, feed_id, isSubscribeIndex) {
-        if (isSubscribeIndex == -1) {
+        if (isSubscribeIndex === -1) {
             console.log("SUBSCRIBE");
             data = this.utils.addFeedIdToJson(data, feed_id);
             this.store.dispatch(this.datasetsAction.subscribeToFeed(data.user_id, { "data": data.app_metadata.datatools }));
@@ -351,7 +369,8 @@ export class DatatoolComponent {
     }
 
     protected getDownloadUrl(feed: any) {
-        this.feedsApiService.getDownloadUrl(feed, feed.selectedVersion ? feed.selectedVersion.id : null, feed.isPublic).subscribe(
+        this.feedsApiService.getDownloadUrl(feed,
+           (feed.selectedVersion ? feed.selectedVersion.id : null), feed.isPublic).subscribe(
             url => {
                 console.log('getDownloadUrl: ', url, feed);
                 if (url) {
@@ -374,7 +393,8 @@ export class DatatoolComponent {
     }
 
     protected openValidation(feed){
-      
+      console.log(feed);
+      this.validationUrl = this.getValidationUrl(feed);
     }
 
     protected onVersionChanged(feed, version){

@@ -107,7 +107,7 @@
                 "download": "Click here to download the item",
                 "delete": "delete the item",
                 "edit": "edit the item",
-                "downloadValidation": "Download validation file",
+                "downloadValidation": "See validation summary",
                 "downloadFeed": "download GTFS file"
             },
             "miscData": {

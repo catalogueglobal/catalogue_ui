@@ -1,4 +1,4 @@
-import {  Component, AfterViewInit, Input, OnInit, OnDestroy } from '@angular/core';
+import {  Component, AfterViewInit, Input } from '@angular/core';
 import * as leaflet                                              from "leaflet";
 import { Store }                                                 from "@ngrx/store";
 require('leaflet.markercluster');
@@ -20,7 +20,7 @@ const NB_ROUTE_MAX = 100;
     selector: 'ct-feed-map',
     templateUrl: 'feed-map.html'
 })
-export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
+export class FeedMapComponent implements AfterViewInit {
     @Input() mapId: string;
     private _feed;
     private routes = [];
@@ -64,20 +64,6 @@ export class FeedMapComponent implements AfterViewInit, OnInit, OnDestroy {
 
     ngAfterViewInit() {
         this.map = this.computeMap(this.mapId);
-    }
-
-    ngOnInit() {
-        this.subscription = this.shared.notifyObservable$.subscribe((res) => {
-            if (res.hasOwnProperty('event') && res.event === 'onVersionChanged') {
-                this._feed.selectedVersion = res.value.selectedVersion;
-                this._feed.latestValidation = res.value.latestValidation;
-                this.extractData(this.extractedData, false);
-            }
-        });
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
     }
 
     private afterAuth() {

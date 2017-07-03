@@ -64,6 +64,7 @@ import { FeedMapComponent }                                            from "./c
 import {FeedMapUtilsService} from "./commons/components/feed-map/feed-map-utils.service";
 import {RouteFilter} from  "./commons/components/feed-map/route.filter";
 import {TruncatePipe} from "./commons/pipes/truncate.pipe";
+import {FilterPipe} from "./commons/pipes/filter.pipe";
 import {FilterByVisibilityPipe} from "./commons/pipes/filter-by-visibility.pipe";
 import { ValidationDetailsModal } from './commons/directives/modal/validation-details-modal.component';
 
@@ -128,7 +129,8 @@ export function composeProvider(state: any, action: any) {
         ValidationDetailsModal,
         DatatoolComponent,
         FeedMapComponent,
-        TruncatePipe
+        TruncatePipe,
+        FilterPipe
     ],
 
     imports: [
@@ -179,6 +181,7 @@ export function composeProvider(state: any, action: any) {
             useFactory: httpAuthConfigFactory,
             deps: [Http, AuthConfig]
         },
+        FilterPipe
     ]
 })
 export class AppModule { }

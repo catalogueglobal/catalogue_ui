@@ -25,7 +25,7 @@ export class FeedsComponent extends DatatoolComponent {
     public feedId: string;
     public notesFeed: Array<any>;
     public feed: any = {};
-    private isAuthorised: boolean = false;
+    private isAuthorised = false;
     private file;
     private selectedFileTarget;
     @ViewChild(LicenseModal)
@@ -43,7 +43,6 @@ export class FeedsComponent extends DatatoolComponent {
     private clickAddNoteToFeed = false;
     private onSubmitConfirmFeedVersionCallback: Function;
     private getPublicFeed = true;
-    private validationUrl: string;
 
     constructor(
         private route: ActivatedRoute,
@@ -316,7 +315,7 @@ export class FeedsComponent extends DatatoolComponent {
     }
 
     protected openValidation(feed){
-      this.validationUrl = this.getValidationUrl(feed);
+      super.openValidation(feed);
       if (feed && feed.selectedVersion && feed.selectedVersion.id){
         this.validationDetailsModal.show();
       }

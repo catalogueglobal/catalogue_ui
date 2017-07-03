@@ -265,3 +265,9 @@ table {
 		width: 90%;
 	}
 }
+
+.right-seperator {
+	border-right: solid;
+	border-right-color: $ct-light-gray;
+	border-right-width: 3px;
+}

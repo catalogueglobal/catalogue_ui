@@ -1,6 +1,7 @@
-import {Component, ViewChild, Input, Output} from '@angular/core';
+import {Component, ViewChild, ViewChildren, Input, Output} from '@angular/core';
 import {CommonComponent} from './common-modal.component';
 import { Http } from "@angular/http";
+import {FilterPipe} from "app/commons/pipes/filter.pipe";
 
 @Component({
     selector: 'validation-details-modal',
@@ -8,41 +9,67 @@ import { Http } from "@angular/http";
 })
 export class ValidationDetailsModal extends CommonComponent {
     _fileUrl: string;
-    datas = {
-        errors: []
-    };
+    public barChartOptions: any;
+    public pieChartLabels: string[];
+    public pieChartData: number[];
+    public pieChartType;
 
-    public barChartOptions: any = {
-        scaleShowVerticalLines: false,
-        responsive: true
-    };
-
-    public pieChartLabels: string[] = [];
-    public pieChartData: number[] = [];
-    public pieChartType: string = 'pie';
-
-    public barChartLabels: string[];
-    public barChartType: string = 'bar';
-    public barChartLegend: boolean = true;
-    public barChartData: any[] = [
-        { data: [], label: '' }
-    ];
+    public barChartLabels: string[] = [];
+    public barChartType;
+    public barChartLegend = true;
+    public barChartData: any[];
     zoomChart = false;
 
     formattedDatas = {};
 
     barColors: Array<any> = [];
+    filteredItems = [];
+    filteredObj:any = {};
+    datasLoading;
 
-    constructor(private http: Http) {
+    constructor(private http: Http, private filter: FilterPipe) {
         super();
     }
 
+    initVars(){
+      this._fileUrl = undefined;
+      this.datasLoading = false;
+      this.barChartOptions = {
+          scaleShowVerticalLines: false,
+          responsive: true
+      };
+
+      this.pieChartLabels = [];
+      this.pieChartData = [];
+      this.pieChartType = 'pie';
+
+      this.barChartLabels = [];
+      this.barChartType = 'bar';
+      this.barChartLegend = true;
+      this.barChartData = [
+          { data: [], label: '' }
+      ];
+      this.zoomChart = false;
+      this.formattedDatas = {};
+
+      this.barColors = [];
+      this.filteredItems = [];
+      this.filteredObj = {
+        all: [],
+        low: [],
+        medium: [],
+        high: []
+      };
+    }
+
     @Input() set fileUrl(value: any) {
+        this.initVars();
         this._fileUrl = value;
+
         if (value) {
+            this.datasLoading = true;
             this.http.get(value).map(response => response.json()).subscribe(
                 data => {
-                    this.datas = data;
                     let keys = Object.keys(data.tripsPerDate);
                     let years = [];
                     for (let i = 0; i < keys.length; i++) {
@@ -63,6 +90,17 @@ export class ValidationDetailsModal extends CommonComponent {
                         counts.push(this.formattedDatas[years[i]].count);
                     }
                     this.pieChartData = counts;
+                    this.filteredObj.all = data.errors;
+                    this.filteredItems = this.filteredObj.all;
+                    this.filteredObj.low = this.filter.transform(data.errors, 'priority', 'LOW');
+                    this.filteredObj.medium = this.filter.transform(data.errors, 'priority', 'MEDIUM');
+                    this.filteredObj.high = this.filter.transform(data.errors, 'priority', 'HIGH');
+                    this.datasLoading = false;
+                },
+                error =>{
+                  this.datasLoading = false;
+                  console.log(error);
+                  this.hide();
                 }
             )
         }
@@ -97,20 +135,16 @@ export class ValidationDetailsModal extends CommonComponent {
     // events
     public barClicked(e: any): void {
         this.zoomChart = false;
-        console.log(e);
     }
 
     public barHovered(e: any): void {
-        console.log(e);
     }
 
     public pieClicked(e: any): void {
         this.zoomChart = true;
         this.buildBarDatas(this.pieChartLabels[e.active[0]._index], e.active[0]._view.backgroundColor);
-        console.log(e);
     }
 
     public pieHovered(e: any): void {
-        console.log(e);
     }
 }

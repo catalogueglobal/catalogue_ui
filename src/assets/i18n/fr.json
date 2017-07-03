@@ -107,7 +107,7 @@
                 "download": "Cliquez ici pour télécharger le contenu",
                 "delete": "supprimer l'élément",
                 "edit": "éditer l'élément",
-                "downloadValidation": "Télécharger le fichier de validation",
+                "downloadValidation": "Voir le fichier de validation",
                 "downloadFeed": "Télécharger le fichier GTFS"
             },
             "miscData": {
