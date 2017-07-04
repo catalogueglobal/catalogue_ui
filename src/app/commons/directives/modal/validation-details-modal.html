@@ -11,7 +11,7 @@
             <div class="col-md-12">
                 <div class="col-md-6 right-seperator">
                     <div class="group-header">
-                        <label class="link-header" (click)="filteredItems=filteredObj.all">{{'popup.feed.validation.error.nbErrors' | translate}}
+                        <label class="link-header" (click)="filteredItems=getAllItems()">{{'popup.feed.validation.error.nbErrors' | translate}}
                             <span class="badge">{{ filteredObj.all.length }}</span>
                         </label>
                         <label class="link-header LOW" (click)="filteredItems=filteredObj.low">LOW
@@ -25,7 +25,7 @@
                         </label>
                     </div>
                     <div class="list-group">
-                        <div class="list-group-item {{item.priority}}" *ngFor="let item of filteredItems">
+                        <div class="list-group-item {{item.priority}}" *ngFor="let item of (filteredItems ? filteredItems.slice(0, 100): [])">
                             <div (click)="displayDetailsType(item, 'itemDetails')">
                                 <h4>{{'popup.feed.validation.error.type' | translate}}: {{ item.errorType }}</h4>
                                 <p class="list-group-item-text">

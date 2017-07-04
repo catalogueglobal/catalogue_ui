@@ -91,7 +91,7 @@ export class ValidationDetailsModal extends CommonComponent {
                     }
                     this.pieChartData = counts;
                     this.filteredObj.all = data.errors;
-                    this.filteredItems = this.filteredObj.all;
+                    this.filteredItems = this.getAllItems();
                     this.filteredObj.low = this.filter.transform(data.errors, 'priority', 'LOW');
                     this.filteredObj.medium = this.filter.transform(data.errors, 'priority', 'MEDIUM');
                     this.filteredObj.high = this.filter.transform(data.errors, 'priority', 'HIGH');
@@ -146,5 +146,13 @@ export class ValidationDetailsModal extends CommonComponent {
     }
 
     public pieHovered(e: any): void {
+    }
+
+    private getAllItems(): any []{
+      let res = [];
+      res = this.filteredObj.all.sort((a, b) => {
+        return 0.5 - Math.random();
+      });
+      return res;
     }
 }
