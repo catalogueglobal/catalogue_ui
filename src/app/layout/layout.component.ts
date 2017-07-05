@@ -1,6 +1,6 @@
 import { Component }          from "@angular/core";
 import { Actions }            from "@ngrx/effects";
-import { SessionService }     from "app/commons/services/session.service";
+import { SessionService }     from "app/modules/common/";
 import { DatasetsActionType } from "app/state/datasets/datasets.actions";
 
 @Component({

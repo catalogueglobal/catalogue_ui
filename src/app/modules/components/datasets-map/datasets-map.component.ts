@@ -14,7 +14,7 @@ import { Configuration,
     SessionService,
     SharedService,
     UtilsService
-} from "app/modules/common/";
+}                                         from "app/modules/common/";
 import { DatasetsActions }                                       from "app/state/datasets/datasets.actions";
 import { DatasetsState }                                         from "app/state/datasets/datasets.reducer";
 
@@ -204,7 +204,7 @@ export class DatasetsMapComponent implements AfterViewInit {
 
     private setCenterMap() {
         let lastCenter = this.shared.getCenterMap();
-        if (lastCenter.lat != 0 && lastCenter.lng != 0) {
+        if (lastCenter.lat !== 0 && lastCenter.lng !== 0) {
             this.position = [lastCenter.lat, lastCenter.lng];
             //this.initialZoom = lastCenter.zoom;
         } else {
@@ -215,7 +215,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     private goTo(theMap, thePosition, isReset) {
         let theZoom = this._zoom || this.config.MAP_ZOOM_POSITION;
         let lastCenter = this.shared.getCenterMap();
-        if (lastCenter.lat != 0 && lastCenter.lng != 0 && isReset == false) {
+        if (lastCenter.lat !== 0 && lastCenter.lng !== 0 && isReset === false) {
             thePosition[0] = lastCenter.lat;
             thePosition[1] = lastCenter.lng;
             theZoom = lastCenter.zoom;

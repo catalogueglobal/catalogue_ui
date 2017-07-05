@@ -2,17 +2,21 @@ import { Component, Output, EventEmitter, Input, ViewChild } from "@angular/core
 import { Actions } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { PaginationService } from "ng2-pagination";
-import { Configuration } from "app/commons/configuration";
 import { InlineEditEvent } from "app/commons/directives/inline-edit-text/inline-edit-generic.component";
-import { IFeed, FeedsApiService } from "app/commons/services/api/feedsApi.service";
-import { UsersApiService } from "app/commons/services/api/usersApi.service";
-import { SessionService } from "app/commons/services/session.service";
-import { UtilsService } from "app/commons/services/utils.service";
 import { DatasetsActions, toFeedReference, DatasetsActionType,IFeedReference } from "app/state/datasets/datasets.actions";
 import { DatasetsState } from "app/state/datasets/datasets.reducer";
 import { DatasetsTableComponent } from "app/modules/datasets-table/datasets-table.component";
 import { IFeedRow } from "app/modules/datasets/datasets.component";
-import { SharedService } from "app/commons/services/shared.service";
+
+import { Configuration,
+    FeedsApiService,
+    IFeed,
+    UsersApiService,
+    SessionService,
+    SharedService,
+    UtilsService
+} from "app/modules/common/";
+
 import { LicenseModal } from 'app/commons/directives/modal/license-modal.component';
 import { MiscDataModal } from 'app/commons/directives/modal/miscdata-modal.component';
 import { DeleteFeedModal } from 'app/commons/directives/modal/delete-feed-modal.component';

@@ -1,5 +1,5 @@
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard }            from "./commons/guards/AuthGuard";
+import { AuthGuard }            from "./modules/common/";
 import { DatasetsComponent }    from "./modules/datasets/datasets.component";
 import { FeedsComponent }       from "./modules/feeds/feeds.component";
 import { MyDatasetsComponent }  from "./modules/my-datasets/my-datasets.component";

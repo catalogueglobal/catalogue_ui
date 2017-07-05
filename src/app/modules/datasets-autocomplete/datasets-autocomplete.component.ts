@@ -1,6 +1,6 @@
 import { Component, Output, Input }                    from '@angular/core';
 import { CompleterService, RemoteData, CompleterItem } from 'ng2-completer';
-import { Configuration }                               from "app/commons/configuration";
+import { Configuration }                               from "app/modules/common";
 import { EventEmitter }                                from "@angular/common/src/facade/async";
 import * as leaflet                                    from "leaflet";
 

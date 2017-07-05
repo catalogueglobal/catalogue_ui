@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, Renderer } from "@angular/core";
 import { Observable }                                                              from "rxjs";
-import { Configuration }                                                           from "app/commons/configuration";
+import { Configuration }                                                           from "app/modules/common";
 import { InlineEditGenericComponent, InlineEditEvent }                             from "./inline-edit-generic.component";
 
 @Component({

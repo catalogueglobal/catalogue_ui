@@ -20,7 +20,7 @@ import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent }                                             from "./app.component";
 import { routing }                                                  from "./app.routes";
-import { Configuration }                                            from "./commons/configuration";
+// import { Configuration }                                            from "./commons/configuration";
 import { CustomFileinputDirective }                                 from "./commons/directives/customFileinput.directive";
 import { FeedCreateFormComponent }                                  from "./commons/directives/feed-create-form/feed-create-form.component";
 import { InlineEditFileComponent }                                  from "./commons/directives/inline-edit-file/inline-edit-file.component";
@@ -30,18 +30,7 @@ import { SortLinkComponent }                                        from "./comm
 import { SpinnerComponent }                                         from "./commons/directives/spinner/spinner.component";
 import { StatusComponent }                                          from "./commons/directives/status/status.component";
 import { SubscribeFormComponent }                                   from './commons/directives/subscribe-form/subscribe-form.component';
-import { AuthGuard }                                                from "./commons/guards/AuthGuard";
-import { InstitutionalUrlPipe }                                     from "./commons/pipes/institutionalUrl.pipe";
-import { OrderByPipe }                                              from "./commons/pipes/orderby";
-import { FeedsApiService }                                          from "./commons/services/api/feedsApi.service";
-import { LocalFiltersService }                                      from "./commons/services/api/localFilters.service";
-import { ProjectsApiService }                                       from "./commons/services/api/projectsApi.service";
-import { UsersApiService }                                          from "./commons/services/api/usersApi.service";
-import { MapUtilsService }                                          from "./commons/services/mapUtils.service";
-import { SessionService }                                           from "./commons/services/session.service";
-import { SharedService }                                            from "./commons/services/shared.service";
-import { UploadService }                                            from "./commons/services/upload.service";
-import { UtilsService }                                             from "./commons/services/utils.service";
+import { SessionService }                                           from "./modules/common/";
 import { LayoutComponent }                                          from "./layout/layout.component";
 import { DatasetsComponent }                                        from "./modules/datasets/datasets.component";
 import { DatasetsAutocompleteComponent }                            from "./modules/datasets-autocomplete/datasets-autocomplete.component";
@@ -63,10 +52,9 @@ import { DatatoolComponent }                                            from "./
 import { FeedMapComponent }                                            from "./commons/components/feed-map/feed-map.component";
 import {FeedMapUtilsService} from "./commons/components/feed-map/feed-map-utils.service";
 import {RouteFilter} from  "./commons/components/feed-map/route.filter";
-import {TruncatePipe} from "./commons/pipes/truncate.pipe";
-import {FilterPipe} from "./commons/pipes/filter.pipe";
-import {FilterByVisibilityPipe} from "./commons/pipes/filter-by-visibility.pipe";
+
 import { ValidationDetailsModal } from './commons/directives/modal/validation-details-modal.component';
+import { CtCommonModule } from './modules/common/';
 
 export function httpFactory(http: Http) {
     return new TranslateStaticLoader(http, '/assets/i18n', '.json');
@@ -109,11 +97,7 @@ export function composeProvider(state: any, action: any) {
         SortLinkComponent,
         MyDatasetsTableComponent,
 
-        // pipes
-        InstitutionalUrlPipe,
         RouteFilter,
-        OrderByPipe,
-        FilterByVisibilityPipe,
         SpinnerComponent,
         StatusComponent,
         FeedCreateFormComponent,
@@ -128,9 +112,7 @@ export function composeProvider(state: any, action: any) {
         ConfirmFeedVersionModal,
         ValidationDetailsModal,
         DatatoolComponent,
-        FeedMapComponent,
-        TruncatePipe,
-        FilterPipe
+        FeedMapComponent
     ],
 
     imports: [
@@ -156,7 +138,8 @@ export function composeProvider(state: any, action: any) {
             deps: [Http]
         }),
         TooltipModule.forRoot(),
-        ChartsModule
+        ChartsModule,
+        CtCommonModule
     ],
 
     entryComponents: [AppComponent],
@@ -164,10 +147,8 @@ export function composeProvider(state: any, action: any) {
     bootstrap: [AppComponent],
 
     providers: [
-        TranslateService, SessionService, Configuration, UploadService,
-        UtilsService, MapUtilsService, ProjectsApiService, FeedsApiService, UsersApiService, LocalFiltersService,
-        DatasetsActions, SharedService, FeedMapUtilsService,
-        AuthGuard,
+        TranslateService,
+        DatasetsActions, FeedMapUtilsService,
         //NG2_WEBSTORAGE,
 
         {
@@ -180,8 +161,7 @@ export function composeProvider(state: any, action: any) {
             provide: AuthHttp,
             useFactory: httpAuthConfigFactory,
             deps: [Http, AuthConfig]
-        },
-        FilterPipe
+        }
     ]
 })
 export class AppModule { }

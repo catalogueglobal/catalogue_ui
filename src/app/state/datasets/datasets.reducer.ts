@@ -1,5 +1,5 @@
 import { Action }                                            from "@ngrx/store";
-import { FeedsGetResponse, IFeed, IFeedApi, FeedsGetParams } from "app/commons/services/api/feedsApi.service";
+import { FeedsGetResponse, IFeed, IFeedApi, FeedsGetParams } from "app/modules/common/";
 import { DatasetsActionType, IFeedReference }                from "./datasets.actions";
 
 export interface DatasetsState {

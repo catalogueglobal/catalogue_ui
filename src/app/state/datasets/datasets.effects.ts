@@ -3,9 +3,15 @@ import { Injectable } from "@angular/core";
 import { Effect, Actions } from "@ngrx/effects";
 import { Action, Store } from "@ngrx/store";
 import { Observable } from "rxjs/Observable";
-import { FeedsApiService, FeedsGetParams, IFeedApi, IFeed, FeedsGetResponse, ILicense } from "app/commons/services/api/feedsApi.service";
-import { ProjectsApiService } from "app/commons/services/api/projectsApi.service";
-import { UsersApiService, UserSubscribeParams } from "app/commons/services/api/usersApi.service";
+import {
+    ProjectsApiService,
+    UserSubscribeParams,
+    UsersApiService,
+    FeedsApiService,
+    FeedsGetParams,
+    IFeed,
+    FeedsGetResponse,
+    ILicense } from "app/modules/common/";
 import { DatasetsActionType, DatasetsActions, IFeedReference } from "./datasets.actions";
 import { DatasetsState } from "./datasets.reducer";
 
@@ -283,7 +289,7 @@ export class DatasetsEffects {
             let failedLicenses = [];
             let errors: any[] = [];
             let nbSuccess = 0;
-            var keys = Object.keys(licenses);
+            let keys = Object.keys(licenses);
             keys.forEach(key => {
                 console.log('deleting ' + nbSuccess + '/' + keys.length, key, licenses[key]);
                 this.feedsApi.unsetLicense(licenses[key], key).subscribe(() => {
@@ -310,8 +316,8 @@ export class DatasetsEffects {
             let failedMiscs = [];
             let errors: any[] = [];
             let nbSuccess = 0;
-            var keys = Object.keys(miscs);
-            var failedCb = function(e, key){
+            let keys = Object.keys(miscs);
+            let failedCb = function(e, key) {
                 console.log('delete failed', e);
                 failedMiscs.push(key);
                 errors.push(e);
@@ -428,10 +434,10 @@ export class DatasetsEffects {
                         feed => {
                             console.log("created feed:", feed);
                             onProgress("uploading...")
-                            var allObs = [];
+                            let allObs = [];
 
-                            if (createFeed.retrievalMethod === 'MANUALLY_UPLOADED'){
-                              allObs.push(this.feedsApi.setFile(feed.id, createFeed.file));
+                            if (createFeed.retrievalMethod === 'MANUALLY_UPLOADED') {
+                                allObs.push(this.feedsApi.setFile(feed.id, createFeed.file));
                             }
 
                             if (createFeed.licenseFile) {
@@ -445,13 +451,13 @@ export class DatasetsEffects {
                                 allObs.push(this.createObservable(createMetadata, 'createMetadata', onProgress, feed));
                             }
                             return (Observable.forkJoin(allObs).subscribe(
-                                data =>{
-                                  obs$.next(feed);
-                                  obs$.complete();
+                                data => {
+                                    obs$.next(feed);
+                                    obs$.complete();
                                 },
-                                error =>{
-                                  console.log(error);
-                                  return obs$.error(error);
+                                error => {
+                                    console.log(error);
+                                    return obs$.error(error);
                                 },
                                 () => {
                                     obs$.next(feed);

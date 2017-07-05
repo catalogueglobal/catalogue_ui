@@ -2,16 +2,18 @@ import {  Component, AfterViewInit, Input } from '@angular/core';
 import * as leaflet                                              from "leaflet";
 import { Store }                                                 from "@ngrx/store";
 require('leaflet.markercluster');
-import { IFeed, FeedsApiService }                                from "app/commons/services/api/feedsApi.service";
-import { MapUtilsService }                                       from "app/commons/services/mapUtils.service";
-import { UtilsService }                                          from "app/commons/services/utils.service";
+import { IFeed,
+    FeedsApiService,
+    MapUtilsService,
+    UtilsService,
+    Configuration,
+    SessionService,
+    SharedService,
+    ProjectsApiService
+}                                from "app/modules/common/";
 import { DatasetsActions }                                       from "app/state/datasets/datasets.actions";
 import { DatasetsState }                                         from "app/state/datasets/datasets.reducer";
-import { Configuration }                                         from "app/commons/configuration";
-import { ProjectsApiService }                                    from "app/commons/services/api/projectsApi.service";
-import { SessionService }                      from "app/commons/services/session.service";
 import {FeedMapUtilsService} from "app/commons/components/feed-map/feed-map-utils.service";
-import { SharedService } from "app/commons/services/shared.service";
 import { Subscription } from 'rxjs/Subscription';
 
 const NB_ROUTE_MAX = 100;
@@ -94,13 +96,13 @@ export class FeedMapComponent implements AfterViewInit {
                 this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
                     that.stops = response;
                     that.loading = false;
-                }).catch( ()=> that.loading = false);
+                }).catch(() => that.loading = false);
             this.loading = true;
             this.feedsApi.getRoutes(this._feed.id, this._feed.selectedVersion ?
                 this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
                     that.routes = response;
                     that.loading = false;
-                }).catch( ()=> that.loading = false);
+                }).catch(() => that.loading = false);
         }
     }
 
@@ -365,7 +367,7 @@ export class FeedMapComponent implements AfterViewInit {
                         that.createTripPatterns(responseTrip);
                         that.getAllStops(responseTrip);
                         that.loading = false;
-                    }).catch( ()=> that.loading = false);
+                    }).catch(() => that.loading = false);
             }
         };
 

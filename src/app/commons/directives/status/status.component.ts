@@ -3,7 +3,7 @@ import { Store }                                         from "@ngrx/store";
 import { Observable }                                    from "rxjs";
 import { ToasterService, ToasterConfig, BodyOutputType } from "angular2-toaster/angular2-toaster";
 import { TranslateService }                              from "ng2-translate/src/translate.service";
-import { Configuration }                                 from "app/commons/configuration";
+import { Configuration }                                 from "app/modules/common";
 import { DatasetsActions }                               from "app/state/datasets/datasets.actions";
 import { DatasetsState }                                 from "app/state/datasets/datasets.reducer";
 
@@ -35,7 +35,7 @@ export class StatusComponent implements AfterViewInit {
         this.status.subscribe(
             statusValue => {
                 if (statusValue.errorMessage) {
-                    var toast = {
+                    let toast = {
                         type: 'error',
                         body: this.translateService.instant(statusValue.errorMessage, statusValue.errorMessageArgs),
                         timeout: this.config.NOTIFY_ERROR_TIMEOUT

@@ -4,11 +4,12 @@ import { Store } from "@ngrx/store";
 import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
 import { ICreateFeed } from "app/state/datasets/datasets.effects";
 import { DatasetsState } from "app/state/datasets/datasets.reducer";
-import { ProjectsApiService } from "app/commons/services/api/projectsApi.service";
-import { FeedsApiService } from "app/commons/services/api/feedsApi.service";
-import { SessionService } from "app/commons/services/session.service";
-import { UtilsService } from "app/commons/services/utils.service";
-import { Configuration } from "app/commons/configuration";
+import { ProjectsApiService,
+    FeedsApiService,
+    SessionService,
+    UtilsService,
+    Configuration
+} from "app/modules/common/";
 
 
 @Component({
@@ -59,7 +60,7 @@ export class FeedCreateFormComponent {
 
     private submit(): void {
         if (this.simpleUpload.retrievalMethod === this.RETRIEVAL_METHODS.MANUAL &&
-           !this.simpleUpload.file) {
+            !this.simpleUpload.file) {
             return;
         }
         let createFeed: ICreateFeed = {
@@ -82,8 +83,8 @@ export class FeedCreateFormComponent {
     private createSuccess(feed) {
         if (this.simpleUpload.retrievalMethod === this.RETRIEVAL_METHODS.CREATE) {
             window.location.href = this.config.EDITION_URL + '/feed/' + feed.id;
-        }else{
-          this.resetForm();
+        } else {
+            this.resetForm();
 
         }
     }
@@ -98,11 +99,11 @@ export class FeedCreateFormComponent {
     }
 
     public getAllProjectNames() {
-        if (this.sessionService.loggedIn == true) {
+        if (this.sessionService.loggedIn === true) {
             this.projectsService.getAllSecureProject().subscribe(response => {
                 let name;
                 let id;
-                for (var i = 0; response && i < response.length; i++) {
+                for (let i = 0; response && i < response.length; i++) {
                     name = response[i]["name"];
                     id = response[i]["id"];
                     this.projectsName[i] = {

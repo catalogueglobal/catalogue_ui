@@ -1,7 +1,7 @@
 import {Component, ViewChild, ViewChildren, Input, Output} from '@angular/core';
 import {CommonComponent} from './common-modal.component';
 import { Http } from "@angular/http";
-import {FilterPipe} from "app/commons/pipes/filter.pipe";
+import {FilterPipe} from "app/modules/common/";
 
 @Component({
     selector: 'validation-details-modal',

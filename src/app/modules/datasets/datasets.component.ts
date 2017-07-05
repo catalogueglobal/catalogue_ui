@@ -2,12 +2,16 @@ import { Component, ViewChild, AfterViewInit } from "@angular/core";
 import { Actions }                             from "@ngrx/effects";
 import { Store }                               from "@ngrx/store";
 import { Observable }                          from "rxjs/Rx";
-import { Configuration }                       from "app/commons/configuration";
 import { SortOrder }                           from "app/commons/directives/sort-link/sort-link.component";
-import { IFeed, IBounds, FeedsApiService }     from "app/commons/services/api/feedsApi.service";
-import { LocalFiltersService }                 from "app/commons/services/api/localFilters.service";
-import { ProjectsApiService }                  from "app/commons/services/api/projectsApi.service";
-import { UtilsService }                        from "app/commons/services/utils.service";
+import { Configuration,
+    ProjectsApiService,
+    IFeed,
+    IBounds,
+    FeedsApiService,
+    UtilsService,
+    LocalFiltersService
+} from "app/modules/common/";
+
 import { DatasetsState }                       from "app/state/datasets/datasets.reducer";
 import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
 import { DatasetsMapComponent }                from "app/modules/datasets-map/datasets-map.component";

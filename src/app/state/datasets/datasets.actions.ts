@@ -1,9 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Action } from "@ngrx/store";
-import { FeedsGetResponse, IFeedApi, FeedsGetParams, IFeed, ILicense } from "app/commons/services/api/feedsApi.service";
-import { IProject } from "app/commons/services/api/projectsApi.service";
-import { UserSubscribeParams } from "app/commons/services/api/usersApi.service";
 import { ICreateFeed } from "./datasets.effects";
+import { FeedsGetResponse,
+    IFeedApi,
+    FeedsGetParams,
+    IFeed,
+    ILicense,
+    IProject,
+    UserSubscribeParams
+} from "app/modules/common/";
 
 export const DatasetsActionType = {
     STATUS_ERROR_MESSAGE: `STATUS_ERROR_MESSAGE`,
@@ -263,16 +268,16 @@ export class DatasetsActions {
     feedCreate(createFeed: ICreateFeed): Action {
         // use filename as default project/feed name
         let defaultName;
-        switch(createFeed.retrievalMethod){
-          case 'PRODUCED_IN_HOUSE':
-            defaultName = 'PRODUCED_IN_HOUSE';
-          break;
-          case 'MANUALLY_UPLOADED':
-            defaultName = createFeed.file.name;
-          break;
-          default:
-            defaultName = createFeed.feedName;
-          break;
+        switch (createFeed.retrievalMethod) {
+            case 'PRODUCED_IN_HOUSE':
+                defaultName = 'PRODUCED_IN_HOUSE';
+                break;
+            case 'MANUALLY_UPLOADED':
+                defaultName = createFeed.file.name;
+                break;
+            default:
+                defaultName = createFeed.feedName;
+                break;
         }
 
         if (!createFeed.projectName || !createFeed.projectName.trim().length) {

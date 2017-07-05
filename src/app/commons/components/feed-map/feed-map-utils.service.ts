@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { MapUtilsService }                                       from "app/commons/services/mapUtils.service";
+import { MapUtilsService }                                       from "app/modules/common/";
 import * as leaflet   from "leaflet";
 
 @Injectable()
@@ -40,9 +40,9 @@ export class FeedMapUtilsService {
     }
 
     getMinMax(list, lat, min) {
-        var res = list[0];
-        var index = lat ? 1 : 0;
-        for (var i = 0; i < list.length; i++) {
+        let res = list[0];
+        let index = lat ? 1 : 0;
+        for (let i = 0; i < list.length; i++) {
             if ((min && list[i][index] < res[index]) || (!min && list[i][index] > res[index])) {
                 res = list[i];
             }
@@ -51,7 +51,7 @@ export class FeedMapUtilsService {
     }
 
     getRouteData(routeId: string, routes): any {
-        for (var i = 0; i < routes.length; i++) {
+        for (let i = 0; i < routes.length; i++) {
             if (routes[i].id === routeId) {
                 return routes[i];
             }

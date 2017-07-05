@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { UtilsService }                                   from "app/commons/services/utils.service";
+import { UtilsService }                                   from "app/modules/common";
 
 export type SortOrder = {
     sort: string,
@@ -30,7 +30,7 @@ export class SortLinkComponent implements OnInit {
     }
 
     private computeNextOrder() {
-        if (this._value.sort != this.sortValue) {
+        if (this._value.sort !== this.sortValue) {
             return this.defaultOrder;
         }
         else {

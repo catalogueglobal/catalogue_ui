@@ -3,7 +3,7 @@ import { Actions }                             from "@ngrx/effects";
 import { Store }                               from "@ngrx/store";
 import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
 import { DatasetsState }                       from "app/state/datasets/datasets.reducer";
-import { UserSubscribeParams }                 from "app/commons/services/api/usersApi.service";
+import { UserSubscribeParams }                 from "app/modules/common/";
 
 @Component({
     selector:    'app-subscribe-form',
