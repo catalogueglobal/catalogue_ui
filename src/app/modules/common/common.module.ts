@@ -3,7 +3,6 @@ import { CommonModule }                                             from '@angul
 import { FormsModule }                                              from '@angular/forms';
 import { Http, HttpModule }                                         from '@angular/http';
 import { BrowserModule }                                            from '@angular/platform-browser';
-import { compose }                                                  from '@ngrx/core/compose';
 
 import { StoreModule }                             from '@ngrx/store';
 import { StoreDevtoolsModule }                                      from '@ngrx/store-devtools';

@@ -25,5 +25,6 @@ export * from './feed-map/feed-map.component';
 export * from './feed-map/feed-map-utils.service';
 export * from './feed-map/feed-route.filter';
 export * from './datasets-generic/datasets-generic.component';
+export * from './layout/layout.component';
 
 export * from './components.module';

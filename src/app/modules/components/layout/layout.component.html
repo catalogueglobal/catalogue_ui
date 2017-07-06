@@ -1,0 +1,139 @@
+<div id="wrapper">
+    <header id="header" class="cf">
+        <div class="wrap">
+            <a href="{{'/'|institutionalUrl}}" class="pull-left" title="Catalogue" id="logo">
+                <img src="images/logo-horizontal-blanc.png" alt="Catalogue">
+            </a>
+            <nav id="mainmenu" class="pull-right">
+                <ul class="cf menu-component">
+
+                    <li>
+                        <a routerLinkActive="active" routerLink="/datasets" class="session-item">{{'layout.menu.download'|translate}}</a>
+                    </li>
+                    <li>
+                        <a *ngIf="sessionService.loggedIn" routerLinkActive="active" routerLink="/my-datasets" class="session-item">{{'layout.menu.manage'|translate}}</a>
+                        <a href="#" *ngIf="!sessionService.loggedIn" (click)="sessionService.login()" class="session-item">{{'layout.menu.manage'|translate}}</a>
+                    </li>
+
+                    <li class="dropdown" *ngIf="sessionService.loggedIn && sessionService.userProfile">
+                        <a href="#" class="dropdown-toggle session-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{sessionService.userProfile.email}}
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu user-dropdown-menu">
+                            <li>
+                                <a href="#" class="session-item" (click)="sessionService.logout()">{{'layout.menu.logout'|translate}}</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li *ngIf="!sessionService.loggedIn">
+                        <a href="#" class="session-item" (click)="sessionService.login()">{{'layout.menu.login'|translate}}</a>
+                    </li>
+                </ul>
+            </nav>
+            <!--/#mainmenu-->
+        </div>
+        <!--/.wrap-->
+    </header>
+    <!--/#header-->
+
+    <router-outlet></router-outlet>
+    <!-- Routed views go here -->
+
+    <footer id="footer">
+        <div class="wrap">
+            <div class="footer-left">
+                <div class="fmenu">
+                    <ul class="cf">
+                        <li>
+                            <a href="{{'/'|institutionalUrl}}">{{'layout.footer.home'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/about/'|institutionalUrl}}">{{'layout.footer.about'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/faq/'|institutionalUrl}}">{{'layout.footer.faq'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/community/'|institutionalUrl}}">{{'layout.footer.community'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/tools/'|institutionalUrl}}">{{'layout.footer.tools'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/blog/'|institutionalUrl}}">{{'layout.footer.blog'|translate}}</a>
+                        </li>
+                        <li>
+                            <a href="{{'/contact-us/'|institutionalUrl}}">{{'layout.footer.contact'|translate}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--/.fmenu-->
+                <p class="copyright" [innerHTML]="'layout.footer.copyright'|translate:{year:'2016'}"></p>
+            </div>
+            <!--/.footer-left-->
+            <div class="footer-right">
+                <a *ngIf="!sessionService.loggedIn" href="#" class="poptrigger button subscribe" data-rel="subscribepopup">{{'layout.footer.subscribe'|translate}}</a>
+                <div class="socials">
+                    <ul class="cf">
+                        <li>
+                            <a href="http://www.facebook.com" class="social fb" title="Facebook">facebook</a>
+                        </li>
+                        <li>
+                            <a href="http://www.twitter.com" class="social tw" title="Twitter">twitter</a>
+                        </li>
+                        <li>
+                            <a href="http://www.linkedin.com" class="social li" title="Linked in">linked-in</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--/.social-->
+            </div>
+            <!--/.footer-right-->
+        </div>
+        <!--/.wrap -->
+    </footer>
+    <!--/#footer -->
+</div>
+<!--/#wrapper-->
+
+<div class="popouterbox" id="subscribepopup">
+    <div class="popup-block">
+        <div class="pop-contentbox">
+            <a href="#" class="close-dialogbox"></a>
+            <h5 class="title">{{'popup.subscribe.title'|translate}}</h5>
+            <app-subscribe-form></app-subscribe-form>
+        </div>
+        <!--/.pop-contentbox-->
+    </div>
+    <!--/.popup-block-->
+</div>
+<!--/.popouterbox-->
+
+<div class="popouterbox" id="createfeed">
+    <div class="popup-block">
+        <div class="pop-contentbox">
+            <a href="#" class="close-dialogbox"></a>
+            <h5 class="title">{{'popup.upload.title'|translate}}</h5>
+            <app-feed-create-form></app-feed-create-form>
+        </div>
+        <!--/.pop-contentbox-->
+    </div>
+    <!--/.popup-block-->
+</div>
+<!--/#createfeed-->
+
+<div class="popouterbox" id="uploadingfeed">
+    <div class="popup-block">
+        <div class="pop-contentbox">
+            <a href="#" class="close-dialogbox"></a>
+            <h5 class="title">Upload</h5>
+            <div style="text-align:center;margin-top:40px;">
+                Your files are uploading.
+                <br />
+                <button class="close-modal" style="text-align:center;">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-status></app-status>

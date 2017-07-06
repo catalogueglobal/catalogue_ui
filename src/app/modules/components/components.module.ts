@@ -38,13 +38,15 @@ import {
     FeedRouteFilter,
     FeedMapComponent,
     FeedMapUtilsService,
-    DatasetsGenericComponent
+    DatasetsGenericComponent,
+    LayoutComponent
 } from './';
 
 let _entryPoints = [
 ];
 
 let _declarations: Array<any> = [
+    LayoutComponent,
     DatasetsMapComponent,
     DatasetsAutocompleteComponent,
     DatasetsTableComponent,
