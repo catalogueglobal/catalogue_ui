@@ -20,6 +20,8 @@ export class DeleteFeedModal extends CommonComponent {
     @Input()
     feedsMiscDatas: any;
 
+    private licenses;
+    private miscs;
     private deletedFeed: any;
     constructor(
         protected store: Store<DatasetsState>,
@@ -41,27 +43,31 @@ export class DeleteFeedModal extends CommonComponent {
         this.deletedFeed = {
             deleteProject: false,
             clicked: false
+        };
+        if (this.feed.feedVersionCount <= 1 || !this.feed.feedVersionCount){
+          this.store.dispatch(this.datasetsAction.feedDeleteLicenses(this.licenses));
+          this.store.dispatch(this.datasetsAction.feedDeleteMiscs(this.miscs));
         }
     }
     protected deleteFeed() {
         let feed: IFeedReference = toFeedReference(this.feed);
         if (feed) {
-            var licenses = {};
-            var miscs = {};
+            this.licenses = {};
+            this.miscs = {};
             if (this.feedsLicenses[feed.feedsourceId]) {
-                if (!licenses[this.feedsLicenses[feed.feedsourceId].id]) {
-                    licenses[this.feedsLicenses[feed.feedsourceId].id] = [];
+                if (!this.licenses[this.feedsLicenses[feed.feedsourceId].id]) {
+                    this.licenses[this.feedsLicenses[feed.feedsourceId].id] = [];
                 }
-                licenses[this.feedsLicenses[feed.feedsourceId].id].push(feed.feedsourceId);
+                this.licenses[this.feedsLicenses[feed.feedsourceId].id].push(feed.feedsourceId);
             }
             if (this.feedsMiscDatas[feed.feedsourceId]) {
-                if (!miscs[this.feedsMiscDatas[feed.feedsourceId].id]) {
-                    miscs[this.feedsMiscDatas[feed.feedsourceId].id] = [];
+                if (!this.miscs[this.feedsMiscDatas[feed.feedsourceId].id]) {
+                    this.miscs[this.feedsMiscDatas[feed.feedsourceId].id] = [];
                 }
-                miscs[this.feedsMiscDatas[feed.feedsourceId].id].push(feed.feedsourceId);
+                this.miscs[this.feedsMiscDatas[feed.feedsourceId].id].push(feed.feedsourceId);
             }
-            this.store.dispatch(this.datasetsAction.feedDeleteLicenses(licenses));
-            this.store.dispatch(this.datasetsAction.feedDeleteMiscs(miscs));
+            feed.versionId = this.feed.selectedVersion.id;
+            feed.feedVersionCount = this.feed.feedVersionCount;
             this.store.dispatch(this.datasetsAction.feedDelete([feed]));
         }
         return false;

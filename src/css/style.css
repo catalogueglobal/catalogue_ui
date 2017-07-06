@@ -584,7 +584,7 @@ p.drop-caps.secundary:first-child:first-letter {
 
 #mainmenu>ul>li {
     float: left;
-    margin: 0 15px;
+    margin: 0 0 0 15px;
 }
 
 #mainmenu>ul>li>a {
@@ -1837,20 +1837,6 @@ input[type="submit"].submit-btn {
 .customfile .fileinput {
     cursor: pointer;
     z-index: 99;
-}
-
-.customfile span.cust-btn {
-    font-family: 'karbon-semibold', Helvetica, sans-serif;
-    font-size: 22px;
-    background: #333 none repeat scroll 0 0;
-    color: #fff;
-    float: right;
-    line-height: 58px;
-    padding: 0 40px;
-    position: relative;
-    right: -1px;
-    top: -1px;
-    z-index: 1;
 }
 
 .customfile span.cust-field {

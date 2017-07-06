@@ -13,6 +13,7 @@ export class ConfirmFeedVersionModal extends CommonComponent {
         if (this.onSubmit) {
             this.onSubmit(true);
         }
+        super.hide();
     }
     cancel () {
         super.hide();

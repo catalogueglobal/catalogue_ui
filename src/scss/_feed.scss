@@ -103,6 +103,10 @@
         border-radius: 5px;
         /* font-weight: bold; */
         font-family: 'karbon-semibold', Helvetica, sans-serif;
+
+        .btn {
+            padding-left: 3px;
+        }
     }
 
     .well {
@@ -140,5 +144,11 @@
     input[type="checkbox"],
     input[type="radio"] {
         margin-top: 6px;
+    }
+
+    .three-bounce-spinner {
+        position: absolute !important;
+        margin-top: -25px !important;
+        margin-left: 15px !important;
     }
 }

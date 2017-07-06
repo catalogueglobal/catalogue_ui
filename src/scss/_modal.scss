@@ -3,11 +3,6 @@
 
 	.customfile {
 		width: 100% !important;
-		height: 45px;
-
-		.cust-btn {
-			top: -6px !important;
-		}
 	}
 
 	.alert {
@@ -25,6 +20,60 @@
 
 		.license-text {
 			white-space: pre;
+		}
+
+		h4 {
+			font-size: 18px !important;
+		}
+
+		.list-group {
+			max-height: 750px;
+			overflow-y: auto;
+
+			.group-header {
+				label {
+					cursor: pointer;
+				}
+
+				.link-header {
+					border-style: solid;
+					border-width: 1px;
+					border-radius: 5px;
+					border-color: $ct-light-gray;
+					padding: 5px;
+				}
+			}
+		}
+
+		.link-header,
+		.list-group-item {
+			cursor: pointer;
+
+			&.LOW {
+				background-color: #faf2cc;
+			}
+
+			&.HIGH {
+				background-color: #f2dede;
+			}
+
+			&.MEDIUM {
+				background-color: #FFE4B5;
+			}
+		}
+
+		pre {
+			display: block;
+			line-height: 1;
+			font-size: 11px;
+			text-align: left;
+			margin: 0;
+			padding: 0;
+		}
+
+		.list-group-dyn-content {
+			background-color: $ct-light-gray;
+			padding: 5px;
 		}
 	}
 
@@ -53,5 +102,19 @@
 		cursor: pointer;
 		color: white;
 		text-transform: uppercase;
+	}
+
+	select {
+		padding: 0 10px;
+		height: 35px;
+	}
+
+	input[type="text"] {
+		height: 35px;
+	}
+
+	.pie-canvas {
+		height: 400px !important;
+		width: 400px !important;
 	}
 }

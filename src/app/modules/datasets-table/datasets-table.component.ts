@@ -13,6 +13,7 @@ import { DatasetsState } from "app/state/datasets/datasets.reducer";
 import { IFeedRow } from "app/modules/datasets/datasets.component";
 import { SharedService } from "app/commons/services/shared.service";
 import { DatatoolComponent } from "app/commons/components/datatool.component";
+import { ValidationDetailsModal } from 'app/commons/directives/modal/validation-details-modal.component';
 
 @Component({
     selector: 'app-datasets-table',
@@ -22,6 +23,8 @@ import { DatatoolComponent } from "app/commons/components/datatool.component";
 export class DatasetsTableComponent extends DatatoolComponent{
     @Input() protected _feeds: IFeedRow[];
     @Output() protected sortChange = new EventEmitter();
+    @ViewChild(ValidationDetailsModal)
+    public readonly validationDetailsModal: ValidationDetailsModal;
 
     private page: number;
 
@@ -83,6 +86,13 @@ export class DatasetsTableComponent extends DatatoolComponent{
                 this.sessionService.setProfile();
             }
         );
+    }
+
+    protected openValidation(feed){
+      super.openValidation(feed);
+      if (feed && feed.selectedVersion && feed.selectedVersion.id){
+        this.validationDetailsModal.show();
+      }
     }
 
     public resetPage() {

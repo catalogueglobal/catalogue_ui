@@ -5,7 +5,7 @@
 
 <div class="container-fluid">
 	<div class="col-md-12 no-padding">
-		<div class="col-md-6 map-section">
+		<div class="col-md-6 map-section well well-sm">
 			<div id="map-wrapper">
 				<app-datasets-map [feeds]="feeds$|async" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom" (boundsChange)="onBoundsChange($event)"></app-datasets-map>
 				<div id="search-input-wrapper" style="">
@@ -24,7 +24,8 @@
 			</div>
 			<app-datasets-table [feeds]="feeds$|async" (sortChange)="onSortChange($event)"></app-datasets-table>
 			<div class="noresult" *ngIf="feeds && feeds.length==0">
-				{{'datasets.table.noresult.info'|translate}} <a (click)="resetSearch()">{{'datasets.table.noresult.reset'|translate}}</a>.
+				{{'datasets.table.noresult.info'|translate}}
+				<a (click)="resetSearch()">{{'datasets.table.noresult.reset'|translate}}</a>.
 			</div>
 		</div>
 	</div>

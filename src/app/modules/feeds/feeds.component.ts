@@ -14,6 +14,7 @@ import { DatatoolComponent } from "app/commons/components/datatool.component";
 import { LicenseModal } from 'app/commons/directives/modal/license-modal.component';
 import { MiscDataModal } from 'app/commons/directives/modal/miscdata-modal.component';
 import {ConfirmFeedVersionModal} from 'app/commons/directives/modal/confirm-feed-version-modal.component';
+import { ValidationDetailsModal } from 'app/commons/directives/modal/validation-details-modal.component';
 
 @Component({
     selector: 'app-feeds',
@@ -24,7 +25,7 @@ export class FeedsComponent extends DatatoolComponent {
     public feedId: string;
     public notesFeed: Array<any>;
     public feed: any = {};
-    private isAuthorised: boolean = false;
+    private isAuthorised = false;
     private file;
     private selectedFileTarget;
     @ViewChild(LicenseModal)
@@ -33,6 +34,9 @@ export class FeedsComponent extends DatatoolComponent {
     public readonly miscDataModal: MiscDataModal;
     @ViewChild(ConfirmFeedVersionModal)
     public readonly confirmFeedVersionModal: ConfirmFeedVersionModal;
+
+    @ViewChild(ValidationDetailsModal)
+    public readonly validationDetailsModal: ValidationDetailsModal;
 
     @Input() private mapPosition;
     private _feeds: any;
@@ -103,7 +107,7 @@ export class FeedsComponent extends DatatoolComponent {
             }
             console.log(that.feed)
             if (that.sessionService.loggedIn === true) {
-                that.feedsApiService.getNotes(that.feedId).then(function(data) {
+                that.feedsApiService.getNotes(that.feedId, that.feed.isPublic).then(function(data) {
                     that.notesFeed = data.reverse();
                     console.log(that.notesFeed);
                 }).catch(function(err) {
@@ -208,10 +212,13 @@ export class FeedsComponent extends DatatoolComponent {
             action => {
                 let updatedFeed = action.payload.feed;
                 this.processConfirm('setFile' + updatedFeed.id);
-                this.selectedFileTarget.value = null;
+                this.selectedFileTarget = null;
                 this.file = null;
             }
         )
+
+        actions$.ofType(DatasetsActionType.FEED_DELETE_SUCCESS).subscribe(action => this.feedChanged());
+        actions$.ofType(DatasetsActionType.FEED_SET_FILE_SUCCESS).subscribe(() => this.feedChanged());
     }
 
 
@@ -293,19 +300,30 @@ export class FeedsComponent extends DatatoolComponent {
                 value: this.selectedFileTarget.files[0]
             });
         } else {
-            this.selectedFileTarget.value = null;
+            this.selectedFileTarget = null;
         }
     }
 
     protected fileChanged(event) {
         try {
-            let file = event.target.files[0];
             this.selectedFileTarget = event.target;
             this.confirmFeedVersionModal.show();
         }
         catch (e) {
             console.log(e);
         }
+    }
+
+    protected openValidation(feed){
+      super.openValidation(feed);
+      if (feed && feed.selectedVersion && feed.selectedVersion.id){
+        this.validationDetailsModal.show();
+      }
+    }
+
+    private feedChanged(){
+      console.log('getting versions');
+      this.getFeedVersion(this.feed);
     }
 
 }

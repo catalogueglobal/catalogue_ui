@@ -1,4 +1,4 @@
-import {  Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+import {  Component, AfterViewInit, Input } from '@angular/core';
 import * as leaflet                                              from "leaflet";
 import { Store }                                                 from "@ngrx/store";
 require('leaflet.markercluster');
@@ -11,6 +11,8 @@ import { Configuration }                                         from "app/commo
 import { ProjectsApiService }                                    from "app/commons/services/api/projectsApi.service";
 import { SessionService }                      from "app/commons/services/session.service";
 import {FeedMapUtilsService} from "app/commons/components/feed-map/feed-map-utils.service";
+import { SharedService } from "app/commons/services/shared.service";
+import { Subscription } from 'rxjs/Subscription';
 
 const NB_ROUTE_MAX = 100;
 
@@ -25,8 +27,8 @@ export class FeedMapComponent implements AfterViewInit {
     private allPatterns;
     map: leaflet.Map;
     private stops = [];
-    stopsMarkers: Array<leaflet.Marker>;
-    stationsMarkers: Array<leaflet.Marker>;
+    stopsMarkers: Array<leaflet.Marker> = new Array();
+    stationsMarkers: Array<leaflet.Marker> = new Array();
     initialPosition = this.config.MAP_DEFAULT_POSITION;
     _position;
     initialZoom: number = this.config.MAP_ZOOM_UNKNOWN;
@@ -38,6 +40,10 @@ export class FeedMapComponent implements AfterViewInit {
     patternsGroup;
     feedMarker;
     isAuthorised;
+    loading = false;
+    extractedData;
+
+    private subscription: Subscription;
 
     constructor(private utils: UtilsService,
         private config: Configuration,
@@ -47,11 +53,10 @@ export class FeedMapComponent implements AfterViewInit {
         private store: Store<DatasetsState>,
         private sessionService: SessionService,
         private projectsApi: ProjectsApiService,
-        private feedMapUtils: FeedMapUtilsService
+        private feedMapUtils: FeedMapUtilsService,
+        private shared: SharedService
 
     ) {
-        this.stopsMarkers = new Array();
-        this.stationsMarkers = new Array();
         this.NumberedDivIcon = mapUtils.createNumMarker();
         this.ImageDivIcon = mapUtils.createIconMarker(10, null, 20, 20);
         this.afterAuth();
@@ -75,16 +80,27 @@ export class FeedMapComponent implements AfterViewInit {
         if (this.map) {
             this.populateMap();
         }
+    }
+
+    private laodRoutes() {
         if (this._feed && this._feed.id && this.sessionService.loggedIn) {
             this.allPatterns = {};
+            this.stopsMarkers.length = 0;;
+            this.stationsMarkers.length = 0;
 
             let that = this;
-            this.feedsApi.getStops(this._feed.id).then(function(response) {
-                that.stops = response;
-            });
-            this.feedsApi.getRoutes(this._feed.id).then(function(response) {
-                that.routes = response;
-            })
+            this.loading = true;
+            this.feedsApi.getStops(this._feed.id, this._feed.selectedVersion ?
+                this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
+                    that.stops = response;
+                    that.loading = false;
+                }).catch( ()=> that.loading = false);
+            this.loading = true;
+            this.feedsApi.getRoutes(this._feed.id, this._feed.selectedVersion ?
+                this._feed.selectedVersion.id : this._feed.id, this._feed.isPublic).then(function(response) {
+                    that.routes = response;
+                    that.loading = false;
+                }).catch( ()=> that.loading = false);
         }
     }
 
@@ -97,7 +113,7 @@ export class FeedMapComponent implements AfterViewInit {
         this.stopsMarkersClusterGroup = this.feedMapUtils.createClusterGroup(true);
         this.stationsMarkersClusterGroup = this.feedMapUtils.createClusterGroup(false);
         this.patternsGroup = leaflet.featureGroup();
-        var overlayMaps = {
+        let overlayMaps = {
             '<span class="legend-item legend-stop"><i class="fa fa-lg fa-flag-checkered"></i></span> Stops': this.stopsMarkersClusterGroup,
             '<span class="legend-item legend-station"><i class="fa fa-lg fa-train"></i></span> Stations': this.stationsMarkersClusterGroup
         };
@@ -122,9 +138,11 @@ export class FeedMapComponent implements AfterViewInit {
         this.patternsGroup.clearLayers();
     }
 
-    private extractData(data) {
+    private extractData(data, clearMap = true) {
         if (this._feed && this.map) {
-            this.clearMap();
+            if (clearMap) {
+                this.clearMap();
+            }
             if (data) {
                 let lat = data.defaultLocationLat;
                 let lng = data.defaultLocationLon;
@@ -139,8 +157,12 @@ export class FeedMapComponent implements AfterViewInit {
                     lat = (bounds[0].lat + bounds[1].lat) / 2;
                 if (!lng)
                     lng = (bounds[0].lng + bounds[2].lng) / 2;
+                if (this.feedMarker && this.map.hasLayer(this.feedMarker)) {
+                    this.map.removeLayer(this.feedMarker);
+                }
+
                 this.feedMarker = this.createMarker(this._feed, [lat, lng], bounds);
-                var coord: leaflet.LatLngExpression = leaflet.latLng(lat, lng);
+                let coord: leaflet.LatLngExpression = leaflet.latLng(lat, lng);
                 this.map.setView(coord, 10);
                 this.map.addLayer(this.feedMarker);
             }
@@ -153,10 +175,14 @@ export class FeedMapComponent implements AfterViewInit {
         if (this.isAuthorised) {
             this.projectsApi.getPrivateProject(this._feed.projectId).then(function success(data) {
                 that.extractData(data);
+                that.extractedData = data;
+                that.laodRoutes();
             });
         } else {
             this.projectsApi.getPublicProject(this._feed.projectId).then(function success(data) {
                 that.extractData(data);
+                that.extractedData = data;
+                that.laodRoutes();
             });
         }
     }
@@ -185,8 +211,8 @@ export class FeedMapComponent implements AfterViewInit {
 
     // Update the Lat and Lng of the project
     private updateProjectProperty(ev) {
-        var updateProject;
-        var changedPos = ev.target.getLatLng();
+        let updateProject;
+        let changedPos = ev.target.getLatLng();
         updateProject = {
             defaultLocationLat: changedPos.lat,
             defaultLocationLon: changedPos.lng
@@ -208,7 +234,7 @@ export class FeedMapComponent implements AfterViewInit {
     */
 
     private createPattern(type, pattern) {
-        var geojson = this.createGeoJSONFeature(type, pattern);
+        let geojson = this.createGeoJSONFeature(type, pattern);
         if (!geojson) {
             return;
         }
@@ -230,7 +256,7 @@ export class FeedMapComponent implements AfterViewInit {
 
     private createTripPatterns(patterns) {
         if (patterns) {
-            for (var i = 0; i < patterns.length; i++) {
+            for (let i = 0; i < patterns.length; i++) {
                 this.createPattern('shape', patterns[i]);
             }
         }
@@ -238,7 +264,7 @@ export class FeedMapComponent implements AfterViewInit {
 
     private getAllStops(patterns) {
         if (patterns) {
-            for (var i = 0; i < patterns.length; i++) {
+            for (let i = 0; i < patterns.length; i++) {
                 this.createStops(this.getStops(patterns[i]));
             }
         }
@@ -312,12 +338,12 @@ export class FeedMapComponent implements AfterViewInit {
 
     private onRouteCheckAll(event) {
         if (event.target.checked) {
-            for (var i = 0; i < Math.min(this.routes.length, NB_ROUTE_MAX); i++) {
+            for (let i = 0; i < Math.min(this.routes.length, NB_ROUTE_MAX); i++) {
                 this.routes[i].checked = event.target.checked;
                 this.onRouteChecked(event, this.routes[i]);
             }
         } else {
-            for (var i = 0; i < this.routes.length; i++) {
+            for (let i = 0; i < this.routes.length; i++) {
                 this.routes[i].checked = event.target.checked;
             }
             this.allPatterns = {};
@@ -328,20 +354,23 @@ export class FeedMapComponent implements AfterViewInit {
     }
 
     private onRouteChecked(event, route) {
-        var checkRoute = function(vm) {
-            var data = vm.feedMapUtils.getRouteData(route.id, vm.routes);
+        let checkRoute = function(vm) {
+            let data = vm.feedMapUtils.getRouteData(route.id, vm.routes);
             if (data) {
                 let that = vm;
-                vm.feedsApi.getRouteTripPattern(vm._feed.id, data.id).then(function(responseTrip) {
-                    console.log(responseTrip, route);
-                    that.createTripPatterns(responseTrip);
-                    that.getAllStops(responseTrip);
-                });
+                vm.loading = true;
+                vm.feedsApi.getRouteTripPattern(vm._feed.id,
+                    vm._feed.selectedVersion ? vm._feed.selectedVersion.id : vm._feed.id,
+                    data.id, vm._feed.isPublic).then(function(responseTrip) {
+                        that.createTripPatterns(responseTrip);
+                        that.getAllStops(responseTrip);
+                        that.loading = false;
+                    }).catch( ()=> that.loading = false);
             }
         };
 
-        var unCheckRoute = function(vm) {
-            for (var i = 0; vm.allPatterns[route.id] && i < vm.allPatterns[route.id].length; i++) {
+        let unCheckRoute = function(vm) {
+            for (let i = 0; vm.allPatterns[route.id] && i < vm.allPatterns[route.id].length; i++) {
                 if (vm.patternsGroup.hasLayer(vm.allPatterns[route.id][i])) {
                     vm.patternsGroup.removeLayer(vm.allPatterns[route.id][i]);
                 }
@@ -399,8 +428,8 @@ export class FeedMapComponent implements AfterViewInit {
         if (!pattern || !pattern[type]) {
             return;
         }
-        var patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON();
-        var geojsonFeature = {
+        let patternsGeoJSON: leaflet.GeoJSON = leaflet.geoJSON();
+        let geojsonFeature = {
             type: 'Feature',
             properties: {
                 pattern: pattern,

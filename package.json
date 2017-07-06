@@ -49,6 +49,7 @@
     "leaflet-groupedlayercontrol": "0.6.0",
     "leaflet.markercluster": "1.0.3",
     "ng2-bootstrap": "1.4.0",
+    "ng2-charts": "^1.6.0",
     "ng2-completer": "1.2.0",
     "ng2-pagination": "2.0.1",
     "ng2-translate": "5.0.0",
@@ -71,7 +72,7 @@
     "@types/jasmine": "2.5.38",
     "@types/leaflet": "1.0.60",
     "@types/node": "6.0.60",
-    "codelyzer": "2.0.1",
+    "codelyzer": "^3.1.1",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
     "karma": "~1.4.1",
@@ -83,6 +84,6 @@
     "ngrx-store-freeze": "0.1.6",
     "protractor": "~5.1.0",
     "ts-node": "~2.0.0",
-    "tslint": "~4.4.2"
+    "tslint": "^5.4.3"
   }
 }

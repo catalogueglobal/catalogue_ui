@@ -50,13 +50,12 @@ export class DatasetsComponent implements AfterViewInit {
         protected config: Configuration,
         protected feedsApi: FeedsApiService,
         protected localFilters: LocalFiltersService,
-        actions$: Actions) {
+        private actions$: Actions) {
         // request feeds
         this.currentSort = INITIAL_SORT;
         this.currentBounds = null;
         this.initDatasets(false); // show public feeds
         // refresh feeds on upload success
-        actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.store.dispatch(datasetsAction.feedsGet(this.getFeedsParams())));
         this.createStore();
     }
 
@@ -66,6 +65,13 @@ export class DatasetsComponent implements AfterViewInit {
     }
 
     protected subscribeActions(){
+      this.actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.store.dispatch(this.datasetsAction.feedsGet(this.getFeedsParams())));
+      this.actions$.ofType(DatasetsActionType.FEED_SET_FILE_SUCCESS).subscribe(() => this.store.dispatch(this.datasetsAction.feedsGet(this.getFeedsParams())));
+      this.actions$.ofType(DatasetsActionType.FEED_DELETE_SUCCESS).subscribe(action => {
+        if (action.payload.feedRefs && action.payload.feedRefs[0].feedVersionCount > 1){
+            this.store.dispatch(this.datasetsAction.feedsGet(this.getFeedsParams()))
+        }
+      });
       this.feeds$.subscribe(
           feeds => {
               if (feeds) {

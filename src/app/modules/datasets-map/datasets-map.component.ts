@@ -33,12 +33,14 @@ export class DatasetsMapComponent implements AfterViewInit {
     private _feeds: IFeed[];
     map: leaflet.Map;
     markerClusterGroup;
-    markers: Array<leaflet.Marker>;
+    markers;
     markersGroup;
     initialPosition = this.config.MAP_DEFAULT_POSITION;
     _position;
     initialZoom: number = this.config.MAP_ZOOM_UNKNOWN;
     _zoom: number;
+    private moveTimeoutId;
+    private oldBounds;
     NumberedDivIcon;
 
 
@@ -55,7 +57,7 @@ export class DatasetsMapComponent implements AfterViewInit {
         private session: SessionService) {
         //this.geolocalize();
         this.setCenterMap();
-        this.markers = new Array();
+        this.markers = {};
         this.updateProject = this.updateProjectProperty.bind(this);
         this.NumberedDivIcon = mapUtils.createNumMarker();
     }
@@ -137,22 +139,43 @@ export class DatasetsMapComponent implements AfterViewInit {
         let map = leaflet.map(cssId, options);
         this.map = map;
         this.markersGroup = leaflet.featureGroup();
+        //add zoom control with your options
+        leaflet.control.zoom({
+            position: 'topright'
+        }).addTo(map);
         map.addLayer(this.markerClusterGroup);
         map.addLayer(this.markersGroup);
         let that = this;
         map.on(
             'moveend', function(e) {
-                console.log('map move', map.getBounds());
-                let mapBounds = map.getBounds();
-                let newCenter = map.getCenter();
-                that.shared.setNewCenter(newCenter, e.target._zoom);
-                let areaBounds = that.utils.computeLatLngToBounds([mapBounds.getNorthEast(), mapBounds.getSouthWest()]);
-                that.boundsChange.emit(areaBounds);
+                if (that.moveTimeoutId) {
+                    clearTimeout(that.moveTimeoutId);
+                }
+                that.moveTimeoutId = setTimeout(() => {
+                    that.filterFeedsInArea(e);
+                }, 1000);
+            }
+        );
+        map.on(
+            'movestart', function(e) {
+              that.moveStart(e);
             }
         );
         if (this._position) {
             this.goTo(map, this._position, false);
         }
+    }
+
+    private moveStart(event){
+      this.oldBounds = this.map.getBounds();
+    }
+
+    private filterFeedsInArea(event) {
+        let mapBounds = this.map.getBounds();
+        let newCenter = this.map.getCenter();
+        this.shared.setNewCenter(newCenter, event.target._zoom);
+        let areaBounds = this.utils.computeLatLngToBounds([mapBounds.getNorthEast(), mapBounds.getSouthWest()]);
+        this.boundsChange.emit(areaBounds);
     }
 
     // remove all marker from the map when refresh
@@ -209,6 +232,7 @@ export class DatasetsMapComponent implements AfterViewInit {
                 surClass: feed.isPublic ? 'public' : 'private'
             })
         });
+        marker.isDisplayed = true;
         marker.data = {
             bounds: bounds,
             id: feed.projectId,
@@ -220,8 +244,8 @@ export class DatasetsMapComponent implements AfterViewInit {
 
         let tooltipData = '';
         let that = this;
-        marker.on('click', event =>{
-          event.target.setPopupContent(that.computeMarkerPopup(event.target.data.feed));
+        marker.on('click', event => {
+            event.target.setPopupContent(that.computeMarkerPopup(event.target.data.feed));
         });
         marker.bindPopup(tooltipData, {
             direction: 'top'
@@ -257,9 +281,9 @@ export class DatasetsMapComponent implements AfterViewInit {
                 res += feed.name + '</b> (' + this.translate.instant('mydatasets-table.column.isPublic.private') + ')';
             }
         } else {
-            res += '<a href="/feeds/' + feed.id +  '/' + feed.isPublic + '">' + feed.name + "</a></b>";
+            res += '<a href="/feeds/' + feed.id + '/' + feed.isPublic + '">' + feed.name + "</a></b>";
         }
-        res += '<a href="/feeds/' + feed.id +  '/' + feed.isPublic + '" class="pull-right">' + this.translate.instant('popup.detail') + '</a>';
+        res += '<a href="/feeds/' + feed.id + '/' + feed.isPublic + '" class="pull-right">' + this.translate.instant('popup.detail') + '</a>';
         return res;
     }
 
@@ -305,7 +329,7 @@ export class DatasetsMapComponent implements AfterViewInit {
                 lng = (bounds[0].lng + bounds[2].lng) / 2;
             let marker = this.computeMarker(feed, [lat, lng], bounds);
             this.router.url === "/my-datasets" ? this.markersGroup.addLayer(marker) : this.markerClusterGroup.addLayer(marker);
-            this.markers.push(marker);
+            this.markers[feed.id] = marker;
             // area over marker
             this.mapUtils.markerAreaOver(marker, this.map);
         }

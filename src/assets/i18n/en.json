@@ -2,7 +2,7 @@
     "layout": {
         "menu": {
             "use": "use",
-            "upload": "create a new feed",
+            "upload": "import a new feed",
             "download": "Explore",
             "manage": "My Data feeds",
             "subscribe": "subscribe",
@@ -54,7 +54,12 @@
             "feedName": "Feed name",
             "isPublic": "Public dataset",
             "submit": "Proceed to upload",
-            "changeLicense": "Change license"
+            "changeLicense": "Change license",
+            "feedDescription": "Comments",
+            "url": "Import from url",
+            "zip": "Import from zip",
+            "createFeed": "Create feed",
+            "autoFetchFeeds": "Automatic fetch"
         },
         "delete": {
             "confirm": {
@@ -66,6 +71,15 @@
             "create": {
                 "title": "Create new version",
                 "subtitle": "Warning, a new version will be created. Current one will be frozen !"
+            },
+            "validation": {
+                "title": "Validation summary",
+                "error": {
+                    "type": "Error type",
+                    "priority": "Error priority",
+                    "nbErrors": "Number of errors"
+                },
+                "see": "Validation summary"
             }
         },
         "cancel": "cancel",
@@ -92,7 +106,9 @@
             "tooltips": {
                 "download": "Click here to download the item",
                 "delete": "delete the item",
-                "edit": "edit the item"
+                "edit": "edit the item",
+                "downloadValidation": "See validation summary",
+                "downloadFeed": "download GTFS file"
             },
             "miscData": {
                 "title": "change misc data",
@@ -133,7 +149,7 @@
             "area": "Area",
             "license": "License",
             "miscData": "Misc",
-            "subscribe": "Subscibe / Unsubscribe",
+            "subscribe": "Subscibe",
             "validity": "Valid until"
         }
     },

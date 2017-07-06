@@ -14,13 +14,12 @@
 
 				<th class="lastUpdated">
 					<app-sort-link sortValue="lastUpdated" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
-						{{'mydatasets-table.column.updated'|translate}} </app-sort-link>
+						{{'datasets.table.versions'|translate}} </app-sort-link>
 				</th>
 				<th>{{'datasets-table.column.license'|translate}}</th>
 				<th>{{'datasets-table.column.miscData'|translate}}</th>
-				<th class="togglePublic">
-					<app-sort-link sortValue="isPublic" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="desc">
-						{{'mydatasets-table.column.isPublic.label'|translate}} </app-sort-link>
+				<th>
+
 				</th>
 			</tr>
 		</thead>
@@ -82,26 +81,29 @@
 
 				</td>
 
-				<td class="togglePublic">
-					<a href="#" (click)="togglePublic(feed)">
-						<div *ngIf="feed.isPublic">
-							<i class="fa fa-toggle-on" title="Public"></i>
-							<span class="details">{{'mydatasets-table.column.isPublic.public'|translate}}</span>
-						</div>
-						<div *ngIf="!feed.isPublic">
-							<i class="fa fa-toggle-off" title="Private"></i>
-							<span class="details">{{'mydatasets-table.column.isPublic.private'|translate}}</span>
-						</div>
-					</a>
-				</td>
-
-				<td>
-					<div class="actions">
+				<td class="actions">
+					<div class="togglePublic download">
+						<a href="#" (click)="togglePublic(feed)">
+							<div *ngIf="feed.isPublic">
+								<i class="fa fa-toggle-on" title="Public"></i>
+								<span class="details">{{'mydatasets-table.column.isPublic.public'|translate}}</span>
+							</div>
+							<div *ngIf="!feed.isPublic">
+								<i class="fa fa-toggle-off" title="Private"></i>
+								<span class="details">{{'mydatasets-table.column.isPublic.private'|translate}}</span>
+							</div>
+						</a>
+					</div>
+					<hr />
+					<div class="download">
 						<a [routerLink]="['/feeds/', feed.id, feed.isPublic]" class="">
 							<span tooltip="{{'datasets.table.tooltips.edit' | translate}}" class="btn-edit">
 								<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 							</span>
 						</a>
+					</div>
+					<hr />
+					<div class="download">
 						<a (click)="displayDeleteFeed(feed)" class="" tooltip="{{'datasets.table.tooltips.delete' | translate}}">
 							<span class="btn-delete">
 								<i class="fa fa-trash-o" aria-hidden="true"></i>

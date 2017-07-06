@@ -14,10 +14,14 @@ export type ICreateFeed = {
     feedName: string,
     isPublic: boolean,
     file: any,
+    feedUrl: any,
     licenseName: string,
     licenseId: string;
     metadataFile: any,
-    licenseFile: any
+    licenseFile: any,
+    feedDesc: any,
+    autoFetchFeeds: boolean,
+    retrievalMethod: string
 }
 
 @Injectable()
@@ -150,7 +154,7 @@ export class DatasetsEffects {
             })
             return setFile$
                 // refresh
-                .switchMap(() => this.feedsApi.get(feedRef.feedsourceId))
+                .switchMap(() => this.feedsApi.getFeed(feedRef.feedsourceId, false))
                 .map(feed => this.action.feedSetFileSuccess(feed))
                 .catch(e => Observable.of(this.action.feedSetFileFail(feedRef, e)))
         }
@@ -164,8 +168,9 @@ export class DatasetsEffects {
             let nbSuccess = 0;
             feedRefs.forEach(feedRef => {
                 console.log('deleting ' + nbSuccess + '/' + feedRefs.length, feedRef);
-                this.feedsApi.delete(feedRef.feedsourceId).subscribe(() => {
+                this.feedsApi.delete(feedRef.feedsourceId, feedRef.versionId).subscribe(() => {
                     console.log('delete success');
+                    feedRef.feedVersionCount -= 1;
                     nbSuccess++;
                 }, e => {
                     console.log('delete failed', e);
@@ -186,7 +191,7 @@ export class DatasetsEffects {
             const feedRef = payload.feedRef;
             return this.feedsApi.fetch(feedRef.feedsourceId)
                 // refresh
-                .switchMap(() => this.feedsApi.get(feedRef.feedsourceId))
+                .switchMap(() => this.feedsApi.getFeed(feedRef.feedsourceId))
                 .map(feedApi => this.action.feedFetchSuccess(feedApi))
                 .catch(e => {
                     return Observable.of(this.action.feedFetchFail(feedRef, e))
@@ -390,7 +395,11 @@ export class DatasetsEffects {
                 progress => {
                     console.log(type + ' progress', progress)
                     if (onProgress) {
-                        onProgress(type + ' uploading... ' + progress + '%');
+                        if (!isNaN(progress)) {
+                            onProgress(type + ' uploading... ' + progress + '%');
+                        } else {
+                            onProgress(type + ' uploading... ');
+                        }
                     }
                 },
                 err => {
@@ -415,14 +424,15 @@ export class DatasetsEffects {
                 project => {
                     console.log("created project:", project);
                     onProgress("creating feed")
-                    this.feedsApi.create(createFeed.feedName, project.id, createFeed.isPublic).subscribe(
+                    this.feedsApi.create(createFeed, project.id).subscribe(
                         feed => {
                             console.log("created feed:", feed);
                             onProgress("uploading...")
                             var allObs = [];
 
-                            let setFile$ = this.feedsApi.setFile(feed.id, createFeed.file);
-                            allObs.push(setFile$, 'setFile', onProgress);
+                            if (createFeed.retrievalMethod === 'MANUALLY_UPLOADED'){
+                              allObs.push(this.feedsApi.setFile(feed.id, createFeed.file));
+                            }
 
                             if (createFeed.licenseFile) {
                                 let createLicense = this.feedsApi.createLicense(createFeed.licenseName, createFeed.licenseFile, [feed.id]);
@@ -435,9 +445,17 @@ export class DatasetsEffects {
                                 allObs.push(this.createObservable(createMetadata, 'createMetadata', onProgress, feed));
                             }
                             return (Observable.forkJoin(allObs).subscribe(
+                                data =>{
+                                  obs$.next(feed);
+                                  obs$.complete();
+                                },
+                                error =>{
+                                  console.log(error);
+                                  return obs$.error(error);
+                                },
                                 () => {
                                     obs$.next(feed);
-                                    obs$.complete;
+                                    obs$.complete();
                                 }
                             ));
                         },

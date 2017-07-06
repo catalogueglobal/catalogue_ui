@@ -34,14 +34,12 @@ export class StatusComponent implements AfterViewInit {
     ngAfterViewInit() {
         this.status.subscribe(
             statusValue => {
-                //console.log('statusValue', statusValue)
                 if (statusValue.errorMessage) {
                     var toast = {
                         type: 'error',
-                        body: this.translateService.get(statusValue.errorMessage, statusValue.errorMessageArgs),
+                        body: this.translateService.instant(statusValue.errorMessage, statusValue.errorMessageArgs),
                         timeout: this.config.NOTIFY_ERROR_TIMEOUT
                     };
-                    //console.log('toast error', toast);
                     this.toasterService.pop(toast);
                 }
             }
