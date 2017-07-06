@@ -1,6 +1,6 @@
 import {  Component, AfterViewInit, Input } from '@angular/core';
-import * as leaflet                                              from "leaflet";
-import { Store }                                                 from "@ngrx/store";
+import * as leaflet                                              from 'leaflet';
+import { Store }                                                 from '@ngrx/store';
 require('leaflet.markercluster');
 import { IFeed,
     FeedsApiService,
@@ -10,10 +10,10 @@ import { IFeed,
     SessionService,
     SharedService,
     ProjectsApiService
-}                                from "app/modules/common/";
-import { DatasetsActions }                                       from "app/state/datasets/datasets.actions";
-import { DatasetsState }                                         from "app/state/datasets/datasets.reducer";
-import {FeedMapUtilsService} from "./feed-map-utils.service";
+}                                from 'app/modules/common/';
+import { DatasetsActions }                                       from 'app/state/datasets/datasets.actions';
+import { DatasetsState }                                         from 'app/state/datasets/datasets.reducer';
+import {FeedMapUtilsService} from './feed-map-utils.service';
 import { Subscription } from 'rxjs/Subscription';
 
 const NB_ROUTE_MAX = 100;
@@ -25,7 +25,7 @@ const NB_ROUTE_MAX = 100;
 export class FeedMapComponent implements AfterViewInit {
     @Input() mapId: string;
     private _feed;
-    private routes = [];
+    public routes = [];
     private allPatterns;
     map: leaflet.Map;
     private stops = [];
@@ -53,7 +53,7 @@ export class FeedMapComponent implements AfterViewInit {
         protected datasetsAction: DatasetsActions,
         private feedsApi: FeedsApiService,
         private store: Store<DatasetsState>,
-        private sessionService: SessionService,
+        public sessionService: SessionService,
         private projectsApi: ProjectsApiService,
         private feedMapUtils: FeedMapUtilsService,
         private shared: SharedService
@@ -87,7 +87,7 @@ export class FeedMapComponent implements AfterViewInit {
     private laodRoutes() {
         if (this._feed && this._feed.id && this.sessionService.loggedIn) {
             this.allPatterns = {};
-            this.stopsMarkers.length = 0;;
+            this.stopsMarkers.length = 0;
             this.stationsMarkers.length = 0;
 
             let that = this;
@@ -107,7 +107,8 @@ export class FeedMapComponent implements AfterViewInit {
     }
 
     private checkAuthorisations() {
-        this.isAuthorised = this.utils.userHasRightsOnFeed(this.sessionService.userProfile, this._feed.projectId, this._feed.id);
+        this.isAuthorised = this.utils.userHasRightsOnFeed(this.sessionService.userProfile,
+            this._feed.projectId, this._feed.id);
     }
 
     protected computeMap(id): leaflet.Map {
@@ -116,16 +117,18 @@ export class FeedMapComponent implements AfterViewInit {
         this.stationsMarkersClusterGroup = this.feedMapUtils.createClusterGroup(false);
         this.patternsGroup = leaflet.featureGroup();
         let overlayMaps = {
-            '<span class="legend-item legend-stop"><i class="fa fa-lg fa-flag-checkered"></i></span> Stops': this.stopsMarkersClusterGroup,
-            '<span class="legend-item legend-station"><i class="fa fa-lg fa-train"></i></span> Stations': this.stationsMarkersClusterGroup
+            '<span class="legend-item legend-stop"><i class="fa fa-lg fa-flag-checkered"></i></span> Stops':
+            this.stopsMarkersClusterGroup,
+            '<span class="legend-item legend-station"><i class="fa fa-lg fa-train"></i></span> Stations':
+            this.stationsMarkersClusterGroup
         };
         let options = {
-            center: <any>this.initialPosition,
+            center: <any> this.initialPosition,
             zoom: 10,
             zoomControl: false,
             minZoom: 2,
             layers: [tiles]
-        }
+        };
         let map = leaflet.map(id, options);
         this.stopsMarkersClusterGroup.addTo(map);
         this.stationsMarkersClusterGroup.addTo(map);
@@ -335,12 +338,12 @@ export class FeedMapComponent implements AfterViewInit {
                 stops: res
             };
         } else {
-            return {}
+            return {};
         }
 
     }
 
-    private onRouteCheckAll(event) {
+    public onRouteCheckAll(event) {
         if (event.target.checked) {
             for (let i = 0; i < Math.min(this.routes.length, NB_ROUTE_MAX); i++) {
                 this.routes[i].checked = event.target.checked;
@@ -357,7 +360,7 @@ export class FeedMapComponent implements AfterViewInit {
         }
     }
 
-    private onRouteChecked(event, route) {
+    public onRouteChecked(event, route) {
         let checkRoute = function(vm) {
             let data = vm.feedMapUtils.getRouteData(route.id, vm.routes);
             if (data) {
@@ -385,7 +388,7 @@ export class FeedMapComponent implements AfterViewInit {
                     vm.stationsMarkersClusterGroup.removeLayer(vm.allPatterns[route.id][i]);
                 }
             }
-        }
+        };
 
         if (event.target.checked) {
             checkRoute(this);
@@ -415,16 +418,16 @@ export class FeedMapComponent implements AfterViewInit {
                 } else {
                     event.target.bringToBack();
                 }
-                event.target.setStyle(that.feedMapUtils.getGeoJSONStyleOver())
-            })
+                event.target.setStyle(that.feedMapUtils.getGeoJSONStyleOver());
+            });
             layer.on('mouseout', function(event) {
                 layer.closeTooltip();
-                event.target.setStyle(that.feedMapUtils.getGeoJSONStyle(event.target.feature))
-            })
+                event.target.setStyle(that.feedMapUtils.getGeoJSONStyle(event.target.feature));
+            });
             layer.on('click', function(event) {
                 event.target.bringToFront();
                 that.map.fitBounds(event.target._bounds);
-            })
+            });
         }
     }
 

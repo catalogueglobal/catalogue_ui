@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { MapUtilsService }                                       from "app/modules/common/";
-import * as leaflet   from "leaflet";
+import { Injectable } from '@angular/core';
+import { MapUtilsService }                                       from 'app/modules/common/';
+import * as leaflet   from 'leaflet';
 
 @Injectable()
 export class FeedMapUtilsService {

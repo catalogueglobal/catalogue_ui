@@ -1,7 +1,7 @@
-import { Component, ViewChild, AfterViewInit } from "@angular/core";
-import { Actions }                             from "@ngrx/effects";
-import { Store }                               from "@ngrx/store";
-import { Observable }                          from "rxjs/Rx";
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Actions }                             from '@ngrx/effects';
+import { Store }                               from '@ngrx/store';
+import { Observable }                          from 'rxjs/Rx';
 import { Configuration,
     ProjectsApiService,
     IFeed,
@@ -11,15 +11,15 @@ import { Configuration,
     UtilsService,
     LocalFiltersService,
     SortOrder
-} from "app/modules/common/";
+} from 'app/modules/common/';
 
-import { DatasetsState }                       from "app/state/datasets/datasets.reducer";
-import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
+import { DatasetsState }                       from 'app/state/datasets/datasets.reducer';
+import { DatasetsActions, DatasetsActionType } from 'app/state/datasets/datasets.actions';
 import {
-  DatasetsMapComponent,
-  AutocompleteItem,
-  DatasetsTableComponent
-} from "app/modules/components";
+    DatasetsMapComponent,
+    AutocompleteItem,
+    DatasetsTableComponent
+} from 'app/modules/components';
 import LatLngExpression = L.LatLngExpression;
 
 const INITIAL_SORT = {
@@ -34,10 +34,10 @@ const INITIAL_SORT = {
 })
 
 export class ExplorePage implements AfterViewInit {
-    protected feeds$: Observable<IFeed[]>;
-    protected feeds: IFeedRow[] = [];
-    private mapPosition: LatLngExpression;
-    private mapZoom: number;
+    public feeds$: Observable<IFeed[]>;
+    public feeds: IFeedRow[] = [];
+    public mapPosition: LatLngExpression;
+    public mapZoom: number;
     private currentSort: SortOrder;
     private currentBounds: IBounds;
     // properties below are overriden by children
@@ -67,24 +67,26 @@ export class ExplorePage implements AfterViewInit {
         this.subscribeActions();
     }
 
-    protected subscribeActions(){
-      this.actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(() => this.store.dispatch(this.datasetsAction.feedsGet(this.getFeedsParams())));
-      this.actions$.ofType(DatasetsActionType.FEED_SET_FILE_SUCCESS).subscribe(() => this.store.dispatch(this.datasetsAction.feedsGet(this.getFeedsParams())));
-      this.actions$.ofType(DatasetsActionType.FEED_DELETE_SUCCESS).subscribe(action => {
-        if (action.payload.feedRefs && action.payload.feedRefs[0].feedVersionCount > 1){
-            this.store.dispatch(this.datasetsAction.feedsGet(this.getFeedsParams()))
-        }
-      });
-      this.feeds$.subscribe(
-          feeds => {
-              if (feeds) {
-                  console.log('FEEDS:', feeds.length);
-                  this.feeds = feeds.map(feed => <IFeedRow>feed);
-              } else {
-                  this.feeds = [];
-              }
-          }
-      );
+    protected subscribeActions() {
+        this.actions$.ofType(DatasetsActionType.FEED_CREATE_SUCCESS).subscribe(
+            () => this.store.dispatch(this.datasetsAction.feedsGet(this.getFeedsParams())));
+        this.actions$.ofType(DatasetsActionType.FEED_SET_FILE_SUCCESS).subscribe(
+            () => this.store.dispatch(this.datasetsAction.feedsGet(this.getFeedsParams())));
+        this.actions$.ofType(DatasetsActionType.FEED_DELETE_SUCCESS).subscribe(action => {
+            if (action.payload.feedRefs && action.payload.feedRefs[0].feedVersionCount > 1) {
+                this.store.dispatch(this.datasetsAction.feedsGet(this.getFeedsParams()));
+            }
+        });
+        this.feeds$.subscribe(
+            feeds => {
+                if (feeds) {
+                    console.log('FEEDS:', feeds.length);
+                    this.feeds = feeds.map(feed => <IFeedRow> feed);
+                } else {
+                    this.feeds = [];
+                }
+            }
+        );
     }
 
     protected initDatasets(isSecure: boolean) {
@@ -100,36 +102,36 @@ export class ExplorePage implements AfterViewInit {
             sortOrder: this.currentSort,
             bounds: this.currentBounds,
             secure: this.isSecure
-        }
+        };
     }
 
-    protected onAutocompleteSelected(selected: AutocompleteItem) {
+    public onAutocompleteSelected(selected: AutocompleteItem) {
         console.log('onAutocompleteSelected', selected);
         this.mapPosition = selected.position;
         this.mapZoom = this.config.MAP_ZOOM_BY_AUTOCOMPLETE_TYPE(selected.type);
     }
 
-    protected onSortChange(value: SortOrder) {
+    public onSortChange(value: SortOrder) {
         this.currentSort = value;
         this.tableComponent.resetPage();
         // uncomment this when sort is ready on server-side API
         //this.fetchFeeds();
         // for now, sort is executed locally - comment this when sort is ready on server-side API
-        let sortedFeeds = this.localFilters.sortFeeds(this.feeds, value)
+        let sortedFeeds = this.localFilters.sortFeeds(this.feeds, value);
         this.store.dispatch(this.datasetsAction.feedsGetLocally(this.getFeedsParams(), sortedFeeds));
     }
 
-    protected onBoundsChange(value: IBounds) {
+    public onBoundsChange(value: IBounds) {
         this.tableComponent.resetPage();
         this.currentBounds = value;
         this.fetchFeeds();
     }
 
-    private fetchFeeds() {
+    public fetchFeeds() {
         this.store.dispatch(this.datasetsAction.feedsGet(this.getFeedsParams()));
     }
 
-    private resetSearch() {
+    public resetSearch() {
         this.currentSort = INITIAL_SORT;
         this.mapComponent.reset();
         this.tableComponent.resetPage();

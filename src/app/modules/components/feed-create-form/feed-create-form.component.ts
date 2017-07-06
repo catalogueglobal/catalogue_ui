@@ -1,16 +1,15 @@
-import { Component } from "@angular/core";
-import { Actions } from "@ngrx/effects";
-import { Store } from "@ngrx/store";
-import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
-import { ICreateFeed } from "app/state/datasets/datasets.effects";
-import { DatasetsState } from "app/state/datasets/datasets.reducer";
+import { Component } from '@angular/core';
+import { Actions } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { DatasetsActions, DatasetsActionType } from 'app/state/datasets/datasets.actions';
+import { ICreateFeed } from 'app/state/datasets/datasets.effects';
+import { DatasetsState } from 'app/state/datasets/datasets.reducer';
 import { ProjectsApiService,
     FeedsApiService,
     SessionService,
     UtilsService,
     Configuration
-} from "app/modules/common/";
-
+} from 'app/modules/common/';
 
 @Component({
     selector: 'app-feed-create-form',
@@ -23,7 +22,7 @@ export class FeedCreateFormComponent {
     public projectsName = [];
     public licenses = [];
 
-    private RETRIEVAL_METHODS = {
+    public RETRIEVAL_METHODS = {
         MANUAL: 'MANUALLY_UPLOADED',
         AUTO: 'FETCHED_AUTOMATICALLY',
         CREATE: 'PRODUCED_IN_HOUSE'
@@ -32,9 +31,9 @@ export class FeedCreateFormComponent {
     private submitIsEnabled;
 
     constructor(
-        private sessionService: SessionService,
-        private utils: UtilsService,
-        protected store: Store<DatasetsState>,
+        public sessionService: SessionService,
+        public utils: UtilsService,
+        public store: Store<DatasetsState>,
         protected datasetsAction: DatasetsActions,
         private projectsService: ProjectsApiService,
         private feedsService: FeedsApiService,
@@ -58,7 +57,7 @@ export class FeedCreateFormComponent {
         this.simpleUpload.license = selectedLicense;
     }
 
-    private submit(): void {
+    public submit(): void {
         if (this.simpleUpload.retrievalMethod === this.RETRIEVAL_METHODS.MANUAL &&
             !this.simpleUpload.file) {
             return;
@@ -76,7 +75,7 @@ export class FeedCreateFormComponent {
             metadataFile: this.simpleUpload.metadataFile,
             licenseFile: this.simpleUpload.licenseFile,
             feedDesc: this.simpleUpload.feedDesc
-        }
+        };
         this.store.dispatch(this.datasetsAction.feedCreate(createFeed));
     }
 
@@ -104,13 +103,13 @@ export class FeedCreateFormComponent {
                 let name;
                 let id;
                 for (let i = 0; response && i < response.length; i++) {
-                    name = response[i]["name"];
-                    id = response[i]["id"];
+                    name = response[i]['name'];
+                    id = response[i]['id'];
                     this.projectsName[i] = {
                         name: name,
                         id: id
-                    }
-                    this.simpleUpload.projectId = this.projectsName[0]["id"];
+                    };
+                    this.simpleUpload.projectId = this.projectsName[0]['id'];
                 }
             });
         }
@@ -119,7 +118,7 @@ export class FeedCreateFormComponent {
     private resetForm() {
         this.showOptionsUpload = false;
         this.simpleUpload = {
-            feedName: "",
+            feedName: '',
             file: null,
             license: {},
             newLicense: false,
@@ -131,7 +130,7 @@ export class FeedCreateFormComponent {
         this.onSelectionChange(this.RETRIEVAL_METHODS.MANUAL);
     }
 
-    private onSelectionChange(type) {
+    public onSelectionChange(type) {
         this.simpleUpload.retrievalMethod = type;
     }
 }

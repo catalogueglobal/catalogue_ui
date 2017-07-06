@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
@@ -7,7 +7,7 @@ export class UploadService {
     constructor() {
     }
 
-    upload(url: string, formData: FormData, headers?: Map<string,string>): Observable<any> {
+    upload(url: string, formData: FormData, headers?: Map<string, string>): Observable<any> {
         return Observable.create(
             observer => {
                 let xhr: XMLHttpRequest = new XMLHttpRequest();

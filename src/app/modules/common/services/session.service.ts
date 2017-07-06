@@ -1,15 +1,15 @@
-import { Injectable }      from "@angular/core";
-import { tokenNotExpired } from "angular2-jwt/angular2-jwt";
-import { LocalStorage }    from "ng2-webstorage";
-import { Configuration }   from "app/modules/common/";
+import { Injectable }      from '@angular/core';
+import { tokenNotExpired } from 'angular2-jwt/angular2-jwt';
+import { LocalStorage }    from 'ng2-webstorage';
+import { Configuration }   from 'app/modules/common/';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export type Session = {
     user: any,
     token: string
-}
+};
 
-const SESSION = "SESSION";
+const SESSION = 'SESSION';
 
 // Avoid name not found warnings
 declare var Auth0Lock: any;
@@ -37,7 +37,7 @@ export class SessionService {
                 }
             },
             languageDictionary: {
-                title: "Catalogue"
+                title: 'Catalogue'
             },
             auth: {
                 redirect: false,
@@ -61,7 +61,7 @@ export class SessionService {
             localStorage.setItem(this.tokenName, authResult.idToken);
             this.setProfile();
             this.loggedIn$.next(this.loggedIn);
-            console.log('authenticated')
+            console.log('authenticated');
         });
     }
 

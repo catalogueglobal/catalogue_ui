@@ -11,10 +11,10 @@ export class FeedRouteFilter implements PipeTransform {
         }
         // filter items array, items which match and return true will be kept, false will be filtered out
         return items.filter(item => {
-          if (item.routeLongName){
-              return item.routeLongName.toLowerCase().indexOf(filter.toLowerCase()) !== -1;
-          }
-          return false;
+            if (item.routeLongName) {
+                return item.routeLongName.toLowerCase().indexOf(filter.toLowerCase()) !== -1;
+            }
+            return false;
         });
     }
 }

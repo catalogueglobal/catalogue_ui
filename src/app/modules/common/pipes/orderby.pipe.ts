@@ -1,9 +1,8 @@
 // sort for angular2, from https://github.com/nicolas2bert/angular2-orderby-pipe/blob/master/app/orderby.ts
-import {Injectable, Pipe, PipeTransform} from "@angular/core";
+import {Injectable, Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
-    //The @Pipe decorator takes an object with a name property whose value is the pipe name that we'll use within a template expression. It must be a valid JavaScript identifier. Our pipe's name is orderby.
-    name: "orderby"
+    name: 'orderby'
 })
 @Injectable()
 export class OrderByPipe implements PipeTransform {
@@ -12,13 +11,13 @@ export class OrderByPipe implements PipeTransform {
         // Check if array exists, in this case array contains articles and args is an array that has 1 element : !id
         if (array) {
             // get the first element
-            let orderByValue = args
-            let byVal = 1
+            let orderByValue = args;
+            let byVal = 1;
             // check if exclamation point
-            if (orderByValue.charAt(0) === "!") {
+            if (orderByValue.charAt(0) === '!') {
                 // reverse the array
-                byVal = -1
-                orderByValue = orderByValue.substring(1)
+                byVal = -1;
+                orderByValue = orderByValue.substring(1);
             }
             //console.log("orderby:", byVal, orderByValue);
             array.sort(
@@ -33,8 +32,8 @@ export class OrderByPipe implements PipeTransform {
                 }
             );
             return array;
-        }else {
-          return array;
+        } else {
+            return array;
         }
     }
 }

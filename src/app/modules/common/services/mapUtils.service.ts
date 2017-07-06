@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import * as leaflet   from "leaflet";
+import { Injectable } from '@angular/core';
+import * as leaflet   from 'leaflet';
 
 @Injectable()
 export class MapUtilsService {
@@ -10,17 +10,17 @@ export class MapUtilsService {
     clusterAreaOver(markerClusterGroup, map) {
         let that = this;
         let computeClusterHull = function(e) {
-            return that.computeConvexHull(e.layer.getAllChildMarkers())
-        }
-        this.areaOver(map, markerClusterGroup, 'clustermouseover', 'clustermouseout', computeClusterHull)
+            return that.computeConvexHull(e.layer.getAllChildMarkers());
+        };
+        this.areaOver(map, markerClusterGroup, 'clustermouseover', 'clustermouseout', computeClusterHull);
     }
 
     markerAreaOver(marker, map) {
         let that = this;
         let computeMarkerHull = function() {
-            return that.computeConvexHull([marker])
-        }
-        this.areaOver(map, marker, 'mouseover', 'mouseout', computeMarkerHull)
+            return that.computeConvexHull([marker]);
+        };
+        this.areaOver(map, marker, 'mouseover', 'mouseout', computeMarkerHull);
     }
 
     computeConvexHull(markers: any[]) {
@@ -28,7 +28,7 @@ export class MapUtilsService {
         for (i = markers.length - 1; i >= 0; i--) {
             markers[i].data.bounds.map(
                 p => {
-                    points.push(p)
+                    points.push(p);
                 }
             );
         }
@@ -56,7 +56,6 @@ export class MapUtilsService {
             className: 'marker-cluster marker-cluster-large', iconSize: new L.Point(40, 40)
         });
     }
-
 
     private areaOver(map, source, eventOver, eventOut, computeConvexHull) {
         let polygon;
@@ -88,7 +87,7 @@ export class MapUtilsService {
                 this.options.className += ' ' + this.options.surClass;
 
                 let numdiv = document.createElement('div');
-                numdiv.setAttribute("class", "number");
+                numdiv.setAttribute('class', 'number');
                 numdiv.innerHTML = this.options['number'] || '';
                 div.appendChild(numdiv);
                 this._setIconStyles(div, 'icon');
@@ -101,7 +100,7 @@ export class MapUtilsService {
         return L.Icon.extend({
             options: {
                 iconSize: new L.Point(iconWidth || 30, iconHeight || 30),
-                iconAnchor: new L.Point(anchorX || 15,  anchorY || 0),
+                iconAnchor: new L.Point(anchorX || 15, anchorY || 0),
                 className: 'leaflet-div-number-icon'
             },
 
@@ -110,7 +109,7 @@ export class MapUtilsService {
                 this.options.className += ' ' + this.options.surClass;
 
                 let icondiv = document.createElement('i');
-                icondiv.setAttribute("class", 'img-icon fa ' + this.options['faIcon'] || '');
+                icondiv.setAttribute('class', 'img-icon fa ' + this.options['faIcon'] || '');
                 div.appendChild(icondiv);
                 this._setIconStyles(div, 'icon');
                 return div;

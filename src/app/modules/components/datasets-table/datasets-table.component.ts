@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
-import { Actions } from "@ngrx/effects";
-import { Store } from "@ngrx/store";
-import { PaginationService } from "ng2-pagination";
-import { ValidationDetailsModal } from "../modal/validation-details-modal.component";
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Actions } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { PaginationService } from 'ng2-pagination';
+import { ValidationDetailsModal } from '../modal/validation-details-modal.component';
 
 import { Configuration,
     ProjectsApiService,
@@ -18,18 +18,18 @@ import { Configuration,
     FEED_RETRIEVAL_METHOD,
     ILicense,
     SortOrder
-} from "app/modules/common/";
+} from 'app/modules/common/';
 
-import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
-import { DatasetsState } from "app/state/datasets/datasets.reducer";
-import { DatasetsGenericComponent } from "../datasets-generic/datasets-generic.component";
+import { DatasetsActions, DatasetsActionType } from 'app/state/datasets/datasets.actions';
+import { DatasetsState } from 'app/state/datasets/datasets.reducer';
+import { DatasetsGenericComponent } from '../datasets-generic/datasets-generic.component';
 
 @Component({
     selector: 'app-datasets-table',
     templateUrl: 'datasets-table.component.html',
     providers: [PaginationService]
 })
-export class DatasetsTableComponent extends DatasetsGenericComponent{
+export class DatasetsTableComponent extends DatasetsGenericComponent {
     @Input() protected _feeds: IFeedRow[];
     @Output() protected sortChange = new EventEmitter();
     @ViewChild(ValidationDetailsModal)
@@ -52,8 +52,8 @@ export class DatasetsTableComponent extends DatasetsGenericComponent{
         protected actions$: Actions,
         protected datasetsAction: DatasetsActions,
         protected shared: SharedService) {
-          super(config, utils, sessionService, feedsApiService, usersApiService, store,
-          actions$, datasetsAction, shared);
+        super(config, utils, sessionService, feedsApiService, usersApiService, store,
+            actions$, datasetsAction, shared);
         this.subscribeActions(actions$);
     }
 
@@ -62,10 +62,10 @@ export class DatasetsTableComponent extends DatasetsGenericComponent{
 
         this.getLicenses(value);
         if (!value) {
-            this._feeds = null
-            return
+            this._feeds = null;
+            return;
         }
-        this._feeds = value
+        this._feeds = value;
     }
 
     // overriden by childs
@@ -97,11 +97,11 @@ export class DatasetsTableComponent extends DatasetsGenericComponent{
         );
     }
 
-    protected openValidation(feed){
-      super.openValidation(feed);
-      if (feed && feed.selectedVersion && feed.selectedVersion.id){
-        this.validationDetailsModal.show();
-      }
+    protected openValidation(feed) {
+        super.openValidation(feed);
+        if (feed && feed.selectedVersion && feed.selectedVersion.id) {
+            this.validationDetailsModal.show();
+        }
     }
 
     public resetPage() {

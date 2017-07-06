@@ -1,5 +1,5 @@
-import { Directive, ElementRef } from "@angular/core";
-import { TranslateService } from "ng2-translate/src/translate.service";
+import { Directive, ElementRef } from '@angular/core';
+import { TranslateService } from 'ng2-translate/src/translate.service';
 
 /**
  * customFileinput integration.
@@ -16,6 +16,6 @@ export class CustomFileinputDirective {
             value => {
                 customFileinput(el.nativeElement, value);
             }
-        )
+        );
     }
 }

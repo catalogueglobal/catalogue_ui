@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import * as leaflet   from "leaflet";
-import { IBounds }    from "./api/feedsApi.service";
+import { Injectable } from '@angular/core';
+import * as leaflet   from 'leaflet';
+import { IBounds }    from './api/feedsApi.service';
 
 @Injectable()
 export class UtilsService {
@@ -12,10 +12,10 @@ export class UtilsService {
         if (!bounds) {
             return null;
         }
-        let lngEast = bounds.east ? bounds.east : bounds.west // check for 0 values
-        let lngWest = bounds.west ? bounds.west : bounds.east // check for 0 values
-        let latNorth = bounds.north ? bounds.north : bounds.south // check for 0 values
-        let latSouth = bounds.south ? bounds.south : bounds.north // check for 0 values
+        let lngEast = bounds.east ? bounds.east : bounds.west;
+        let lngWest = bounds.west ? bounds.west : bounds.east;
+        let latNorth = bounds.north ? bounds.north : bounds.south;
+        let latSouth = bounds.south ? bounds.south : bounds.north;
         // return averaged location
         return leaflet.latLng((latNorth + latSouth) / 2, (lngWest + lngEast) / 2);
     }
@@ -24,10 +24,10 @@ export class UtilsService {
         if (!bounds) {
             return null;
         }
-        let lngEast = bounds.east ? bounds.east : bounds.west // check for 0 values
-        let lngWest = bounds.west ? bounds.west : bounds.east // check for 0 values
-        let latNorth = bounds.north ? bounds.north : bounds.south // check for 0 values
-        let latSouth = bounds.south ? bounds.south : bounds.north // check for 0 values
+        let lngEast = bounds.east ? bounds.east : bounds.west; // check for 0 values
+        let lngWest = bounds.west ? bounds.west : bounds.east; // check for 0 values
+        let latNorth = bounds.north ? bounds.north : bounds.south; // check for 0 values
+        let latSouth = bounds.south ? bounds.south : bounds.north; // check for 0 values
         return [
             leaflet.latLng(latNorth, lngEast),
             leaflet.latLng(latSouth, lngEast),
@@ -47,7 +47,7 @@ export class UtilsService {
             south: southWest.lat,
             east: northEast.lng,
             west: southWest.lng
-        }
+        };
     }
 
     public setFileModelOnChange(model, property, event) {
@@ -78,16 +78,16 @@ export class UtilsService {
     }
 
     public addFeedIdToJson(userInfos, feed_id) {
-        console.log("add feed_id to json");
+        console.log('add feed_id to json');
         if (!userInfos.app_metadata) {
             userInfos.app_metadata = {
                 datatools: [{
                     subscriptions: null
                 }]
-            }
+            };
         }
-        if (userInfos.app_metadata.datatools[0].subscriptions == null) {
-            let b = { "type": "feed-updated", target: [] };
+        if (userInfos.app_metadata.datatools[0].subscriptions === null) {
+            let b = { 'type': 'feed-updated', target: [] };
             userInfos.app_metadata.datatools[0].subscriptions = [];
             userInfos.app_metadata.datatools[0].subscriptions.push(b);
             userInfos.app_metadata.datatools[0].subscriptions[0].target.push(feed_id);
@@ -122,13 +122,12 @@ export class UtilsService {
         return false;
     }
 
-
     public userHasManageRightOnFeed(userInfo, projectId, feedId) {
         return this.userHasEditRightOnFeed(userInfo, projectId, feedId, 'manage-feed');
     }
 
     public userHasEditRightOnFeed(userInfo, projectId, feedId, type) {
-        type = type || 'edit-gtfs'
+        type = type || 'edit-gtfs';
         if (userInfo.app_metadata && userInfo.app_metadata.datatools &&
             userInfo.app_metadata.datatools[0].projects) {
             for (let i = 0; i < userInfo.app_metadata.datatools[0].projects.length; i++) {
@@ -184,7 +183,6 @@ export class UtilsService {
         }
         return false;
     }
-
 
     public trim(str) {
         return str.replace(/^\s+|\s+$/g, '');

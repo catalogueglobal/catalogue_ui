@@ -1,111 +1,39 @@
 {
     "rulesDirectory": [
+        "node_modules/tslint-eslint-rules/dist/rules",
         "node_modules/codelyzer"
     ],
     "rules": {
-        "class-name": true,
-        "comment-format": [
-            false,
-            "check-space"
-        ],
+        "no-duplicate-variable": true,
         "curly": true,
-        "eofline": false,
-        "forin": true,
-        "indent": [
-            false,
-            "spaces"
-        ],
-        "label-position": true,
-        "label-undefined": true,
-        "max-line-length": [
-            false,
-            140
-        ],
-        "member-access": false,
-        "member-ordering": [
-            true,
-            "static-before-instance",
-            "variables-before-functions"
-        ],
         "no-arg": true,
         "no-bitwise": true,
-        "no-console": [
-            true,
-            "debug",
-            "info",
-            "time",
-            "timeEnd",
-            "trace"
-        ],
-        "no-construct": true,
-        "no-debugger": true,
-        "no-duplicate-key": true,
-        "no-duplicate-variable": true,
-        "no-empty": false,
+        "no-conditional-assignment": true,
+        "no-duplicate-super": true,
         "no-eval": true,
-        "no-inferrable-types": true,
-        "no-shadowed-variable": true,
-        "no-string-literal": false,
-        "no-switch-case-fall-through": true,
-        "no-trailing-whitespace": false,
-        "no-unused-expression": true,
-        "no-unused-variable": true,
-        "no-unreachable": true,
-        "no-use-before-declare": true,
-        "no-var-keyword": true,
-        "object-literal-sort-keys": false,
-        "one-line": [
-            false,
-            "check-open-brace",
-            "check-catch",
-            "check-else",
-            "check-whitespace"
-        ],
-        "quotemark": [
-            false,
-            "double"
-        ],
-        "radix": true,
-        "semicolon": [
-            false,
-            "always"
-        ],
-        "triple-equals": [
-            true,
-            "allow-null-check"
-        ],
-        "typedef-whitespace": [
-            true,
-            {
-                "call-signature": "nospace",
-                "index-signature": "nospace",
-                "parameter": "nospace",
-                "property-declaration": "nospace",
-                "variable-declaration": "nospace"
-            }
-        ],
-        "variable-name": false,
-        "whitespace": [
-            false,
-            "check-branch",
-            "check-decl",
-            "check-operator",
-            "check-separator",
-            "check-type"
-        ],
+        "triple-equals": true,
+        "max-line-length": [true, 120],
+        "max-file-line-count": [true, 1000],
+        "no-consecutive-blank-lines": true,
+        "no-irregular-whitespace": true,
+        "no-trailing-whitespace": true,
+        "quotemark": [true, "single"],
+        "semicolon": true,
+        "whitespace": [true, "check-branch", "check-type", "check-decl", "check-seperator", "check-preblock", "check-operator", "check-typecast"],
 
-        "directive-selector-name": [true, "camelCase"],
-        "component-selector-name": [true, "kebab-case"],
-        "component-class-suffix": [true, "Component", "App", "Page", "Modal"],
-        "directive-selector-type": [true, "attribute"],
-        "component-selector-type": [true, "element"],
         "use-input-property-decorator": true,
         "use-output-property-decorator": true,
         "use-host-property-decorator": true,
+        "no-attribute-parameter-decorator": true,
         "no-input-rename": true,
         "no-output-rename": true,
+        "no-forward-ref": true,
         "use-life-cycle-interface": true,
         "use-pipe-transform-interface": true,
-        "directive-class-suffix": true
+
+        "component-class-suffix": [true, "Component", "App", "Page", "Modal"],
+        "directive-class-suffix": [true, "Directive"],
+        "templates-use-public": true,
+        "invoke-injectable": true
     }
 }

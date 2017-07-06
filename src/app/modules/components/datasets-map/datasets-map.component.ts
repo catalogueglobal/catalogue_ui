@@ -1,8 +1,8 @@
-import { Component, AfterViewInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router }                                                from '@angular/router';
-import { Store }                                                 from "@ngrx/store";
-import * as leaflet                                              from "leaflet";
-import { Observable }                                            from "rxjs/Rx";
+import { Store }                                                 from '@ngrx/store';
+import * as leaflet                                              from 'leaflet';
+import { Observable }                                            from 'rxjs/Rx';
 import { DatePipe } from '@angular/common';
 import {TranslateService} from 'ng2-translate';
 require('leaflet.markercluster');
@@ -14,9 +14,9 @@ import { Configuration,
     SessionService,
     SharedService,
     UtilsService
-}                                         from "app/modules/common/";
-import { DatasetsActions }                                       from "app/state/datasets/datasets.actions";
-import { DatasetsState }                                         from "app/state/datasets/datasets.reducer";
+}                                         from 'app/modules/common/';
+import { DatasetsActions }                                       from 'app/state/datasets/datasets.actions';
+import { DatasetsState }                                         from 'app/state/datasets/datasets.reducer';
 
 @Component({
     selector: 'app-datasets-map',
@@ -44,7 +44,6 @@ export class DatasetsMapComponent implements AfterViewInit {
     private oldBounds;
     NumberedDivIcon;
 
-
     constructor(
         private utils: UtilsService,
         private config: Configuration,
@@ -64,7 +63,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     }
 
     reset() {
-        console.log('map reset', this.initialPosition, this.initialZoom)
+        console.log('map reset', this.initialPosition, this.initialZoom);
         this._zoom = this.initialZoom;
         this._position = this.initialPosition;
         this.goTo(this.map, this._position, true);
@@ -110,10 +109,10 @@ export class DatasetsMapComponent implements AfterViewInit {
             navigator.geolocation.getCurrentPosition(
                 response => {
                     this.position = [response.coords.latitude, response.coords.longitude];
-                    console.log("geolocalize: available", this._position);
+                    console.log('geolocalize: available', this._position);
                 },
                 () => {
-                    console.log("geolocalize: geolocation not available");
+                    console.log('geolocalize: geolocation not available');
                 }
             );
         }
@@ -128,15 +127,15 @@ export class DatasetsMapComponent implements AfterViewInit {
                 showCoverageOnHover: false,
                 iconCreateFunction: this.mapUtils.computeRedIcon
             }
-        )
+        );
         let tiles = leaflet.tileLayer(this.config.MAP_TILE_LAYER_URL, this.config.MAP_TILE_LAYER_OPTIONS);
         let options = {
-            center: <any>this.initialPosition,
+            center: <any> this.initialPosition,
             zoom: this.initialZoom,
             zoomControl: false,
             minZoom: 2,
             layers: [tiles]
-        }
+        };
         let map = leaflet.map(cssId, options);
         this.map = map;
         this.markersGroup = leaflet.featureGroup();
@@ -238,9 +237,9 @@ export class DatasetsMapComponent implements AfterViewInit {
             bounds: bounds,
             id: feed.projectId,
             feed: feed
-        }
+        };
         if (isDraggable === true) {
-            marker.on("dragend", this.updateProject);
+            marker.on('dragend', this.updateProject);
         }
 
         let tooltipData = '';
@@ -275,16 +274,18 @@ export class DatasetsMapComponent implements AfterViewInit {
 
     private getPopupName(feed: any) {
         let res = '';
-        if (this.router.url === "/my-datasets") {
+        if (this.router.url === '/my-datasets') {
             if (feed.isPublic) {
-                res += '<a href="/feeds/' + feed.id + '/' + feed.isPublic + '">' + feed.name + "</a></b> (" + this.translate.instant('mydatasets-table.column.isPublic.label') + ')';
+                res += '<a href="/feeds/' + feed.id + '/' + feed.isPublic + '">' +
+                    feed.name + '</a></b> (' + this.translate.instant('mydatasets-table.column.isPublic.label') + ')';
             } else {
                 res += feed.name + '</b> (' + this.translate.instant('mydatasets-table.column.isPublic.private') + ')';
             }
         } else {
-            res += '<a href="/feeds/' + feed.id + '/' + feed.isPublic + '">' + feed.name + "</a></b>";
+            res += '<a href="/feeds/' + feed.id + '/' + feed.isPublic + '">' + feed.name + '</a></b>';
         }
-        res += '<a href="/feeds/' + feed.id + '/' + feed.isPublic + '" class="pull-right">' + this.translate.instant('popup.detail') + '</a>';
+        res += '<a href="/feeds/' + feed.id + '/' + feed.isPublic + '" class="pull-right">' +
+            this.translate.instant('popup.detail') + '</a>';
         return res;
     }
 
@@ -296,8 +297,10 @@ export class DatasetsMapComponent implements AfterViewInit {
             popupHtml += '<br/><b>License</b>: ' + license.name;
         }
         popupHtml += '<br/>';
-        popupHtml += '<b>' + this.translate.instant('feed.period') + '</b> ' + this.datePipe.transform(feed.latestValidation.startDate, 'y-MM-dd');
-        popupHtml += '<b>' + this.translate.instant('feed.period_to') + '</b> ' + this.datePipe.transform(feed.latestValidation.endDate, 'y-MM-dd');
+        popupHtml += '<b>' + this.translate.instant('feed.period') + '</b> ' + this.datePipe.transform
+            (feed.latestValidation.startDate, 'y-MM-dd');
+        popupHtml += '<b>' + this.translate.instant('feed.period_to') + '</b> ' +
+            this.datePipe.transform(feed.latestValidation.endDate, 'y-MM-dd');
         popupHtml += '<br/><b>' + this.translate.instant('feed.routes') + '</b> ' + feed.latestValidation.routeCount;
         popupHtml += '<br/><b>' + this.translate.instant('feed.stops') + '</b> ' + feed.latestValidation.stopTimesCount;
         if (feed.lastUpdated) {
@@ -331,7 +334,8 @@ export class DatasetsMapComponent implements AfterViewInit {
                 lng = (bounds[0].lng + bounds[2].lng) / 2;
             }
             let marker = this.computeMarker(feed, [lat, lng], bounds);
-            this.router.url === "/my-datasets" ? this.markersGroup.addLayer(marker) : this.markerClusterGroup.addLayer(marker);
+            this.router.url === '/my-datasets' ? this.markersGroup.addLayer(marker) :
+                this.markerClusterGroup.addLayer(marker);
             this.markers[feed.id] = marker;
             // area over marker
             this.mapUtils.markerAreaOver(marker, this.map);
@@ -340,7 +344,7 @@ export class DatasetsMapComponent implements AfterViewInit {
 
     private createMarker(feed: IFeed) {
         // TODO : to change, the code is not clean
-        if (this.router.url === "/my-datasets") {
+        if (this.router.url === '/my-datasets') {
             this.projectsApi.getPrivateProject(feed.projectId).then(function success(data) {
                 return this.extractData(data, feed);
             }.bind(this));

@@ -1,9 +1,10 @@
-import { Component, Output, EventEmitter, OnInit, Input, ViewChild } from "@angular/core";
-import { Actions } from "@ngrx/effects";
-import { Store } from "@ngrx/store";
-import { PaginationService } from "ng2-pagination";
-import { DatasetsActions, toFeedReference, DatasetsActionType, IFeedReference } from "app/state/datasets/datasets.actions";
-import { DatasetsState } from "app/state/datasets/datasets.reducer";
+import { Component, Output, EventEmitter, OnInit, Input, ViewChild } from '@angular/core';
+import { Actions } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { PaginationService } from 'ng2-pagination';
+import { DatasetsActions, toFeedReference, DatasetsActionType, IFeedReference }
+from 'app/state/datasets/datasets.actions';
+import { DatasetsState } from 'app/state/datasets/datasets.reducer';
 
 import { Configuration,
     FeedsApiService,
@@ -14,21 +15,21 @@ import { Configuration,
     UtilsService,
     IFeedRow,
     InlineEditEvent
-} from "app/modules/common/";
+} from 'app/modules/common/';
 
 import { DatasetsTableComponent } from '../datasets-table/datasets-table.component';
 
 import { LicenseModal } from '../modal/license-modal.component';
 import { MiscDataModal } from '../modal/miscdata-modal.component';
 import { DeleteFeedModal } from '../modal/delete-feed-modal.component';
-const CONFIRM_EDIT_IDX_SETFILE = "setFile"
+const CONFIRM_EDIT_IDX_SETFILE = 'setFile';
 
 @Component({
     selector: 'app-user-datasets-table',
     templateUrl: 'user-datasets-table.component.html',
     providers: [PaginationService]
 })
-export class UserDatasetsTableComponent extends DatasetsTableComponent  implements OnInit {
+export class UserDatasetsTableComponent extends DatasetsTableComponent implements OnInit {
     @Output() protected sortChange = new EventEmitter();
     @Input() protected _feeds: IFeedRow[];
     @ViewChild(LicenseModal)
@@ -69,17 +70,17 @@ export class UserDatasetsTableComponent extends DatasetsTableComponent  implemen
                 let updatedFeed = action.payload.feed;
                 this.processConfirm('setName' + updatedFeed.id);
             }
-        )
+        );
         // close inline edit form on setFile() success
         actions$.ofType(DatasetsActionType.FEED_SET_FILE_SUCCESS).subscribe(
             action => {
                 let updatedFeed = action.payload.feed;
                 this.processConfirm(CONFIRM_EDIT_IDX_SETFILE + updatedFeed.id);
             }
-        )
+        );
         actions$.ofType(DatasetsActionType.FEED_CREATE_LICENSE_FAIL).subscribe(
             action => {
-                this.createLicenseFail(action.payload.feed, action.payload.error)
+                this.createLicenseFail(action.payload.feed, action.payload.error);
             }
         );
 
@@ -105,7 +106,7 @@ export class UserDatasetsTableComponent extends DatasetsTableComponent  implemen
 
         actions$.ofType(DatasetsActionType.FEED_CREATE_MISCDATA_FAIL).subscribe(
             action => {
-                this.createLicenseFail(action.payload.feed, action.payload.error)
+                this.createLicenseFail(action.payload.feed, action.payload.error);
             }
         );
 

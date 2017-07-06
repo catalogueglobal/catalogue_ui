@@ -1,14 +1,14 @@
 import { Component, AfterViewInit }                      from '@angular/core';
-import { Store }                                         from "@ngrx/store";
-import { Observable }                                    from "rxjs";
-import { ToasterService, ToasterConfig, BodyOutputType } from "angular2-toaster/angular2-toaster";
-import { TranslateService }                              from "ng2-translate/src/translate.service";
-import { Configuration }                                 from "app/modules/common";
-import { DatasetsActions }                               from "app/state/datasets/datasets.actions";
-import { DatasetsState }                                 from "app/state/datasets/datasets.reducer";
+import { Store }                                         from '@ngrx/store';
+import { Observable }                                    from 'rxjs';
+import { ToasterService, ToasterConfig, BodyOutputType } from 'angular2-toaster/angular2-toaster';
+import { TranslateService }                              from 'ng2-translate/src/translate.service';
+import { Configuration }                                 from 'app/modules/common';
+import { DatasetsActions }                               from 'app/state/datasets/datasets.actions';
+import { DatasetsState }                                 from 'app/state/datasets/datasets.reducer';
 
 @Component({
-    selector:    'app-status',
+    selector: 'app-status',
     templateUrl: 'status.component.html'
 })
 export class StatusComponent implements AfterViewInit {
@@ -26,8 +26,7 @@ export class StatusComponent implements AfterViewInit {
         private toasterService: ToasterService,
         private datasetsStore: Store<DatasetsState>,
         private datasetsAction: DatasetsActions,
-        private translateService: TranslateService)
-    {
+        private translateService: TranslateService) {
         this.status = datasetsStore.select('datasets').map((datasetsState: DatasetsState) => datasetsState.status);
     }
 
@@ -43,7 +42,7 @@ export class StatusComponent implements AfterViewInit {
                     this.toasterService.pop(toast);
                 }
             }
-        )
+        );
     }
 
     private getStatus() {

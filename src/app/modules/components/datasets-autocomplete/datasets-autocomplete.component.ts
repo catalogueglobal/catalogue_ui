@@ -1,13 +1,13 @@
 import { Component, Output, Input }                    from '@angular/core';
-import { EventEmitter }                                from "@angular/common/src/facade/async";
+import { EventEmitter }                                from '@angular/common/src/facade/async';
 import { CompleterService, RemoteData, CompleterItem } from 'ng2-completer';
-import { Configuration }                               from "app/modules/common";
-import * as leaflet                                    from "leaflet";
+import { Configuration }                               from 'app/modules/common';
+import * as leaflet                                    from 'leaflet';
 
 export type AutocompleteItem = {
     position: leaflet.LatLngExpression,
     type: string,
-}
+};
 
 @Component({
     selector: 'app-datasets-autocomplete',
@@ -15,9 +15,9 @@ export type AutocompleteItem = {
     providers: [CompleterService]
 })
 export class DatasetsAutocompleteComponent {
-    private dataService: RemoteData;
-    @Output() private selected = new EventEmitter<AutocompleteItem>();
-    @Input() private placeholder: string;
+    public dataService: RemoteData;
+    @Output() public selected = new EventEmitter<AutocompleteItem>();
+    @Input() public placeholder: string;
     data = [];
 
     constructor(

@@ -1,18 +1,18 @@
 import {Component, ViewChild, Input, EventEmitter} from '@angular/core';
-import { Store } from "@ngrx/store";
-import { Actions } from "@ngrx/effects";
+import { Store } from '@ngrx/store';
+import { Actions } from '@ngrx/effects';
 import { FeedsApiService,
-  FEED_RETRIEVAL_METHOD,
-  ILicense,
-  Configuration,
-  UtilsService,
-  SessionService,
-  UsersApiService,
-  SharedService,
-  InlineEditEvent,
-  IFeed } from 'app/modules/common/';
-import { DatasetsState } from "app/state/datasets/datasets.reducer";
-import { DatasetsActions, toFeedReference, DatasetsActionType } from "app/state/datasets/datasets.actions";
+    FEED_RETRIEVAL_METHOD,
+    ILicense,
+    Configuration,
+    UtilsService,
+    SessionService,
+    UsersApiService,
+    SharedService,
+    InlineEditEvent,
+    IFeed } from 'app/modules/common/';
+import { DatasetsState } from 'app/state/datasets/datasets.reducer';
+import { DatasetsActions, toFeedReference, DatasetsActionType } from 'app/state/datasets/datasets.actions';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -39,7 +39,6 @@ export class DatasetsGenericComponent {
 
     protected latestVersionId;
 
-
     constructor(
         protected config: Configuration,
         protected utils: UtilsService,
@@ -62,8 +61,8 @@ export class DatasetsGenericComponent {
         if (feed.feedVersionCount > 1) {
             let that = this;
             this.feedsApiService.getFeedVersions(feed.id, feed.isPublic).then(versions => {
-                feed.allVersions = versions.sort((a,b) => {
-                  return b.updated - a.updated;
+                feed.allVersions = versions.sort((a, b) => {
+                    return b.updated - a.updated;
                 });
                 feed.selectedVersion = feed.allVersions[0];
                 feed.latestValidation = feed.selectedVersion.validationSummary || feed.latestValidation;
@@ -81,12 +80,12 @@ export class DatasetsGenericComponent {
         }
     }
 
-    private setLastVersionId(feed){
-      for (let i = 0; i < feed.allVersions.length; i++){
-        if (!feed.allVersions[i].nextVersionId){
-          this.latestVersionId = feed.allVersions[i].id;
+    private setLastVersionId(feed) {
+        for (let i = 0; i < feed.allVersions.length; i++) {
+            if (!feed.allVersions[i].nextVersionId) {
+                this.latestVersionId = feed.allVersions[i].id;
+            }
         }
-      }
     }
 
     protected getLicenses(value: any) {
@@ -102,9 +101,9 @@ export class DatasetsGenericComponent {
     }
 
     protected getFeedsVersion(values) {
-      for (let i = 0; values && i < values.length; i++) {
-          this.getFeedVersion(values[i]);
-      }
+        for (let i = 0; values && i < values.length; i++) {
+            this.getFeedVersion(values[i]);
+        }
     }
 
     protected getMiscDatas(value: any) {
@@ -117,7 +116,7 @@ export class DatasetsGenericComponent {
                 that.setFeedsItemsObj(value, false);
             }).catch(error => {
                 console.log(error);
-            })
+            });
     }
 
     protected setFeedItemsObj(feed: any, license: boolean) {
@@ -156,7 +155,7 @@ export class DatasetsGenericComponent {
     // Return true or false if the user is subscribe
     // or not to the feed
     protected isSubscribe(userInfos, feed_id): number {
-        if (!userInfos.app_metadata || userInfos.app_metadata.datatools[0].subscriptions == null) {
+        if (!userInfos.app_metadata || userInfos.app_metadata.datatools[0].subscriptions === null) {
             return -1;
         } else {
             for (let i = 0; i < userInfos.app_metadata.datatools[0].subscriptions[0].target.length; i++) {
@@ -181,9 +180,9 @@ export class DatasetsGenericComponent {
             index = this.sessionService.userProfile.app_metadata.datatools[0].subscriptions[0].target.indexOf(feed_id);
         }
         if (index === -1) {
-            return false
+            return false;
         }
-        return true
+        return true;
     }
 
     protected actionOnFeed(feed_id) {
@@ -197,14 +196,16 @@ export class DatasetsGenericComponent {
 
     protected subscribeOrUnsubscribeFeed(data, feed_id, isSubscribeIndex) {
         if (isSubscribeIndex === -1) {
-            console.log("SUBSCRIBE");
+            console.log('SUBSCRIBE');
             data = this.utils.addFeedIdToJson(data, feed_id);
-            this.store.dispatch(this.datasetsAction.subscribeToFeed(data.user_id, { "data": data.app_metadata.datatools }));
+            this.store.dispatch(this.datasetsAction.subscribeToFeed(data.user_id,
+                { 'data': data.app_metadata.datatools }));
         } else {
-            console.log("UNSUBSCRIBE");
+            console.log('UNSUBSCRIBE');
             data.app_metadata.datatools[0].subscriptions[0].target.splice(isSubscribeIndex, 1);
             console.log(data.app_metadata.datatools[0]);
-            this.store.dispatch(this.datasetsAction.unsubscribeToFeed(data.user_id, { "data": data.app_metadata.datatools }));
+            this.store.dispatch(this.datasetsAction.unsubscribeToFeed(data.user_id,
+                { 'data': data.app_metadata.datatools }));
         }
     }
 
@@ -225,7 +226,7 @@ export class DatasetsGenericComponent {
             item: null,
             error: null,
             itemFile: {}
-        }
+        };
         //};
     }
 
@@ -236,7 +237,8 @@ export class DatasetsGenericComponent {
     protected displayLicense(feed: IFeed) {
         this.currentFeed = feed;
         for (let i = 0; this.licenses && i < this.licenses.length; i++) {
-            if (this.feedsLicenses[this.currentFeed.id] && this.licenses[i].id === this.feedsLicenses[this.currentFeed.id].id) {
+            if (this.feedsLicenses[this.currentFeed.id] && this.licenses[i].id ===
+                this.feedsLicenses[this.currentFeed.id].id) {
                 this.newLicenseOrMiscData.item = this.licenses[i];
             }
             if (!this.newLicenseOrMiscData.item && this.licenses[i].id === this.defaultLicenseId) {
@@ -278,7 +280,8 @@ export class DatasetsGenericComponent {
 
     protected setLicense(): boolean {
         if (this.newLicenseOrMiscData.item.id) {
-            this.store.dispatch(this.datasetsAction.feedSetLicense(toFeedReference(this.currentFeed), this.newLicenseOrMiscData.item.id));
+            this.store.dispatch(this.datasetsAction.feedSetLicense(toFeedReference(this.currentFeed),
+                this.newLicenseOrMiscData.item.id));
             return true;
         } else {
             return false;
@@ -287,7 +290,8 @@ export class DatasetsGenericComponent {
 
     protected unsetLicense(): boolean {
         if (this.feedsLicenses[this.currentFeed.id]) {
-            this.store.dispatch(this.datasetsAction.feedUnsetLicense(toFeedReference(this.currentFeed), this.feedsLicenses[this.currentFeed.id].id));
+            this.store.dispatch(this.datasetsAction.feedUnsetLicense(toFeedReference
+                (this.currentFeed), this.feedsLicenses[this.currentFeed.id].id));
             return true;
         } else {
             return false;
@@ -295,12 +299,14 @@ export class DatasetsGenericComponent {
     }
 
     protected createLicense() {
-        this.store.dispatch(this.datasetsAction.feedCreateLicense(toFeedReference(this.currentFeed), this.newLicenseOrMiscData.name, this.newLicenseOrMiscData.itemFile.file));
+        this.store.dispatch(this.datasetsAction.feedCreateLicense(toFeedReference
+            (this.currentFeed), this.newLicenseOrMiscData.name, this.newLicenseOrMiscData.itemFile.file));
     }
 
     protected setMiscData(): boolean {
         if (this.newLicenseOrMiscData.item.id) {
-            this.store.dispatch(this.datasetsAction.feedSetMiscData(toFeedReference(this.currentFeed), this.newLicenseOrMiscData.item.id));
+            this.store.dispatch(this.datasetsAction.feedSetMiscData(toFeedReference
+                (this.currentFeed), this.newLicenseOrMiscData.item.id));
             return true;
         } else {
             return false;
@@ -309,7 +315,8 @@ export class DatasetsGenericComponent {
 
     protected unsetMiscData() {
         if (this.feedsMiscDatas[this.currentFeed.id]) {
-            this.store.dispatch(this.datasetsAction.feedUnsetMiscData(toFeedReference(this.currentFeed), this.feedsMiscDatas[this.currentFeed.id].id));
+            this.store.dispatch(this.datasetsAction.feedUnsetMiscData(toFeedReference
+                (this.currentFeed), this.feedsMiscDatas[this.currentFeed.id].id));
             return true;
         } else {
             return false;
@@ -317,7 +324,8 @@ export class DatasetsGenericComponent {
     }
 
     protected createMiscData() {
-        this.store.dispatch(this.datasetsAction.feedCreateMiscData(toFeedReference(this.currentFeed), this.newLicenseOrMiscData.name, this.newLicenseOrMiscData.itemFile.file));
+        this.store.dispatch(this.datasetsAction.feedCreateMiscData(toFeedReference
+            (this.currentFeed), this.newLicenseOrMiscData.name, this.newLicenseOrMiscData.itemFile.file));
     }
 
     protected onSubmitLicense() {
@@ -359,57 +367,57 @@ export class DatasetsGenericComponent {
     }
 
     protected setName(feed, event: InlineEditEvent<string>) {
-        this.confirmEditById.set('setName' + feed.id, event.confirm$)
+        this.confirmEditById.set('setName' + feed.id, event.confirm$);
         this.store.dispatch(this.datasetsAction.feedSetName(toFeedReference(feed), event.value));
     }
 
     protected processConfirm(idx: string) {
-        let confirmEdit = this.confirmEditById.get(idx)
+        let confirmEdit = this.confirmEditById.get(idx);
         if (confirmEdit) {
             confirmEdit.emit(true);
-            this.confirmEditById.delete(idx)
+            this.confirmEditById.delete(idx);
         }
     }
 
     protected getDownloadUrl(feed: any) {
         this.feedsApiService.getDownloadUrl(feed,
-           (feed.selectedVersion ? feed.selectedVersion.id : null), feed.isPublic).subscribe(
+            (feed.selectedVersion ? feed.selectedVersion.id : null), feed.isPublic).subscribe(
             url => {
                 console.log('getDownloadUrl: ', url, feed);
                 if (url) {
                     window.open(url);
                 }
             }
-        );
+            );
     }
 
     protected downloadFeed(feed: any) {
         this.getDownloadUrl(feed);
     }
 
-    protected downloadValidation(feed){
-      window.open(this.getValidationUrl(feed));
+    protected downloadValidation(feed) {
+        window.open(this.getValidationUrl(feed));
     }
 
-    protected getValidationUrl(feed){
-      return this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.selectedVersion.id + '/validation';
+    protected getValidationUrl(feed) {
+        return this.config.ROOT_API + '/api/manager/public/feedversion/' + feed.selectedVersion.id + '/validation';
     }
 
-    protected openValidation(feed){
-      console.log(feed);
-      this.validationUrl = this.getValidationUrl(feed);
+    protected openValidation(feed) {
+        console.log(feed);
+        this.validationUrl = this.getValidationUrl(feed);
     }
 
-    protected onVersionChanged(feed, version){
-      feed.selectedVersion = version;
-      feed.latestValidation = feed.selectedVersion.validationSummary;
-      this.shared.notifyOther({
-        event: 'onVersionChanged',
-        value: feed
-      });
-      // this.feedsApiService.getFeedByVersion(version.id, feed.isPublic).then(data => {
-      //   console.log(data);
-      // })
+    protected onVersionChanged(feed, version) {
+        feed.selectedVersion = version;
+        feed.latestValidation = feed.selectedVersion.validationSummary;
+        this.shared.notifyOther({
+            event: 'onVersionChanged',
+            value: feed
+        });
+        // this.feedsApiService.getFeedByVersion(version.id, feed.isPublic).then(data => {
+        //   console.log(data);
+        // })
     }
 
     protected fetchFeed(feed) {
@@ -418,7 +426,7 @@ export class DatasetsGenericComponent {
 
     protected setFile(feed, event: any) {
         // observer will be notified to close inline form on success
-        this.confirmEditById.set('setFile' + feed.id, event.confirm$)
+        this.confirmEditById.set('setFile' + feed.id, event.confirm$);
         // process
         this.store.dispatch(this.datasetsAction.feedSetFile(toFeedReference(feed), event.value));
         return false;

@@ -1,7 +1,7 @@
-import { Injectable }     from "@angular/core";
-import { SortOrder }      from "app/modules/common";
-import { UtilsService }   from "../utils.service";
-import { IFeed, IBounds } from "./feedsApi.service";
+import { Injectable }     from '@angular/core';
+import { SortOrder }      from 'app/modules/common';
+import { UtilsService }   from '../utils.service';
+import { IFeed, IBounds } from './feedsApi.service';
 
 @Injectable()
 export class LocalFiltersService {
@@ -10,7 +10,7 @@ export class LocalFiltersService {
     }
 
     public filterFeedsInArea(feeds: IFeed[], area: IBounds) {
-        console.log("FILTER FEEDS IN AREA", feeds);
+        console.log('FILTER FEEDS IN AREA', feeds);
         return feeds.filter(feed => this.isFeedWithinArea(feed, area));
     }
 
@@ -22,18 +22,18 @@ export class LocalFiltersService {
         if (
             // feed at west of area
             feedBounds.east < area.west ||
-                // feed at east of area
-                feedBounds.west > area.east) {
+            // feed at east of area
+            feedBounds.west > area.east) {
             // latitude KO
-            return false
+            return false;
         }
         if (
             // feed at north of area
             feedBounds.south > area.north ||
-                // feed at south of area
-                feedBounds.north < area.south) {
+            // feed at south of area
+            feedBounds.north < area.south) {
             // longitude KO
-            return false
+            return false;
         }
         return true;
     }
@@ -50,24 +50,24 @@ export class LocalFiltersService {
     public sortFeeds(feeds, sortOrder: SortOrder) {
         let sortProperty;
         switch (sortOrder.sort) {
-        case 'regionStateCountry':
-            sortProperty = (feed)=>this.utils.regionStateCountry(feed);
-            break;
-        case 'lastUpdated':
-            sortProperty = (feed)=> {
-                let value = feed.lastUpdated;
-                if (!value) { // lastUpdated may be empty
-                    value = 0;
-                }
-                return value
-            }
-            break;
-        default:
-            sortProperty = (feed)=>feed[sortOrder.sort];
-            break;
+            case 'regionStateCountry':
+                sortProperty = (feed) => this.utils.regionStateCountry(feed);
+                break;
+            case 'lastUpdated':
+                sortProperty = (feed) => {
+                    let value = feed.lastUpdated;
+                    if (!value) { // lastUpdated may be empty
+                        value = 0;
+                    }
+                    return value;
+                };
+                break;
+            default:
+                sortProperty = (feed) => feed[sortOrder.sort];
+                break;
         }
         let sortFactor = sortOrder.order === 'asc' ? 1 : -1;
-        let res = this.computeSort(feeds, sortFactor, sortProperty)
+        let res = this.computeSort(feeds, sortFactor, sortProperty);
         return res;
     }
 
@@ -75,10 +75,10 @@ export class LocalFiltersService {
         array.sort((a: any, b: any) => {
             let aValue = sortProperty(a);
             let bValue = sortProperty(b);
-            if (typeof aValue === "string") {
+            if (typeof aValue === 'string') {
                 aValue = aValue.toLowerCase();
             }
-            if (typeof bValue === "string") {
+            if (typeof bValue === 'string') {
                 bValue = bValue.toLowerCase();
             }
             if (aValue < bValue) {

@@ -1,11 +1,11 @@
-import { Injectable }           from "@angular/core";
-import { Http }                 from "@angular/http";
-import { AuthHttp, AuthConfig } from "angular2-jwt";
-import { Observable }           from "rxjs/Rx";
-import { Configuration }        from "../configuration";
-import { SortOrder }            from "app/modules/common";
-import { AbstractApiService }   from "./abstractApi.service";
-import { IFeedApi, IBounds }    from "./feedsApi.service";
+import { Injectable }           from '@angular/core';
+import { Http }                 from '@angular/http';
+import { AuthHttp, AuthConfig } from 'angular2-jwt';
+import { Observable }           from 'rxjs/Rx';
+import { Configuration }        from '../configuration';
+import { SortOrder }            from 'app/modules/common';
+import { AbstractApiService }   from './abstractApi.service';
+import { IFeedApi, IBounds }    from './feedsApi.service';
 
 export type IProject = {
     id: string,
@@ -24,11 +24,10 @@ export class ProjectsApiService extends AbstractApiService {
         protected http: Http,
         protected authHttp: AuthHttp,
         protected authConfig: AuthConfig,
-        protected config: Configuration)
-    {
+        protected config: Configuration) {
         super(http, authHttp, authConfig, config);
-        this.PROJECT_SECURE_URL = this.config.ROOT_API + "/api/manager/secure/project";
-        this.PROJECT_PUBLIC_URL = this.config.ROOT_API + "/api/manager/public/project";
+        this.PROJECT_SECURE_URL = this.config.ROOT_API + '/api/manager/secure/project';
+        this.PROJECT_PUBLIC_URL = this.config.ROOT_API + '/api/manager/public/project';
     }
 
     public create(name: string): Observable<IProject> {
@@ -39,21 +38,21 @@ export class ProjectsApiService extends AbstractApiService {
     }
 
     public delete(projectId: string): Observable<any> {
-        return this.authHttp.delete(this.PROJECT_SECURE_URL + "/" + projectId);
+        return this.authHttp.delete(this.PROJECT_SECURE_URL + '/' + projectId);
     }
 
     public getPublicList(bounds: IBounds, sortOrder: SortOrder): Observable<IProject[]> {
-        return this.http.get(this.PROJECT_PUBLIC_URL + "?" + this.sortQuery(sortOrder) + "&" + this.boundsQuery(bounds))
+        return this.http.get(this.PROJECT_PUBLIC_URL + '?' + this.sortQuery(sortOrder) + '&' + this.boundsQuery(bounds))
             .map(response => response.json());
     }
 
     public getSecureList(bounds: IBounds, sortOrder: SortOrder): Observable<IProject[]> {
-        return this.authHttp.get(this.PROJECT_SECURE_URL + "?" + this.sortQuery(sortOrder) + "&" + this.boundsQuery(bounds))
-            .map(response => response.json());
+        return this.authHttp.get(this.PROJECT_SECURE_URL + '?' + this.sortQuery(sortOrder) +
+            '&' + this.boundsQuery(bounds)).map(response => response.json());
     }
 
     public getPublicProject(projectId: string): Promise<IProject> {
-        return this.http.get(this.PROJECT_PUBLIC_URL + "/" + projectId).map(response => response.json()).toPromise();
+        return this.http.get(this.PROJECT_PUBLIC_URL + '/' + projectId).map(response => response.json()).toPromise();
     }
 
     public getAllSecureProject(): Observable<IProject[]> {
@@ -61,25 +60,26 @@ export class ProjectsApiService extends AbstractApiService {
     }
 
     public getPrivateProject(projectId: string): Promise<IProject> {
-        return this.authHttp.get(this.PROJECT_SECURE_URL + "/" + projectId).map(response => response.json()).toPromise();
+        return this.authHttp.get(this.PROJECT_SECURE_URL + '/' + projectId)
+            .map(response => response.json()).toPromise();
     }
 
-
     public updateProject(project: JSON, projectId: string): Observable<IProject> {
-        return this.authHttp.put(this.PROJECT_SECURE_URL + "/" + projectId, JSON.stringify(project)).map(response => response.json());
+        return this.authHttp.put(this.PROJECT_SECURE_URL + '/' + projectId, JSON.stringify(project))
+            .map(response => response.json());
     }
 
     private sortQuery(sortOrder: SortOrder) {
         if (!sortOrder) {
-            return "";
+            return '';
         }
-        return "sort=" + sortOrder.sort + "&order=" + sortOrder.order;
+        return 'sort=' + sortOrder.sort + '&order=' + sortOrder.order;
     }
 
     private boundsQuery(bounds: IBounds) {
         if (!bounds) {
-            return "";
+            return '';
         }
-        return "north=" + bounds.north + "&south=" + bounds.south + "&east=" + bounds.east + "&west=" + bounds.west;
+        return 'north=' + bounds.north + '&south=' + bounds.south + '&east=' + bounds.east + '&west=' + bounds.west;
     }
 }

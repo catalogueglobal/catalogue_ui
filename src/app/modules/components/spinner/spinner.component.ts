@@ -7,7 +7,7 @@ import {Component, Input, OnDestroy} from '@angular/core';
     styleUrls: ['spinner.component.css']
 })
 export class SpinnerComponent implements OnDestroy {
-    private visible = true;
+    public visible = true;
     private timeout: any;
     @Input() public delay = 0;
 
