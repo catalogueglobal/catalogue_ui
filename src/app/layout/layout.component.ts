@@ -5,8 +5,7 @@ import { DatasetsActionType } from 'app/state/datasets/datasets.actions';
 
 @Component({
     selector: 'app-layout',
-    templateUrl: 'layout.component.html',
-    styleUrls: ['layout.component.css']
+    templateUrl: 'layout.component.html'
 })
 export class LayoutComponent {
     mainTitle: string;
