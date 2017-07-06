@@ -18,5 +18,6 @@ export * from './pipes/orderby.pipe';
 export * from './pipes/truncate.pipe';
 
 export * from './guards/AuthGuard';
+export * from './types/types';
 
 export * from './common.module';

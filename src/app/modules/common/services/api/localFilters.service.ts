@@ -1,5 +1,5 @@
 import { Injectable }     from "@angular/core";
-import { SortOrder }      from "app/commons/directives/sort-link/sort-link.component";
+import { SortOrder }      from "app/modules/common";
 import { UtilsService }   from "../utils.service";
 import { IFeed, IBounds } from "./feedsApi.service";
 

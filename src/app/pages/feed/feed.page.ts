@@ -14,17 +14,19 @@ import { Configuration,
     UtilsService
 } from "app/modules/common/";
 
-import { DatatoolComponent } from "app/commons/components/datatool.component";
-import { LicenseModal } from 'app/commons/directives/modal/license-modal.component';
-import { MiscDataModal } from 'app/commons/directives/modal/miscdata-modal.component';
-import {ConfirmFeedVersionModal} from 'app/commons/directives/modal/confirm-feed-version-modal.component';
-import { ValidationDetailsModal } from 'app/commons/directives/modal/validation-details-modal.component';
+import {
+    LicenseModal,
+    MiscDataModal,
+    ConfirmFeedVersionModal,
+    ValidationDetailsModal,
+    DatasetsGenericComponent
+} from 'app/modules/components';
 
 @Component({
-    selector: 'app-feeds',
-    templateUrl: 'feeds.component.html',
+    selector: 'app-feed-page',
+    templateUrl: 'feed.page.html',
 })
-export class FeedsComponent extends DatatoolComponent {
+export class FeedPage extends DatasetsGenericComponent {
     public note: string;
     public feedId: string;
     public notesFeed: Array<any>;
@@ -65,8 +67,8 @@ export class FeedsComponent extends DatatoolComponent {
             actions$, datasetsAction, shared);
         // Get the id of the feed
         this.route.params.subscribe(params => {
-          this.feedId = params["id"];
-          this.getPublicFeed = params["public"] ? (params["public"].toString() === 'false' ? false : true) : true;
+            this.feedId = params["id"];
+            this.getPublicFeed = params["public"] ? (params["public"].toString() === 'false' ? false : true) : true;
         });
         // Get the info from the feed id
         this.notesFeed = [];
@@ -103,7 +105,7 @@ export class FeedsComponent extends DatatoolComponent {
             that.feed = data;
             that.feeds = [that.feed];
             that.getLicenses(that.feeds);
-            that.mapPosition =  that.feed.latestValidation ? that.utils.computeLatLng(that.feed.latestValidation.bounds) :
+            that.mapPosition = that.feed.latestValidation ? that.utils.computeLatLng(that.feed.latestValidation.bounds) :
                 that.mapPosition;
             if (that.sessionService.loggedIn === true) {
                 that.checkAuthorisations();
@@ -236,8 +238,10 @@ export class FeedsComponent extends DatatoolComponent {
     addNotesToFeed() {
         // add note to feed if not empty
         if (this.note != null && this.sessionService.userProfile) {
-            let data = { body: this.note, date: Date.now(), userEmail: this.sessionService.userProfile.email,
-            user: this.sessionService.userProfile.user_id };
+            let data = {
+                body: this.note, date: Date.now(), userEmail: this.sessionService.userProfile.email,
+                user: this.sessionService.userProfile.user_id
+            };
             this.store.dispatch(this.datasetsAction.feedAddNotes(this.feedId, data));
             this.notesFeed.unshift(data);
         }
@@ -318,16 +322,16 @@ export class FeedsComponent extends DatatoolComponent {
         }
     }
 
-    protected openValidation(feed){
-      super.openValidation(feed);
-      if (feed && feed.selectedVersion && feed.selectedVersion.id){
-        this.validationDetailsModal.show();
-      }
+    protected openValidation(feed) {
+        super.openValidation(feed);
+        if (feed && feed.selectedVersion && feed.selectedVersion.id) {
+            this.validationDetailsModal.show();
+        }
     }
 
-    private feedChanged(){
-      console.log('getting versions');
-      this.getFeedVersion(this.feed);
+    private feedChanged() {
+        console.log('getting versions');
+        this.getFeedVersion(this.feed);
     }
 
 }

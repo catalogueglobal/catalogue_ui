@@ -2,26 +2,25 @@ import { Component, ViewChild, AfterViewInit } from "@angular/core";
 import { Actions }                             from "@ngrx/effects";
 import { Store }                               from "@ngrx/store";
 import { Observable }                          from "rxjs/Rx";
-import { SortOrder }                           from "app/commons/directives/sort-link/sort-link.component";
 import { Configuration,
     ProjectsApiService,
     IFeed,
+    IFeedRow,
     IBounds,
     FeedsApiService,
     UtilsService,
-    LocalFiltersService
+    LocalFiltersService,
+    SortOrder
 } from "app/modules/common/";
 
 import { DatasetsState }                       from "app/state/datasets/datasets.reducer";
 import { DatasetsActions, DatasetsActionType } from "app/state/datasets/datasets.actions";
-import { DatasetsMapComponent }                from "app/modules/datasets-map/datasets-map.component";
-import { AutocompleteItem }                    from "app/modules/datasets-autocomplete/datasets-autocomplete.component";
-import { DatasetsTableComponent }              from "app/modules/datasets-table/datasets-table.component";
+import {
+  DatasetsMapComponent,
+  AutocompleteItem,
+  DatasetsTableComponent
+} from "app/modules/components";
 import LatLngExpression = L.LatLngExpression;
-
-export type IFeedRow = IFeed & {
-    checked
-}
 
 const INITIAL_SORT = {
     sort: 'name',
@@ -29,12 +28,12 @@ const INITIAL_SORT = {
 };
 
 @Component({
-    selector: 'app-datasets',
-    templateUrl: 'datasets.component.html',
+    selector: 'app-explore-page',
+    templateUrl: 'explore.page.html',
     providers: [ProjectsApiService]
 })
 
-export class DatasetsComponent implements AfterViewInit {
+export class ExplorePage implements AfterViewInit {
     protected feeds$: Observable<IFeed[]>;
     protected feeds: IFeedRow[] = [];
     private mapPosition: LatLngExpression;

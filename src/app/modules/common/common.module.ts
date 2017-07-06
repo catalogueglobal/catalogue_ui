@@ -27,7 +27,7 @@ import {
   SessionService,
   SharedService,
   UploadService,
-  UtilsService,
+  UtilsService
 } from './';
 
 let _entryPoints = [

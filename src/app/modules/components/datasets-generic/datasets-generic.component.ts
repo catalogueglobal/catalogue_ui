@@ -9,16 +9,16 @@ import { FeedsApiService,
   SessionService,
   UsersApiService,
   SharedService,
+  InlineEditEvent,
   IFeed } from 'app/modules/common/';
 import { DatasetsState } from "app/state/datasets/datasets.reducer";
 import { DatasetsActions, toFeedReference, DatasetsActionType } from "app/state/datasets/datasets.actions";
-import { InlineEditEvent } from "app/commons/directives/inline-edit-text/inline-edit-generic.component";
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     template: ''
 })
-export class DatatoolComponent {
+export class DatasetsGenericComponent {
 
     protected licenses: Array<ILicense>;
     protected feedsLicenses = {};

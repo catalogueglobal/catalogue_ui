@@ -1,0 +1,9 @@
+<div *ngIf="!editing" (click)="startEditing()" class="inline-edit viewing" [class.highlight]="highlight">
+  <ng-content></ng-content>
+  &nbsp;<i class="fa fa-pencil"></i>
+</div>
+
+<form (submit)="doneEditing()" class="inline-edit" [class.editing]="editing">
+  <input #inlineInput type="text" name="editingValue" [(ngModel)]="editingValue"
+         (blur)="doneEditing()" (keypress)="keypressCancelOnEscape($event)">
+</form>

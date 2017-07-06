@@ -1,12 +1,9 @@
-import { Component, Output, EventEmitter, Input, ViewChild } from "@angular/core";
+import { Component, Output, EventEmitter, OnInit, Input, ViewChild } from "@angular/core";
 import { Actions } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { PaginationService } from "ng2-pagination";
-import { InlineEditEvent } from "app/commons/directives/inline-edit-text/inline-edit-generic.component";
-import { DatasetsActions, toFeedReference, DatasetsActionType,IFeedReference } from "app/state/datasets/datasets.actions";
+import { DatasetsActions, toFeedReference, DatasetsActionType, IFeedReference } from "app/state/datasets/datasets.actions";
 import { DatasetsState } from "app/state/datasets/datasets.reducer";
-import { DatasetsTableComponent } from "app/modules/datasets-table/datasets-table.component";
-import { IFeedRow } from "app/modules/datasets/datasets.component";
 
 import { Configuration,
     FeedsApiService,
@@ -14,21 +11,24 @@ import { Configuration,
     UsersApiService,
     SessionService,
     SharedService,
-    UtilsService
+    UtilsService,
+    IFeedRow,
+    InlineEditEvent
 } from "app/modules/common/";
 
-import { LicenseModal } from 'app/commons/directives/modal/license-modal.component';
-import { MiscDataModal } from 'app/commons/directives/modal/miscdata-modal.component';
-import { DeleteFeedModal } from 'app/commons/directives/modal/delete-feed-modal.component';
+import { DatasetsTableComponent } from '../datasets-table/datasets-table.component';
 
+import { LicenseModal } from '../modal/license-modal.component';
+import { MiscDataModal } from '../modal/miscdata-modal.component';
+import { DeleteFeedModal } from '../modal/delete-feed-modal.component';
 const CONFIRM_EDIT_IDX_SETFILE = "setFile"
 
 @Component({
-    selector: 'app-my-datasets-table',
-    templateUrl: 'my-datasets-table.component.html',
+    selector: 'app-user-datasets-table',
+    templateUrl: 'user-datasets-table.component.html',
     providers: [PaginationService]
 })
-export class MyDatasetsTableComponent extends DatasetsTableComponent {
+export class UserDatasetsTableComponent extends DatasetsTableComponent  implements OnInit {
     @Output() protected sortChange = new EventEmitter();
     @Input() protected _feeds: IFeedRow[];
     @ViewChild(LicenseModal)
@@ -145,15 +145,15 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         this.deleteFeedModal.show();
     }
 
-    protected setLicense():boolean {
+    protected setLicense(): boolean {
         let res = !super.setLicense();
         if (!res) {
-          this.licenseModal.hide();
+            this.licenseModal.hide();
         }
         return res;
     }
 
-    protected unsetLicense():boolean {
+    protected unsetLicense(): boolean {
         let res = super.unsetLicense();
         if (!res) {
             this.licenseModal.hide();
@@ -161,7 +161,7 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         return res;
     }
 
-    protected setMiscData(): boolean{
+    protected setMiscData(): boolean {
         let res = super.setMiscData();
         if (!res) {
             this.licenseModal.hide();
@@ -169,8 +169,8 @@ export class MyDatasetsTableComponent extends DatasetsTableComponent {
         return res;
     }
 
-    protected unsetMiscData():boolean {
-      let res = super.unsetMiscData();
+    protected unsetMiscData(): boolean {
+        let res = super.unsetMiscData();
         if (!res) {
             this.miscDataModal.hide();
         }

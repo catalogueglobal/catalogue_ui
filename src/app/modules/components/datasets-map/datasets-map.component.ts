@@ -324,10 +324,12 @@ export class DatasetsMapComponent implements AfterViewInit {
             let bounds = this.utils.computeBoundsToLatLng(feed.latestValidation.bounds);
             let lat = data.defaultLocationLat;
             let lng = data.defaultLocationLon;
-            if (!lat)
+            if (!lat) {
                 lat = (bounds[0].lat + bounds[1].lat) / 2;
-            if (!lng)
+            }
+            if (!lng) {
                 lng = (bounds[0].lng + bounds[2].lng) / 2;
+            }
             let marker = this.computeMarker(feed, [lat, lng], bounds);
             this.router.url === "/my-datasets" ? this.markersGroup.addLayer(marker) : this.markerClusterGroup.addLayer(marker);
             this.markers[feed.id] = marker;
@@ -338,7 +340,7 @@ export class DatasetsMapComponent implements AfterViewInit {
 
     private createMarker(feed: IFeed) {
         // TODO : to change, the code is not clean
-        if (this.router.url == "/my-datasets") {
+        if (this.router.url === "/my-datasets") {
             this.projectsApi.getPrivateProject(feed.projectId).then(function success(data) {
                 return this.extractData(data, feed);
             }.bind(this));

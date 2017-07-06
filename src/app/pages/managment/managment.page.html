@@ -30,7 +30,7 @@
 				<h4>{{'mydatasets.table.title'|translate}}</h4>
 				<p>{{'mydatasets.table.intro'|translate}}</p>
 			</div>
-			<app-my-datasets-table [feeds]="feeds$|async" (sortChange)="onSortChange($event)"></app-my-datasets-table>
+			<app-user-datasets-table [feeds]="feeds$|async" (sortChange)="onSortChange($event)"></app-user-datasets-table>
 			<div class="noresult" *ngIf="feeds && feeds.length==0">
 				{{'mydatasets.table.noresult.info'|translate}}
 				<a (click)="resetSearch()">{{'mydatasets.table.noresult.reset'|translate}}</a>.

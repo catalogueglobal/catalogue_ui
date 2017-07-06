@@ -3,7 +3,7 @@ import { Http }                 from "@angular/http";
 import { AuthHttp, AuthConfig } from "angular2-jwt";
 import { Observable }           from "rxjs/Rx";
 import { Configuration }        from "../configuration";
-import { SortOrder }            from "app/commons/directives/sort-link/sort-link.component";
+import { SortOrder }            from "app/modules/common";
 import { AbstractApiService }   from "./abstractApi.service";
 import { IFeedApi, IBounds }    from "./feedsApi.service";
 

@@ -1,11 +1,11 @@
 import { Component, ViewChild } from "@angular/core";
 import { Actions } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
-import { DatasetsComponent } from "app/modules/datasets/datasets.component";
+import { ExplorePage } from "app/pages/explore/explore.page";
 import { DatasetsState } from "app/state/datasets/datasets.reducer";
 import { DatasetsActions, toFeedReference, IFeedReference } from "app/state/datasets/datasets.actions";
-import { DatasetsMapComponent } from "app/modules/datasets-map/datasets-map.component";
-import { MyDatasetsTableComponent } from "app/modules/my-datasets-table/my-datasets-table.component";
+import { DatasetsMapComponent } from "app/modules/components";
+import { UserDatasetsTableComponent } from "app/modules/components";
 import { DatasetsActionType } from "app/state/datasets/datasets.actions";
 
 import { Configuration,
@@ -17,13 +17,13 @@ import { Configuration,
 } from "app/modules/common/";
 
 @Component({
-    selector:    'app-my-datasets',
-    templateUrl: 'my-datasets.component.html'
+    selector:    'app-managment-page',
+    templateUrl: 'managment.page.html'
 })
-export class MyDatasetsComponent extends DatasetsComponent {
+export class ManagmentPage extends ExplorePage {
     // override parent properties
     @ViewChild(DatasetsMapComponent) public mapComponent: DatasetsMapComponent;
-    @ViewChild(MyDatasetsTableComponent) public tableComponent: MyDatasetsTableComponent;
+    @ViewChild(UserDatasetsTableComponent) public tableComponent: UserDatasetsTableComponent;
 
     constructor(
         protected utils: UtilsService,
