@@ -5,10 +5,10 @@
 
 export const environment = {
     production: false,
-    rootApi: "http://catalogue.tdvdigitalfactory.ovh", //"http://178.33.231.17:4001", //rootApi: "https://gtfs-manager-dev.conveyal.com",
+    rootApi: "http://localhost:4000",
     institutionalUrl: "http://www.catalogue.global",
     authId: "URvcRYyeNMGRFJLRQW9Kp62DHAv7YGBH",
     authDomain: "cataloguetest.eu.auth0.com",
-    licenseApi: "http://catalogue.tdvdigitalfactory.ovh",
+    licenseApi: "http://localhost:4400",
     licenseApiVersion: "1.0"
 };
