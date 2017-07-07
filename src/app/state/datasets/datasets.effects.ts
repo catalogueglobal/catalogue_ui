@@ -283,7 +283,7 @@ export class DatasetsEffects {
             let failedLicenses = [];
             let errors: any[] = [];
             let nbSuccess = 0;
-            var keys = Object.keys(licenses);
+            let keys = Object.keys(licenses);
             keys.forEach(key => {
                 console.log('deleting ' + nbSuccess + '/' + keys.length, key, licenses[key]);
                 this.feedsApi.unsetLicense(licenses[key], key).subscribe(() => {
@@ -310,8 +310,8 @@ export class DatasetsEffects {
             let failedMiscs = [];
             let errors: any[] = [];
             let nbSuccess = 0;
-            var keys = Object.keys(miscs);
-            var failedCb = function(e, key){
+            let keys = Object.keys(miscs);
+            let failedCb = function(e, key) {
                 console.log('delete failed', e);
                 failedMiscs.push(key);
                 errors.push(e);
@@ -428,13 +428,13 @@ export class DatasetsEffects {
                         feed => {
                             console.log("created feed:", feed);
                             onProgress("uploading...")
-                            var allObs = [];
+                            let allObs = [];
 
-                            if (createFeed.retrievalMethod === 'MANUALLY_UPLOADED'){
-                              allObs.push(this.feedsApi.setFile(feed.id, createFeed.file));
+                            if (createFeed.retrievalMethod === 'MANUALLY_UPLOADED') {
+                                allObs.push(this.feedsApi.setFile(feed.id, createFeed.file));
                             }
 
-                            if (createFeed.licenseFile) {
+                            if (createFeed.licenseFile && createFeed.licenseName) {
                                 let createLicense = this.feedsApi.createLicense(createFeed.licenseName, createFeed.licenseFile, [feed.id]);
                                 allObs.push(this.createObservable(createLicense, 'createLicense', onProgress, feed));
                             } else if (createFeed.licenseId) {
@@ -445,13 +445,13 @@ export class DatasetsEffects {
                                 allObs.push(this.createObservable(createMetadata, 'createMetadata', onProgress, feed));
                             }
                             return (Observable.forkJoin(allObs).subscribe(
-                                data =>{
-                                  obs$.next(feed);
-                                  obs$.complete();
+                                data => {
+                                    obs$.next(feed);
+                                    obs$.complete();
                                 },
-                                error =>{
-                                  console.log(error);
-                                  return obs$.error(error);
+                                error => {
+                                    console.log(error);
+                                    return obs$.error(error);
                                 },
                                 () => {
                                     obs$.next(feed);
