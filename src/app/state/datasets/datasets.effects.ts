@@ -422,7 +422,7 @@ export class DatasetsEffects {
                                 allObs.push(this.feedsApi.setFile(feed.id, createFeed.file));
                             }
 
-                            if (createFeed.licenseFile) {
+                            if (createFeed.licenseFile && createFeed.licenseName) {
                                 let createLicense = this.feedsApi.createLicense(createFeed.licenseName,
                                     createFeed.licenseFile, [feed.id]);
                                 allObs.push(this.createObservable(createLicense, 'createLicense', onProgress, feed));
