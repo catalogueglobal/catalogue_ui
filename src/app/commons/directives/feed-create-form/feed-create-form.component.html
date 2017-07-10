@@ -46,7 +46,7 @@
         <input type="text" class="form-control" [(ngModel)]="simpleUpload.feedName" name="feedName" id="basic-feedName" aria-describedby="basic-addon-Name">
     </div>
 
-    <div *ngIf="simpleUpload.retrievalMethod === RETRIEVAL_METHODS.AUTO || simpleUpload.retrievalMethod === RETRIEVAL_METHODS.MANUAL">
+    <div>
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon-feedDesc">{{'popup.upload.feedDescription'|translate}}</span>
             <input type="text" class="form-control" [(ngModel)]="simpleUpload.feedDesc" name="feedDesc" id="basic-feedDesc" aria-describedby="basic-addon-feedDesc">
