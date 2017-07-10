@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { DatasetsActions, DatasetsActionType } from 'app/state/datasets/datasets.actions';
-import { ICreateFeed } from 'app/state/datasets/datasets.effects';
 import { DatasetsState } from 'app/state/datasets/datasets.reducer';
 import { ProjectsApiService,
     FeedsApiService,
     SessionService,
     UtilsService,
-    Configuration
+    Configuration,
+    ICreateFeed
 } from 'app/modules/common/';
 
 @Component({

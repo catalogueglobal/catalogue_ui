@@ -3,62 +3,21 @@ import { Http, Headers }                         from '@angular/http';
 import { AuthHttp, AuthConfig }         from 'angular2-jwt';
 import { Observable }                   from 'rxjs/Rx';
 import { Configuration }                from '../configuration';
-import { SortOrder }                    from 'app/modules/common';
+import {
+    SortOrder,
+    FEED_RETRIEVAL_METHOD,
+    IFeedApi,
+    ILicense,
+    IFeed,
+    IBounds,
+    FeedsGetResponse,
+    FeedsGetParams,
+    IProject
+} from 'app/modules/common';
 import { UploadService }                from '../upload.service';
 import { AbstractApiService }           from './abstractApi.service';
 import { LocalFiltersService }          from './localFilters.service';
-import { ProjectsApiService, IProject } from './projectsApi.service';
-
-export enum FEED_RETRIEVAL_METHOD {
-    FETCHED_AUTOMATICALLY = <any> 'FETCHED_AUTOMATICALLY',
-    PRODUCED_IN_HOUSE = <any> 'PRODUCED_IN_HOUSE',
-    MANUALLY_UPLOADED = <any> 'MANUALLY_UPLOADED'
-}
-
-export type IFeedApi = {
-    id: string,
-    projectId: string,
-    regions: string[],
-    name: string,
-    url: string,
-    isPublic: boolean,
-    retrievalMethod: FEED_RETRIEVAL_METHOD,
-    lastUpdated: number,
-    latestVersionId: string,
-    latestValidation: {
-        bounds: IBounds
-    }
-};
-
-export type ILicense = {
-    id: string,
-    name: string,
-    originalFileName: string,
-    feedIds: string[]
-};
-
-export type IFeed = IFeedApi & {
-    region: string,
-    state: string,
-    country: string
-};
-
-export type IBounds = {
-    north: number,
-    east: number,
-    south: number,
-    west: number
-};
-
-export type FeedsGetResponse = {
-    feeds: IFeed[]
-};
-
-export type FeedsGetParams = {
-    secure: boolean,
-    sortOrder: SortOrder,
-    bounds: IBounds
-};
+import { ProjectsApiService } from './projectsApi.service';
 
 @Injectable()
 export class FeedsApiService extends AbstractApiService {

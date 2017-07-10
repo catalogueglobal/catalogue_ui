@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as leaflet   from 'leaflet';
-import { IBounds }    from './api/feedsApi.service';
+import { IBounds }    from 'app/modules/common';
 
 @Injectable()
 export class UtilsService {

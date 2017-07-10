@@ -1,7 +1,10 @@
 import { Injectable }     from '@angular/core';
-import { SortOrder }      from 'app/modules/common';
+import {
+    SortOrder,
+    IFeed,
+    IBounds
+} from 'app/modules/common';
 import { UtilsService }   from '../utils.service';
-import { IFeed, IBounds } from './feedsApi.service';
 
 @Injectable()
 export class LocalFiltersService {

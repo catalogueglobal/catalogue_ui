@@ -56,6 +56,7 @@ export class Configuration {
             lat: 48.827208299999995,
             lon: 2.2820185
         };
+        console.log('eeeee');
         this.MAP_DEFAULT_POSITION = [coords.lat, coords.lon];
     }
 

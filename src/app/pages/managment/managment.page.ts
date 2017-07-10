@@ -3,7 +3,7 @@ import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { ExplorePage } from 'app/pages/explore/explore.page';
 import { DatasetsState } from 'app/state/datasets/datasets.reducer';
-import { DatasetsActions, toFeedReference, IFeedReference } from 'app/state/datasets/datasets.actions';
+import { DatasetsActions, toFeedReference } from 'app/state/datasets/datasets.actions';
 import { DatasetsMapComponent } from 'app/modules/components';
 import { UserDatasetsTableComponent } from 'app/modules/components';
 import { DatasetsActionType } from 'app/state/datasets/datasets.actions';
@@ -13,7 +13,8 @@ import { Configuration,
     IFeed,
     ProjectsApiService,
     UtilsService,
-    LocalFiltersService
+    LocalFiltersService,
+    IFeedReference
 } from 'app/modules/common/';
 
 @Component({

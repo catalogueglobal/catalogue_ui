@@ -11,24 +11,11 @@ import {
     FeedsGetParams,
     IFeed,
     FeedsGetResponse,
-    ILicense } from 'app/modules/common/';
-import { DatasetsActionType, DatasetsActions, IFeedReference } from './datasets.actions';
+    ILicense,
+    IFeedReference,
+    ICreateFeed } from 'app/modules/common/';
+import { DatasetsActionType, DatasetsActions } from './datasets.actions';
 import { DatasetsState } from './datasets.reducer';
-
-export type ICreateFeed = {
-    projectName: string,
-    feedName: string,
-    isPublic: boolean,
-    file: any,
-    feedUrl: any,
-    licenseName: string,
-    licenseId: string;
-    metadataFile: any,
-    licenseFile: any,
-    feedDesc: any,
-    autoFetchFeeds: boolean,
-    retrievalMethod: string
-};
 
 @Injectable()
 export class DatasetsEffects {

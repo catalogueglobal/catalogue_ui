@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter, OnInit, Input, ViewChild } from '@angu
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { PaginationService } from 'ng2-pagination';
-import { DatasetsActions, toFeedReference, DatasetsActionType, IFeedReference }
+import { DatasetsActions, toFeedReference, DatasetsActionType }
 from 'app/state/datasets/datasets.actions';
 import { DatasetsState } from 'app/state/datasets/datasets.reducer';
 
@@ -14,7 +14,8 @@ import { Configuration,
     SharedService,
     UtilsService,
     IFeedRow,
-    InlineEditEvent
+    InlineEditEvent,
+    IFeedReference
 } from 'app/modules/common/';
 
 import { DatasetsTableComponent } from '../datasets-table/datasets-table.component';

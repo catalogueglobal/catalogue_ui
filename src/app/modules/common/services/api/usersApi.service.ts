@@ -6,14 +6,11 @@ import { Configuration }                from '../configuration';
 import { UploadService }                from '../upload.service';
 import { AbstractApiService }           from './abstractApi.service';
 import { LocalFiltersService }          from './localFilters.service';
-import { ProjectsApiService, IProject } from './projectsApi.service';
-
-export type UserSubscribeParams = {
-    NAME: string,
-    EMAIL: string,
-    COMPANY: string,
-    TYPE: string
-};
+import { ProjectsApiService } from './projectsApi.service';
+import {
+    IProject,
+    UserSubscribeParams
+} from 'app/modules/common';
 
 @Injectable()
 export class UsersApiService extends AbstractApiService {

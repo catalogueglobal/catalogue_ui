@@ -10,14 +10,14 @@ import { Configuration,
     FeedsApiService,
     UtilsService,
     LocalFiltersService,
-    SortOrder
+    SortOrder,
+    AutocompleteItem
 } from 'app/modules/common/';
 
 import { DatasetsState }                       from 'app/state/datasets/datasets.reducer';
 import { DatasetsActions, DatasetsActionType } from 'app/state/datasets/datasets.actions';
 import {
     DatasetsMapComponent,
-    AutocompleteItem,
     DatasetsTableComponent
 } from 'app/modules/components';
 import LatLngExpression = L.LatLngExpression;

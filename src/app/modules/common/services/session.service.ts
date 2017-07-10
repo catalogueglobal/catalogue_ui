@@ -1,13 +1,11 @@
 import { Injectable }      from '@angular/core';
 import { tokenNotExpired } from 'angular2-jwt/angular2-jwt';
 import { LocalStorage }    from 'ng2-webstorage';
-import { Configuration }   from 'app/modules/common/';
+import {
+    Configuration,
+    Session
+} from 'app/modules/common/';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
-export type Session = {
-    user: any,
-    token: string
-};
 
 const SESSION = 'SESSION';
 

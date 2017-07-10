@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { ICreateFeed } from './datasets.effects';
 import { FeedsGetResponse,
     IFeedApi,
     FeedsGetParams,
     IFeed,
     ILicense,
     IProject,
-    UserSubscribeParams
+    ICreateFeed,
+    UserSubscribeParams,
+    IFeedReference
 } from 'app/modules/common/';
 
 export const DatasetsActionType = {
@@ -109,13 +110,6 @@ export const DatasetsActionType = {
     FEED_DELETE_MISCS_SUCCESS: `FEED_DELETE_MISCS_SUCCESS`,
     FEED_DELETE_MISCS_FAIL: `FEED_DELETE_MISCS_FAIL`,
 
-};
-
-export type IFeedReference = {
-    feedsourceId: string,
-    versionId?: string,
-    feedVersionCount?: number,
-    feedLabel: string
 };
 
 export function toFeedReference(feed: IFeedApi): IFeedReference {

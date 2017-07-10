@@ -16,6 +16,7 @@ import { TranslateService, TranslateLoader, TranslateStaticLoader } from 'ng2-tr
 import { Ng2PaginationModule }                                      from 'ng2-pagination';
 import { TooltipModule } from 'ng2-bootstrap';
 
+import { AppConfig } from './app.config';
 import { AppComponent }                                             from './app.component';
 import { routing }                                                  from './app.routes';
 import { ExplorePage }                                              from './pages/explore/explore.page';
@@ -45,6 +46,10 @@ export function httpAuthConfigFactory(http, authConfig) {
     return new AuthHttp(authConfig, http);
 }
 
+export function getConfigFactory() {
+    return AppConfig.getInstance('./environment.json');
+}
+
 const allReducers = compose(storeLogger(), combineReducers)(appReducer);
 
 export function composeProvider(state: any, action: any) {
@@ -56,7 +61,7 @@ export function composeProvider(state: any, action: any) {
         AppComponent,
         ExplorePage,
         ManagmentPage,
-        FeedPage,
+        FeedPage
     ],
 
     imports: [
@@ -85,6 +90,10 @@ export function composeProvider(state: any, action: any) {
     bootstrap: [AppComponent],
 
     providers: [
+        {
+            provide: AppConfig,
+            useFactory: getConfigFactory
+        },
         TranslateService,
         DatasetsActions,
         //NG2_WEBSTORAGE,

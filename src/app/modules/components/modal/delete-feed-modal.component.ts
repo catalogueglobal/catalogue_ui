@@ -5,10 +5,10 @@ import { DatasetsState } from 'app/state/datasets/datasets.reducer';
 import {
     DatasetsActions,
     toFeedReference,
-    DatasetsActionType,
-    IFeedReference
+    DatasetsActionType
 } from 'app/state/datasets/datasets.actions';
 import { Actions } from '@ngrx/effects';
+import { IFeedReference } from 'app/modules/common';
 
 @Component({
     selector: 'delete-feed-modal',

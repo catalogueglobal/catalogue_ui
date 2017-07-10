@@ -3,17 +3,13 @@ import { Http }                 from '@angular/http';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { Observable }           from 'rxjs/Rx';
 import { Configuration }        from '../configuration';
-import { SortOrder }            from 'app/modules/common';
+import {
+    SortOrder,
+    IFeedApi,
+    IBounds,
+    IProject
+} from 'app/modules/common';
 import { AbstractApiService }   from './abstractApi.service';
-import { IFeedApi, IBounds }    from './feedsApi.service';
-
-export type IProject = {
-    id: string,
-    name: string,
-    defaultLocationLat: number,
-    defaultLocationLon: number,
-    feedSources: IFeedApi[]
-};
 
 @Injectable()
 export class ProjectsApiService extends AbstractApiService {
