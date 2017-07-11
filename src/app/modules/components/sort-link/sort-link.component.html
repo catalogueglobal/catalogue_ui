@@ -1,0 +1,7 @@
+<a (click)="clicked()">
+  <ng-content></ng-content>
+  <span *ngIf="_value.sort==sortValue">
+    <i *ngIf="nextOrder=='desc'" class="fa fa-sort-desc"></i>
+    <i *ngIf="nextOrder=='asc'" class="fa fa-sort-asc"></i>
+  </span>
+</a>

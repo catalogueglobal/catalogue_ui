@@ -1,0 +1,135 @@
+<div class="dataset-table datasets-table-component" *ngIf="feeds && feeds.length>0">
+    <table id="datatable" class="display responsive nowrap" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>
+                    <app-sort-link sortValue="name" [(value)]="currentSort" (valueChange)="setSort($event)" defaultOrder="asc">
+                        {{'datasets-table.column.feedName'|translate}}
+                    </app-sort-link>
+                </th>
+                <th>
+                    {{'datasets-table.column.validity'|translate}}
+                </th>
+                <th>
+                    {{'datasets-table.column.license'|translate}}
+                </th>
+                <th>
+                    {{'datasets-table.column.miscData'|translate}}
+                </th>
+                <th>
+                    {{'datasets.table.versions'|translate}}
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let feed of feeds | paginate: { itemsPerPage: config.PAGINATION_ITEMS_PER_PAGE, maxSize: config.PAGINATION_LINKS_MAX, currentPage: page }">
+                <td>
+                    <div class="">
+                        <a [routerLink]="['/feeds/', feed.id, feed.isPublic]">
+                            {{feed.name}}</a>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="date">
+                        <a [routerLink]="['/feeds/', feed.id, feed.isPublic]" *ngIf="feed.selectedVersion && feed.selectedVersion.latestValidation">
+                            {{feed.selectedVersion.latestValidation.endDate | date:'y-MM-dd'}}
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div class="other">
+                        <a *ngIf="feedsLicenses[feed.id]" download="{{feedsLicenses[feed.id].name}}" href="{{feedsLicenses[feed.id].licenseUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
+                            <span>
+                                {{feedsLicenses[feed.id].name}}
+                            </span>
+                        </a>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="other">
+                        <a *ngIf="feedsMiscDatas[feed.id]" download="{{feedsMiscDatas[feed.id].name}}" href="{{feedsMiscDatas[feed.id].miscDataUrl}}" tooltip="{{'datasets.table.tooltips.download' | translate}}">
+                            <span>
+                                {{feedsMiscDatas[feed.id].name}}
+                            </span>
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div class="" *ngIf="feed.feedVersionCount == 1">
+                        {{feed.lastUpdated|date:'y-MM-dd'}}
+                    </div>
+                    <div class="dropdown-select version-component" *ngIf="feed.feedVersionCount > 1">
+                        <select class="" [ngModel]="feed.selectedVersion" (ngModelChange)="onVersionChanged(feed, $event)">
+                            <option [ngValue]="version" *ngFor="let version of feed.allVersions">{{version.updated | date:'y-MM-dd'}}</option>
+                        </select>
+                        <span class="caret"></span>
+                    </div>
+                </td>
+                <td class="actions">
+                    <div class="">
+                        <label>
+                            <input *ngIf="sessionService.loggedIn" type="checkbox" (click)="actionOnFeed(feed.id)" [checked]="checkSubscribed(feed.id)" />
+                            <input *ngIf="!sessionService.loggedIn" type="checkbox" (click)="sessionService.login()" /> {{'datasets-table.column.subscribe'|translate}}
+                        </label>
+                    </div>
+                    <hr />
+                    <div class="download">
+                        <a (click)="openValidation(feed)">
+                            <span tooltip="{{'datasets.table.tooltips.downloadValidation' | translate}}" class="action-success">
+                                <i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <hr />
+                    <div class="download">
+                        <a (click)="downloadFeed(feed)">
+                            <span tooltip="{{'datasets.table.tooltips.downloadFeed' | translate}}" class="action-success btn-download">
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </div>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <pagination-template #p="paginationApi" (pageChange)="page = $event" autoHide="true">
+            <ul class="ng2-pagination custom" *ngIf="p.pages.length > 1">
+                <li class="pagination-previous" [class.disabled]="p.isFirstPage()">
+                    <a *ngIf="1 < p.getCurrent()" (click)="p.previous()">
+                        <i class="fa fa-arrow-left"></i>
+                    </a>
+                    <span *ngIf="p.isFirstPage()">
+                        <i class="fa fa-arrow-left"></i>
+                    </span>
+                </li>
+                <li [class.current]="p.getCurrent() === page.value" *ngFor="let page of p.pages">
+                    <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
+                        <span>{{ page.label }}</span>
+                    </a>
+                    <div *ngIf="p.getCurrent() === page.value">
+                        <span>{{ page.label }}</span>
+                    </div>
+                </li>
+                <li class="pagination-next" [class.disabled]="p.isLastPage()">
+                    <a *ngIf="!p.isLastPage()" (click)="p.next()">
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
+                    <span *ngIf="p.isLastPage()">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
+                </li>
+            </ul>
+        </pagination-template>
+    </div>
+</div>
+<validation-details-modal [fileUrl]="validationUrl"> </validation-details-modal>
+
+<!--/.dataset-table-->

@@ -7,20 +7,20 @@ import { environment } from 'environments/environment';
 export const laodConfig = () => {
     AppConfig.loadInstance('./environment.json')
         .then(() => {
-            // let data = AppConfig.getInstance('./environment.json').data;
-            // if (Object.keys(data).length > 0) {
-            //     Object.assign(environment, data);
-            // }
-            // console.log(data);
-            // if (environment.production) {
-            //     enableProdMode();
-            // }
-            // platformBrowserDynamic().bootstrapModule(AppModule);
+            let data = AppConfig.getInstance('./environment.json').data;
+            if (Object.keys(data).length > 0) {
+                Object.assign(environment, data);
+            }
+            console.log(data);
+            if (environment.production) {
+                enableProdMode();
+            }
+            platformBrowserDynamic().bootstrapModule(AppModule);
         })
         .catch(() => {
-            // if (environment.production) {
-            //     enableProdMode();
-            // }
-            // platformBrowserDynamic().bootstrapModule(AppModule);
+            if (environment.production) {
+                enableProdMode();
+            }
+            platformBrowserDynamic().bootstrapModule(AppModule);
         });
 };

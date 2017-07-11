@@ -5,7 +5,7 @@ import {
     IFeedApi,
     IFeedReference,
     FeedsGetParams
-} from 'app/modules/common-mod/';
+} from 'app/modules/common/';
 import { DatasetsActionType, }                from './datasets.actions';
 
 export interface DatasetsState {

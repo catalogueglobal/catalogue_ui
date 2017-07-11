@@ -10,9 +10,9 @@ import { TranslateModule }                                          from 'ng2-tr
 import { TranslateService, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/src/translate.service';
 
 import {
-    FilterPipe,
     Configuration,
     InstitutionalUrlPipe,
+    FilterPipe,
     TruncatePipe,
 
     AuthGuard,
@@ -24,54 +24,36 @@ import {
     SessionService,
     SharedService,
     UploadService,
-    UtilsService,
-    NewFilterPipe
+    UtilsService
 } from './';
 
-let _entryPoints = [
-];
-
-let _declarations: Array<any> = [
-    NewFilterPipe,
-    FilterPipe,
+export const declarations = [
     InstitutionalUrlPipe,
+    FilterPipe,
     TruncatePipe
 ];
 
-export function entryPoints() {
-    return _entryPoints;
-}
-
-export function exports() {
-    return declarations().concat([]);
-}
-
-export function declarations() {
-    return _declarations.concat(_entryPoints);
-}
-
-export function providers() {
-    return [
-        AuthGuard,
-        FeedsApiService,
-        LocalFiltersService,
-        ProjectsApiService,
-        UsersApiService,
-        MapUtilsService,
-        SessionService,
-        SharedService,
-        UploadService,
-        UtilsService,
-        Configuration,
-        InstitutionalUrlPipe,
-        NewFilterPipe,
-        FilterPipe,
-        TruncatePipe
-    ];
-}
+export const exports = declarations;
+export const entryPoints = [];
+export const providers = [
+    AuthGuard,
+    FeedsApiService,
+    LocalFiltersService,
+    ProjectsApiService,
+    UsersApiService,
+    MapUtilsService,
+    SessionService,
+    SharedService,
+    UploadService,
+    UtilsService,
+    Configuration,
+    InstitutionalUrlPipe,
+    FilterPipe,
+    TruncatePipe
+];
 
 @NgModule({
-    declarations: declarations(),
+    declarations: declarations,
     imports: [
         CommonModule,
         FormsModule,
@@ -82,8 +64,8 @@ export function providers() {
         StoreDevtoolsModule.instrumentOnlyWithExtension(),
         TranslateModule
     ],
-    entryComponents: entryPoints(),
-    providers: providers(),
-    exports: exports()
+    entryComponents: entryPoints,
+    providers: providers,
+    exports: exports
 })
 export class CtCommonModule { }

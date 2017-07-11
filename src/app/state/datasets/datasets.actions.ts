@@ -9,7 +9,7 @@ import { FeedsGetResponse,
     ICreateFeed,
     UserSubscribeParams,
     IFeedReference
-} from 'app/modules/common-mod/';
+} from 'app/modules/common/';
 
 export const DatasetsActionType = {
     STATUS_ERROR_MESSAGE: `STATUS_ERROR_MESSAGE`,

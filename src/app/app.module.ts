@@ -16,7 +16,7 @@ import { TranslateService, TranslateLoader, TranslateStaticLoader } from 'ng2-tr
 import { Ng2PaginationModule }                                      from 'ng2-pagination';
 import { TooltipModule } from 'ng2-bootstrap';
 
-// import { AppConfig } from './app.config';
+import { AppConfig } from './app.config';
 import { AppComponent }                                             from './app.component';
 import { routing }                                                  from './app.routes';
 import { ExplorePage }                                              from './pages/explore/explore.page';
@@ -26,8 +26,8 @@ import { DatasetsActions }                                          from './stat
 import { DatasetsEffects }                                          from './state/datasets/datasets.effects';
 import { appReducer }                                               from './state/index.reducer';
 
-import { CtCommonModule, SessionService } from 'app/modules/common-mod/';
-import { ComponentsModule } from 'app/modules/components-mod/';
+import { CtCommonModule, SessionService } from './modules/common/';
+import { ComponentsModule } from './modules/components/';
 
 export function httpFactory(http: Http) {
     return new TranslateStaticLoader(http, '/assets/i18n', '.json');
@@ -46,9 +46,9 @@ export function httpAuthConfigFactory(http, authConfig) {
     return new AuthHttp(authConfig, http);
 }
 
-// export function getConfigFactory() {
-//     return AppConfig.getInstance('./environment.json');
-// }
+export function getConfigFactory() {
+    return AppConfig.getInstance('./environment.json');
+}
 
 const allReducers = compose(storeLogger(), combineReducers)(appReducer);
 
@@ -90,10 +90,10 @@ export function composeProvider(state: any, action: any) {
     bootstrap: [AppComponent],
 
     providers: [
-        // {
-        //     provide: AppConfig,
-        //     useFactory: getConfigFactory
-        // },
+        {
+            provide: AppConfig,
+            useFactory: getConfigFactory
+        },
         TranslateService,
         DatasetsActions,
         //NG2_WEBSTORAGE,
