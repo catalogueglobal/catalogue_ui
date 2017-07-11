@@ -11,10 +11,9 @@ export * from './services/shared.service';
 export * from './services/upload.service';
 export * from './services/utils.service';
 
-export * from './pipes/filter-by-visibility.pipe';
 export * from './pipes/filter.pipe';
+export * from './pipes/newfilter.pipe';
 export * from './pipes/institutionalUrl.pipe';
-export * from './pipes/orderby.pipe';
 export * from './pipes/truncate.pipe';
 
 export * from './guards/AuthGuard';

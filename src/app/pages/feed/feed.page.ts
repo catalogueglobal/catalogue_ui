@@ -12,7 +12,7 @@ import { Configuration,
     SessionService,
     SharedService,
     UtilsService
-} from 'app/modules/common/';
+} from 'app/modules/common-mod/';
 
 import {
     LicenseModal,
@@ -20,7 +20,7 @@ import {
     ConfirmFeedVersionModal,
     ValidationDetailsModal,
     DatasetsGenericComponent
-} from 'app/modules/components';
+} from 'app/modules/components-mod';
 
 @Component({
     selector: 'app-feed-page',

@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { ExplorePage } from 'app/pages/explore/explore.page';
 import { DatasetsState } from 'app/state/datasets/datasets.reducer';
 import { DatasetsActions, toFeedReference } from 'app/state/datasets/datasets.actions';
-import { DatasetsMapComponent } from 'app/modules/components';
-import { UserDatasetsTableComponent } from 'app/modules/components';
+import { DatasetsMapComponent } from 'app/modules/components-mod';
+import { UserDatasetsTableComponent } from 'app/modules/components-mod';
 import { DatasetsActionType } from 'app/state/datasets/datasets.actions';
 
 import { Configuration,
@@ -15,7 +15,7 @@ import { Configuration,
     UtilsService,
     LocalFiltersService,
     IFeedReference
-} from 'app/modules/common/';
+} from 'app/modules/common-mod/';
 
 @Component({
     selector: 'app-managment-page',

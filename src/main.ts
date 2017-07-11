@@ -5,7 +5,7 @@ import { AppModule } from './app/';
 import { laodConfig } from './load';
 
 laodConfig();
-let hackThis = false;
+let hackThis = true;
 if (hackThis) {
     platformBrowserDynamic().bootstrapModule(AppModule);
 }

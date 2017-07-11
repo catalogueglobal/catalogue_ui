@@ -12,14 +12,14 @@ import { Configuration,
     LocalFiltersService,
     SortOrder,
     AutocompleteItem
-} from 'app/modules/common/';
+} from 'app/modules/common-mod/';
 
 import { DatasetsState }                       from 'app/state/datasets/datasets.reducer';
 import { DatasetsActions, DatasetsActionType } from 'app/state/datasets/datasets.actions';
 import {
     DatasetsMapComponent,
     DatasetsTableComponent
-} from 'app/modules/components';
+} from 'app/modules/components-mod';
 import LatLngExpression = L.LatLngExpression;
 
 const INITIAL_SORT = {

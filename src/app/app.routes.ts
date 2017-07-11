@@ -1,5 +1,5 @@
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard }            from './modules/common/';
+import { AuthGuard }            from 'app/modules/common-mod/';
 import { ExplorePage }    from './pages/explore/explore.page';
 import { FeedPage }       from './pages/feed/feed.page';
 import { ManagmentPage }  from './pages/managment/managment.page';

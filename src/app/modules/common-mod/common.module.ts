@@ -10,11 +10,9 @@ import { TranslateModule }                                          from 'ng2-tr
 import { TranslateService, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/src/translate.service';
 
 import {
+    FilterPipe,
     Configuration,
     InstitutionalUrlPipe,
-    OrderByPipe,
-    FilterPipe,
-    FilterByVisibilityPipe,
     TruncatePipe,
 
     AuthGuard,
@@ -26,17 +24,17 @@ import {
     SessionService,
     SharedService,
     UploadService,
-    UtilsService
+    UtilsService,
+    NewFilterPipe
 } from './';
 
 let _entryPoints = [
 ];
 
 let _declarations: Array<any> = [
-    InstitutionalUrlPipe,
-    OrderByPipe,
+    NewFilterPipe,
     FilterPipe,
-    FilterByVisibilityPipe,
+    InstitutionalUrlPipe,
     TruncatePipe
 ];
 
@@ -45,7 +43,7 @@ export function entryPoints() {
 }
 
 export function exports() {
-    return declarations().concat();
+    return declarations().concat([]);
 }
 
 export function declarations() {
@@ -66,9 +64,8 @@ export function providers() {
         UtilsService,
         Configuration,
         InstitutionalUrlPipe,
-        OrderByPipe,
+        NewFilterPipe,
         FilterPipe,
-        FilterByVisibilityPipe,
         TruncatePipe
     ];
 }

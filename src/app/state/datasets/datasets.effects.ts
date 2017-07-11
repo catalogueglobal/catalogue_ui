@@ -13,7 +13,7 @@ import {
     FeedsGetResponse,
     ILicense,
     IFeedReference,
-    ICreateFeed } from 'app/modules/common/';
+    ICreateFeed } from 'app/modules/common-mod/';
 import { DatasetsActionType, DatasetsActions } from './datasets.actions';
 import { DatasetsState } from './datasets.reducer';
 
