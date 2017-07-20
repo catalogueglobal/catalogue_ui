@@ -1,24 +1,16 @@
-import {Component, ViewChild, Input, EventEmitter} from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Actions } from '@ngrx/effects';
-import { FeedsApiService,
+import {Component, EventEmitter, Injector} from '@angular/core';
+import {
     FEED_RETRIEVAL_METHOD,
     ILicense,
-    Configuration,
-    UtilsService,
-    SessionService,
-    UsersApiService,
-    SharedService,
     InlineEditEvent,
     IFeed } from 'app/modules/common/';
-import { DatasetsState } from 'app/state/datasets/datasets.reducer';
-import { DatasetsActions, toFeedReference, DatasetsActionType } from 'app/state/datasets/datasets.actions';
-import { Subscription } from 'rxjs/Subscription';
+import { toFeedReference } from 'app/state/datasets/datasets.actions';
+import { DatasetsAbstractComponent } from '../datasets-abstract/datasets-abstract.component';
 
 @Component({
     template: ''
 })
-export class DatasetsGenericComponent {
+export class DatasetsGenericComponent extends DatasetsAbstractComponent {
 
     protected licenses: Array<ILicense>;
     protected feedsLicenses = {};
@@ -39,22 +31,11 @@ export class DatasetsGenericComponent {
 
     protected latestVersionId;
 
-    constructor(
-        protected config: Configuration,
-        protected utils: UtilsService,
-        protected sessionService: SessionService,
-        protected feedsApiService: FeedsApiService,
-        protected usersApiService: UsersApiService,
-        protected store: Store<DatasetsState>,
-        protected actions$: Actions,
-        protected datasetsAction: DatasetsActions,
-        protected shared: SharedService
-    ) {
-
+    constructor(injector: Injector) {
+        super(injector);
     }
 
     protected subscribeActions(actions) {
-
     }
 
     protected getFeedVersion(feed) {
@@ -92,7 +73,7 @@ export class DatasetsGenericComponent {
         let that = this;
         this.getMiscDatas(value);
         this.getFeedsVersion(value);
-        this.feedsApiService.getLicenses().then(licenses => {
+        this.licenseApiService.getLicenses().then(licenses => {
             that.licenses = licenses;
             this.shared.setLicenses(licenses);
             that.feedsLicenses = {};
@@ -108,7 +89,7 @@ export class DatasetsGenericComponent {
 
     protected getMiscDatas(value: any) {
         let that = this;
-        this.feedsApiService.getMiscDatas()
+        this.licenseApiService.getMiscDatas()
             .then(miscDatas => {
                 that.miscDatas = miscDatas;
                 this.shared.setMiscDatas(miscDatas);
@@ -121,12 +102,12 @@ export class DatasetsGenericComponent {
 
     protected setFeedItemsObj(feed: any, license: boolean) {
         let itemsObj = this.feedsLicenses;
-        let apiUrl = this.feedsApiService.FEED_LICENSE;
+        let apiUrl = this.licenseApiService.FEED_LICENSE;
         let itemsList = this.licenses;
         let downloadUrl = 'licenseUrl';
         if (!license) {
             itemsObj = this.feedsMiscDatas;
-            apiUrl = this.feedsApiService.FEED_MISC_DATA;
+            apiUrl = this.licenseApiService.FEED_MISC_DATA;
             itemsList = this.miscDatas;
             downloadUrl = 'miscDataUrl';
         }

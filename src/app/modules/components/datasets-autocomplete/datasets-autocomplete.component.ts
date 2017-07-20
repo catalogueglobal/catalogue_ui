@@ -23,7 +23,6 @@ export class DatasetsAutocompleteComponent {
         this.dataService = completerService.remote(null, 'display_name', 'display_name');
         this.dataService.urlFormater(term => {
             return this.config.AUTOCOMPLETE_URL(term);
-
         });
 
         this.dataService.subscribe(data => {

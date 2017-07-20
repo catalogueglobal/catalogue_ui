@@ -9,59 +9,60 @@ import {
     IBounds,
     IProject
 } from 'app/modules/common';
+import { UtilsService } from '../utils.service';
 import { AbstractApiService }   from './abstractApi.service';
 
 @Injectable()
 export class ProjectsApiService extends AbstractApiService {
-    private PROJECT_SECURE_URL: string;
-    private PROJECT_PUBLIC_URL: string;
-
+    private PROJECT_URL: string;
     constructor(
         protected http: Http,
         protected authHttp: AuthHttp,
         protected authConfig: AuthConfig,
-        protected config: Configuration) {
+        protected config: Configuration,
+        private utilsService: UtilsService) {
         super(http, authHttp, authConfig, config);
-        this.PROJECT_SECURE_URL = this.config.ROOT_API + '/api/manager/secure/project';
-        this.PROJECT_PUBLIC_URL = this.config.ROOT_API + '/api/manager/public/project';
+        this.PROJECT_URL = this.config.ROOT_API + '/api/manager/public/project';
     }
 
     public create(name: string): Observable<IProject> {
         let params = JSON.stringify({
             name: name
         });
-        return this.authHttp.post(this.PROJECT_SECURE_URL, params).map(response => response.json());
+        return this.authHttp.post(this.utilsService.getSecureUrl(this.PROJECT_URL),
+            params).map(response => response.json());
     }
 
     public delete(projectId: string): Observable<any> {
-        return this.authHttp.delete(this.PROJECT_SECURE_URL + '/' + projectId);
+        return this.authHttp.delete(this.utilsService.getSecureUrl(this.PROJECT_URL) + '/' + projectId);
     }
 
     public getPublicList(bounds: IBounds, sortOrder: SortOrder): Observable<IProject[]> {
-        return this.http.get(this.PROJECT_PUBLIC_URL + '?' + this.sortQuery(sortOrder) + '&' + this.boundsQuery(bounds))
+        return this.http.get(this.PROJECT_URL + '?' + this.sortQuery(sortOrder) + '&' + this.boundsQuery(bounds))
             .map(response => response.json());
     }
 
     public getSecureList(bounds: IBounds, sortOrder: SortOrder): Observable<IProject[]> {
-        return this.authHttp.get(this.PROJECT_SECURE_URL + '?' + this.sortQuery(sortOrder) +
+        return this.authHttp.get(this.utilsService.getSecureUrl(this.PROJECT_URL) + '?' + this.sortQuery(sortOrder) +
             '&' + this.boundsQuery(bounds)).map(response => response.json());
     }
 
     public getPublicProject(projectId: string): Promise<IProject> {
-        return this.http.get(this.PROJECT_PUBLIC_URL + '/' + projectId).map(response => response.json()).toPromise();
+        return this.http.get(this.PROJECT_URL + '/' + projectId).map(response => response.json()).toPromise();
     }
 
     public getAllSecureProject(): Observable<IProject[]> {
-        return this.authHttp.get(this.PROJECT_SECURE_URL).map(response => response.json());
+        return this.authHttp.get(this.utilsService.getSecureUrl(this.PROJECT_URL)).map(response => response.json());
     }
 
     public getPrivateProject(projectId: string): Promise<IProject> {
-        return this.authHttp.get(this.PROJECT_SECURE_URL + '/' + projectId)
+        return this.authHttp.get(this.utilsService.getSecureUrl(this.PROJECT_URL) + '/' + projectId)
             .map(response => response.json()).toPromise();
     }
 
     public updateProject(project: JSON, projectId: string): Observable<IProject> {
-        return this.authHttp.put(this.PROJECT_SECURE_URL + '/' + projectId, JSON.stringify(project))
+        return this.authHttp.put(this.utilsService.getSecureUrl(this.PROJECT_URL) + '/'
+            + projectId, JSON.stringify(project))
             .map(response => response.json());
     }
 

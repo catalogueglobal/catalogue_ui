@@ -11,7 +11,6 @@ export const laodConfig = () => {
             if (Object.keys(data).length > 0) {
                 Object.assign(environment, data);
             }
-            console.log(data);
             if (environment.production) {
                 enableProdMode();
             }

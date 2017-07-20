@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { DatasetsActions, DatasetsActionType } from 'app/state/datasets/datasets.actions';
 import { DatasetsState } from 'app/state/datasets/datasets.reducer';
 import { ProjectsApiService,
-    FeedsApiService,
+    LicenseApiService,
     SessionService,
     UtilsService,
     Configuration,
@@ -36,7 +36,7 @@ export class FeedCreateFormComponent {
         public store: Store<DatasetsState>,
         protected datasetsAction: DatasetsActions,
         private projectsService: ProjectsApiService,
-        private feedsService: FeedsApiService,
+        private licenseApiService: LicenseApiService,
         private config: Configuration,
         actions$: Actions) {
         this.resetForm();
@@ -48,7 +48,7 @@ export class FeedCreateFormComponent {
         actions$.ofType(DatasetsActionType.ADD_FEED_TO_PROJECT_SUCCESS).subscribe(() => this.resetForm());
         let that = this;
         that.simpleUpload.license = {};
-        this.feedsService.getLicenses().then(licenses => {
+        this.licenseApiService.getLicenses().then(licenses => {
             that.licenses = licenses;
         });
     }

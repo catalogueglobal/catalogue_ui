@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Headers } from '@angular/http';
 import * as leaflet   from 'leaflet';
-import { IBounds }    from 'app/modules/common';
+import { IBounds }    from '../types/types';
 
 @Injectable()
 export class UtilsService {
@@ -186,5 +187,42 @@ export class UtilsService {
 
     public trim(str) {
         return str.replace(/^\s+|\s+$/g, '');
+    }
+
+    public getHeader(multi?: boolean) {
+        let myHeader = new Headers();
+        // myHeader.append('Cache-Control', 'public, max-age=300');
+        if (multi) {
+            myHeader.append('Content-Type', 'multipart/form-data');
+        }
+        return myHeader;
+    }
+
+    public getSecureUrl(url: string): string {
+        let res = url.replace('/public', '/secure');
+        return res;
+    }
+
+    public computeRegionStateCountryData(projectName: string, feedRegions: any[]): any {
+        let region = '', state = '', country = '';
+        if (feedRegions && feedRegions[0]) {
+            let splitDatas = projectName.split(',');
+            // indice n-1=country, n-2=state, n-3=region
+            country = splitDatas.shift();
+            if (splitDatas.length > 0) {
+                state = country;
+                country = splitDatas.shift();
+            }
+            if (splitDatas.length > 0) {
+                region = state;
+                state = country;
+                country = splitDatas.shift();
+            }
+        }
+        return {
+            region: region,
+            state: state,
+            country: country
+        };
     }
 }

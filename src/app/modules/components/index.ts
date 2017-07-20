@@ -27,4 +27,6 @@ export * from './feed-map/feed-route.filter';
 export * from './datasets-generic/datasets-generic.component';
 export * from './layout/layout.component';
 
+export * from './datasets-abstract/datasets-abstract.component';
+
 export * from './components.module';

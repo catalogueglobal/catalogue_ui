@@ -1,17 +1,8 @@
-import { Component, ViewChild, Input, OnInit}  from '@angular/core';
+import { Component, ViewChild, Input, OnInit, Injector}  from '@angular/core';
 import { Router, ActivatedRoute }              from '@angular/router';
-import { Actions }                             from '@ngrx/effects';
-import { Store }                               from '@ngrx/store';
-import { DatasetsActions, DatasetsActionType } from 'app/state/datasets/datasets.actions';
-import { DatasetsState }                       from 'app/state/datasets/datasets.reducer';
-import { Configuration,
-    FeedsApiService,
-    IFeed,
-    FEED_RETRIEVAL_METHOD,
-    UsersApiService,
-    SessionService,
-    SharedService,
-    UtilsService
+import { DatasetsActionType } from 'app/state/datasets/datasets.actions';
+import {
+    IFeed
 } from 'app/modules/common/';
 
 import {
@@ -51,20 +42,11 @@ export class FeedPage extends DatasetsGenericComponent implements OnInit {
     private getPublicFeed = true;
 
     constructor(
+        injector: Injector,
         private route: ActivatedRoute,
-        private router: Router,
-
-        protected config: Configuration,
-        protected utils: UtilsService,
-        protected sessionService: SessionService,
-        protected feedsApiService: FeedsApiService,
-        protected usersApiService: UsersApiService,
-        protected store: Store<DatasetsState>,
-        protected actions$: Actions,
-        protected datasetsAction: DatasetsActions,
-        protected shared: SharedService) {
-        super(config, utils, sessionService, feedsApiService, usersApiService, store,
-            actions$, datasetsAction, shared);
+        private router: Router
+    ) {
+        super(injector);
         // Get the id of the feed
         this.route.params.subscribe(params => {
             this.feedId = params['id'];
@@ -111,18 +93,12 @@ export class FeedPage extends DatasetsGenericComponent implements OnInit {
                 that.checkAuthorisations();
                 that.subscribeActions(that.actions$);
             }
-            console.log(that.feed);
             if (that.sessionService.loggedIn === true) {
                 that.feedsApiService.getNotes(that.feedId, that.feed.isPublic).then(function(data) {
                     that.notesFeed = data.reverse();
-                    console.log(that.notesFeed);
-                }).catch(function(err) {
-                    console.log(err);
-                });
+                }).catch(err => console.log(err));
             }
-        }).catch(function(err) {
-            console.log(err);
-        });
+        }).catch(err => console.log(err));
     }
 
     private checkAuthorisations() {

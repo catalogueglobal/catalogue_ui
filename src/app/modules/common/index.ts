@@ -1,5 +1,6 @@
 export * from './services/api/abstractApi.service';
 export * from './services/api/feedsApi.service';
+export * from './services/api/licenseApi.service';
 export * from './services/api/localFilters.service';
 export * from './services/api/projectsApi.service';
 export * from './services/api/usersApi.service';

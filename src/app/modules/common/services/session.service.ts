@@ -1,11 +1,11 @@
 import { Injectable }      from '@angular/core';
 import { tokenNotExpired } from 'angular2-jwt/angular2-jwt';
 import { LocalStorage }    from 'ng2-webstorage';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import {
     Configuration,
     Session
 } from 'app/modules/common/';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 const SESSION = 'SESSION';
 

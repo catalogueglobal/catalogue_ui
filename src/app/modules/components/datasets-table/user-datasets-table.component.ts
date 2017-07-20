@@ -1,21 +1,10 @@
-import { Component, Output, EventEmitter, OnInit, Input, ViewChild } from '@angular/core';
-import { Actions } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
+import { Component, Output, EventEmitter, OnInit, Input, ViewChild, Injector } from '@angular/core';
 import { PaginationService } from 'ng2-pagination';
-import { DatasetsActions, toFeedReference, DatasetsActionType }
-from 'app/state/datasets/datasets.actions';
-import { DatasetsState } from 'app/state/datasets/datasets.reducer';
+import { toFeedReference, DatasetsActionType } from 'app/state/datasets/datasets.actions';
 
-import { Configuration,
-    FeedsApiService,
+import {
     IFeed,
-    UsersApiService,
-    SessionService,
-    SharedService,
-    UtilsService,
-    IFeedRow,
-    InlineEditEvent,
-    IFeedReference
+    IFeedRow
 } from 'app/modules/common/';
 
 import { DatasetsTableComponent } from '../datasets-table/datasets-table.component';
@@ -42,18 +31,8 @@ export class UserDatasetsTableComponent extends DatasetsTableComponent implement
     @ViewChild(DeleteFeedModal)
     public readonly deleteFeedModal: DeleteFeedModal;
 
-    constructor(
-        protected config: Configuration,
-        protected utils: UtilsService,
-        protected feedsApi: FeedsApiService,
-        protected store: Store<DatasetsState>,
-        protected datasetsAction: DatasetsActions,
-        protected actions$: Actions,
-        protected usersApiService: UsersApiService,
-        protected sessionService: SessionService,
-        protected shared: SharedService) {
-        super(config, utils, sessionService, feedsApi, usersApiService, store, actions$, datasetsAction, shared);
-
+    constructor(injector: Injector) {
+        super(injector);
         this.resetForm(this._feeds);
     }
 
@@ -182,16 +161,4 @@ export class UserDatasetsTableComponent extends DatasetsTableComponent implement
     setSort(sort) {
         this.sortChange.emit(sort);
     }
-
-    // setFile(feed, event: InlineEditEvent<File>) {
-    //     // observer will be notified to close inline form on success
-    //     this.confirmEditById.set(CONFIRM_EDIT_IDX_SETFILE + feed.id, event.confirm$)
-    //     // process
-    //     this.store.dispatch(this.datasetsAction.feedSetFile(toFeedReference(feed), event.value));
-    //     return false;
-    // }
-    //
-    // fetchFeed(feed) {
-    //     this.store.dispatch(this.datasetsAction.feedFetch(toFeedReference(feed)));
-    // }
 }

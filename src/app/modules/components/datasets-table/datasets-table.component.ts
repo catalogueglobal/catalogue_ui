@@ -1,27 +1,13 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { Actions } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
+import { Component, Injector, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PaginationService } from 'ng2-pagination';
 import { ValidationDetailsModal } from '../modal/validation-details-modal.component';
 
-import { Configuration,
-    ProjectsApiService,
-    IFeed,
-    IProject,
+import {
     IFeedRow,
-    MapUtilsService,
-    SessionService,
-    SharedService,
-    FeedsApiService,
-    UtilsService,
-    UsersApiService,
-    FEED_RETRIEVAL_METHOD,
-    ILicense,
     SortOrder
 } from 'app/modules/common/';
 
-import { DatasetsActions, DatasetsActionType } from 'app/state/datasets/datasets.actions';
-import { DatasetsState } from 'app/state/datasets/datasets.reducer';
+import {  DatasetsActionType } from 'app/state/datasets/datasets.actions';
 import { DatasetsGenericComponent } from '../datasets-generic/datasets-generic.component';
 
 @Component({
@@ -42,19 +28,9 @@ export class DatasetsTableComponent extends DatasetsGenericComponent {
         order: 'asc'
     };
 
-    constructor(
-        protected config: Configuration,
-        protected utils: UtilsService,
-        protected sessionService: SessionService,
-        protected feedsApiService: FeedsApiService,
-        protected usersApiService: UsersApiService,
-        protected store: Store<DatasetsState>,
-        protected actions$: Actions,
-        protected datasetsAction: DatasetsActions,
-        protected shared: SharedService) {
-        super(config, utils, sessionService, feedsApiService, usersApiService, store,
-            actions$, datasetsAction, shared);
-        this.subscribeActions(actions$);
+    constructor(injector: Injector) {
+        super(injector);
+        this.subscribeActions(this.actions$);
     }
 
     // overriden by childs

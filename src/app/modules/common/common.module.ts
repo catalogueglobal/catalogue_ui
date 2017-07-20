@@ -24,7 +24,8 @@ import {
     SessionService,
     SharedService,
     UploadService,
-    UtilsService
+    UtilsService,
+    LicenseApiService
 } from './';
 
 export const declarations = [
@@ -49,7 +50,8 @@ export const providers = [
     Configuration,
     InstitutionalUrlPipe,
     FilterPipe,
-    TruncatePipe
+    TruncatePipe,
+    LicenseApiService
 ];
 
 @NgModule({

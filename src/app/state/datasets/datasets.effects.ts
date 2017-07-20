@@ -13,6 +13,7 @@ import {
     FeedsGetResponse,
     ILicense,
     IFeedReference,
+    LicenseApiService,
     ICreateFeed } from 'app/modules/common/';
 import { DatasetsActionType, DatasetsActions } from './datasets.actions';
 import { DatasetsState } from './datasets.reducer';
@@ -23,6 +24,7 @@ export class DatasetsEffects {
     constructor(private actions$: Actions,
         private action: DatasetsActions,
         private feedsApi: FeedsApiService,
+        private licenseApi: LicenseApiService,
         private projectsApi: ProjectsApiService,
         private usersApi: UsersApiService,
         private store: Store<DatasetsState>) {
@@ -205,7 +207,7 @@ export class DatasetsEffects {
             const feedRef = payload.feedRef;
             const licenseId = payload.licenseId;
 
-            return this.feedsApi.setLicense([feedRef.feedsourceId], licenseId)
+            return this.licenseApi.setLicense([feedRef.feedsourceId], licenseId)
                 .map(license => this.action.feedSetLicenseSuccess(license))
                 .catch(e => {
                     return Observable.of(this.action.feedSetLicenseFail(feedRef, e));
@@ -220,7 +222,7 @@ export class DatasetsEffects {
             const licenseId = payload.licenseId;
             console.log(feedRef.feedsourceId, licenseId);
 
-            return this.feedsApi.unsetLicense([feedRef.feedsourceId], licenseId)
+            return this.licenseApi.unsetLicense([feedRef.feedsourceId], licenseId)
                 .map(license => this.action.feedSetLicenseSuccess(license))
                 .catch(e => {
                     return Observable.of(this.action.feedSetLicenseFail(feedRef, e));
@@ -244,7 +246,7 @@ export class DatasetsEffects {
             const feedRef = payload.feedRef;
             const licenseId = payload.licenseId;
 
-            return this.feedsApi.setMiscData([feedRef.feedsourceId], licenseId)
+            return this.licenseApi.setMiscData([feedRef.feedsourceId], licenseId)
                 .map(license => this.action.feedSetMiscDataSuccess(license))
                 .catch(e => {
                     return Observable.of(this.action.feedSetMiscDataFail(feedRef, e));
@@ -259,7 +261,7 @@ export class DatasetsEffects {
             const licenseId = payload.licenseId;
             console.log(feedRef.feedsourceId, licenseId);
 
-            return this.feedsApi.unsetMiscData([feedRef.feedsourceId], licenseId)
+            return this.licenseApi.unsetMiscData([feedRef.feedsourceId], licenseId)
                 .map(license => this.action.feedSetMiscDataSuccess(license))
                 .catch(e => {
                     return Observable.of(this.action.feedSetMiscDataFail(feedRef, e));
@@ -288,7 +290,7 @@ export class DatasetsEffects {
             let keys = Object.keys(licenses);
             keys.forEach(key => {
                 console.log('deleting ' + nbSuccess + '/' + keys.length, key, licenses[key]);
-                this.feedsApi.unsetLicense(licenses[key], key).subscribe(() => {
+                this.licenseApi.unsetLicense(licenses[key], key).subscribe(() => {
                     console.log('delete success');
                     nbSuccess++;
                 }, e => {
@@ -322,9 +324,9 @@ export class DatasetsEffects {
             keys.forEach(key => {
                 console.log('deleting ' + nbSuccess + '/' + keys.length, key, miscs[key]);
                 // remove the miscdata from the list
-                this.feedsApi.unsetMiscData(miscs[key], key).subscribe(() => {
+                this.licenseApi.unsetMiscData(miscs[key], key).subscribe(() => {
                     // delete the miscdata file
-                    this.feedsApi.deletMiscData(key).subscribe(() => {
+                    this.licenseApi.deletMiscData(key).subscribe(() => {
                         console.log('delete success');
                         nbSuccess++;
                     }, e => {
@@ -353,10 +355,10 @@ export class DatasetsEffects {
             let listener;
             let type;
             if (license) {
-                listener = this.feedsApi.createLicense(licenseName, licenseFile, [feed.feedsourceId]);
+                listener = this.licenseApi.createLicense(licenseName, licenseFile, [feed.feedsourceId]);
                 type = 'createLicense';
             } else {
-                listener = this.feedsApi.createMiscData(licenseName, licenseFile, [feed.feedsourceId]);
+                listener = this.licenseApi.createMiscData(licenseName, licenseFile, [feed.feedsourceId]);
                 type = 'createMiscData';
             }
             myobservable = this.createObservable(listener, type, null, feed);
@@ -410,15 +412,15 @@ export class DatasetsEffects {
                             }
 
                             if (createFeed.licenseFile && createFeed.licenseName) {
-                                let createLicense = this.feedsApi.createLicense(createFeed.licenseName,
+                                let createLicense = this.licenseApi.createLicense(createFeed.licenseName,
                                     createFeed.licenseFile, [feed.id]);
                                 allObs.push(this.createObservable(createLicense, 'createLicense', onProgress, feed));
                             } else if (createFeed.licenseId) {
-                                allObs.push(this.createObservable(this.feedsApi.setLicense([feed.id],
+                                allObs.push(this.createObservable(this.licenseApi.setLicense([feed.id],
                                     createFeed.licenseId), 'setLicense', onProgress, feed));
                             }
                             if (createFeed.metadataFile) {
-                                let createMetadata = this.feedsApi.createMiscData(createFeed.metadataFile.name,
+                                let createMetadata = this.licenseApi.createMiscData(createFeed.metadataFile.name,
                                     createFeed.metadataFile, [feed.id]);
                                 allObs.push(this.createObservable(createMetadata, 'createMetadata', onProgress, feed));
                             }

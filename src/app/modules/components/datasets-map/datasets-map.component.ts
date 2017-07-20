@@ -1,5 +1,4 @@
 import { Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
-import { Router }                                                from '@angular/router';
 import { Store }                                                 from '@ngrx/store';
 import * as leaflet                                              from 'leaflet';
 import { Observable }                                            from 'rxjs/Rx';
@@ -30,6 +29,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     private datePipe = new DatePipe('en-US');
     private feedsLicenses;
     @Input() mapId: string;
+    @Input() mapType: string;
     @Output() protected boundsChange = new EventEmitter();
     private _feeds: IFeed[];
     map: leaflet.Map;
@@ -41,7 +41,6 @@ export class DatasetsMapComponent implements AfterViewInit {
     initialZoom: number = this.config.MAP_ZOOM_UNKNOWN;
     _zoom: number;
     private moveTimeoutId;
-    private oldBounds;
     NumberedDivIcon;
 
     constructor(
@@ -49,7 +48,6 @@ export class DatasetsMapComponent implements AfterViewInit {
         private config: Configuration,
         private projectsApi: ProjectsApiService,
         private mapUtils: MapUtilsService,
-        private router: Router,
         protected store: Store<DatasetsState>,
         protected datasetsAction: DatasetsActions,
         private shared: SharedService,
@@ -60,13 +58,6 @@ export class DatasetsMapComponent implements AfterViewInit {
         this.markers = {};
         this.updateProject = this.updateProjectProperty.bind(this);
         this.NumberedDivIcon = mapUtils.createNumMarker();
-    }
-
-    reset() {
-        console.log('map reset', this.initialPosition, this.initialZoom);
-        this._zoom = this.initialZoom;
-        this._position = this.initialPosition;
-        this.goTo(this.map, this._position, true);
     }
 
     @Input() set position(value: leaflet.LatLngExpression) {
@@ -102,6 +93,13 @@ export class DatasetsMapComponent implements AfterViewInit {
     ngAfterViewInit() {
         this.computeMap(this.mapId);
         this.populateMap();
+    }
+
+    reset() {
+        console.log('map reset', this.initialPosition, this.initialZoom);
+        this._zoom = this.initialZoom;
+        this._position = this.initialPosition;
+        this.goTo(this.map, this._position, true);
     }
 
     private geolocalize(): void {
@@ -156,18 +154,9 @@ export class DatasetsMapComponent implements AfterViewInit {
                 }, 1000);
             }
         );
-        map.on(
-            'movestart', function(e) {
-                that.moveStart(e);
-            }
-        );
         if (this._position) {
             this.goTo(map, this._position, false);
         }
-    }
-
-    private moveStart(event) {
-        this.oldBounds = this.map.getBounds();
     }
 
     private filterFeedsInArea(event) {
@@ -224,7 +213,7 @@ export class DatasetsMapComponent implements AfterViewInit {
     }
 
     private computeMarker(feed: IFeed, latLng: [number, number], bounds: leaflet.LatLngExpression[]): leaflet.Marker {
-        let isDraggable: boolean = this.router.url === '/my-datasets' ? true : false;
+        let isDraggable: boolean = this.mapType === 'manage' ? true : false;
         let marker: any = leaflet.marker(latLng, {
             title: feed.name, draggable: isDraggable,
             icon: new this.NumberedDivIcon({
@@ -274,7 +263,7 @@ export class DatasetsMapComponent implements AfterViewInit {
 
     private getPopupName(feed: any) {
         let res = '';
-        if (this.router.url === '/my-datasets') {
+        if (this.mapType === 'manage') {
             if (feed.isPublic) {
                 res += '<a href="/feeds/' + feed.id + '/' + feed.isPublic + '">' +
                     feed.name + '</a></b> (' + this.translate.instant('mydatasets-table.column.isPublic.label') + ')';
@@ -334,7 +323,7 @@ export class DatasetsMapComponent implements AfterViewInit {
                 lng = (bounds[0].lng + bounds[2].lng) / 2;
             }
             let marker = this.computeMarker(feed, [lat, lng], bounds);
-            this.router.url === '/my-datasets' ? this.markersGroup.addLayer(marker) :
+            this.mapType === 'manage' ? this.markersGroup.addLayer(marker) :
                 this.markerClusterGroup.addLayer(marker);
             this.markers[feed.id] = marker;
             // area over marker
@@ -344,7 +333,7 @@ export class DatasetsMapComponent implements AfterViewInit {
 
     private createMarker(feed: IFeed) {
         // TODO : to change, the code is not clean
-        if (this.router.url === '/my-datasets') {
+        if (this.mapType === 'manage') {
             this.projectsApi.getPrivateProject(feed.projectId).then(function success(data) {
                 return this.extractData(data, feed);
             }.bind(this));
