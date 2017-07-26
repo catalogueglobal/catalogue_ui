@@ -1,0 +1,40 @@
+<div class="banner" style="background-image: url(images/bgi/banner.jpg);">
+	<!--<div class="main-title"><h1 class="banner-title">{{'mydatasets.title'|translate}}</h1></div>-->
+</div>
+<!--/.banner-->
+
+<div class="container-fluid">
+	<div class="col-md-12 no-padding">
+		<div class="col-md-6 map-section well well-sm">
+			<div id="map-wrapper">
+				<app-datasets-map [mapType]="manage" [feeds]="feeds$|async" [mapId]="'datasetmap'" [position]="mapPosition" [zoom]="mapZoom" (boundsChange)="onBoundsChange($event)"></app-datasets-map>
+				<div id="search-input-wrapper" style="">
+					<div class="tools">
+						<div class="autocompletebox">
+							<app-datasets-autocomplete (selected)="onAutocompleteSelected($event)" placeholder="{{'datasets.table.search'|translate}}"></app-datasets-autocomplete>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="col-md-12">
+				<div class="col-md-12">
+					<a href="#" class="poptrigger pull-right" data-rel="createfeed">
+						<span title="{{'mydatasets-table.add' | translate}}" class="btn btn-success">
+							<i class="fa fa-plus" aria-hidden="true"></i>
+							{{'layout.menu.upload'|translate}}
+						</span>
+					</a>
+				</div>
+				<h4>{{'mydatasets.table.title'|translate}}</h4>
+				<p>{{'mydatasets.table.intro'|translate}}</p>
+			</div>
+			<app-user-datasets-table [feeds]="feeds$|async" (sortChange)="onSortChange($event)"></app-user-datasets-table>
+			<div class="noresult" *ngIf="feeds && feeds.length==0">
+				{{'mydatasets.table.noresult.info'|translate}}
+				<a (click)="resetSearch()">{{'mydatasets.table.noresult.reset'|translate}}</a>.
+			</div>
+		</div>
+	</div>
+</div>

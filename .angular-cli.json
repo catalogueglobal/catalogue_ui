@@ -31,7 +31,6 @@
             "../node_modules/angular2-toaster/toaster.css",
 
             "../node_modules/bootstrap/dist/css/bootstrap.min.css",
-            "styles.css",
             "css/style.css",
             "scss/all.scss"
         ],

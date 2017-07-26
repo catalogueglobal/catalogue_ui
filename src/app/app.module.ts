@@ -1,72 +1,33 @@
-import { CommonModule }                                             from "@angular/common";
-import { NgModule }                                                 from "@angular/core";
-import { FormsModule }                                              from "@angular/forms";
-import { Http, HttpModule }                                         from "@angular/http";
-import { BrowserModule }                                            from "@angular/platform-browser";
-import { compose }                                                  from "@ngrx/core/compose";
-import { EffectsModule }                                            from "@ngrx/effects";
-import { combineReducers, StoreModule }                             from "@ngrx/store";
+import { CommonModule }                                             from '@angular/common';
+import { NgModule }                                                 from '@angular/core';
+import { FormsModule }                                              from '@angular/forms';
+import { Http, HttpModule }                                         from '@angular/http';
+import { BrowserModule }                                            from '@angular/platform-browser';
+
+import { compose }                                                  from '@ngrx/core/compose';
+import { EffectsModule }                                            from '@ngrx/effects';
+import { combineReducers, StoreModule }                             from '@ngrx/store';
 import { StoreDevtoolsModule }                                      from '@ngrx/store-devtools';
-import { ConfirmationPopoverModule }                                from 'angular-confirmation-popover';
-import { AuthConfig, AuthHttp }                                     from "angular2-jwt";
-import { ToasterModule }                                            from "angular2-toaster";
-import { Ng2CompleterModule  }                                      from "ng2-completer";
-import { TranslateModule }                                          from "ng2-translate";
-import { TranslateService, TranslateLoader, TranslateStaticLoader } from "ng2-translate/src/translate.service";
-import { storeLogger }                                              from "ngrx-store-logger";
-import { Ng2PaginationModule }                                      from "ng2-pagination";
+import { storeLogger }                                              from 'ngrx-store-logger';
+
+import { AuthConfig, AuthHttp }                                     from 'angular2-jwt';
+import { TranslateModule }                                          from 'ng2-translate';
+import { TranslateService, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/src/translate.service';
+import { Ng2PaginationModule }                                      from 'ng2-pagination';
 import { TooltipModule } from 'ng2-bootstrap';
-import { ChartsModule } from 'ng2-charts';
 
-import { AppComponent }                                             from "./app.component";
-import { routing }                                                  from "./app.routes";
-import { Configuration }                                            from "./commons/configuration";
-import { CustomFileinputDirective }                                 from "./commons/directives/customFileinput.directive";
-import { FeedCreateFormComponent }                                  from "./commons/directives/feed-create-form/feed-create-form.component";
-import { InlineEditFileComponent }                                  from "./commons/directives/inline-edit-file/inline-edit-file.component";
-import { InlineEditTextComponent }                                  from "./commons/directives/inline-edit-text/inline-edit-text.component";
-import { ModalComponent } from './commons/directives/modal/modal.component';
-import { SortLinkComponent }                                        from "./commons/directives/sort-link/sort-link.component";
-import { SpinnerComponent }                                         from "./commons/directives/spinner/spinner.component";
-import { StatusComponent }                                          from "./commons/directives/status/status.component";
-import { SubscribeFormComponent }                                   from './commons/directives/subscribe-form/subscribe-form.component';
-import { AuthGuard }                                                from "./commons/guards/AuthGuard";
-import { InstitutionalUrlPipe }                                     from "./commons/pipes/institutionalUrl.pipe";
-import { OrderByPipe }                                              from "./commons/pipes/orderby";
-import { FeedsApiService }                                          from "./commons/services/api/feedsApi.service";
-import { LocalFiltersService }                                      from "./commons/services/api/localFilters.service";
-import { ProjectsApiService }                                       from "./commons/services/api/projectsApi.service";
-import { UsersApiService }                                          from "./commons/services/api/usersApi.service";
-import { MapUtilsService }                                          from "./commons/services/mapUtils.service";
-import { SessionService }                                           from "./commons/services/session.service";
-import { SharedService }                                            from "./commons/services/shared.service";
-import { UploadService }                                            from "./commons/services/upload.service";
-import { UtilsService }                                             from "./commons/services/utils.service";
-import { LayoutComponent }                                          from "./layout/layout.component";
-import { DatasetsComponent }                                        from "./modules/datasets/datasets.component";
-import { DatasetsAutocompleteComponent }                            from "./modules/datasets-autocomplete/datasets-autocomplete.component";
-import { DatasetsMapComponent }                                     from "./modules/datasets-map/datasets-map.component";
-import { DatasetsTableComponent }                                   from "./modules/datasets-table/datasets-table.component";
-import { FeedsComponent }                                           from "./modules/feeds/feeds.component";
-import { MyDatasetsComponent }                                      from "./modules/my-datasets/my-datasets.component";
-import { MyDatasetsTableComponent }                                 from "./modules/my-datasets-table/my-datasets-table.component";
-import { DatasetsActions }                                          from "./state/datasets/datasets.actions";
-import { DatasetsEffects }                                          from "./state/datasets/datasets.effects";
-import { appReducer }                                               from "./state/index.reducer";
+import { AppConfig } from './app.config';
+import { AppComponent }                                             from './app.component';
+import { routing }                                                  from './app.routes';
+import { ExplorePage }                                              from './pages/explore/explore.page';
+import { FeedPage }                                                 from './pages/feed/feed.page';
+import { ManagmentPage }                                            from './pages/managment/managment.page';
+import { DatasetsActions }                                          from './state/datasets/datasets.actions';
+import { DatasetsEffects }                                          from './state/datasets/datasets.effects';
+import { appReducer }                                               from './state/index.reducer';
 
-import {CommonComponent} from './commons/directives/modal/common-modal.component';
-import { MiscDataModal } from './commons/directives/modal/miscdata-modal.component';
-import { LicenseModal } from './commons/directives/modal/license-modal.component';
-import { DeleteFeedModal } from './commons/directives/modal/delete-feed-modal.component';
-import {ConfirmFeedVersionModal} from './commons/directives/modal/confirm-feed-version-modal.component';
-import { DatatoolComponent }                                            from "./commons/components/datatool.component";
-import { FeedMapComponent }                                            from "./commons/components/feed-map/feed-map.component";
-import {FeedMapUtilsService} from "./commons/components/feed-map/feed-map-utils.service";
-import {RouteFilter} from  "./commons/components/feed-map/route.filter";
-import {TruncatePipe} from "./commons/pipes/truncate.pipe";
-import {FilterPipe} from "./commons/pipes/filter.pipe";
-import {FilterByVisibilityPipe} from "./commons/pipes/filter-by-visibility.pipe";
-import { ValidationDetailsModal } from './commons/directives/modal/validation-details-modal.component';
+import { CtCommonModule, SessionService } from './modules/common/';
+import { ComponentsModule } from './modules/components/';
 
 export function httpFactory(http: Http) {
     return new TranslateStaticLoader(http, '/assets/i18n', '.json');
@@ -85,6 +46,10 @@ export function httpAuthConfigFactory(http, authConfig) {
     return new AuthHttp(authConfig, http);
 }
 
+export function getConfigFactory() {
+    return AppConfig.getInstance('./environment.json');
+}
+
 const allReducers = compose(storeLogger(), combineReducers)(appReducer);
 
 export function composeProvider(state: any, action: any) {
@@ -94,58 +59,18 @@ export function composeProvider(state: any, action: any) {
 @NgModule({
     declarations: [
         AppComponent,
-        DatasetsComponent,
-        MyDatasetsComponent,
-        FeedsComponent,
-
-        // directives
-        CustomFileinputDirective,
-        LayoutComponent,
-
-        //ToasterContainerComponent,
-        DatasetsMapComponent,
-        DatasetsTableComponent,
-        DatasetsAutocompleteComponent,
-        SortLinkComponent,
-        MyDatasetsTableComponent,
-
-        // pipes
-        InstitutionalUrlPipe,
-        RouteFilter,
-        OrderByPipe,
-        FilterByVisibilityPipe,
-        SpinnerComponent,
-        StatusComponent,
-        FeedCreateFormComponent,
-        InlineEditTextComponent,
-        InlineEditFileComponent,
-        SubscribeFormComponent,
-        CommonComponent,
-        ModalComponent,
-        LicenseModal,
-        MiscDataModal,
-        DeleteFeedModal,
-        ConfirmFeedVersionModal,
-        ValidationDetailsModal,
-        DatatoolComponent,
-        FeedMapComponent,
-        TruncatePipe,
-        FilterPipe
+        ExplorePage,
+        ManagmentPage,
+        FeedPage
     ],
 
     imports: [
         BrowserModule,
         CommonModule,
-        Ng2CompleterModule,
         FormsModule,
         HttpModule,
-        ToasterModule,
         routing,
         Ng2PaginationModule,
-        ConfirmationPopoverModule.forRoot({
-            confirmButtonType: 'danger' // set defaults here
-        }),
-
         StoreModule.provideStore(composeProvider),
         EffectsModule.run(DatasetsEffects),
         StoreDevtoolsModule.instrumentOnlyWithExtension(),
@@ -156,7 +81,8 @@ export function composeProvider(state: any, action: any) {
             deps: [Http]
         }),
         TooltipModule.forRoot(),
-        ChartsModule
+        CtCommonModule,
+        ComponentsModule
     ],
 
     entryComponents: [AppComponent],
@@ -164,24 +90,23 @@ export function composeProvider(state: any, action: any) {
     bootstrap: [AppComponent],
 
     providers: [
-        TranslateService, SessionService, Configuration, UploadService,
-        UtilsService, MapUtilsService, ProjectsApiService, FeedsApiService, UsersApiService, LocalFiltersService,
-        DatasetsActions, SharedService, FeedMapUtilsService,
-        AuthGuard,
+        {
+            provide: AppConfig,
+            useFactory: getConfigFactory
+        },
+        TranslateService,
+        DatasetsActions,
         //NG2_WEBSTORAGE,
-
         {
             provide: AuthConfig,
             useFactory: sessionServiceFactory,
             deps: [SessionService]
         },
-
         {
             provide: AuthHttp,
             useFactory: httpAuthConfigFactory,
             deps: [Http, AuthConfig]
-        },
-        FilterPipe
+        }
     ]
 })
 export class AppModule { }

@@ -1,9 +1,15 @@
-import { Injectable } from "@angular/core";
-import { Action } from "@ngrx/store";
-import { FeedsGetResponse, IFeedApi, FeedsGetParams, IFeed, ILicense } from "app/commons/services/api/feedsApi.service";
-import { IProject } from "app/commons/services/api/projectsApi.service";
-import { UserSubscribeParams } from "app/commons/services/api/usersApi.service";
-import { ICreateFeed } from "./datasets.effects";
+import { Injectable } from '@angular/core';
+import { Action } from '@ngrx/store';
+import { FeedsGetResponse,
+    IFeedApi,
+    FeedsGetParams,
+    IFeed,
+    ILicense,
+    IProject,
+    ICreateFeed,
+    UserSubscribeParams,
+    IFeedReference
+} from 'app/modules/common/';
 
 export const DatasetsActionType = {
     STATUS_ERROR_MESSAGE: `STATUS_ERROR_MESSAGE`,
@@ -68,7 +74,7 @@ export const DatasetsActionType = {
     UNSUBSCRIBE_FEED_SUCCESS: 'UNSUBSCRIBE_FEED_SUCCESS',
     UNSUBSCRIBE_FEED_FAIL: 'UNSUBSCRIBE_FEED_FAIL',
 
-    FEEDS_ADD_NOTES: "FEEDS_ADD_NOTES",
+    FEEDS_ADD_NOTES: 'FEEDS_ADD_NOTES',
     FEEDS_ADD_NOTES_SUCCESS: 'FEEDS_ADD_NOTES_SUCCESS',
     FEEDS_ADD_NOTES_FAIL: 'FEEDS_ADD_NOTES_FAIL',
 
@@ -106,18 +112,11 @@ export const DatasetsActionType = {
 
 };
 
-export type IFeedReference = {
-    feedsourceId: string,
-    versionId?: string,
-    feedVersionCount?: number,
-    feedLabel: string
-}
-
 export function toFeedReference(feed: IFeedApi): IFeedReference {
     return {
         feedsourceId: feed.id,
         feedLabel: feed.name
-    }
+    };
 }
 
 @Injectable()
@@ -129,13 +128,13 @@ export class DatasetsActions {
             payload: {
                 errorMessage: errorMessage
             }
-        }
+        };
     }
 
     statusClearNotifyMessage(): Action {
         return {
             type: DatasetsActionType.STATUS_CLEAR_NOTIFY_MESSAGE
-        }
+        };
     }
 
     userSubscribe(userSubscribeParams: UserSubscribeParams): Action {
@@ -144,7 +143,7 @@ export class DatasetsActions {
             payload: {
                 userSubscribeParams: userSubscribeParams
             }
-        }
+        };
     }
 
     userSubscribeSuccess(userSubscribeParams: UserSubscribeParams): Action {
@@ -162,7 +161,7 @@ export class DatasetsActions {
             payload: {
                 userSubscribeParams: userSubscribeParams
             }
-        }
+        };
     }
 
     feedsGet(feedsGetParams: FeedsGetParams): Action {
@@ -171,7 +170,7 @@ export class DatasetsActions {
             payload: {
                 feedsGetParams: feedsGetParams
             }
-        }
+        };
     }
 
     feedsGetLocally(feedsGetParams: FeedsGetParams, feeds: IFeed[]): Action {
@@ -181,7 +180,7 @@ export class DatasetsActions {
                 feedsGetParams: feedsGetParams,
                 feeds: feeds
             }
-        }
+        };
     }
 
     publicProjectGet(projectGetParams: string): Action {
@@ -190,7 +189,7 @@ export class DatasetsActions {
             payload: {
                 projectGetParams: projectGetParams,
             }
-        }
+        };
     }
 
     publicProjectGetSuccess(projectGetResponse: IProject): Action {
@@ -199,7 +198,7 @@ export class DatasetsActions {
             payload: {
                 project: projectGetResponse
             }
-        }
+        };
     }
 
     publicProjectGetFail(projectGetParams: string, error: any): Action {
@@ -219,7 +218,7 @@ export class DatasetsActions {
                 projectId: projectId,
                 updateProject: projectPutParams
             }
-        }
+        };
     }
 
     updateProjectSuccess(projectPutResponse: IProject): Action {
@@ -228,7 +227,7 @@ export class DatasetsActions {
             payload: {
                 project: projectPutResponse
             }
-        }
+        };
     }
 
     updateProjectFail(projectId: string, projectPutParams: any, error: any): Action {
@@ -239,7 +238,7 @@ export class DatasetsActions {
                 updateProject: projectPutParams,
                 error: error
             }
-        }
+        };
     }
 
     feedsGetSuccess(feedsGetResponse: FeedsGetResponse): Action {
@@ -257,22 +256,22 @@ export class DatasetsActions {
             payload: {
                 feedsGetParams: feedsGetParams
             }
-        }
+        };
     }
 
     feedCreate(createFeed: ICreateFeed): Action {
         // use filename as default project/feed name
         let defaultName;
-        switch(createFeed.retrievalMethod){
-          case 'PRODUCED_IN_HOUSE':
-            defaultName = 'PRODUCED_IN_HOUSE';
-          break;
-          case 'MANUALLY_UPLOADED':
-            defaultName = createFeed.file.name;
-          break;
-          default:
-            defaultName = createFeed.feedName;
-          break;
+        switch (createFeed.retrievalMethod) {
+            case 'PRODUCED_IN_HOUSE':
+                defaultName = 'PRODUCED_IN_HOUSE';
+                break;
+            case 'MANUALLY_UPLOADED':
+                defaultName = createFeed.file.name;
+                break;
+            default:
+                defaultName = createFeed.feedName;
+                break;
         }
 
         if (!createFeed.projectName || !createFeed.projectName.trim().length) {
@@ -286,7 +285,7 @@ export class DatasetsActions {
             payload: {
                 createFeed: createFeed
             }
-        }
+        };
     }
 
     feedCreateProgress(createFeed: ICreateFeed, progress: string): Action {
@@ -316,7 +315,7 @@ export class DatasetsActions {
                 createFeed: createFeed,
                 error: error
             }
-        }
+        };
     }
 
     feedSetPublic(feedRef: IFeedReference, value: boolean): Action {
@@ -326,7 +325,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 isPublic: value
             }
-        }
+        };
     }
 
     feedSetPublicSuccess(feed: IFeedApi): Action {
@@ -345,7 +344,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 error: error
             }
-        }
+        };
     }
 
     feedDelete(feedRefs: IFeedReference[]): Action {
@@ -354,7 +353,7 @@ export class DatasetsActions {
             payload: {
                 feedRefs: feedRefs
             }
-        }
+        };
     }
 
     feedDeleteSuccess(feedRefs: IFeedReference[]): Action {
@@ -372,7 +371,7 @@ export class DatasetsActions {
             payload: {
                 feedRefs: feedRefs
             }
-        }
+        };
     }
 
     feedSetName(feedRef: IFeedReference, name: string): Action {
@@ -382,7 +381,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 name: name
             }
-        }
+        };
     }
 
     feedSetNameSuccess(feed: IFeedApi): Action {
@@ -401,7 +400,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 error: error
             }
-        }
+        };
     }
 
     feedAddNotes(feedId: string, data: any): Action {
@@ -411,7 +410,7 @@ export class DatasetsActions {
                 feedId: feedId,
                 data: data
             }
-        }
+        };
     }
 
     feedAddNotesSuccess(feedId: string, data: any): Action {
@@ -421,7 +420,7 @@ export class DatasetsActions {
                 feedId: feedId,
                 data: data
             }
-        }
+        };
     }
 
     feedAddNotesFail(feedId: string, data: any, error: any): Action {
@@ -432,7 +431,7 @@ export class DatasetsActions {
                 data: data,
                 error: error
             }
-        }
+        };
     }
 
     feedSetFile(feedRef: IFeedReference, file: File): Action {
@@ -442,7 +441,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 file: file
             }
-        }
+        };
     }
 
     feedSetFileProgress(feedRef: IFeedReference, progress: string): Action {
@@ -452,7 +451,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 progress: progress
             }
-        }
+        };
     }
 
     feedSetFileSuccess(feed: IFeedApi): Action {
@@ -471,7 +470,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 error: error
             }
-        }
+        };
     }
 
     feedFetch(feedRef: IFeedReference): Action {
@@ -480,7 +479,7 @@ export class DatasetsActions {
             payload: {
                 feedRef: feedRef
             }
-        }
+        };
     }
 
     feedFetchSuccess(feed: IFeedApi): Action {
@@ -498,7 +497,7 @@ export class DatasetsActions {
             payload: {
                 feedRef: feedRef
             }
-        }
+        };
     }
 
     addFeedToProject(createFeed: ICreateFeed): Action {
@@ -515,7 +514,7 @@ export class DatasetsActions {
             payload: {
                 createFeed: createFeed
             }
-        }
+        };
     }
 
     addFeedToProjectSuccess(feed: IFeedApi): Action {
@@ -524,7 +523,7 @@ export class DatasetsActions {
             payload: {
                 feed: feed
             }
-        }
+        };
     }
 
     addFeedToProjectFail(createFeed: ICreateFeed, error: any): Action {
@@ -534,7 +533,7 @@ export class DatasetsActions {
                 createFeed: createFeed,
                 error: error
             }
-        }
+        };
     }
 
     confirmationDeleteProject(deleteProject: boolean): Action {
@@ -543,13 +542,13 @@ export class DatasetsActions {
             payload: {
                 deleteProject: deleteProject
             }
-        }
+        };
     }
 
     confirmationDeleteProjectSuccess(): Action {
         return {
             type: DatasetsActionType.CONFIRM_DELETE_FEED_SUCCESS
-        }
+        };
     }
 
     subscribeToFeed(user_id, userInfos: Object): Action {
@@ -559,7 +558,7 @@ export class DatasetsActions {
                 user_id: user_id,
                 userInfos: userInfos
             }
-        }
+        };
     }
 
     subscribeToFeedSuccess(userInfos: Object): Action {
@@ -568,7 +567,7 @@ export class DatasetsActions {
             payload: {
                 userInfos: userInfos
             }
-        }
+        };
     }
 
     subscribeToFeedFail(userInfos: Object, error: any): Action {
@@ -578,7 +577,7 @@ export class DatasetsActions {
                 userInfos: userInfos,
                 error: error
             }
-        }
+        };
     }
 
     unsubscribeToFeed(user_id, userInfos: Object): Action {
@@ -588,7 +587,7 @@ export class DatasetsActions {
                 user_id: user_id,
                 userInfos: userInfos
             }
-        }
+        };
     }
 
     unsubscribeToFeedSuccess(userInfos: Object): Action {
@@ -597,7 +596,7 @@ export class DatasetsActions {
             payload: {
                 userInfos: userInfos
             }
-        }
+        };
     }
 
     unsubscribeToFeedFail(userInfos: Object, error: any): Action {
@@ -607,7 +606,7 @@ export class DatasetsActions {
                 userInfos: userInfos,
                 error: error
             }
-        }
+        };
     }
 
     feedSetLicense(feedRef: IFeedReference, licenseId: string): Action {
@@ -636,7 +635,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 error: error
             }
-        }
+        };
     }
 
     feedUnsetLicense(feedRef: IFeedReference, licenseId: string): Action {
@@ -665,7 +664,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 error: error
             }
-        }
+        };
     }
 
     feedCreateLicense(feedRef: IFeedReference, licenseName: string, licenseFile: any): Action {
@@ -695,9 +694,8 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 error: error
             }
-        }
+        };
     }
-
 
     feedSetMiscData(feedRef: IFeedReference, licenseId: string): Action {
         return {
@@ -725,7 +723,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 error: error
             }
-        }
+        };
     }
 
     feedUnsetMiscData(feedRef: IFeedReference, licenseId: string): Action {
@@ -754,7 +752,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 error: error
             }
-        }
+        };
     }
 
     feedCreateMiscData(feedRef: IFeedReference, licenseName: string, licenseFile: any): Action {
@@ -784,7 +782,7 @@ export class DatasetsActions {
                 feedRef: feedRef,
                 error: error
             }
-        }
+        };
     }
 
     feedDeleteLicenses(licenses: any): Action {
@@ -793,7 +791,7 @@ export class DatasetsActions {
             payload: {
                 licenses: licenses
             }
-        }
+        };
     }
 
     feedDeleteLicensesSuccess(licenses: any): Action {
@@ -811,7 +809,7 @@ export class DatasetsActions {
             payload: {
                 licenses: licenses
             }
-        }
+        };
     }
 
     feedDeleteMiscs(miscs: any): Action {
@@ -820,7 +818,7 @@ export class DatasetsActions {
             payload: {
                 miscs: miscs
             }
-        }
+        };
     }
 
     feedDeleteMiscsSuccess(miscs: any): Action {
@@ -838,6 +836,6 @@ export class DatasetsActions {
             payload: {
                 miscs: miscs
             }
-        }
+        };
     }
 }
