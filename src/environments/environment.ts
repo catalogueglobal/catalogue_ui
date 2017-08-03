@@ -5,7 +5,7 @@
 
 export const environment = {
     production: false,
-    rootApi: "http://localhost:4000",
+    rootApi: "http://localhost:4200",
     institutionalUrl: "http://www.catalogue.global",
     authId: "URvcRYyeNMGRFJLRQW9Kp62DHAv7YGBH",
     authDomain: "cataloguetest.eu.auth0.com",
