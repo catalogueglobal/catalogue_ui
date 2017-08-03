@@ -6,7 +6,7 @@
     "angular-cli": {},
     "scripts": {
         "ng": "ng",
-        "start": "ng serve --aot false",
+        "start": "ng serve -v --aot false --proxy-config proxy.conf.json",
         "test": "ng test --code-coverage",
         "e2e": "ng e2e",
         "build": "ng build --prod",
