@@ -1,35 +1,33 @@
-import { Component, OnInit }            from "@angular/core";
-import { TranslateService }             from "ng2-translate";
-import { Router, NavigationEnd, Event } from "@angular/router";
-import { Store }                        from "@ngrx/store";
-import { DatasetsActions }              from "./state/datasets/datasets.actions";
-import { DatasetsState }                from "./state/datasets/datasets.reducer";
-import { AppState }                     from "./state/index.reducer";
+import { Component, OnInit }            from '@angular/core';
+import { TranslateService }             from 'ng2-translate';
+import { Router, NavigationEnd, Event } from '@angular/router';
+import { Store }                        from '@ngrx/store';
+import { DatasetsActions }              from './state/datasets/datasets.actions';
+import { DatasetsState }                from './state/datasets/datasets.reducer';
+import { AppState }                     from './state/index.reducer';
 
 @Component({
-    selector:    'app-root',
-    templateUrl: 'app.component.html',
-    styleUrls:   ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
 
     constructor(
-	private translate: TranslateService, private router: Router,
-	private appStore: Store<AppState>,
-	private datasetsStore: Store<DatasetsState>,
-	private datasetsAction: DatasetsActions)
-    {
-	initLanguage(translate, 'en');
-	// apply general.js to all views
-	router.events.subscribe(
-	    (event: Event) => {
-		if (event instanceof NavigationEnd) {
-		    applyGeneralJs();
-		}
-	    }
-	);
+        private translate: TranslateService, private router: Router,
+        private appStore: Store<AppState>,
+        private datasetsStore: Store<DatasetsState>,
+        private datasetsAction: DatasetsActions) {
+        initLanguage(translate, 'en');
+        // apply general.js to all views
+        router.events.subscribe(
+            (event: Event) => {
+                if (event instanceof NavigationEnd) {
+                    applyGeneralJs();
+                }
+            }
+        );
     }
-    
+
     ngOnInit() {
     }
 }
@@ -51,9 +49,9 @@ function initLanguage(translate: TranslateService, defaultLang: string): void {
  */
 function applyGeneralJs(): void {
     try {
-	console.log("generalJs()");
-	generalJs();
+        console.log('generalJs()');
+        generalJs();
     } catch (e) {
-	console.log('generalJs error', e);
+        console.log('generalJs error', e);
     }
 }
