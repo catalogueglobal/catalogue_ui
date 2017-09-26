@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, OnInit, Input, ViewChild, Injector } from '@angular/core';
-import { PaginationService } from 'ng2-pagination';
+import { PaginationService } from 'ngx-pagination';
 import { toFeedReference, DatasetsActionType } from 'app/state/datasets/datasets.actions';
 
 import {

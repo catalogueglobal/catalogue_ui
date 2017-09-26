@@ -5,10 +5,10 @@
 
 export const environment = {
     production: false,
-    rootApi: "http://localhost:4200",
-    institutionalUrl: "http://www.catalogue.global",
-    authId: "URvcRYyeNMGRFJLRQW9Kp62DHAv7YGBH",
-    authDomain: "cataloguetest.eu.auth0.com",
-    licenseApi: "http://localhost:4400",
-    licenseApiVersion: "1.0"
+    rootApi: 'http://localhost:4200',
+    institutionalUrl: 'http://www.catalogue.global',
+    authId: 'URvcRYyeNMGRFJLRQW9Kp62DHAv7YGBH',
+    authDomain: 'cataloguetest.eu.auth0.com',
+    licenseApi: 'http://localhost:4400',
+    licenseApiVersion: '1.0'
 };

@@ -114,7 +114,10 @@
 			</tr>
 		</tbody>
 	</table>
-
+    <!--
+    <pagination-controls (pageChange)="page = $event"></pagination-controls>
+    -->
+    <!-- -->
 	<div class="pagination">
 		<pagination-template #p="paginationApi" (pageChange)="page = $event" autoHide="true">
 			<ul class="ng2-pagination custom" *ngIf="p.pages.length > 1">
@@ -145,6 +148,7 @@
 			</ul>
 		</pagination-template>
 	</div>
+        <!-- -->
 </div>
 <!--/.dataset-table-->
 

@@ -29,7 +29,6 @@
             "../node_modules/leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.css",
             "../node_modules/font-awesome/css/font-awesome.min.css",
             "../node_modules/angular2-toaster/toaster.css",
-
             "../node_modules/bootstrap/dist/css/bootstrap.min.css",
             "css/style.css",
             "scss/all.scss"
@@ -38,7 +37,8 @@
             "../node_modules/jquery/dist/jquery.min.js",
             "../node_modules/jquery-match-height/dist/jquery.matchHeight-min.js",
             "../node_modules/owl.carousel/dist/owl.carousel.min.js",
-            "../node_modules/bootstrap/dist/js/bootstrap.js",
+            "../node_modules/popper.js/dist/umd/popper.min.js",
+            "../node_modules/bootstrap/dist/js/bootstrap.min.js",
             "js/vendor/venobox.js",
             "js/vendor/customfileinput.js",
             "js/vendor/jquery.easy-autocomplete.min.js",

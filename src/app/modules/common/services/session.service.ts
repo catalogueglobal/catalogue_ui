@@ -1,12 +1,13 @@
+import { Configuration } from './configuration';
 import { Injectable }      from '@angular/core';
 import { tokenNotExpired } from 'angular2-jwt/angular2-jwt';
 import { LocalStorage }    from 'ng2-webstorage';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import {
+/*import {
     Configuration,
     Session
 } from 'app/modules/common/';
-
+*/
 const SESSION = 'SESSION';
 
 // Avoid name not found warnings

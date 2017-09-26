@@ -13,8 +13,8 @@ import { storeLogger }                                              from 'ngrx-s
 import { AuthConfig, AuthHttp }                                     from 'angular2-jwt';
 import { TranslateModule }                                          from 'ng2-translate';
 import { TranslateService, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/src/translate.service';
-import { Ng2PaginationModule }                                      from 'ng2-pagination';
-import { TooltipModule } from 'ng2-bootstrap';
+import { NgxPaginationModule }                                      from 'ngx-pagination';
+import { TooltipModule } from 'ngx-bootstrap';
 
 import { AppConfig } from './app.config';
 import { AppComponent }                                             from './app.component';
@@ -70,7 +70,7 @@ export function composeProvider(state: any, action: any) {
         FormsModule,
         HttpModule,
         routing,
-        Ng2PaginationModule,
+        NgxPaginationModule,
         StoreModule.provideStore(composeProvider),
         EffectsModule.run(DatasetsEffects),
         StoreDevtoolsModule.instrumentOnlyWithExtension(),

@@ -1,5 +1,5 @@
 import { Component, Injector, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { PaginationService } from 'ng2-pagination';
+import { PaginationService } from 'ngx-pagination';
 import { ValidationDetailsModal } from '../modal/validation-details-modal.component';
 
 import {
@@ -21,7 +21,7 @@ export class DatasetsTableComponent extends DatasetsGenericComponent {
     @ViewChild(ValidationDetailsModal)
     public readonly validationDetailsModal: ValidationDetailsModal;
 
-    private page: number;
+    private page: number = 1;
 
     protected currentSort: SortOrder = {
         sort: 'name',
